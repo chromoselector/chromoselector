@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <link rel="stylesheet" type="text/css" href="libs/ui-lightness/jquery-ui-1.8.23.custom.css" />
+    <script src="./libs/jquery-1.8.1.js" type="text/javascript"></script>
+    <script src="./libs/jquery-ui-1.8.23.custom.min.js" type="text/javascript"></script>
+    <script type="text/javascript">
+(function ($, document, defaults) {
+    "use strict";
+    var Color = function () {
+        this.rgb = {
+            r: 0,
+            g: 0,
+            b: 0
+        };
+        this.hsl = {
+            h: 0,
+            s: 0,
+            l: 0
+        };
+        this.hex = "#ff0000";
+    };
+    /** setters */
+    Color.prototype.setRgb = function (value) {
+        this.rgb = value;
+        this.hsl = this.rgb2hsl(value);
+        this.hex = this.rgb2hex(value);
+    };
+    Color.prototype.setHsl = function (value) {
+        this.hsl = value;
+        this.rgb = this.hsl2rgb(value);
+        this.hex = this.rgb2hex(this.rgb);
+    };
+    Color.prototype.setHex = function (value) {
+        var r = /^#([0-9a-f]{3}){1,2}$/i;
+        if (r.test(value)) {
+            if (value.length == 4) {
+                value = value.replace(/[0-9a-f]/gi, function(match) { 
+                    return match + match;
+                });
+            }
+            this.hex = value;
+            this.rgb = this.hex2rgb(value);
+            this.hsl = this.rgb2hsl(this.rgb);
+        }
+    };
+    /** converters */
+    Color.prototype.rgb2hsl = function (value) {
+        var r = value.r / 255,
+        g = value.g / 255,
+        b = value.b / 255;
+        var max = Math.max(r, g, b),
+        min = Math.min(r, g, b),
+        h,
+        s;
+        var l = (max + min) / 2;
+        if (max == min) {
+            h = s = 0; // achromatic
+        } else {
+            var d = max - min;
+            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+            switch(max) {
+                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                case g: h = (b - r) / d + 2; break;
+                case b: h = (r - g) / d + 4; break;
+            }
+            h /= 6;
+        }
+        return {
+            h: h,
+            s: s,
+            l: l
+        };
+    };
+    Color.prototype.rgb2hex = function (value) {
+        var convert = function (value) {
+            var retval = value.toString(16);
+            if (value < 16) {
+                retval = "0" + retval;
+            }
+            return retval;
+        };
+        return "#" + convert(value.r) + convert(value.g) + convert(value.b);
+    };
+    Color.prototype.hsl2rgb = function (value) {
+        var r, g, b;
+        if (value.s == 0) {
+            r = g = b = value.l; // achromatic
+        } else {
+            var hue2rgb = function (p, q, t) {
+                if(t < 0) t += 1;
+                if(t > 1) t -= 1;
+                if(t < 1/6) return p + (q - p) * 6 * t;
+                if(t < 1/2) return q;
+                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                return p;
+            };
+            var q = value.l < 0.5 ? value.l * (1 + value.s) : value.l + value.s - value.l * value.s;
+            var p = 2 * value.l - q;
+            r = hue2rgb(p, q, value.h + 1/3);
+            g = hue2rgb(p, q, value.h);
+            b = hue2rgb(p, q, value.h - 1/3);
+        }
+        return {
+            r: Math.round(r * 255),
+            g: Math.round(g * 255),
+            b: Math.round(b * 255)
+        };
+    };
+    Color.prototype.hex2rgb = function (value) {
+        var convert = function (v) {
+            return parseInt('0x' + v, 16);
+        };
+        return {
+            r: convert(value.substring(1,3)),
+            g: convert(value.substring(3,5)),
+            b: convert(value.substring(5,7))
+        };
+    };
+    
+    /**
+     * Sets a pixel on a canvas
+     */
+    function setPixel(imageData, x, y, r, g, b, a) {
+        var index = (x + y * imageData.width) * 4;
+        imageData.data[index+0] = r;
+        imageData.data[index+1] = g;
+        imageData.data[index+2] = b;
+        imageData.data[index+3] = a;
+    }
+    
+    /**
+     * Draws the rainbow wheel
+     */
+    function drawHueSelector(canvas, diameter) {
+        var ctx = canvas.getContext("2d");
+        var imageData = ctx.createImageData(diameter, diameter);
+        var x, y, r, g, b;
+        var origin = [Math.round(diameter / 2), Math.round(diameter / 2)];
+        for (var i = 0; i < diameter; i++) {
+            for (var j = 0; j < diameter; j++) {
+                x = i - origin[0];
+                y = j - origin[1];
+                var degree = Math.round(
+                    Math.atan2(x, y) * (180/Math.PI) + 180
+                );
+                var getValue = function (degree) {
+                    degree %= 360;
+                    var g;
+                    if (degree < 60 || degree == 360) {
+                        g = 255 * (degree / 60);
+                    } else if (degree >= 60 && degree < 180) {
+                        g = 255;
+                    } else if (degree >= 180 && degree < 240) {
+                        g = 255 * ((60 - (degree - 180)) / 60);
+                    } else if (degree >= 240 && degree < 360) {
+                        g = 0;
+                    }
+                    return g;
+                };
+                r = getValue(degree + 210);
+                g = getValue(degree + 90);
+                b = getValue(degree + 330);
+                setPixel(imageData, i, j, r, g, b, 255);
+            }
+
+        }
+        var lineWidth = diameter >= 180 ? 18 : 9;
+        var blur = diameter >= 180 ? 10 : 6;
+        var offset = diameter >= 180 ? origin[1] - 15 : origin[1] - 10;
+        // copy the image data back onto the canvas
+        ctx.putImageData(imageData, 0, 0); // at coords 0,0
+        ctx.beginPath();
+        ctx.arc(origin[0], origin[1], offset, 0, Math.PI*2, false); 
+        ctx.closePath();
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.lineWidth = lineWidth;
+        ctx.stroke();
+        // shadow
+        ctx.beginPath();
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.arc(origin[0], origin[1], offset, 0, Math.PI*2, false); 
+        ctx.closePath();
+        ctx.lineWidth = blur;
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = blur;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.stroke();
+        ctx.globalCompositeOperation = "source-over"; 
+    }
+
+    /** The color picker object */
+    var next_picker_id = 0;
+    var ColorPickers = [];
+    var ColorPicker = function ($this, id) {
+        var self = this;
+        self.color = new Color();
+        self.color.setHex(
+            $this.val()
+        );
+        self.canvas = {};
+        self.id = id;
+        self.$target = $this;
+        
+        self.$picker = $('<div></div>')
+            .hide()
+            .attr('id', 'canvasColorPicker-' + self.id)
+            .insertAfter(
+                self.$target
+            ).html(
+                '<canvas width="200" height="200" style="position: absolute"></canvas>'
+                + '<canvas width="200" height="200" style="position: absolute"></canvas>'
+            );
+
+        drawHueSelector(self.$picker.find('canvas')[0], 200);
+       
+        var canvas = self.$picker.find('canvas')[1];
+        var ctx = canvas.getContext("2d");
+        var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+        
+        var point1 = [100 + Math.round(68 * Math.cos(degrees)), 100 + Math.round(68 * Math.sin(degrees))];
+        degrees -= Math.PI * 2 / 3;
+        var point2 = [100 + Math.round(68 * Math.cos(degrees)), 100 + Math.round(68 * Math.sin(degrees))];
+        degrees -= Math.PI * 2 / 3;
+        var point3 = [100 + Math.round(68 * Math.cos(degrees)), 100 + Math.round(68 * Math.sin(degrees))];
+       // console.log(point1, point2, point3)
+
+
+        function intersection(a, b, c, d) {
+            var A1 = a[1]-b[1]
+            var B1 = a[0]-b[0]
+            var C1 = A1*a[0]+B1*a[1];
+            var A1 = c[1]-d[1]
+            var B2 = c[0]-d[0]
+            var C2 = A1*c[0]+B1*c[1];
+            var det = A1*B2 - A2*B1;
+            if (det == 0) {
+                return [-1000,-1000];
+            }
+            return [
+                x = (B2*C1 - B1*C2)/det,
+                y = (A1*C2 - A2*C1)/det
+            ];
+        }
+        
+        function getSat(x, y) {
+            var input = [x, y];
+            var thePoint1 = [input[0], Math.max(point2[1], point3[1])];
+            if (thePoint1[0] - point2[0] <= (point3[0] - point2[0]) / 2) {
+                var adj = point2[0] - input[0];
+                var opposite = Math.tan(Math.PI / 3) * adj;
+                var thePoint2 = [Math.round(point2[0] - adj), Math.round(point2[1] - opposite)];
+            } else {
+                var adj = point3[0] - input[0];
+                var opposite = Math.tan(Math.PI / 3) * adj;
+                var thePoint2 = [Math.round(point3[0] - adj), Math.round(point3[1] - opposite)];
+            }
+            return Math.sqrt(
+                Math.pow(thePoint1[0]-input[0], 2)
+                +
+                Math.pow(thePoint1[1]-input[1], 2)
+            ) / Math.sqrt(
+                Math.pow(thePoint1[0]-thePoint2[0], 2)
+                +
+                Math.pow(thePoint1[1]-thePoint2[1], 2)
+            )
+        }
+        
+        function getLum(x, y) {
+            var input = [x, y];
+            var thePoint1 = [input[0], Math.max(point2[1], point3[1])];
+            var maxLen = (point3[0] - point2[0]) / 2;
+            if (thePoint1[0] - point2[0] <= maxLen) {
+                var adj = input[0] - point2[0];
+                var ratio = 1 - ((adj / maxLen) * 0.5);
+                return ratio;
+            } else {
+                var adj = point3[0] - input[0];
+                var ratio = (adj / maxLen) * 0.5;
+                return ratio;
+            }
+        }
+        
+        var imageData = ctx.createImageData(200, 200);
+        // triangle
+        var startX = Math.min(point1[0], point2[0], point3[0]);
+        var endX   = Math.max(point1[0], point2[0], point3[0]);
+        var startY = Math.min(point1[1], point2[1], point3[1]);
+        var endY   = Math.max(point1[1], point2[1], point3[1]);
+        for (var i = 0; i <= 200; i++) {
+            for (var j = 0; j <= 200; j++) {
+                var color = new Color();
+                var s = getSat(i, j);
+                if (s < 0) {
+                    s = 0;
+                } else if (s > 1) {
+                    s = 1;
+                }
+                color.setHsl({
+                    h: self.color.hsl.h,
+                    s: s,
+                    l: getLum(i, j)
+                });
+                var rgb = color.rgb;
+                setPixel(imageData, i, j, rgb.r, rgb.g, rgb.b, 255);
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
+
+        // cut out triangle
+        ctx.beginPath();
+        ctx.moveTo(point1[0], point1[1]);
+        ctx.lineTo(point2[0], point2[1]);
+        ctx.lineTo(point3[0], point3[1]);
+        ctx.lineTo(point1[0], point1[1]);
+        ctx.closePath();
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fill();
+        
+        // shadow
+        ctx.beginPath();
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.moveTo(point1[0], point1[1]);
+        ctx.lineTo(point2[0], point2[1]);
+        ctx.lineTo(point3[0], point3[1]);
+        ctx.lineTo(point1[0], point1[1]);
+        ctx.closePath();
+        ctx.fillStyle = "#000";
+        ctx.shadowColor = 'rgba(0,0,0,0.3)';
+        ctx.shadowBlur = 6;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.fill();
+        ctx.globalCompositeOperation = "source-over";
+        
+        $this.focus(function () {
+            $('#canvasColorPicker-' + self.id).fadeIn('fast')
+        }).blur(function () {
+            $('#canvasColorPicker-' + self.id).fadeOut('medium')
+        });
+    };
+    
+    var methods = {
+        init: function(options) {
+            var settings = $.extend(
+                defaults,
+                options
+            );
+            return this.each(function () {
+                var $this = $(this);
+                if (! $this.data('id')) {
+                    // Instantiate new ColorPicker
+                    var id = next_picker_id++;
+                    $this.data($.extend(settings, {'id':id}));
+                    ColorPickers[id] = new ColorPicker($this, id);
+
+                    // Register callbacks for all events
+                    var events = [
+                        'create',
+                        'destroy'
+                    ];
+                    for (var i in events) {
+                        var name = events[i];
+                        var data = $this.data(name);
+                        if (typeof data === 'function') {
+                            $this.bind(
+                                name + '.canvasColorPicker',
+                                data
+                            );
+                        }
+                    }
+                    // Trigger create event now
+                    $this.trigger('create.canvasColorPicker');
+                 }
+            });
+        },
+        id: function() {
+            return this.data('id');
+        },
+        destroy: function () {
+            this
+            .trigger('destroy.canvasColorPicker')
+            .unbind('.canvasColorPicker')
+            .remove();
+        }
+    };
+    
+    /** Extend jQuery */
+    $.fn.canvasColorPicker = function(method) {
+        if (methods[method]) {
+            return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
+        } else if (typeof method === 'object' || ! method) {
+            return methods.init.apply(this, arguments);
+        } else {
+            $.error('Method ' +  method + ' does not exist on jQuery.canvasColorPicker');
+        }
+    };
+})(jQuery, document, {
+    
+});
+
+$(function () {
+    $('#color').canvasColorPicker();
+});
+
+    </script>
+    <style type="text/css">
+        #mySlider {
+            margin: 10em;
+        }
+        body {
+            background: #adf;
+        }
+    </style>
+</head>
+<body>
+    <div id="mySlider">
+        <input id="color" name="color" type="text" value="#ff0000" />
+    </div>
+</body>
+</html>
