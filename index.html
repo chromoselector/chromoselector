@@ -196,6 +196,16 @@
         ctx.globalCompositeOperation = "source-over"; 
     }
 
+    var PointInTriangle = function(pt, v1, v2, v3) {
+        var b1, b2, b3;
+        var sign = function(p1, p2, p3) {
+            return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
+        }
+        b1 = sign(pt, v1, v2) < 0;
+        b2 = sign(pt, v2, v3) < 0;
+        b3 = sign(pt, v3, v1) < 0;
+        return ((b1 == b2) && (b2 == b3));
+    }
     function getPerpedicularSlope(p1, p2) {
         return -1 / ((p2[1] - p1[1]) / (p2[0] - p1[0]));
     }
@@ -269,9 +279,14 @@
         var dLength = getDistance(point1, inputPoint);
         var dMaxLength = getDistance(point1, thePoint3);
         
+        var s = height / maxHeight;
+        if (isNaN(s)) {
+            s = 0;
+        }
+        
         return {
             h: hue,
-            s: height / maxHeight,
+            s: s,
             l: width / maxWidth,
             a: dLength / dMaxLength
         };
@@ -413,12 +428,8 @@
             (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
             (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
         ];
-        
-
-        
-        
         ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 6, 0, Math.PI*2, false); 
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2, false); 
         ctx.closePath();
         ctx.stroke();
         
@@ -436,7 +447,8 @@
         );
         self.canvas = {};
         self.id = id;
-        self.dragging = false;
+        self.draggingHue = false;
+        self.draggingSatLum = false;
         self.$target = $this;
         self.diameter = 400;
         self.triangleRadius = self.diameter / 2 - 30;
@@ -515,19 +527,9 @@
                 &&
                 ! pointInCircle([x,y], self.diameter/2, radius-lineWidth)
             ) {
-                self.dragging = true;
+                self.draggingHue = true;
                 self.reDrawHue(e);
             } else {
-                var sign = function(p1, p2, p3) {
-                  return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
-                }
-                var PointInTriangle = function(pt, v1, v2, v3) {
-                  var b1, b2, b3;
-                  b1 = sign(pt, v1, v2) < 0;
-                  b2 = sign(pt, v2, v3) < 0;
-                  b3 = sign(pt, v3, v1) < 0;
-                  return ((b1 == b2) && (b2 == b3));
-                }
                 var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
                 var points = [];
                 for (var i = 0; i < 3; i++) {
@@ -535,6 +537,7 @@
                     degrees -= Math.PI * 2 / 3;
                 }
                 if (PointInTriangle([x,y], points[0], points[1], points[2])) {
+                    self.draggingSatLum = true;
                     var color = getColor(points[0], points[1], points[2], [x,y], self.color.hsl.h);
                     self.reDrawSatLum(
                         color.s,
@@ -543,15 +546,96 @@
                 }
             }
         })
-        .bind('mousemove', function (e) {            
-            if (self.dragging) {
+        .bind('mousemove', function (e) {
+            var offset = self.$picker.offset();
+            var x = e.pageX - offset.left;
+            var y = e.pageY - offset.top;
+            if (self.draggingHue) {
                 self.reDrawHue(e);
+            }
+            if (self.draggingSatLum) {
+                var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+                var points = [];
+                for (var i = 0; i < 3; i++) {
+                    points[i] = getPointOnCircle(self.triangleRadius, degrees, self.diameter / 2);
+                    degrees -= Math.PI * 2 / 3;
+                }
+                var borderPoint = [x, y];
+                if (! PointInTriangle([x,y], points[0], points[1], points[2])) {
+                   /* x -= self.diameter / 2;
+                    y -= self.diameter / 2;*/
+                    var int1 = intersectLineLine(
+                        [x, y],
+                        [self.diameter / 2, self.diameter / 2],
+                        points[0],
+                        points[1]
+                    );
+                    var int2 = intersectLineLine(
+                        [x, y],
+                        [self.diameter / 2, self.diameter / 2],
+                        points[0],
+                        points[2]
+                    );
+                    var int3 = intersectLineLine(
+                        [x, y],
+                        [self.diameter / 2, self.diameter / 2],
+                        points[1],
+                        points[2]
+                    );
+                    var dist1 = [
+                        (points[0][0] + points[1][0]) / 2,
+                        (points[0][1] + points[1][1]) / 2
+                    ];
+                    var dist2 = [
+                        (points[0][0] + points[2][0]) / 2,
+                        (points[0][1] + points[2][1]) / 2
+                    ];
+                    var dist3 = [
+                        (points[1][0] + points[2][0]) / 2,
+                        (points[1][1] + points[2][1]) / 2
+                    ];
+                    
+                    var d1 = getDistance([x, y], dist1);
+                    var d2 = getDistance([x, y], dist2);
+                    var d3 = getDistance([x, y], dist3);
+                    
+                    if (d1 <= d2 && d1 <= d3) {
+                        borderPoint = int1;
+                    } else if (d2 <= d1 && d2 <= d3) {
+                        borderPoint = int2;
+                    } else {
+                        borderPoint = int3;
+                    }
+                }
+                var color = getColor(points[0], points[1], points[2], borderPoint, self.color.hsl.h);
+                self.reDrawSatLum(
+                    color.s,
+                    color.l
+                );
             }
         })
         .bind('mouseup', function (e) {
-            if (self.dragging) {
-                self.dragging = false;
+            var offset = self.$picker.offset();
+            var x = e.pageX - offset.left;
+            var y = e.pageY - offset.top;
+            
+            if (self.draggingHue) {
+                self.draggingHue = false;
                 self.reDrawHue(e);
+            }
+            if (self.draggingSatLum) {
+                self.draggingSatLum = false;
+               /* var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+                var points = [];
+                for (var i = 0; i < 3; i++) {
+                    points[i] = getPointOnCircle(self.triangleRadius, degrees, self.diameter / 2);
+                    degrees -= Math.PI * 2 / 3;
+                }
+                var color = getColor(points[0], points[1], points[2], [x,y], self.color.hsl.h);
+                self.reDrawSatLum(
+                    color.s,
+                    color.l
+                );*/
             }
         });
     };
