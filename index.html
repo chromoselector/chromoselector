@@ -139,6 +139,20 @@
         var imageData = ctx.createImageData(diameter, diameter);
         var x, y, r, g, b;
         var origin = [Math.round(diameter / 2), Math.round(diameter / 2)];
+        var getValue = function (degree) {
+            degree %= 360;
+            var g;
+            if (degree < 60 || degree == 360) {
+                g = 255 * (degree / 60);
+            } else if (degree >= 60 && degree < 180) {
+                g = 255;
+            } else if (degree >= 180 && degree < 240) {
+                g = 255 * ((60 - (degree - 180)) / 60);
+            } else if (degree >= 240 && degree < 360) {
+                g = 0;
+            }
+            return g;
+        };
         for (var i = 0; i < diameter; i++) {
             for (var j = 0; j < diameter; j++) {
                 x = i - origin[0];
@@ -146,20 +160,6 @@
                 var degree = Math.round(
                     Math.atan2(x, y) * (180/Math.PI) + 180
                 );
-                var getValue = function (degree) {
-                    degree %= 360;
-                    var g;
-                    if (degree < 60 || degree == 360) {
-                        g = 255 * (degree / 60);
-                    } else if (degree >= 60 && degree < 180) {
-                        g = 255;
-                    } else if (degree >= 180 && degree < 240) {
-                        g = 255 * ((60 - (degree - 180)) / 60);
-                    } else if (degree >= 240 && degree < 360) {
-                        g = 0;
-                    }
-                    return g;
-                };
                 r = getValue(degree + 210);
                 g = getValue(degree + 90);
                 b = getValue(degree + 330);
@@ -170,27 +170,171 @@
         var lineWidth = diameter >= 180 ? 18 : 9;
         var blur = diameter >= 180 ? 10 : 6;
         var offset = diameter >= 180 ? origin[1] - 15 : origin[1] - 10;
+        var arc = function () {
+            ctx.beginPath();
+            ctx.arc(origin[0], origin[1], offset, 0, Math.PI*2, false); 
+            ctx.closePath();
+            ctx.stroke();
+        };
         // copy the image data back onto the canvas
         ctx.putImageData(imageData, 0, 0); // at coords 0,0
-        ctx.beginPath();
-        ctx.arc(origin[0], origin[1], offset, 0, Math.PI*2, false); 
-        ctx.closePath();
+        // cut out doughnut
         ctx.globalCompositeOperation = "destination-in";
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
-        ctx.stroke();
+        arc();
         // shadow
-        ctx.beginPath();
         ctx.globalCompositeOperation = "destination-over";
-        ctx.arc(origin[0], origin[1], offset, 0, Math.PI*2, false); 
-        ctx.closePath();
         ctx.lineWidth = blur;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = blur;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
-        ctx.stroke();
+        arc();
         ctx.globalCompositeOperation = "source-over"; 
+    }
+
+    function getPerpedicularSlope(p1, p2) {
+        return -1 / ((p2[1] - p1[1]) / (p2[0] - p1[0]));
+    }
+    function getDistance(p1, p2) {
+        return Math.sqrt(
+            Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2)
+        );
+    }
+    function pointOnLine(point, slope) {
+        if (Math.abs(slope) == Infinity) {
+            return [
+                point[0],
+                point[1] + 100
+            ];
+        }
+        return [
+            point[0] + 100,
+            slope * 100 + point[1]
+        ];
+    }
+    function intersectLineLine(a1, a2, b1, b2) {
+        var u_b = (b2[1] - b1[1]) * (a2[0] - a1[0]) - (b2[0] - b1[0]) * (a2[1] - a1[1]);
+        var ua_t = (b2[0] - b1[0]) * (a1[1] - b1[1]) - (b2[1] - b1[1]) * (a1[0] - b1[0]);
+        var ua = ua_t / u_b;
+        return [
+            a1[0] + ua * (a2[0] - a1[0]),
+            a1[1] + ua * (a2[1] - a1[1])
+        ];
+    }
+    function getColor(point1, point2, point3, inputPoint, hue) {
+        if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
+            return { // fixes black point at the edge of the selector
+                h: hue,
+                s: 0,
+                l: 1
+            };
+        }
+        var m = getPerpedicularSlope(point2, point3);
+        var inputPoint2 = pointOnLine(inputPoint, m);
+        var thePoint1 = intersectLineLine(
+            inputPoint,
+            inputPoint2,
+            point2,
+            point3
+        );
+        var maxWidth = getDistance(point2, point3);
+        var width = getDistance(point3, thePoint1);
+        if (width >= maxWidth / 2) {
+            var perpedicularPoint = point2;
+        } else {
+            var perpedicularPoint = point3;
+        }
+        m = getPerpedicularSlope(point1, perpedicularPoint);
+        inputPoint2 = pointOnLine(inputPoint, m);
+        var thePoint2 = intersectLineLine(
+            inputPoint,
+            inputPoint2,
+            point1,
+            perpedicularPoint
+        );
+        var height = getDistance(thePoint1, inputPoint);
+        var maxHeight = getDistance(thePoint1, thePoint2);
+        return {
+            h: hue,
+            s: height / maxHeight,
+            l: width / maxWidth
+        };
+    }
+    function getPointOnCircle(radius, degrees, offset) {
+        return [
+            offset + Math.round(radius * Math.cos(degrees)),
+            offset + Math.round(radius * Math.sin(degrees))
+        ];
+    }
+    function drawSaturationLimunositySelector(canvas, diameter, hue, id) {
+        var ctx = canvas.getContext("2d");
+        var imageData = ctx.createImageData(diameter, diameter);
+        var triangleRadius = diameter / 2 - 30;
+        var degrees = (1 - hue) * Math.PI * 2;
+        var points = [];
+        for (var i = 0; i < 3; i++) {
+            points[i] = getPointOnCircle(triangleRadius, degrees, diameter / 2);
+            degrees -= Math.PI * 2 / 3;
+        }
+        // triangle limits
+        var limits = function (points, axis) {
+            return {
+                start: Math.min(points[0][axis], points[1][axis], points[2][axis]),
+                end: Math.max(points[0][axis], points[1][axis], points[2][axis])
+            };
+        };
+        var limitX = limits(points, 0);
+        var limitY = limits(points, 1);
+        // draw
+        for (var i = limitX.start; i <= limitX.end; i++) {
+            for (var j = limitY.start; j <= limitY.end; j++) {
+                var hsl = getColor(points[0], points[1], points[2], [i, j], hue);
+                /* if (hsl.s < 0) {
+                    hsl.s = 0;
+                } else if (hsl.s > 1) {
+                    hsl.s = 1;
+                } */
+                var rgb = Color.prototype.hsl2rgb(hsl);
+                setPixel(imageData, i, j, rgb.r, rgb.g, rgb.b, 255);
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
+        // cut out triangle
+        ctx.beginPath();
+        ctx.moveTo(points[0][0], points[0][1]);
+        ctx.lineTo(points[1][0], points[1][1]);
+        ctx.lineTo(points[2][0], points[2][1]);
+        ctx.closePath();
+        ctx.globalCompositeOperation = "destination-in";
+        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fill();
+        // shadow
+       /* ctx.beginPath();
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.moveTo(point1[0], point1[1]);
+        ctx.lineTo(point2[0], point2[1]);
+        ctx.lineTo(point3[0], point3[1]);
+        ctx.closePath();
+        ctx.fillStyle = "#000";
+        ctx.shadowColor = 'rgba(0,0,0,0.2)';
+        ctx.shadowBlur = 5;
+        ctx.shadowOffsetX = 0;
+        ctx.shadowOffsetY = 0;
+        ctx.fill();*/
+        ctx.globalCompositeOperation = "source-over";
+        
+        if (typeof saved[id] !== 'undefined') {
+           setTimeout(function () {
+                drawSaturationLimunositySelector(canvas, diameter, saved[id], id);
+                saved[id] = undefined;
+            }, 4);
+        } else {
+            setTimeout(function () {
+                drawing[id] = false;
+            }, 4);
+        }
     }
 
     /** The color picker object */
@@ -212,138 +356,58 @@
             .insertAfter(
                 self.$target
             ).html(
-                '<canvas width="200" height="200" style="position: absolute"></canvas>'
-                + '<canvas width="200" height="200" style="position: absolute"></canvas>'
+                '<canvas width="400" height="400" style="position: absolute"></canvas>'
+                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
             );
 
-        drawHueSelector(self.$picker.find('canvas')[0], 200);
-       
-        var canvas = self.$picker.find('canvas')[1];
-        var ctx = canvas.getContext("2d");
-        var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
-        
-        var point1 = [100 + Math.round(68 * Math.cos(degrees)), 100 + Math.round(68 * Math.sin(degrees))];
-        degrees -= Math.PI * 2 / 3;
-        var point2 = [100 + Math.round(68 * Math.cos(degrees)), 100 + Math.round(68 * Math.sin(degrees))];
-        degrees -= Math.PI * 2 / 3;
-        var point3 = [100 + Math.round(68 * Math.cos(degrees)), 100 + Math.round(68 * Math.sin(degrees))];
-       // console.log(point1, point2, point3)
-
-
-        function intersection(a, b, c, d) {
-            var A1 = a[1]-b[1]
-            var B1 = a[0]-b[0]
-            var C1 = A1*a[0]+B1*a[1];
-            var A1 = c[1]-d[1]
-            var B2 = c[0]-d[0]
-            var C2 = A1*c[0]+B1*c[1];
-            var det = A1*B2 - A2*B1;
-            if (det == 0) {
-                return [-1000,-1000];
-            }
-            return [
-                x = (B2*C1 - B1*C2)/det,
-                y = (A1*C2 - A2*C1)/det
-            ];
-        }
-        
-        function getSat(x, y) {
-            var input = [x, y];
-            var thePoint1 = [input[0], Math.max(point2[1], point3[1])];
-            if (thePoint1[0] - point2[0] <= (point3[0] - point2[0]) / 2) {
-                var adj = point2[0] - input[0];
-                var opposite = Math.tan(Math.PI / 3) * adj;
-                var thePoint2 = [Math.round(point2[0] - adj), Math.round(point2[1] - opposite)];
-            } else {
-                var adj = point3[0] - input[0];
-                var opposite = Math.tan(Math.PI / 3) * adj;
-                var thePoint2 = [Math.round(point3[0] - adj), Math.round(point3[1] - opposite)];
-            }
-            return Math.sqrt(
-                Math.pow(thePoint1[0]-input[0], 2)
-                +
-                Math.pow(thePoint1[1]-input[1], 2)
-            ) / Math.sqrt(
-                Math.pow(thePoint1[0]-thePoint2[0], 2)
-                +
-                Math.pow(thePoint1[1]-thePoint2[1], 2)
-            )
-        }
-        
-        function getLum(x, y) {
-            var input = [x, y];
-            var thePoint1 = [input[0], Math.max(point2[1], point3[1])];
-            var maxLen = (point3[0] - point2[0]) / 2;
-            if (thePoint1[0] - point2[0] <= maxLen) {
-                var adj = input[0] - point2[0];
-                var ratio = 1 - ((adj / maxLen) * 0.5);
-                return ratio;
-            } else {
-                var adj = point3[0] - input[0];
-                var ratio = (adj / maxLen) * 0.5;
-                return ratio;
-            }
-        }
-        
-        var imageData = ctx.createImageData(200, 200);
-        // triangle
-        var startX = Math.min(point1[0], point2[0], point3[0]);
-        var endX   = Math.max(point1[0], point2[0], point3[0]);
-        var startY = Math.min(point1[1], point2[1], point3[1]);
-        var endY   = Math.max(point1[1], point2[1], point3[1]);
-        for (var i = 0; i <= 200; i++) {
-            for (var j = 0; j <= 200; j++) {
-                var color = new Color();
-                var s = getSat(i, j);
-                if (s < 0) {
-                    s = 0;
-                } else if (s > 1) {
-                    s = 1;
-                }
-                color.setHsl({
-                    h: self.color.hsl.h,
-                    s: s,
-                    l: getLum(i, j)
-                });
-                var rgb = color.rgb;
-                setPixel(imageData, i, j, rgb.r, rgb.g, rgb.b, 255);
-            }
-        }
-        ctx.putImageData(imageData, 0, 0);
-
-        // cut out triangle
-        ctx.beginPath();
-        ctx.moveTo(point1[0], point1[1]);
-        ctx.lineTo(point2[0], point2[1]);
-        ctx.lineTo(point3[0], point3[1]);
-        ctx.lineTo(point1[0], point1[1]);
-        ctx.closePath();
-        ctx.globalCompositeOperation = "destination-in";
-        ctx.fillStyle = "rgba(0,0,0,1)";
-        ctx.fill();
-        
-        // shadow
-        ctx.beginPath();
-        ctx.globalCompositeOperation = "destination-over";
-        ctx.moveTo(point1[0], point1[1]);
-        ctx.lineTo(point2[0], point2[1]);
-        ctx.lineTo(point3[0], point3[1]);
-        ctx.lineTo(point1[0], point1[1]);
-        ctx.closePath();
-        ctx.fillStyle = "#000";
-        ctx.shadowColor = 'rgba(0,0,0,0.3)';
-        ctx.shadowBlur = 6;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
-        ctx.fill();
-        ctx.globalCompositeOperation = "source-over";
+        var diameter = 400;
+        drawHueSelector(
+            self.$picker.find('canvas')[0], diameter
+        );
+        drawSaturationLimunositySelector(
+            self.$picker.find('canvas')[1], diameter, self.color.hsl.h, self.$target.data('id')
+        );
         
         $this.focus(function () {
             $('#canvasColorPicker-' + self.id).fadeIn('fast')
         }).blur(function () {
-            $('#canvasColorPicker-' + self.id).fadeOut('medium')
+           // $('#canvasColorPicker-' + self.id).fadeOut('medium')
+        })
+        
+        $('#canvasColorPicker-' + self.id).mousedown(function () {
+            dragging[ self.$target.data('id') ] = true;
+        }).mousemove(function (e) {            
+            if (dragging[ self.$target.data('id') ] == true) {
+                var offset = $(this).offset();
+                var angle = Math.atan2(
+                    e.pageX - offset.left - diameter / 2,
+                    e.pageY - offset.top - diameter / 2
+                ) * (180/Math.PI) - 90;
+                if (drawing[ self.$target.data('id') ] == true) {
+                    saved[ self.$target.data('id') ] = angle / 360;
+                } else {
+                    drawing[ self.$target.data('id') ] = true;
+                    drawSaturationLimunositySelector(
+                        self.$picker.find('canvas')[1], diameter, angle / 360, self.$target.data('id')
+                    );
+                }
+            }
+        }).mouseup(function (e) {
+            dragging = [];
+            
+            var offset = $(this).offset();
+            var angle = Math.atan2(
+                e.pageX - offset.left - diameter / 2,
+                e.pageY - offset.top - diameter / 2
+            ) * (180/Math.PI) - 90;
+            drawSaturationLimunositySelector(
+                self.$picker.find('canvas')[1], diameter, angle / 360, self.$target.data('id')
+            );
         });
     };
+    var dragging = [];
+    var drawing = [];
+    var saved = [];
     
     var methods = {
         init: function(options) {
@@ -358,7 +422,6 @@
                     var id = next_picker_id++;
                     $this.data($.extend(settings, {'id':id}));
                     ColorPickers[id] = new ColorPicker($this, id);
-
                     // Register callbacks for all events
                     var events = [
                         'create',
