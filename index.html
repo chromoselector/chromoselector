@@ -256,10 +256,22 @@
         );
         var height = getDistance(thePoint1, inputPoint);
         var maxHeight = getDistance(thePoint1, thePoint2);
+        
+        var thePoint3 = intersectLineLine(
+            inputPoint,
+            point1,
+            point2,
+            point3
+        );
+        
+        var dLength = getDistance(point1, inputPoint);
+        var dMaxLength = getDistance(point1, thePoint3);
+        
         return {
             h: hue,
             s: height / maxHeight,
-            l: width / maxWidth
+            l: width / maxWidth,
+            a: dLength / dMaxLength
         };
     }
     function getPointOnCircle(radius, degrees, offset) {
@@ -268,39 +280,86 @@
             offset + Math.round(radius * Math.sin(degrees))
         ];
     }
+    
+    var maskImageData = false;
     function drawSaturationLimunositySelector(canvas, diameter, hue, id) {
         var ctx = canvas.getContext("2d");
-        var imageData = ctx.createImageData(diameter, diameter);
         var triangleRadius = diameter / 2 - 30;
-        var degrees = (1 - hue) * Math.PI * 2;
+        var degrees = -Math.PI / 2;//(1 - hue) * Math.PI * 2;
         var points = [];
         for (var i = 0; i < 3; i++) {
             points[i] = getPointOnCircle(triangleRadius, degrees, diameter / 2);
             degrees -= Math.PI * 2 / 3;
         }
-        // triangle limits
-        var limits = function (points, axis) {
-            return {
-                start: Math.min(points[0][axis], points[1][axis], points[2][axis]),
-                end: Math.max(points[0][axis], points[1][axis], points[2][axis])
+        
+        
+        
+        if (maskImageData === false) {
+            maskImageData = ctx.createImageData(diameter, diameter);
+            // triangle limits
+            var limits = function (points, axis) {
+                return {
+                    start: Math.min(points[0][axis], points[1][axis], points[2][axis]),
+                    end: Math.max(points[0][axis], points[1][axis], points[2][axis])
+                };
             };
-        };
-        var limitX = limits(points, 0);
-        var limitY = limits(points, 1);
-        // draw
-        for (var i = limitX.start; i <= limitX.end; i++) {
-            for (var j = limitY.start; j <= limitY.end; j++) {
-                var hsl = getColor(points[0], points[1], points[2], [i, j], hue);
-                /* if (hsl.s < 0) {
-                    hsl.s = 0;
-                } else if (hsl.s > 1) {
-                    hsl.s = 1;
-                } */
-                var rgb = Color.prototype.hsl2rgb(hsl);
-                setPixel(imageData, i, j, rgb.r, rgb.g, rgb.b, 255);
+            var limitX = limits(points, 0);
+            var limitY = limits(points, 1);
+            // draw
+            for (var i = limitX.start; i <= limitX.end; i++) {
+                for (var j = limitY.start; j <= limitY.end; j++) {
+                    var hsl = getColor(points[0], points[1], points[2], [i, j], hue);
+                     if (hsl.a < 0) {
+                        hsl.a = 0;
+                    } else if (hsl.a > 1) {
+                        hsl.a = 1;
+                    } 
+                 /*   var rgb = Color.prototype.hsl2rgb(hsl);
+                    var avg = (rgb.r + rgb.g + rgb.b) / 3;
+                    if (hsl.l > 0.5) {
+                        var alpha = hsl.l * 255;
+                    } else {
+                        var alpha = 255 - hsl.l * 255;
+                    }
+                    //if (hsl.s < 0.5) {
+                        alpha *= (1 - hsl.s);
+                   /* } else {
+                        alpha *= (1 - hsl.s);
+                    }*/
+                    
+                    var rgb = Color.prototype.hsl2rgb(hsl);
+                    var avg = (rgb.r + rgb.g + rgb.b) / 3;
+                    
+                    var alpha = 0; //127.5 - (hsl.s * 127.5);
+                    
+                    if (hsl.l > 0.5) {
+                        alpha += hsl.l * 255;
+                    } else {
+                        alpha += 255 - (hsl.l * 255);
+                    }
+                   // console.log(hsl.a)
+                    setPixel(maskImageData, i, j, avg, avg, avg, hsl.a * 255);
+                }
             }
         }
-        ctx.putImageData(imageData, 0, 0);
+
+        var clr = new Color();
+        clr.setHsl({
+            h: hue,
+            s: 1,
+            l: 0.5
+        });
+
+        
+        ctx.putImageData(maskImageData, 0, 0);
+        
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.fillStyle = clr.hex;
+        ctx.fillRect(0,0,diameter,diameter);
+        
+        
+        
+        
         // cut out triangle
         ctx.beginPath();
         ctx.moveTo(points[0][0], points[0][1]);
@@ -327,8 +386,10 @@
         
         if (typeof saved[id] !== 'undefined') {
            setTimeout(function () {
-                drawSaturationLimunositySelector(canvas, diameter, saved[id], id);
+                var hue = saved[id];
+                console.log(hue)
                 saved[id] = undefined;
+                drawSaturationLimunositySelector(canvas, diameter, hue, id);
             }, 4);
         } else {
             setTimeout(function () {
@@ -382,7 +443,7 @@
                 var angle = Math.atan2(
                     e.pageX - offset.left - diameter / 2,
                     e.pageY - offset.top - diameter / 2
-                ) * (180/Math.PI) - 90;
+                ) * (180/Math.PI) + 270;
                 if (drawing[ self.$target.data('id') ] == true) {
                     saved[ self.$target.data('id') ] = angle / 360;
                 } else {
@@ -394,12 +455,11 @@
             }
         }).mouseup(function (e) {
             dragging = [];
-            
             var offset = $(this).offset();
             var angle = Math.atan2(
                 e.pageX - offset.left - diameter / 2,
                 e.pageY - offset.top - diameter / 2
-            ) * (180/Math.PI) - 90;
+            ) * (180/Math.PI) + 270;
             drawSaturationLimunositySelector(
                 self.$picker.find('canvas')[1], diameter, angle / 360, self.$target.data('id')
             );
