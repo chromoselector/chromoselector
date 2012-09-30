@@ -540,9 +540,9 @@
         * Register events
         */
         $this.focus(function () {
-            $('#canvasColorPicker-' + self.id).fadeIn('fast');
+            self.$picker.fadeIn('fast');
         }).blur(function () {
-           // $('#canvasColorPicker-' + self.id).fadeOut('medium');
+           // self.$picker.fadeOut('medium');
         });
         self.$picker.bind('mousedown', function (e) {
             var radius = self.diameter/2 - 15;
