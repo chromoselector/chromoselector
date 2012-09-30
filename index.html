@@ -689,8 +689,14 @@
 
 });
 
+var init = false;
 $(function () {
-    $('#color').canvasColorPicker();
+    $('#color').mouseover(function() {
+        if (! init) {
+            init = true;
+            $(this).canvasColorPicker();
+        }
+    });
 });
 
     </script>
