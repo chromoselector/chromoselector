@@ -38,7 +38,7 @@
         var r = /^#([0-9a-f]{3}){1,2}$/i;
         if (r.test(value)) {
             if (value.length === 4) {
-                value = value.replace(/[0-9a-f]/gi, function(match) { 
+                value = value.replace(/[0-9a-f]/gi, function(match) {
                     return match + match;
                 });
             }
@@ -129,7 +129,7 @@
             b: convert(value.substring(5,7))
         };
     };
-    
+
     /**
      * Sets a pixel on a canvas
      */
@@ -140,7 +140,7 @@
         imageData.data[index+2] = b;
         imageData.data[index+3] = a;
     }
-    
+
     /**
      * Draws the rainbow wheel
      */
@@ -182,7 +182,7 @@
         var offset = (diameter / 2) - 15;
         var arc = function () {
             ctx.beginPath();
-            ctx.arc(self.origin[0], self.origin[1], offset, 0, Math.PI*2, false); 
+            ctx.arc(self.origin[0], self.origin[1], offset, 0, Math.PI*2, false);
             ctx.closePath();
             ctx.stroke();
         };
@@ -201,11 +201,11 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         arc();
-        ctx.globalCompositeOperation = "source-over"; 
+        ctx.globalCompositeOperation = "source-over";
     }
-    
-    
-    
+
+
+
     function getMidpoint(p1, p2) {
         return [
             (p1[0] + p2[0]) / 2,
@@ -216,13 +216,12 @@
         return getDistance(point, [origin, origin]) <= radius;
     }
     function pointInTriangle(pt, v1, v2, v3) {
-        var b1, b2, b3;
         var sign = function(p1, p2, p3) {
             return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
         };
-        b1 = sign(pt, v1, v2) < 0;
-        b2 = sign(pt, v2, v3) < 0;
-        b3 = sign(pt, v3, v1) < 0;
+        var b1 = sign(pt, v1, v2) < 0;
+        var b2 = sign(pt, v2, v3) < 0;
+        var b3 = sign(pt, v3, v1) < 0;
         return ((b1 === b2) && (b2 === b3));
     }
     function getPerpedicularSlope(p1, p2) {
@@ -254,9 +253,9 @@
             a1[1] + ua * (a2[1] - a1[1])
         ];
     }
-    
-    
-    
+
+
+
     function getColor(point1, point2, point3, inputPoint, hue) {
         if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
             return { // fixes black point at the edge of the selector
@@ -289,22 +288,22 @@
         );
         var height = getDistance(thePoint1, inputPoint);
         var maxHeight = getDistance(thePoint1, thePoint2);
-        
+
         var thePoint3 = intersectLineLine(
             inputPoint,
             point1,
             point2,
             point3
         );
-        
+
         var dLength = getDistance(point1, inputPoint);
         var dMaxLength = getDistance(point1, thePoint3);
-        
+
         var s = height / maxHeight;
         if (isNaN(s)) {
             s = 0;
         }
-        
+
         return {
             h: hue,
             s: s,
@@ -318,7 +317,7 @@
             offset + Math.round(radius * Math.sin(degrees))
         ];
     }
-    
+
     var maskImageData = false;
     function drawSaturationLimunositySelector(self, hue) {
         var canvas = self.$picker.find('canvas')[1];
@@ -372,7 +371,7 @@
         ctx.restore();
         // fill background color
         ctx.globalCompositeOperation = "destination-over";
-        
+
         ctx.fillStyle = clr.hex;
         ctx.fillRect(0,0,self.diameter,self.diameter);
         // cut out triangle
@@ -404,10 +403,10 @@
         ctx.strokeStyle = "rgba(1,1,1,1)";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2, false); 
+        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2, false);
         ctx.closePath();
         ctx.stroke();
-        
+
         /** draw sat/lum indicator */
         var colorPoint = [
             (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
@@ -438,7 +437,7 @@
             (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
         ];
         ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2, false); 
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2, false);
         ctx.closePath();
         ctx.stroke();
         setTimeout(function () {
@@ -676,7 +675,7 @@
             .remove();
         }
     };
-    
+
     /** Extend jQuery */
     $.fn.canvasColorPicker = function(method) {
         if (methods[method]) {
@@ -688,7 +687,7 @@
         }
     };
 })(jQuery, document, {
-    
+
 });
 
 $(function () {
