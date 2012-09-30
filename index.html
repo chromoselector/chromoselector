@@ -140,7 +140,6 @@
         var ctx = self.$picker.find('canvas')[0].getContext("2d");
         var imageData = ctx.createImageData(diameter, diameter);
         var x, y, r, g, b;
-        var origin = [Math.round(diameter / 2), Math.round(diameter / 2)];
         var getValue = function (degree) {
             degree %= 360;
             var g;
@@ -157,8 +156,8 @@
         };
         for (var i = 0; i < diameter; i++) {
             for (var j = 0; j < diameter; j++) {
-                x = i - origin[0];
-                y = j - origin[1];
+                x = i - self.origin[0];
+                y = j - self.origin[1];
                 var degree = Math.round(
                     Math.atan2(x, y) * (180/Math.PI) + 180
                 );
@@ -171,10 +170,10 @@
         }
         var lineWidth = 18;
         var blur = 10;
-        var offset = origin[1] - 15;
+        var offset = (diameter / 2) - 15;
         var arc = function () {
             ctx.beginPath();
-            ctx.arc(origin[0], origin[1], offset, 0, Math.PI*2, false); 
+            ctx.arc(self.origin[0], self.origin[1], offset, 0, Math.PI*2, false); 
             ctx.closePath();
             ctx.stroke();
         };
@@ -195,8 +194,19 @@
         arc();
         ctx.globalCompositeOperation = "source-over"; 
     }
-
-    var PointInTriangle = function(pt, v1, v2, v3) {
+    
+    
+    
+    function getMidpoint(p1, p2) {
+        return [
+            (p1[0] + p2[0]) / 2,
+            (p1[1] + p2[1]) / 2
+        ];
+    }
+    function pointInCircle(point, origin, radius) {
+        return getDistance(point, [origin, origin]) <= radius;
+    }
+    function PointInTriangle(pt, v1, v2, v3) {
         var b1, b2, b3;
         var sign = function(p1, p2, p3) {
             return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
@@ -235,6 +245,9 @@
             a1[1] + ua * (a2[1] - a1[1])
         ];
     }
+    
+    
+    
     function getColor(point1, point2, point3, inputPoint, hue) {
         if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
             return { // fixes black point at the edge of the selector
@@ -343,11 +356,8 @@
             l: 0.5
         });
         var degrees = (1 - hue) * Math.PI * 2;
-        var points = [];
-        for (var i = 0; i < 3; i++) {
-            points[i] = getPointOnCircle(self.triangleRadius, degrees, self.diameter / 2);
-            degrees -= Math.PI * 2 / 3;
-        }
+        var points = self.getPoints(degrees);
+
         // Draw mask
         ctx.putImageData(maskImageData, 0, 0);
         // Rotate mask
@@ -451,6 +461,7 @@
         self.draggingSatLum = false;
         self.$target = $this;
         self.diameter = 220;
+        self.origin = [self.diameter / 2, self.diameter / 2];
         self.triangleRadius = self.diameter / 2 - 30;
         self.$picker = $('<div></div>')
             .hide()
@@ -495,6 +506,18 @@
                 self.color.hex
             );
         };
+        self.getPoints = function(hue) {
+            var points = [];
+            for (var i = 0; i < 3; i++) {
+                points[i] = getPointOnCircle(
+                    self.triangleRadius,
+                    hue,
+                    self.diameter / 2
+                );
+                hue -= Math.PI * 2 / 3;
+            }
+            return points;
+        }
         /**
         * Start processing
         */
@@ -512,111 +535,82 @@
         }).blur(function () {
            // $('#canvasColorPicker-' + self.id).fadeOut('medium')
         })
-        self.$picker
-        .bind('mousedown', function (e) {
+        self.$picker.bind('mousedown', function (e) {
             var radius = self.diameter/2 - 15;
             var offset = self.$picker.offset();
-            var x = e.pageX - offset.left;
-            var y = e.pageY - offset.top;
+            var inputPoint = [
+                e.pageX - offset.left,
+                e.pageY - offset.top
+            ];
             var lineWidth = 9;
-            var pointInCircle = function (point, origin, radius) {
-                return getDistance(point, [origin, origin]) <= radius;
-            }
             if (
-                pointInCircle([x,y], self.diameter/2, radius+lineWidth)
+                pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
                 &&
-                ! pointInCircle([x,y], self.diameter/2, radius-lineWidth)
+                ! pointInCircle(inputPoint, self.diameter/2, radius-lineWidth)
             ) {
                 self.draggingHue = true;
                 self.reDrawHue(e);
             } else {
                 var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
-                var points = [];
-                for (var i = 0; i < 3; i++) {
-                    points[i] = getPointOnCircle(self.triangleRadius, degrees, self.diameter / 2);
-                    degrees -= Math.PI * 2 / 3;
-                }
-                if (PointInTriangle([x,y], points[0], points[1], points[2])) {
+                var points = self.getPoints(degrees);
+                if (PointInTriangle(inputPoint, points[0], points[1], points[2])) {
                     self.draggingSatLum = true;
-                    var color = getColor(points[0], points[1], points[2], [x,y], self.color.hsl.h);
-                    self.reDrawSatLum(
-                        color.s,
-                        color.l
-                    );
+                    handleSatLumDrag(self, e);
                 }
             }
-        })
-        .bind('mousemove', function (e) {
+        });
+        $([window, document]).bind('mousemove', function (e) {
             if (self.draggingHue) {
                 self.reDrawHue(e);
             }
             if (self.draggingSatLum) {
-                handleDrag(self, e);
+                handleSatLumDrag(self, e);
             }
-        })
-        .bind('mouseup', function (e) {
+        }).bind('mouseup', function (e) {
             if (self.draggingHue) {
                 self.draggingHue = false;
                 self.reDrawHue(e);
             }
             if (self.draggingSatLum) {
                 self.draggingSatLum = false;
-                handleDrag(self, e);
+                handleSatLumDrag(self, e);
             }
         });
     };
-    
-    function handleDrag(self, e) {
+
+    function handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
-        var x = e.pageX - offset.left;
-        var y = e.pageY - offset.top;
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
-        var points = [];
-        for (var i = 0; i < 3; i++) {
-            points[i] = getPointOnCircle(self.triangleRadius, degrees, self.diameter / 2);
-            degrees -= Math.PI * 2 / 3;
-        }
-        var sanitisedInputPoint = [x, y];
+        var points = self.getPoints(degrees);
+        var sanitisedInputPoint = [
+            e.pageX - offset.left,
+            e.pageY - offset.top
+        ];
         if (! PointInTriangle(sanitisedInputPoint, points[0], points[1], points[2])) {
-            var origin = [self.diameter / 2, self.diameter / 2];
-            var int1 = intersectLineLine(
-                sanitisedInputPoint,
-                origin,
-                points[0],
-                points[1]
-            );
-            var int2 = intersectLineLine(
-                sanitisedInputPoint,
-                origin,
-                points[0],
-                points[2]
-            );
-            var int3 = intersectLineLine(
-                sanitisedInputPoint,
-                origin,
-                points[1],
-                points[2]
-            );
-            
-            var midpoints = [];
-            var midpoint = function (p1, p2) {
-                return [
-                    (p1[0] + p2[0]) / 2,
-                    (p1[1] + p2[1]) / 2
-                ];
+            var vertices1 = [0,0,1];
+            var vertices2 = [1,2,2];
+            var intersections = [];
+            for (var i=0; i<3; i++) {
+                intersections[i] = intersectLineLine(
+                    sanitisedInputPoint,
+                    self.origin,
+                    points[vertices1[i]],
+                    points[vertices2[i]]
+                );
+            }
+            var distances = [];
+            for (var i=0; i<3; i++) {
+                distances[i] = getDistance(
+                    sanitisedInputPoint,
+                    getMidpoint(points[vertices1[i]], points[vertices2[i]])
+                );
             };
-            var distances = [
-                getDistance(sanitisedInputPoint, midpoint(points[0], points[1])),
-                getDistance(sanitisedInputPoint, midpoint(points[0], points[2])),
-                getDistance(sanitisedInputPoint, midpoint(points[1], points[2]))
-            ];
-            
             if (distances[0] <= distances[1] && distances[0] <= distances[2]) {
-                sanitisedInputPoint = int1;
+                sanitisedInputPoint = intersections[0];
             } else if (distances[1] <= distances[0] && distances[1] <= distances[2]) {
-                sanitisedInputPoint = int2;
+                sanitisedInputPoint = intersections[1];
             } else {
-                sanitisedInputPoint = int3;
+                sanitisedInputPoint = intersections[2];
             }
         }
         var color = getColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
