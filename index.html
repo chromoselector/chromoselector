@@ -357,6 +357,9 @@
             l: 0.5
         });
 
+        degrees = (1 - hue) * Math.PI * 2;
+        points = self.getPoints(degrees);
+
         // Draw mask
         ctx.putImageData(maskImageData, 0, 0);
         // Rotate mask
