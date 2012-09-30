@@ -147,38 +147,54 @@
         var diameter = self.diameter;
         var ctx = self.$picker.find('canvas')[0].getContext("2d");
         var imageData = ctx.createImageData(diameter, diameter);
-        var x, y, r, g, b;
-        var getValue = function (degree) {
-            degree %= 360;
-            var g;
-            if (degree < 60) {
-                g = 255 * (degree / 60);
-            } else if (degree < 180) {
-                g = 255;
-            } else if (degree < 240) {
-                g = 255 * ((240 - degree) / 60);
-            } else if (degree < 360) {
-                g = 0;
-            }
-            return g;
-        };
-        for (var i = 0; i < diameter; i++) {
-            x = i - self.origin[0];
-            for (var j = 0; j < diameter; j++) {
-                y = j - self.origin[1];
-                var degree = Math.atan2(x, y) * (180/Math.PI) + 180;
-                r = getValue(degree + 210);
-                g = getValue(degree + 90);
-                b = getValue(degree + 330);
-                setPixel(imageData, i, j, [r, g, b, 255]);
-            }
-        }
         var lineWidth = 18;
         var blur = 10;
-        var offset = (diameter / 2) - 15;
+        var circleRadius = (diameter / 2) - 15;
+        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
+
+        var getValue = function (degree) {
+            degree %= 360;
+            if (degree >= 240) {
+                return 0;
+            } else if (degree >= 180) {
+                return 255 * ((240 - degree) / 60);
+            } else if (degree >= 90) {
+                return 255;
+            }
+            return 255 * (degree / 60);
+        };
+        var drawPart = function (startX, endX, startY, endY) {
+            for (i = startX; i < endX; i++) {
+                x = i - self.origin[0];
+                for (j = startY; j < endY; j++) {
+                    y = j - self.origin[1];
+                    degree = Math.atan2(x, y) * rad2deg + 270;
+                    r = getValue(degree + 120);
+                    g = getValue(degree);
+                    b = getValue(degree + 240);
+                    setPixel(imageData, i, j, [r, g, b, 255]);
+                }
+            }
+        };
+
+        var deg = Math.PI*5/4;
+        var radius = circleRadius - lineWidth / 2 - 3;
+        var squarePoint1 = getPointOnCircle(radius, deg, diameter/2);
+        var squarePoint2 = getPointOnCircle(radius, deg + Math.PI,  diameter/2);
+        var side = Math.ceil(squarePoint1[0] / 2);
+
+        drawPart(squarePoint1[0], diameter - squarePoint1[0], 0, squarePoint1[1]);
+        drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
+        drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
+        drawPart(squarePoint1[0], diameter - squarePoint1[0], squarePoint2[1], diameter);
+        drawPart(side, squarePoint1[0], side, squarePoint1[1]);
+        drawPart(side, squarePoint1[0], squarePoint2[1], squarePoint2[1] + side);
+        drawPart(squarePoint2[0], squarePoint2[0] + side, side, squarePoint1[1]);
+        drawPart(squarePoint2[0], squarePoint2[0] + side, squarePoint2[1], diameter - side);
+
         var arc = function () {
             ctx.beginPath();
-            ctx.arc(self.origin[0], self.origin[1], offset, 0, Math.PI*2, false);
+            ctx.arc(self.origin[0], self.origin[1], circleRadius, 0, Math.PI*2, false);
             ctx.closePath();
             ctx.stroke();
         };
@@ -201,7 +217,12 @@
     }
 
 
-
+    function getPointOnCircle(radius, degrees, offset) {
+        return [
+            offset + Math.round(radius * Math.cos(degrees)),
+            offset + Math.round(radius * Math.sin(degrees))
+        ];
+    }
     function getMidpoint(p1, p2) {
         return [
             (p1[0] + p2[0]) / 2,
@@ -250,16 +271,7 @@
         ];
     }
 
-
-
-    function getColor(point1, point2, point3, inputPoint, hue) {
-        if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
-            return { // fixes black point at the edge of the selector
-                h: hue,
-                s: 0,
-                l: 1
-            };
-        }
+    function getSaturation(point1, point2, point3, inputPoint) {
         var m = getPerpedicularSlope(point2, point3);
         var inputPoint2 = pointOnLine(inputPoint, m);
         var thePoint1 = intersectLineLine(
@@ -284,34 +296,54 @@
         );
         var height = getDistance(thePoint1, inputPoint);
         var maxHeight = getDistance(thePoint1, thePoint2);
-
+        var s = height / maxHeight;
+        if (isNaN(s)) {
+            s = 0;
+        }
+        return { s:s, l:width/maxWidth };
+    }
+    function getLuminosity(point1, point2, point3, inputPoint) {
+        var m = getPerpedicularSlope(point2, point3);
+        var thePoint1 = intersectLineLine(
+            inputPoint,
+            pointOnLine(inputPoint, m),
+            point2,
+            point3
+        );
+        return getDistance(point3, thePoint1) / getDistance(point2, point3);
+    }
+    function getAlpha(point1, point2, point3, inputPoint) {
         var thePoint3 = intersectLineLine(
             inputPoint,
             point1,
             point2,
             point3
         );
-
-        var dLength = getDistance(point1, inputPoint);
-        var dMaxLength = getDistance(point1, thePoint3);
-
-        var s = height / maxHeight;
-        if (isNaN(s)) {
-            s = 0;
+        return getDistance(point1, inputPoint) / getDistance(point1, thePoint3);
+    }
+    function fixEdgeOfSelector(point2, inputPoint, hue) {
+        if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
+            return { // fixes black point at the edge of the selector
+                h: hue,
+                s: 0,
+                l: 1
+            };
         }
-
-        return {
+    }
+    function getSatLumColor(point1, point2, point3, inputPoint, hue) {
+        var sl = getSaturation(point1, point2, point3, inputPoint);
+        return fixEdgeOfSelector(point2, inputPoint, hue) || {
             h: hue,
-            s: s,
-            l: width / maxWidth,
-            a: dLength / dMaxLength
+            s: sl.s,
+            l: sl.l
         };
     }
-    function getPointOnCircle(radius, degrees, offset) {
-        return [
-            offset + Math.round(radius * Math.cos(degrees)),
-            offset + Math.round(radius * Math.sin(degrees))
-        ];
+    function getLumAlphaColor(point1, point2, point3, inputPoint, hue) {
+        return fixEdgeOfSelector(point2, inputPoint, hue) || {
+            h: hue,
+            l: getLuminosity(point1, point2, point3, inputPoint),
+            a: getAlpha(point1, point2, point3, inputPoint)
+        };
     }
 
     var maskImageData = false;
@@ -334,7 +366,7 @@
             // draw
             for (var i = limitX.start; i <= limitX.end; i++) {
                 for (var j = limitY.start; j <= limitY.end; j++) {
-                    var hsl = getColor(points[0], points[1], points[2], [i, j], hue);
+                    var hsl = getLumAlphaColor(points[0], points[1], points[2], [i, j], hue);
                      if (hsl.a < 0) {
                         hsl.a = 0;
                     } else if (hsl.a > 1) {
@@ -621,7 +653,7 @@
                 sanitisedInputPoint = intersections[2];
             }
         }
-        var color = getColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
+        var color = getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
         self.reDrawSatLum(
             color.s,
             color.l
