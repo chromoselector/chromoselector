@@ -151,30 +151,27 @@
         var getValue = function (degree) {
             degree %= 360;
             var g;
-            if (degree < 60 || degree == 360) {
+            if (degree < 60) {
                 g = 255 * (degree / 60);
-            } else if (degree >= 60 && degree < 180) {
+            } else if (degree < 180) {
                 g = 255;
-            } else if (degree >= 180 && degree < 240) {
-                g = 255 * ((60 - (degree - 180)) / 60);
-            } else if (degree >= 240 && degree < 360) {
+            } else if (degree < 240) {
+                g = 255 * ((240 - degree) / 60);
+            } else if (degree < 360) {
                 g = 0;
             }
             return g;
         };
         for (var i = 0; i < diameter; i++) {
+            x = i - self.origin[0];
             for (var j = 0; j < diameter; j++) {
-                x = i - self.origin[0];
                 y = j - self.origin[1];
-                var degree = Math.round(
-                    Math.atan2(x, y) * (180/Math.PI) + 180
-                );
+                var degree = Math.atan2(x, y) * (180/Math.PI) + 180;
                 r = getValue(degree + 210);
                 g = getValue(degree + 90);
                 b = getValue(degree + 330);
                 setPixel(imageData, i, j, [r, g, b, 255]);
             }
-
         }
         var lineWidth = 18;
         var blur = 10;
