@@ -37,7 +37,7 @@
     Color.prototype.setHex = function (value) {
         var r = /^#([0-9a-f]{3}){1,2}$/i;
         if (r.test(value)) {
-            if (value.length == 4) {
+            if (value.length === 4) {
                 value = value.replace(/[0-9a-f]/gi, function(match) { 
                     return match + match;
                 });
@@ -57,7 +57,7 @@
         h,
         s;
         var l = (max + min) / 2;
-        if (max == min) {
+        if (max === min) {
             h = s = 0; // achromatic
         } else {
             var d = max - min;
@@ -91,11 +91,20 @@
             r = g = b = value.l; // achromatic
         } else {
             var hue2rgb = function (p, q, t) {
-                if(t < 0) t += 1;
-                if(t > 1) t -= 1;
-                if(t < 1/6) return p + (q - p) * 6 * t;
-                if(t < 1/2) return q;
-                if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+                if (t < 0) {
+                    t += 1;
+                } else if (t > 1) {
+                    t -= 1;
+                }
+                if (t < 1/6) {
+                    return p + (q - p) * 6 * t;
+                }
+                if (t < 1/2) {
+                    return q;
+                }
+                if (t < 2/3) {
+                    return p + (q - p) * (2/3 - t) * 6;
+                }
                 return p;
             };
             var q = value.l < 0.5 ? value.l * (1 + value.s) : value.l + value.s - value.l * value.s;
@@ -225,7 +234,7 @@
         );
     }
     function pointOnLine(point, slope) {
-        if (Math.abs(slope) == Infinity) {
+        if (Math.abs(slope) === Infinity) {
             return [
                 point[0],
                 point[1] + 100
@@ -266,10 +275,9 @@
         );
         var maxWidth = getDistance(point2, point3);
         var width = getDistance(point3, thePoint1);
+        var perpedicularPoint = point3;
         if (width >= maxWidth / 2) {
-            var perpedicularPoint = point2;
-        } else {
-            var perpedicularPoint = point3;
+            perpedicularPoint = point2;
         }
         m = getPerpedicularSlope(point1, perpedicularPoint);
         inputPoint2 = pointOnLine(inputPoint, m);
@@ -316,12 +324,7 @@
         var canvas = self.$picker.find('canvas')[1];
         var ctx = canvas.getContext("2d");
         var degrees = -Math.PI / 2;//(1 - hue) * Math.PI * 2;
-        var points = [];
-        for (var i = 0; i < 3; i++) {
-            points[i] = getPointOnCircle(self.triangleRadius, degrees, self.diameter / 2);
-            degrees -= Math.PI * 2 / 3;
-        }
-        
+        var points = self.getPoints(degrees);
         if (maskImageData === false) {
             maskImageData = ctx.createImageData(self.diameter, self.diameter);
             // triangle limits
@@ -341,10 +344,8 @@
                         hsl.a = 0;
                     } else if (hsl.a > 1) {
                         hsl.a = 1;
-                    } 
-                    var rgb = Color.prototype.hsl2rgb(hsl);
-                    var avg = (rgb.r + rgb.g + rgb.b) / 3;
-                    setPixel(maskImageData, i, j, avg, avg, avg, hsl.a * 255);
+                    }
+                    setPixel(maskImageData, i, j, hsl.l * 255, hsl.l * 255, hsl.l * 255, hsl.a * 255);
                 }
             }
         }
@@ -355,8 +356,6 @@
             s: 1,
             l: 0.5
         });
-        var degrees = (1 - hue) * Math.PI * 2;
-        var points = self.getPoints(degrees);
 
         // Draw mask
         ctx.putImageData(maskImageData, 0, 0);
@@ -398,7 +397,6 @@
         ctx.globalCompositeOperation = "source-over";
 
         /** draw hue indicator */
-        var degrees = (1 - hue) * Math.PI * 2;
         var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
         ctx.strokeStyle = "rgba(1,1,1,1)";
         ctx.lineWidth = 2;
@@ -517,7 +515,7 @@
                 hue -= Math.PI * 2 / 3;
             }
             return points;
-        }
+        };
         /**
         * Start processing
         */
@@ -531,10 +529,10 @@
         * Register events
         */
         $this.focus(function () {
-            $('#canvasColorPicker-' + self.id).fadeIn('fast')
+            $('#canvasColorPicker-' + self.id).fadeIn('fast');
         }).blur(function () {
-           // $('#canvasColorPicker-' + self.id).fadeOut('medium')
-        })
+           // $('#canvasColorPicker-' + self.id).fadeOut('medium');
+        });
         self.$picker.bind('mousedown', function (e) {
             var radius = self.diameter/2 - 15;
             var offset = self.$picker.offset();
