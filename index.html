@@ -382,12 +382,12 @@
         ctx.globalCompositeOperation = "destination-in";
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fill();
-      /*  // shadow
+        // shadow
        /* ctx.beginPath();
         ctx.globalCompositeOperation = "destination-over";
-        ctx.moveTo(point1[0], point1[1]);
-        ctx.lineTo(point2[0], point2[1]);
-        ctx.lineTo(point3[0], point3[1]);
+        ctx.moveTo(points[0][0], points[0][1]);
+        ctx.lineTo(points[1][0], points[1][1]);
+        ctx.lineTo(points[2][0], points[2][1]);
         ctx.closePath();
         ctx.fillStyle = "#000";
         ctx.shadowColor = 'rgba(0,0,0,0.2)';
