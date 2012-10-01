@@ -273,6 +273,7 @@
         var blur = 10;
         var circleRadius = (diameter / 2) - 15;
         var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
+        var origin = [self.diameter / 2, self.diameter / 2];
         var getValue = function (degree) {
             degree %= 360;
             if (degree >= 240) {
@@ -286,9 +287,9 @@
         };
         var drawPart = function (startX, endX, startY, endY) {
             for (i = startX; i < endX; i++) {
-                x = i - self.origin[0];
+                x = i - origin[0];
                 for (j = startY; j < endY; j++) {
-                    y = j - self.origin[1];
+                    y = j - origin[1];
                     degree = Math_atan2(x, y) * rad2deg + 270;
                     r = getValue(degree + 120);
                     g = getValue(degree);
@@ -316,12 +317,12 @@
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius - 8, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - 8, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.fill();
         ctx.lineWidth = circleRadius * 2 - 16;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius * 2, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
         // shadow
@@ -332,7 +333,7 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.fill();
         */
@@ -633,7 +634,6 @@
         self.drawing = false;
         self.$source = $this;
         self.diameter = self.settings.diameter;
-        self.origin = [self.diameter / 2, self.diameter / 2];
         self.triangleRadius = self.diameter / 2 - 30;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
         if (self.settings.target) {
