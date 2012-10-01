@@ -524,9 +524,10 @@
         $this.focus(function () {
             self.$picker.fadeIn('fast');
         }).blur(function () {
-           // self.$picker.fadeOut('medium');
+            self.$picker.fadeOut('medium');
         });
         self.$picker.bind('mousedown', function (e) {
+            e.preventDefault();
             var radius = self.diameter/2 - 15;
             var offset = self.$picker.offset();
             var inputPoint = [
@@ -551,6 +552,7 @@
             }
         });
         $([window, document]).bind('mousemove', function (e) {
+            e.preventDefault();
             if (self.drawing != true) {
                 if (self.draggingHue) {
                     self.reDrawHue(e);
@@ -560,6 +562,7 @@
                 }
             }
         }).bind('mouseup', function (e) {
+            e.preventDefault();
             if (self.draggingHue) {
                 self.draggingHue = false;
                 self.reDrawHue(e);
