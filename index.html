@@ -9,6 +9,9 @@
     <script type="text/javascript">
 (function ($, document, defaults) {
     "use strict";
+    /**
+     * COLOR MANAGEMENT
+     */
     var Color = function () {
         this.rgb = {
             r: 0,
@@ -22,7 +25,7 @@
         };
         this.hex = "#ff0000";
     };
-    /** setters */
+    // setters
     Color.prototype.setRgb = function (value) {
         this.rgb = value;
         this.hsl = this.rgb2hsl(value);
@@ -47,16 +50,16 @@
             this.hsl = this.rgb2hsl(this.rgb);
         }
     };
-    /** converters */
+    // converters
     Color.prototype.rgb2hsl = function (value) {
         var r = value.r / 255,
         g = value.g / 255,
-        b = value.b / 255;
-        var max = Math.max(r, g, b),
+        b = value.b / 255,
+        max = Math.max(r, g, b),
         min = Math.min(r, g, b),
         h,
-        s;
-        var l = (max + min) / 2;
+        s,
+        l = (max + min) / 2;
         if (max === min) {
             h = s = 0; // achromatic
         } else {
@@ -131,6 +134,63 @@
     };
 
     /**
+     * 2D MATHS
+     */
+    function getPointOnCircle(radius, degrees, offset) {
+        return [
+            offset + Math.round(radius * Math.cos(degrees)),
+            offset + Math.round(radius * Math.sin(degrees))
+        ];
+    }
+    function getMidpoint(p1, p2) {
+        return [
+            (p1[0] + p2[0]) / 2,
+            (p1[1] + p2[1]) / 2
+        ];
+    }
+    function pointInCircle(point, origin, radius) {
+        return getDistance(point, [origin, origin]) <= radius;
+    }
+    function pointInTriangle(pt, v1, v2, v3) {
+        var sign = function(p1, p2, p3) {
+            return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
+        };
+        var b1 = sign(pt, v1, v2) < 0;
+        var b2 = sign(pt, v2, v3) < 0;
+        var b3 = sign(pt, v3, v1) < 0;
+        return ((b1 === b2) && (b2 === b3));
+    }
+    function getPerpedicularSlope(p1, p2) {
+        return -1 / ((p2[1] - p1[1]) / (p2[0] - p1[0]));
+    }
+    function getDistance(p1, p2) {
+        return Math.sqrt(
+            (p1[0]-p2[0])*(p1[0]-p2[0]) + (p1[1]-p2[1])*(p1[1]-p2[1])
+        );
+    }
+    function pointOnLine(point, slope) {
+        if (Math.abs(slope) === Infinity) {
+            return [
+                point[0],
+                point[1] + 100
+            ];
+        }
+        return [
+            point[0] + 100,
+            slope * 100 + point[1]
+        ];
+    }
+    function intersectLineLine(a1, a2, b1, b2) {
+        var u_b = (b2[1] - b1[1]) * (a2[0] - a1[0]) - (b2[0] - b1[0]) * (a2[1] - a1[1]);
+        var ua_t = (b2[0] - b1[0]) * (a1[1] - b1[1]) - (b2[1] - b1[1]) * (a1[0] - b1[0]);
+        var ua = ua_t / u_b;
+        return [
+            a1[0] + ua * (a2[0] - a1[0]),
+            a1[1] + ua * (a2[1] - a1[1])
+        ];
+    }
+
+    /**
      * Sets a pixel on a canvas
      */
     function setPixel(imageData, x, y, pixel) {
@@ -187,8 +247,9 @@
         drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint1[0], diameter - squarePoint1[0], squarePoint2[1], diameter);
+
         drawPart(side, squarePoint1[0], side, squarePoint1[1]);
-        drawPart(side, squarePoint1[0], squarePoint2[1], squarePoint2[1] + side);
+        drawPart(side, squarePoint1[0], squarePoint2[1], diameter - side);
         drawPart(squarePoint2[0], squarePoint2[0] + side, side, squarePoint1[1]);
         drawPart(squarePoint2[0], squarePoint2[0] + side, squarePoint2[1], diameter - side);
 
@@ -216,136 +277,31 @@
         ctx.globalCompositeOperation = "source-over";
     }
 
-
-    function getPointOnCircle(radius, degrees, offset) {
-        return [
-            offset + Math.round(radius * Math.cos(degrees)),
-            offset + Math.round(radius * Math.sin(degrees))
-        ];
-    }
-    function getMidpoint(p1, p2) {
-        return [
-            (p1[0] + p2[0]) / 2,
-            (p1[1] + p2[1]) / 2
-        ];
-    }
-    function pointInCircle(point, origin, radius) {
-        return getDistance(point, [origin, origin]) <= radius;
-    }
-    function pointInTriangle(pt, v1, v2, v3) {
-        var sign = function(p1, p2, p3) {
-            return (p1[0] - p3[0]) * (p2[1] - p3[1]) - (p2[0] - p3[0]) * (p1[1] - p3[1]);
-        };
-        var b1 = sign(pt, v1, v2) < 0;
-        var b2 = sign(pt, v2, v3) < 0;
-        var b3 = sign(pt, v3, v1) < 0;
-        return ((b1 === b2) && (b2 === b3));
-    }
-    function getPerpedicularSlope(p1, p2) {
-        return -1 / ((p2[1] - p1[1]) / (p2[0] - p1[0]));
-    }
-    function getDistance(p1, p2) {
-        return Math.sqrt(
-            Math.pow(p1[0] - p2[0], 2) + Math.pow(p1[1] - p2[1], 2)
-        );
-    }
-    function pointOnLine(point, slope) {
-        if (Math.abs(slope) === Infinity) {
-            return [
-                point[0],
-                point[1] + 100
-            ];
-        }
-        return [
-            point[0] + 100,
-            slope * 100 + point[1]
-        ];
-    }
-    function intersectLineLine(a1, a2, b1, b2) {
-        var u_b = (b2[1] - b1[1]) * (a2[0] - a1[0]) - (b2[0] - b1[0]) * (a2[1] - a1[1]);
-        var ua_t = (b2[0] - b1[0]) * (a1[1] - b1[1]) - (b2[1] - b1[1]) * (a1[0] - b1[0]);
-        var ua = ua_t / u_b;
-        return [
-            a1[0] + ua * (a2[0] - a1[0]),
-            a1[1] + ua * (a2[1] - a1[1])
-        ];
-    }
-
-    function getSaturation(point1, point2, point3, inputPoint) {
-        var m = getPerpedicularSlope(point2, point3);
-        var inputPoint2 = pointOnLine(inputPoint, m);
-        var thePoint1 = intersectLineLine(
-            inputPoint,
-            inputPoint2,
-            point2,
-            point3
-        );
-        var maxWidth = getDistance(point2, point3);
-        var width = getDistance(point3, thePoint1);
-        var perpedicularPoint = point3;
-        if (width >= maxWidth / 2) {
-            perpedicularPoint = point2;
-        }
-        m = getPerpedicularSlope(point1, perpedicularPoint);
-        inputPoint2 = pointOnLine(inputPoint, m);
-        var thePoint2 = intersectLineLine(
-            inputPoint,
-            thePoint1,
-            point1,
-            perpedicularPoint
-        );
-        var height = getDistance(thePoint1, inputPoint);
-        var maxHeight = getDistance(thePoint1, thePoint2);
-        var s = height / maxHeight;
-        if (isNaN(s)) {
-            s = 0;
-        }
-        return { s:s, l:width/maxWidth };
-    }
-    function getLuminosity(point1, point2, point3, inputPoint) {
-        var m = getPerpedicularSlope(point2, point3);
-        var thePoint1 = intersectLineLine(
-            inputPoint,
-            pointOnLine(inputPoint, m),
-            point2,
-            point3
-        );
-        return getDistance(point3, thePoint1) / getDistance(point2, point3);
-    }
-    function getAlpha(point1, point2, point3, inputPoint) {
-        var thePoint3 = intersectLineLine(
+    /**
+     * the following function simplified
+     * to account for the mask always being
+     * straight relative to the x-axis
+     */
+    function getLumAlphaColor(point1, point2, point3, inputPoint) {
+        var intersectionPoint = intersectLineLine(
             inputPoint,
             point1,
             point2,
             point3
         );
-        return getDistance(point1, inputPoint) / getDistance(point1, thePoint3);
-    }
-    function fixEdgeOfSelector(point2, inputPoint, hue) {
-        if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
-            return { // fixes black point at the edge of the selector
-                h: hue,
-                s: 0,
-                l: 1
-            };
+        var l = ((point3[0] - inputPoint[0]) / (point3[0] - point2[0])) * 255;
+        var a = (getDistance(point1, inputPoint) / getDistance(point1, intersectionPoint)) * 255;
+        if (a < 0) {
+            a = 0;
+        } else if (a > 255) {
+            a = 255;
         }
-    }
-    function getSatLumColor(point1, point2, point3, inputPoint, hue) {
-        var sl = getSaturation(point1, point2, point3, inputPoint);
-        return fixEdgeOfSelector(point2, inputPoint, hue) || {
-            h: hue,
-            s: sl.s,
-            l: sl.l
-        };
-    }
-    function getLumAlphaColor(point1, point2, point3, inputPoint, hue) {
-        return fixEdgeOfSelector(point2, inputPoint, hue) || {
-            h: hue,
-            l: getLuminosity(point1, point2, point3, inputPoint),
-            a: getAlpha(point1, point2, point3, inputPoint)
-        };
+        return [ l, l, l, a ];
     }
 
+    /**
+     * Draws the triangular selector
+     */
     var maskImageData = false;
     function drawSaturationLimunositySelector(self, hue) {
         var canvas = self.$picker.find('canvas')[1];
@@ -366,13 +322,12 @@
             // draw
             for (var i = limitX.start; i <= limitX.end; i++) {
                 for (var j = limitY.start; j <= limitY.end; j++) {
-                    var hsl = getLumAlphaColor(points[0], points[1], points[2], [i, j], hue);
-                     if (hsl.a < 0) {
-                        hsl.a = 0;
-                    } else if (hsl.a > 1) {
-                        hsl.a = 1;
-                    }
-                    setPixel(maskImageData, i, j, [hsl.l * 255, hsl.l * 255, hsl.l * 255, hsl.a * 255]);
+                    setPixel(
+                        maskImageData,
+                        i,
+                        j,
+                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
+                    );
                 }
             }
         }
@@ -510,14 +465,14 @@
                 e.pageX - offset.left - self.diameter / 2,
                 e.pageY - offset.top - self.diameter / 2
             ) * (180/Math.PI) + 270;
-            drawSaturationLimunositySelector(
-                self, angle / 360
-            );
             self.color.setHsl({
                 h: angle / 360,
                 s: self.color.hsl.s,
                 l: self.color.hsl.l
             });
+            drawSaturationLimunositySelector(
+                self, angle / 360
+            );
             self.drawing = true;
             self.setValue();
         };
@@ -658,6 +613,48 @@
             color.s,
             color.l
         );
+    }
+    function getSatLumColor(point1, point2, point3, inputPoint, hue) {
+        if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
+            return { // fixes black point at the edge of the selector
+                h: hue,
+                s: 0,
+                l: 1
+            };
+        }
+        var m = getPerpedicularSlope(point2, point3);
+        var inputPoint2 = pointOnLine(inputPoint, m);
+        var thePoint1 = intersectLineLine(
+            inputPoint,
+            inputPoint2,
+            point2,
+            point3
+        );
+        var maxWidth = getDistance(point2, point3);
+        var width = getDistance(point3, thePoint1);
+        var perpedicularPoint = point3;
+        if (width >= maxWidth / 2) {
+            perpedicularPoint = point2;
+        }
+        m = getPerpedicularSlope(point1, perpedicularPoint);
+        inputPoint2 = pointOnLine(inputPoint, m);
+        var thePoint2 = intersectLineLine(
+            inputPoint,
+            thePoint1,
+            point1,
+            perpedicularPoint
+        );
+        var height = getDistance(thePoint1, inputPoint);
+        var maxHeight = getDistance(thePoint1, thePoint2);
+        var s = height / maxHeight;
+        if (isNaN(s)) {
+            s = 0;
+        }
+        return {
+            h: hue,
+            s: s,
+            l: width/maxWidth
+        };
     }
 
     var methods = {
