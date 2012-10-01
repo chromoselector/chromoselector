@@ -522,6 +522,8 @@
                 self.timeout = false;
                 self.$source.val(
                     self.color.hex
+                ).html(
+                    self.color.hex
                 );
             }, 100);
         }
@@ -624,7 +626,7 @@
         self.settings = settings;
         self.color = new Color();
         self.color.setHex(
-            $this.val()
+            $this.val() || $this.html()
         );
         self.draggingHue = false;
         self.draggingSatLum = false;
