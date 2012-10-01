@@ -281,19 +281,31 @@
     }
 
     /**
-     * the following function simplified
+     * the following function is simplified
      * to account for the mask always being
      * straight relative to the x-axis
      */
     function getLumAlphaColor(point1, point2, point3, inputPoint) {
-        var intersectionPoint = intersectLineLine(
+        var alphaIntersectionPoint = intersectLineLine(
             inputPoint,
             point1,
             point2,
             point3
         );
-        var l = ((point3[0] - inputPoint[0]) / (point3[0] - point2[0])) * 255;
-        var a = (getDistance(point1, inputPoint) / getDistance(point1, intersectionPoint)) * 255;
+        var lumIntersectionPoint1 = intersectLineLine(
+            inputPoint,
+            [inputPoint[0] + 20, inputPoint[1]],
+            point1,
+            point2
+        );
+        var lumIntersectionPoint2 = intersectLineLine(
+            inputPoint,
+            [inputPoint[0] + 20, inputPoint[1]],
+            point1,
+            point3
+        );
+        var l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
+        var a = (getDistance(point1, inputPoint) / getDistance(point1, alphaIntersectionPoint)) * 255;
         if (a < 0) {
             a = 0;
         } else if (a > 255) {
@@ -617,14 +629,8 @@
             color.l
         );
     }
+
     function getSatLumColor(point1, point2, point3, inputPoint, hue) {
-        if (inputPoint[0] == point2[0] && inputPoint[1] == point2[1]) {
-            return { // fixes black point at the edge of the selector
-                h: hue,
-                s: 0,
-                l: 1
-            };
-        }
         var m = getPerpedicularSlope(point2, point3);
         var inputPoint2 = pointOnLine(inputPoint, m);
         var thePoint1 = intersectLineLine(
