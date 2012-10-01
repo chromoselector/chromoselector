@@ -741,7 +741,7 @@
                 if (! $this.data('canvasColorPicker')) {
                     $this.data('canvasColorPicker', 1);
                     // Instantiate new ColorPicker
-                    new ColorPicker($this, settings);
+                    $this.data('self', new ColorPicker($this, settings));
                     // Register callbacks for all events
                     var events = [
                         'create',
