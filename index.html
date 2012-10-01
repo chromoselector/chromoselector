@@ -349,7 +349,7 @@
         var degrees = -Math_PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
-        if (! self.tempCanvas) {
+        if (! self.ready) {
             var maskImageData = ctx.createImageData(self.diameter, self.diameter);
             // triangle limits
             var limits = function (points, axis) {
@@ -371,7 +371,6 @@
                     );
                 }
             }
-            self.tempCanvas = $('<canvas width="400" height="400"></canvas>')[0];
             tempCtx = self.tempCanvas.getContext('2d');
             tempCtx.putImageData(maskImageData, 0, 0);
         }
@@ -643,6 +642,7 @@
                 canvasString + canvasString + canvasString
             );
         self.canvases = self.$picker.find('canvas').css('position', 'absolute');
+        self.tempCanvas = $(canvasString)[0];
         /**
         * Register events
         */
@@ -660,7 +660,7 @@
             }
             self.$picker.fadeIn('fast');
         }).blur(function () {
-            self.$picker.fadeOut('medium');
+            self.$picker.fadeOut('fast');
         });
         self.$picker.bind('mousedown', function (e) {
             e.preventDefault();
