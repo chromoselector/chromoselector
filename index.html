@@ -550,21 +550,19 @@
         self.diameter = self.settings.diameter;
         self.origin = [self.diameter / 2, self.diameter / 2];
         self.triangleRadius = self.diameter / 2 - 30;
+        var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
         self.$picker = $('<div></div>')
             .hide()
-            .attr('id', 'canvasColorPicker-' + self.id)
             .insertAfter(
                 self.$target
             ).html(
-                '<canvas width="400" height="400" style="position: absolute"></canvas>'
-                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
-                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
+                canvasString + canvasString + canvasString
             );
-        self.canvases = self.$picker.find('canvas');
+        self.canvases = self.$picker.find('canvas').css('position', 'absolute');
         /**
         * Register events
         */
-        $this.mouseover(function () {
+        self.$target.mouseover(function () {
             drawHueSelector(self);
             drawSaturationLimunositySelector(self);
             drawIndicators(self);
