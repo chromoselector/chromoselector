@@ -580,13 +580,10 @@
         });
         $([window, document]).bind('mousemove', function (e) {
             e.preventDefault();
-            if (self.drawing != true) {
-                if (self.draggingHue) {
-                    self.reDrawHue(e);
-                }
-                if (self.draggingSatLum) {
-                    handleSatLumDrag(self, e);
-                }
+            if (self.draggingHue) {
+                self.reDrawHue(e);
+            } else if (self.draggingSatLum) {
+                handleSatLumDrag(self, e);
             }
         }).bind('mouseup', function (e) {
             e.preventDefault();
