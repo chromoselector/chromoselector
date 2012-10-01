@@ -343,18 +343,71 @@
         return [ l, l, l, a ];
     }
 
+    function drawIndicators(self) {
+        var canvas = self.$picker.find('canvas')[2];
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,self.diameter, self.diameter);
+        var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+        var points = self.getPoints(degrees);
+        /** draw hue indicator */
+        var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
+        ctx.strokeStyle = "rgba(1,1,1,1)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(indicator[0], indicator[1], 4, 0, Math_PI*2, false);
+        ctx.closePath();
+        ctx.stroke();
+
+        /** draw sat/lum indicator */
+        var colorPoint = [
+            (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
+            (points[1][1] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][1])
+        ];
+        var m = getPerpedicularSlope(points[1], points[2]);
+        var colorPoint2 = pointOnLine(colorPoint, m);
+        var thePoint1 = intersectLineLine(
+            colorPoint,
+            colorPoint2,
+            points[1],
+            points[2]
+        );
+        var maxWidth = getDistance(points[1], points[2]);
+        var width = getDistance(points[2], thePoint1);
+        var slopePoint = points[2];
+        if (width >= maxWidth / 2) {
+            slopePoint = points[1];
+        }
+        var thePoint2 = intersectLineLine(
+            colorPoint,
+            colorPoint2,
+            points[0],
+            slopePoint
+        );
+        colorPoint = [
+            (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
+            (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
+        ];
+        ctx.beginPath();
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
+        ctx.closePath();
+        ctx.stroke();
+        setTimeout(function () {
+            self.drawing = false;
+        }, 4);
+    }
+
     /**
      * Draws the triangular selector
      */
-    var maskImageData = false;
-    function drawSaturationLimunositySelector(self, hue) {
+    function drawSaturationLimunositySelector(self) {
+        var hue = self.color.hsl.h;
         var canvas = self.$picker.find('canvas')[1];
         var ctx = canvas.getContext("2d");
         var degrees = -Math_PI / 2;
         var points = self.getPoints(degrees);
         var tempCtx;
         if (! self.tempCanvas) {
-            maskImageData = ctx.createImageData(self.diameter, self.diameter);
+            var maskImageData = ctx.createImageData(self.diameter, self.diameter);
             // triangle limits
             var limits = function (points, axis) {
                 return {
@@ -421,52 +474,6 @@
         ctx.shadowOffsetY = 0;
         ctx.fill();*/
         ctx.globalCompositeOperation = "source-over";
-
-        /** draw hue indicator */
-        var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
-        ctx.strokeStyle = "rgba(1,1,1,1)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math_PI*2, false);
-        ctx.closePath();
-        ctx.stroke();
-
-        /** draw sat/lum indicator */
-        var colorPoint = [
-            (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
-            (points[1][1] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][1])
-        ];
-        var m = getPerpedicularSlope(points[1], points[2]);
-        var colorPoint2 = pointOnLine(colorPoint, m);
-        var thePoint1 = intersectLineLine(
-            colorPoint,
-            colorPoint2,
-            points[1],
-            points[2]
-        );
-        var maxWidth = getDistance(points[1], points[2]);
-        var width = getDistance(points[2], thePoint1);
-        var slopePoint = points[2];
-        if (width >= maxWidth / 2) {
-            slopePoint = points[1];
-        }
-        var thePoint2 = intersectLineLine(
-            colorPoint,
-            colorPoint2,
-            points[0],
-            slopePoint
-        );
-        colorPoint = [
-            (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
-            (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
-        ];
-        ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
-        ctx.closePath();
-        ctx.stroke();
-        setTimeout(function () {
-            self.drawing = false;
-        }, 4);
     }
 
     /** The color picker object */
@@ -485,7 +492,7 @@
         self.draggingSatLum = false;
         self.drawing = false;
         self.$target = $this;
-        self.diameter = 280;
+        self.diameter = 400;
         self.origin = [self.diameter / 2, self.diameter / 2];
         self.triangleRadius = self.diameter / 2 - 30;
         self.$picker = $('<div></div>')
@@ -495,6 +502,7 @@
                 self.$target
             ).html(
                 '<canvas width="400" height="400" style="position: absolute"></canvas>'
+                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
                 + '<canvas width="400" height="400" style="position: absolute"></canvas>'
             );
         /**
@@ -512,7 +520,10 @@
                 l: self.color.hsl.l
             });
             drawSaturationLimunositySelector(
-                self, angle / 360
+                self
+            );
+            drawIndicators(
+                self
             );
             self.drawing = true;
             self.setValue();
@@ -523,8 +534,8 @@
                 s: s,
                 l: l
             });
-            drawSaturationLimunositySelector(
-                self, self.color.hsl.h
+            drawIndicators(
+                self
             );
             self.drawing = true;
             self.setValue();
@@ -558,7 +569,10 @@
             self
         );
         drawSaturationLimunositySelector(
-            self, self.color.hsl.h
+            self
+        );
+        drawIndicators(
+            self
         );
         /**
         * Register events
