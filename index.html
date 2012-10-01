@@ -308,9 +308,10 @@
     function drawSaturationLimunositySelector(self, hue) {
         var canvas = self.$picker.find('canvas')[1];
         var ctx = canvas.getContext("2d");
-        var degrees = -Math.PI / 2;//(1 - hue) * Math.PI * 2;
+        var degrees = -Math.PI / 2;
         var points = self.getPoints(degrees);
-        if (maskImageData === false) {
+        var tempCtx;
+        if (! self.tempCanvas) {
             maskImageData = ctx.createImageData(self.diameter, self.diameter);
             // triangle limits
             var limits = function (points, axis) {
@@ -332,6 +333,9 @@
                     );
                 }
             }
+            self.tempCanvas = $('<canvas width="400" height="400"></canvas>')[0];
+            tempCtx = self.tempCanvas.getContext('2d');
+            tempCtx.putImageData(maskImageData, 0, 0);
         }
 
         var clr = new Color();
@@ -340,25 +344,18 @@
             s: 1,
             l: 0.5
         });
-
         degrees = (1 - hue) * Math.PI * 2;
         points = self.getPoints(degrees);
-
-        // Draw mask
-        ctx.putImageData(maskImageData, 0, 0);
-        // Rotate mask
-        ctx.globalCompositeOperation = "copy";
+        // Fill background
+        ctx.fillStyle = clr.hex;
+        ctx.fillRect(0,0,self.diameter,self.diameter);
+        // Copy rotated mask
         ctx.save();
         ctx.translate(self.diameter/2, self.diameter/2);
         ctx.rotate(degrees + Math.PI / 2);
         ctx.translate(-self.diameter/2, -self.diameter/2);
-        ctx.drawImage(canvas, 0, 0 );
+        ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
-        // fill background color
-        ctx.globalCompositeOperation = "destination-over";
-
-        ctx.fillStyle = clr.hex;
-        ctx.fillRect(0,0,self.diameter,self.diameter);
         // cut out triangle
         ctx.beginPath();
         ctx.moveTo(points[0][0], points[0][1]);
