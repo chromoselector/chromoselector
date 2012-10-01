@@ -520,7 +520,7 @@
         if (! self.timeout) {
             self.timeout = setTimeout(function () {
                 self.timeout = false;
-                self.$target.val(
+                self.$source.val(
                     self.color.hex
                 );
             }, 100);
@@ -629,16 +629,25 @@
         self.draggingHue = false;
         self.draggingSatLum = false;
         self.drawing = false;
-        self.$target = $this;
+        self.$source = $this;
         self.diameter = self.settings.diameter;
         self.origin = [self.diameter / 2, self.diameter / 2];
         self.triangleRadius = self.diameter / 2 - 30;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
-        self.$picker = $('<div></div>')
+        if (self.settings.target) {
+            self.$picker = $(self.settings.target);
+        }
+        if (! self.$picker || ! self.$picker.length) {
+            self.$picker = $('<div/>').insertAfter(
+                self.$source
+            );
+        }
+        self.$picker
+            .width(self.diameter)
+            .height(self.diameter)
+            .css('position', 'relative')
             .hide()
-            .insertAfter(
-                self.$target
-            ).html(
+            .html(
                 canvasString + canvasString + canvasString
             );
         self.canvases = self.$picker.find('canvas').css('position', 'absolute');
@@ -646,7 +655,7 @@
         /**
         * Register events
         */
-        self.$target.mouseover(function () {
+        self.$source.mouseover(function () {
             ColorPicker_drawHueSelector(self);
             ColorPicker_drawSaturationLimunositySelector(self);
             ColorPicker_drawIndicators(self);
@@ -742,6 +751,9 @@
         setColor: function (value) {
 
         },
+        getColor: function () {
+
+        },
         destroy: function () {
             this
             .trigger('destroy.canvasColorPicker')
@@ -761,16 +773,19 @@
         }
     };
 })(jQuery, document, {
-    diameter: 210
+    autoshow: true,
+    diameter: 210,
+    target: null
 });
 
 $(function () {
     $('#color').canvasColorPicker({
-        diameter: 250
+        diameter: 250,
+        target: '#target'
     });
 });
 
-    </script>
+</script>
     <style type="text/css">
         body {
             margin: 2em;
@@ -780,5 +795,6 @@ $(function () {
 </head>
 <body>
     <input id="color" name="color" type="text" value="#ff0000" />
+    <span id="target"></span>
 </body>
 </html>
