@@ -640,14 +640,15 @@
             self.$picker = $(self.settings.target);
         }
         if (! self.$picker || ! self.$picker.length) {
-            self.$picker = $('<div/>').insertAfter(
-                self.$source
-            );
+            self.$picker = $('<div/>').appendTo('body').css({
+                top: self.$source.offset().top + self.$source.height() + 5,
+                left: self.$source.offset().left
+            });
         }
         self.$picker
-            .width(self.diameter)
-            .height(self.diameter)
-            .css('position', 'relative')
+            .width(0)
+            .height(0)
+            .css('position', 'absolute')
             .hide()
             .html(
                 canvasString + canvasString + canvasString
