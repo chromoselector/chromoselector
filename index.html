@@ -11,6 +11,20 @@
 (function ($, document, defaults) {
     "use strict";
     /**
+     * Shorten names of math functions
+     */
+    var m = Math;
+    var Math_cos = m.cos;
+    var Math_sin = m.sin;
+    var Math_round = m.round;
+    var Math_sqrt = m.sqrt;
+    var Math_abs = m.abs;
+    var Math_min = m.min;
+    var Math_max = m.max;
+    var Math_PI = m.PI;
+    var Math_atan2 = m.atan2;
+    var Math_ceil = m.ceil;
+    /**
      * COLOR MANAGEMENT
      */
     var Color = function () {
@@ -33,7 +47,7 @@
         this.hex = this.rgb2hex(value);
     };
     Color.prototype.setHsl = function (value) {
-        value.h = Math.abs(value.h % 360);
+        value.h = Math_abs(value.h % 360);
         this.hsl = value;
         this.rgb = this.hsl2rgb(value);
         this.hex = this.rgb2hex(this.rgb);
@@ -56,8 +70,8 @@
         var r = value.r / 255,
         g = value.g / 255,
         b = value.b / 255,
-        max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
+        max = Math_max(r, g, b),
+        min = Math_min(r, g, b),
         h,
         s,
         l = (max + min) / 2;
@@ -118,9 +132,9 @@
             b = hue2rgb(p, q, value.h - 1/3);
         }
         return {
-            r: Math.round(r * 255),
-            g: Math.round(g * 255),
-            b: Math.round(b * 255)
+            r: Math_round(r * 255),
+            g: Math_round(g * 255),
+            b: Math_round(b * 255)
         };
     };
     Color.prototype.hex2rgb = function (value) {
@@ -139,8 +153,8 @@
      */
     function getPointOnCircle(radius, degrees, offset) {
         return [
-            offset + Math.round(radius * Math.cos(degrees)),
-            offset + Math.round(radius * Math.sin(degrees))
+            offset + Math_round(radius * Math_cos(degrees)),
+            offset + Math_round(radius * Math_sin(degrees))
         ];
     }
     function getMidpoint(p1, p2) {
@@ -165,12 +179,12 @@
         return -1 / ((p2[1] - p1[1]) / (p2[0] - p1[0]));
     }
     function getDistance(p1, p2) {
-        return Math.sqrt(
+        return Math_sqrt(
             (p1[0]-p2[0])*(p1[0]-p2[0]) + (p1[1]-p2[1])*(p1[1]-p2[1])
         );
     }
     function pointOnLine(point, slope) {
-        if (Math.abs(slope) === Infinity) {
+        if (Math_abs(slope) === Infinity) {
             return [
                 point[0],
                 point[1] + 100
@@ -211,7 +225,7 @@
         var lineWidth = 18;
         var blur = 10;
         var circleRadius = (diameter / 2) - 15;
-        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
+        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
         var getValue = function (degree) {
             degree %= 360;
             if (degree >= 240) {
@@ -228,7 +242,7 @@
                 x = i - self.origin[0];
                 for (j = startY; j < endY; j++) {
                     y = j - self.origin[1];
-                    degree = Math.atan2(x, y) * rad2deg + 270;
+                    degree = Math_atan2(x, y) * rad2deg + 270;
                     r = getValue(degree + 120);
                     g = getValue(degree);
                     b = getValue(degree + 240);
@@ -236,11 +250,11 @@
                 }
             }
         };
-        var deg = Math.PI*5/4;
+        var deg = Math_PI*5/4;
         var radius = circleRadius - lineWidth / 2 - 3;
         var squarePoint1 = getPointOnCircle(radius, deg, diameter/2);
-        var squarePoint2 = getPointOnCircle(radius, deg + Math.PI,  diameter/2);
-        var side = Math.ceil(squarePoint1[0] / 2);
+        var squarePoint2 = getPointOnCircle(radius, deg + Math_PI,  diameter/2);
+        var side = Math_ceil(squarePoint1[0] / 2);
         drawPart(squarePoint1[0], diameter - squarePoint1[0], 0, squarePoint1[1]);
         drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
@@ -257,12 +271,12 @@
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius - 8, 0, Math.PI*2, false);
+        ctx.arc(self.origin[0], self.origin[1], circleRadius - 8, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.fill();
         ctx.lineWidth = 50;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius + 35, 0, Math.PI*2, false);
+        ctx.arc(self.origin[0], self.origin[1], circleRadius + 35, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
         // shadow
@@ -273,7 +287,7 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius, 0, Math.PI*2, false);
+        ctx.arc(self.origin[0], self.origin[1], circleRadius, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.fill();
         */
@@ -321,7 +335,7 @@
     function drawSaturationLimunositySelector(self, hue) {
         var canvas = self.$picker.find('canvas')[1];
         var ctx = canvas.getContext("2d");
-        var degrees = -Math.PI / 2;
+        var degrees = -Math_PI / 2;
         var points = self.getPoints(degrees);
         var tempCtx;
         if (! self.tempCanvas) {
@@ -329,8 +343,8 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math.min(points[0][axis], points[1][axis], points[2][axis]),
-                    end: Math.max(points[0][axis], points[1][axis], points[2][axis])
+                    start: Math_min(points[0][axis], points[1][axis], points[2][axis]),
+                    end: Math_max(points[0][axis], points[1][axis], points[2][axis])
                 };
             };
             var limitX = limits(points, 0);
@@ -357,7 +371,7 @@
             s: 1,
             l: 0.5
         });
-        degrees = (1 - hue) * Math.PI * 2;
+        degrees = (1 - hue) * Math_PI * 2;
         points = self.getPoints(degrees);
         // Fill background
         ctx.fillStyle = clr.hex;
@@ -365,7 +379,7 @@
         // Copy rotated mask
         ctx.save();
         ctx.translate(self.diameter/2, self.diameter/2);
-        ctx.rotate(degrees + Math.PI / 2);
+        ctx.rotate(degrees + Math_PI / 2);
         ctx.translate(-self.diameter/2, -self.diameter/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
@@ -398,7 +412,7 @@
         ctx.strokeStyle = "rgba(1,1,1,1)";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2, false);
+        ctx.arc(indicator[0], indicator[1], 4, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
 
@@ -432,7 +446,7 @@
             (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
         ];
         ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2, false);
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
         setTimeout(function () {
@@ -456,7 +470,7 @@
         self.draggingSatLum = false;
         self.drawing = false;
         self.$target = $this;
-        self.diameter = 400;
+        self.diameter = 280;
         self.origin = [self.diameter / 2, self.diameter / 2];
         self.triangleRadius = self.diameter / 2 - 30;
         self.$picker = $('<div></div>')
@@ -473,10 +487,10 @@
         */
         self.reDrawHue = function (e) {
             var offset = self.$picker.offset();
-            var angle = Math.atan2(
+            var angle = Math_atan2(
                 e.pageX - offset.left - self.diameter / 2,
                 e.pageY - offset.top - self.diameter / 2
-            ) * (180/Math.PI) + 270;
+            ) * (180/Math_PI) + 270;
             self.color.setHsl({
                 h: angle / 360,
                 s: self.color.hsl.s,
@@ -518,7 +532,7 @@
                     hue,
                     self.diameter / 2
                 );
-                hue -= Math.PI * 2 / 3;
+                hue -= Math_PI * 2 / 3;
             }
             return points;
         };
@@ -556,7 +570,7 @@
                 self.draggingHue = true;
                 self.reDrawHue(e);
             } else {
-                var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+                var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
                 var points = self.getPoints(degrees);
                 if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
                     self.draggingSatLum = true;
@@ -589,7 +603,7 @@
 
     function handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
-        var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+        var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
         var points = self.getPoints(degrees);
         var inputPoint = [
             e.pageX - offset.left,
@@ -604,7 +618,7 @@
                     inputPoint
                 );
             }
-            var maxDistance = Math.min.apply(null, distances);
+            var maxDistance = Math_max.apply(null, distances);
             for (i=0; i<3; i++) {
                 if (distances[i] === maxDistance) {
                     sanitisedInputPoint = sanitiseDragInput(inputPoint, points, distances, i);
@@ -629,7 +643,7 @@
             points[vertices3[index]]
         );
         if (getDistance(intersect, points[vertices1[index]]) >= getDistance(points[0], points[1])) {
-            var minDistance = Math.min.apply(null, distances);
+            var minDistance = Math_min.apply(null, distances);
             for (var i=0; i<3; i++) {
                 if (distances[i] === minDistance) {
                     intersect = points[i];
