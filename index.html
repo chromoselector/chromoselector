@@ -591,36 +591,46 @@
         var offset = self.$picker.offset();
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = self.getPoints(degrees);
-        var sanitisedInputPoint = [
+        var inputPoint = [
             e.pageX - offset.left,
             e.pageY - offset.top
         ];
-        if (! pointInTriangle(sanitisedInputPoint, points[0], points[1], points[2])) {
-            var vertices1 = [0,0,1];
-            var vertices2 = [1,2,2];
-            var intersections = [];
-            var i;
-            for (i=0; i<3; i++) {
-                intersections[i] = intersectLineLine(
-                    sanitisedInputPoint,
-                    self.origin,
-                    points[vertices1[i]],
-                    points[vertices2[i]]
+        var sanitisedInputPoint = inputPoint;
+        if (! pointInTriangle(inputPoint, points[0], points[1], points[2])) {
+            var sanitise = function (inputPoint, distances, index) {
+                var vertices1 = [0,1,2];
+                var vertices2 = [1,0,1];
+                var vertices3 = [2,2,0];
+                var intersect = intersectLineLine(
+                    inputPoint,
+                    points[vertices1[index]],
+                    points[vertices2[index]],
+                    points[vertices3[index]]
                 );
-            }
+                if (getDistance(intersect, points[vertices1[index]]) >= getDistance(points[0], points[1])) {
+                    if (distances[0] <= distances[1] && distances[0] <= distances[2]) {
+                        intersect = points[0];
+                    } else if (distances[1] <= distances[0] && distances[1] <= distances[2]) {
+                        intersect = points[1];
+                    } else {
+                        intersect = points[2];
+                    }
+                }
+                return intersect;
+            };
             var distances = [];
-            for (i=0; i<3; i++) {
+            for (var i=0; i<3; i++) {
                 distances[i] = getDistance(
-                    sanitisedInputPoint,
-                    getMidpoint(points[vertices1[i]], points[vertices2[i]])
+                    points[i],
+                    inputPoint
                 );
             }
-            if (distances[0] <= distances[1] && distances[0] <= distances[2]) {
-                sanitisedInputPoint = intersections[0];
-            } else if (distances[1] <= distances[0] && distances[1] <= distances[2]) {
-                sanitisedInputPoint = intersections[1];
+            if (distances[0] >= distances[1] && distances[0] >= distances[2]) {
+                sanitisedInputPoint = sanitise(inputPoint, distances, 0);
+            } else if (distances[1] >= distances[0] && distances[1] >= distances[2]) {
+                sanitisedInputPoint = sanitise(inputPoint, distances, 1);
             } else {
-                sanitisedInputPoint = intersections[2];
+                sanitisedInputPoint = sanitise(inputPoint, distances, 2);
             }
         }
         var color = getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
