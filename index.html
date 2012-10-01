@@ -766,22 +766,20 @@
 });
 
 $(function () {
-    $('#color').canvasColorPicker();
+    $('#color').canvasColorPicker({
+        diameter: 250
+    });
 });
 
     </script>
     <style type="text/css">
-        #mySlider {
-            margin: 2em;
-        }
         body {
+            margin: 2em;
             background: #adf;
         }
     </style>
 </head>
 <body>
-    <div id="mySlider">
-        <input id="color" name="color" type="text" value="#ff0000" />
-    </div>
+    <input id="color" name="color" type="text" value="#ff0000" />
 </body>
 </html>
