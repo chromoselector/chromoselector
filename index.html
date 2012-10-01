@@ -222,9 +222,50 @@
     }
 
     /**
+     * the following function is simplified
+     * to account for the mask always being
+     * straight relative to the x-axis
+     */
+    function getLumAlphaColor(point1, point2, point3, inputPoint) {
+        var alphaIntersectionPoint = intersectLineLine(
+            inputPoint,
+            point1,
+            point2,
+            point3
+        );
+        var lumIntersectionPoint1 = intersectLineLine(
+            inputPoint,
+            [inputPoint[0] + 20, inputPoint[1]],
+            point1,
+            point2
+        );
+        var lumIntersectionPoint2 = intersectLineLine(
+            inputPoint,
+            [inputPoint[0] + 20, inputPoint[1]],
+            point1,
+            point3
+        );
+        var l;
+        if (inputPoint[0] < lumIntersectionPoint1[0]) {
+            l = 255;
+        } else if (inputPoint[0] > lumIntersectionPoint2[0]) {
+            l = 0;
+        } else {
+            l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
+        }
+        var a = (getDistance(point1, inputPoint) / getDistance(point1, alphaIntersectionPoint)) * 255;
+        if (a < 0) {
+            a = 0;
+        } else if (a > 255) {
+            a = 255;
+        }
+        return [ l, l, l, a ];
+    }
+
+    /**
      * Draws the rainbow wheel
      */
-    function drawHueSelector(self) {
+    function ColorPicker_drawHueSelector(self) {
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
         var imageData = ctx.createImageData(diameter, diameter);
@@ -299,55 +340,14 @@
     }
 
     /**
-     * the following function is simplified
-     * to account for the mask always being
-     * straight relative to the x-axis
-     */
-    function getLumAlphaColor(point1, point2, point3, inputPoint) {
-        var alphaIntersectionPoint = intersectLineLine(
-            inputPoint,
-            point1,
-            point2,
-            point3
-        );
-        var lumIntersectionPoint1 = intersectLineLine(
-            inputPoint,
-            [inputPoint[0] + 20, inputPoint[1]],
-            point1,
-            point2
-        );
-        var lumIntersectionPoint2 = intersectLineLine(
-            inputPoint,
-            [inputPoint[0] + 20, inputPoint[1]],
-            point1,
-            point3
-        );
-        var l;
-        if (inputPoint[0] < lumIntersectionPoint1[0]) {
-            l = 255;
-        } else if (inputPoint[0] > lumIntersectionPoint2[0]) {
-            l = 0;
-        } else {
-            l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
-        }
-        var a = (getDistance(point1, inputPoint) / getDistance(point1, alphaIntersectionPoint)) * 255;
-        if (a < 0) {
-            a = 0;
-        } else if (a > 255) {
-            a = 255;
-        }
-        return [ l, l, l, a ];
-    }
-
-    /**
      * Draws the triangular selector
      */
-    function drawSaturationLimunositySelector(self) {
+    function ColorPicker_drawSaturationLimunositySelector(self) {
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
         var degrees = -Math_PI / 2;
-        var points = self.getPoints(degrees);
+        var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.tempCanvas) {
             var maskImageData = ctx.createImageData(self.diameter, self.diameter);
@@ -383,7 +383,7 @@
             l: 0.5
         });
         degrees = (1 - hue) * Math_PI * 2;
-        points = self.getPoints(degrees);
+        points = ColorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = clr.hex;
         ctx.fillRect(0,0,self.diameter,self.diameter);
@@ -419,13 +419,12 @@
         ctx.globalCompositeOperation = "source-over";
     }
 
-
-    function drawIndicators(self) {
+    function ColorPicker_drawIndicators(self) {
         var canvas = self.canvases[2];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.diameter, self.diameter);
         var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
-        var points = self.getPoints(degrees);
+        var points = ColorPicker_getPoints(self, degrees);
         /** draw hue indicator */
         var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
         ctx.strokeStyle = "rgba(1,1,1,1)";
@@ -473,160 +472,65 @@
         }, 4);
     }
 
-    /** The color picker object */
-    var ColorPicker = function ($this, settings) {
-        var self = this;
-        /**
-        * Functions
-        */
-        self.reDrawHue = function (e) {
-            var offset = self.$picker.offset();
-            var angle = Math_atan2(
-                e.pageX - offset.left - self.diameter / 2,
-                e.pageY - offset.top - self.diameter / 2
-            ) * (180/Math_PI) + 270;
-            self.color.setHsl({
-                h: angle / 360,
-                s: self.color.hsl.s,
-                l: self.color.hsl.l
-            });
-            drawSaturationLimunositySelector(
-                self
+    /** The color picker functions */
+    function ColorPicker_getPoints(self, hue) {
+        var points = [];
+        for (var i = 0; i < 3; i++) {
+            points[i] = getPointOnCircle(
+                self.triangleRadius,
+                hue,
+                self.diameter / 2
             );
-            drawIndicators(
-                self
-            );
-            self.drawing = true;
-            self.setValue();
-        };
-        self.reDrawSatLum = function (s, l) {
-            self.color.setHsl({
-                h: self.color.hsl.h,
-                s: s,
-                l: l
-            });
-            drawIndicators(
-                self
-            );
-            self.drawing = true;
-            self.setValue();
-        };
-        self.setValue = function () {
-            if (! self.timeout) {
-                self.timeout = setTimeout(function () {
-                    self.timeout = false;
-                    self.$target.val(
-                        self.color.hex
-                    );
-                }, 100);
-            }
-        };
-        self.getPoints = function(hue) {
-            var points = [];
-            for (var i = 0; i < 3; i++) {
-                points[i] = getPointOnCircle(
-                    self.triangleRadius,
-                    hue,
-                    self.diameter / 2
-                );
-                hue -= Math_PI * 2 / 3;
-            }
-            return points;
-        };
-
-        /**
-        * Properties
-        */
-        self.ready = false;
-        self.settings = settings;
-        self.color = new Color();
-        self.color.setHex(
-            $this.val()
+            hue -= Math_PI * 2 / 3;
+        }
+        return points;
+    }
+    function ColorPicker_reDrawHue(self, e) {
+        var offset = self.$picker.offset();
+        var angle = Math_atan2(
+            e.pageX - offset.left - self.diameter / 2,
+            e.pageY - offset.top - self.diameter / 2
+        ) * (180/Math_PI) + 270;
+        self.color.setHsl({
+            h: angle / 360,
+            s: self.color.hsl.s,
+            l: self.color.hsl.l
+        });
+        ColorPicker_drawSaturationLimunositySelector(
+            self
         );
-        self.draggingHue = false;
-        self.draggingSatLum = false;
-        self.drawing = false;
-        self.$target = $this;
-        self.diameter = self.settings.diameter;
-        self.origin = [self.diameter / 2, self.diameter / 2];
-        self.triangleRadius = self.diameter / 2 - 30;
-        var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
-        self.$picker = $('<div></div>')
-            .hide()
-            .insertAfter(
-                self.$target
-            ).html(
-                canvasString + canvasString + canvasString
-            );
-        self.canvases = self.$picker.find('canvas').css('position', 'absolute');
-        /**
-        * Register events
-        */
-        self.$target.mouseover(function () {
-            drawHueSelector(self);
-            drawSaturationLimunositySelector(self);
-            drawIndicators(self);
-            self.ready = true;
-            $(this).unbind('mouseover');
-        }).focus(function () {
-            if (! self.ready) {
-                drawHueSelector(self);
-                drawSaturationLimunositySelector(self);
-                drawIndicators(self);
-            }
-            self.$picker.fadeIn('fast');
-        }).blur(function () {
-            self.$picker.fadeOut('medium');
+        ColorPicker_drawIndicators(
+            self
+        );
+        self.drawing = true;
+        ColorPicker_setValue(self);
+    }
+    function ColorPicker_reDrawSatLum(self, s, l) {
+        self.color.setHsl({
+            h: self.color.hsl.h,
+            s: s,
+            l: l
         });
-        self.$picker.bind('mousedown', function (e) {
-            e.preventDefault();
-            var radius = self.diameter/2 - 15;
-            var offset = self.$picker.offset();
-            var inputPoint = [
-                e.pageX - offset.left,
-                e.pageY - offset.top
-            ];
-            var lineWidth = 9;
-            if (
-                pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
-                &&
-                ! pointInCircle(inputPoint, self.diameter/2, radius-lineWidth)
-            ) {
-                self.draggingHue = true;
-                self.reDrawHue(e);
-            } else {
-                var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
-                var points = self.getPoints(degrees);
-                if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
-                    self.draggingSatLum = true;
-                    handleSatLumDrag(self, e);
-                }
-            }
-        });
-        $([window, document]).bind('mousemove', function (e) {
-            e.preventDefault();
-            if (self.draggingHue) {
-                self.reDrawHue(e);
-            } else if (self.draggingSatLum) {
-                handleSatLumDrag(self, e);
-            }
-        }).bind('mouseup', function (e) {
-            e.preventDefault();
-            if (self.draggingHue) {
-                self.draggingHue = false;
-                self.reDrawHue(e);
-            }
-            if (self.draggingSatLum) {
-                self.draggingSatLum = false;
-                handleSatLumDrag(self, e);
-            }
-        });
+        ColorPicker_drawIndicators(
+            self
+        );
+        self.drawing = true;
+        ColorPicker_setValue(self);
+    }
+    function ColorPicker_setValue(self) {
+        if (! self.timeout) {
+            self.timeout = setTimeout(function () {
+                self.timeout = false;
+                self.$target.val(
+                    self.color.hex
+                );
+            }, 100);
+        }
     };
-
-    function handleSatLumDrag(self, e) {
+    function ColorPicker_handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
         var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
-        var points = self.getPoints(degrees);
+        var points = ColorPicker_getPoints(self, degrees);
         var inputPoint = [
             e.pageX - offset.left,
             e.pageY - offset.top
@@ -643,18 +547,19 @@
             var maxDistance = Math_max.apply(null, distances);
             for (i=0; i<3; i++) {
                 if (distances[i] === maxDistance) {
-                    sanitisedInputPoint = sanitiseDragInput(inputPoint, points, distances, i);
+                    sanitisedInputPoint = ColorPicker_sanitiseDragInput(inputPoint, points, distances, i);
                     break;
                 }
             }
         }
-        var color = getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
-        self.reDrawSatLum(
+        var color = ColorPicker_getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
+        ColorPicker_reDrawSatLum(
+            self,
             color.s,
             color.l
         );
     }
-    function sanitiseDragInput(inputPoint, points, distances, index) {
+    function ColorPicker_sanitiseDragInput(inputPoint, points, distances, index) {
         var vertices1 = [0,1,2];
         var vertices2 = [1,0,1];
         var vertices3 = [2,2,0];
@@ -675,7 +580,7 @@
         }
         return intersect;
     }
-    function getSatLumColor(point1, point2, point3, inputPoint, hue) {
+    function ColorPicker_getSatLumColor(point1, point2, point3, inputPoint, hue) {
         var m = getPerpedicularSlope(point2, point3);
         var inputPoint2 = pointOnLine(inputPoint, m);
         var thePoint1 = intersectLineLine(
@@ -710,6 +615,97 @@
             l: width/maxWidth
         };
     }
+    /** The color picker object */
+    var ColorPicker = function ($this, settings) {
+        var self = this;
+        /**
+        * Properties
+        */
+        self.ready = false;
+        self.settings = settings;
+        self.color = new Color();
+        self.color.setHex(
+            $this.val()
+        );
+        self.draggingHue = false;
+        self.draggingSatLum = false;
+        self.drawing = false;
+        self.$target = $this;
+        self.diameter = self.settings.diameter;
+        self.origin = [self.diameter / 2, self.diameter / 2];
+        self.triangleRadius = self.diameter / 2 - 30;
+        var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
+        self.$picker = $('<div></div>')
+            .hide()
+            .insertAfter(
+                self.$target
+            ).html(
+                canvasString + canvasString + canvasString
+            );
+        self.canvases = self.$picker.find('canvas').css('position', 'absolute');
+        /**
+        * Register events
+        */
+        self.$target.mouseover(function () {
+            ColorPicker_drawHueSelector(self);
+            ColorPicker_drawSaturationLimunositySelector(self);
+            ColorPicker_drawIndicators(self);
+            self.ready = true;
+            $(this).unbind('mouseover');
+        }).focus(function () {
+            if (! self.ready) {
+                ColorPicker_drawHueSelector(self);
+                ColorPicker_drawSaturationLimunositySelector(self);
+                ColorPicker_drawIndicators(self);
+            }
+            self.$picker.fadeIn('fast');
+        }).blur(function () {
+            self.$picker.fadeOut('medium');
+        });
+        self.$picker.bind('mousedown', function (e) {
+            e.preventDefault();
+            var radius = self.diameter/2 - 15;
+            var offset = self.$picker.offset();
+            var inputPoint = [
+                e.pageX - offset.left,
+                e.pageY - offset.top
+            ];
+            var lineWidth = 9;
+            if (
+                pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
+                &&
+                ! pointInCircle(inputPoint, self.diameter/2, radius-lineWidth)
+            ) {
+                self.draggingHue = true;
+                ColorPicker_reDrawHue(self, e);
+            } else {
+                var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+                var points = ColorPicker_getPoints(self, degrees);
+                if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
+                    self.draggingSatLum = true;
+                    ColorPicker_handleSatLumDrag(self, e);
+                }
+            }
+        });
+        $([window, document]).bind('mousemove', function (e) {
+            e.preventDefault();
+            if (self.draggingHue) {
+                ColorPicker_reDrawHue(self, e);
+            } else if (self.draggingSatLum) {
+                ColorPicker_handleSatLumDrag(self, e);
+            }
+        }).bind('mouseup', function (e) {
+            e.preventDefault();
+            if (self.draggingHue) {
+                self.draggingHue = false;
+                ColorPicker_reDrawHue(self, e);
+            }
+            if (self.draggingSatLum) {
+                self.draggingSatLum = false;
+                ColorPicker_handleSatLumDrag(self, e);
+            }
+        });
+    };
 
     var methods = {
         init: function(options) {
@@ -742,6 +738,9 @@
                     $this.trigger('create.canvasColorPicker');
                  }
             });
+        },
+        setColor: function (value) {
+
         },
         destroy: function () {
             this
