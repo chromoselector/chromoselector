@@ -226,7 +226,7 @@
      */
     function drawHueSelector(self) {
         var diameter = self.diameter;
-        var ctx = self.$picker.find('canvas')[0].getContext("2d");
+        var ctx = self.canvases[0].getContext("2d");
         var imageData = ctx.createImageData(diameter, diameter);
         var lineWidth = 18;
         var blur = 10;
@@ -260,17 +260,13 @@
         var radius = circleRadius - lineWidth / 2 - 2;
         var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
         var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math_PI,  diameter/2));
-        var side = Math_ceil(squarePoint1[0] / 2);
 
-        // drawPart(0, diameter, 0, diameter)
-        drawPart(squarePoint1[0], diameter - squarePoint1[0], 0, squarePoint1[1]);
+       // drawPart(0, diameter, 0, diameter)
+        drawPart(0, diameter, 0, squarePoint1[1]);
+        drawPart(0, diameter, squarePoint2[1], diameter);
         drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
-        drawPart(squarePoint1[0], diameter - squarePoint1[0], squarePoint2[1], diameter);
-        drawPart(side, squarePoint1[0], side, squarePoint1[1]);
-        drawPart(side, squarePoint1[0], squarePoint2[1], diameter - side);
-        drawPart(squarePoint2[0], squarePoint2[0] + side, side, squarePoint1[1]);
-        drawPart(squarePoint2[0], squarePoint2[0] + side, squarePoint2[1], diameter - side);
+
         // copy the image data back onto the canvas
         ctx.putImageData(imageData, 0, 0); // at coords 0,0
         // cut out doughnut
@@ -282,9 +278,9 @@
         ctx.arc(self.origin[0], self.origin[1], circleRadius - 8, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.fill();
-        ctx.lineWidth = 50;
+        ctx.lineWidth = circleRadius * 2 - 16;
         ctx.beginPath();
-        ctx.arc(self.origin[0], self.origin[1], circleRadius + 35, 0, Math_PI*2, false);
+        ctx.arc(self.origin[0], self.origin[1], circleRadius * 2, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
         // shadow
@@ -343,65 +339,12 @@
         return [ l, l, l, a ];
     }
 
-    function drawIndicators(self) {
-        var canvas = self.$picker.find('canvas')[2];
-        var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,self.diameter, self.diameter);
-        var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
-        var points = self.getPoints(degrees);
-        /** draw hue indicator */
-        var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
-        ctx.strokeStyle = "rgba(1,1,1,1)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math_PI*2, false);
-        ctx.closePath();
-        ctx.stroke();
-
-        /** draw sat/lum indicator */
-        var colorPoint = [
-            (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
-            (points[1][1] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][1])
-        ];
-        var m = getPerpedicularSlope(points[1], points[2]);
-        var colorPoint2 = pointOnLine(colorPoint, m);
-        var thePoint1 = intersectLineLine(
-            colorPoint,
-            colorPoint2,
-            points[1],
-            points[2]
-        );
-        var maxWidth = getDistance(points[1], points[2]);
-        var width = getDistance(points[2], thePoint1);
-        var slopePoint = points[2];
-        if (width >= maxWidth / 2) {
-            slopePoint = points[1];
-        }
-        var thePoint2 = intersectLineLine(
-            colorPoint,
-            colorPoint2,
-            points[0],
-            slopePoint
-        );
-        colorPoint = [
-            (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
-            (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
-        ];
-        ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
-        ctx.closePath();
-        ctx.stroke();
-        setTimeout(function () {
-            self.drawing = false;
-        }, 4);
-    }
-
     /**
      * Draws the triangular selector
      */
     function drawSaturationLimunositySelector(self) {
         var hue = self.color.hsl.h;
-        var canvas = self.$picker.find('canvas')[1];
+        var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
         var degrees = -Math_PI / 2;
         var points = self.getPoints(degrees);
@@ -476,35 +419,63 @@
         ctx.globalCompositeOperation = "source-over";
     }
 
-    /** The color picker object */
-    var next_picker_id = 0;
-    var ColorPickers = [];
 
-    var ColorPicker = function ($this, id) {
-        var self = this;
-        self.color = new Color();
-        self.color.setHex(
-            $this.val()
+    function drawIndicators(self) {
+        var canvas = self.canvases[2];
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,self.diameter, self.diameter);
+        var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+        var points = self.getPoints(degrees);
+        /** draw hue indicator */
+        var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
+        ctx.strokeStyle = "rgba(1,1,1,1)";
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.arc(indicator[0], indicator[1], 4, 0, Math_PI*2, false);
+        ctx.closePath();
+        ctx.stroke();
+
+        /** draw sat/lum indicator */
+        var colorPoint = [
+            (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
+            (points[1][1] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][1])
+        ];
+        var m = getPerpedicularSlope(points[1], points[2]);
+        var colorPoint2 = pointOnLine(colorPoint, m);
+        var thePoint1 = intersectLineLine(
+            colorPoint,
+            colorPoint2,
+            points[1],
+            points[2]
         );
-        self.canvas = {};
-        self.id = id;
-        self.draggingHue = false;
-        self.draggingSatLum = false;
-        self.drawing = false;
-        self.$target = $this;
-        self.diameter = 400;
-        self.origin = [self.diameter / 2, self.diameter / 2];
-        self.triangleRadius = self.diameter / 2 - 30;
-        self.$picker = $('<div></div>')
-            .hide()
-            .attr('id', 'canvasColorPicker-' + self.id)
-            .insertAfter(
-                self.$target
-            ).html(
-                '<canvas width="400" height="400" style="position: absolute"></canvas>'
-                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
-                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
-            );
+        var maxWidth = getDistance(points[1], points[2]);
+        var width = getDistance(points[2], thePoint1);
+        var slopePoint = points[2];
+        if (width >= maxWidth / 2) {
+            slopePoint = points[1];
+        }
+        var thePoint2 = intersectLineLine(
+            colorPoint,
+            colorPoint2,
+            points[0],
+            slopePoint
+        );
+        colorPoint = [
+            (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
+            (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
+        ];
+        ctx.beginPath();
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
+        ctx.closePath();
+        ctx.stroke();
+        setTimeout(function () {
+            self.drawing = false;
+        }, 4);
+    }
+
+    /** The color picker object */
+    var ColorPicker = function ($this, settings) {
+        var self = this;
         /**
         * Functions
         */
@@ -562,22 +533,49 @@
             }
             return points;
         };
+
         /**
-        * Start processing
+        * Properties
         */
-        drawHueSelector(
-            self
+        self.ready = false;
+        self.settings = settings;
+        self.color = new Color();
+        self.color.setHex(
+            $this.val()
         );
-        drawSaturationLimunositySelector(
-            self
-        );
-        drawIndicators(
-            self
-        );
+        self.draggingHue = false;
+        self.draggingSatLum = false;
+        self.drawing = false;
+        self.$target = $this;
+        self.diameter = self.settings.diameter;
+        self.origin = [self.diameter / 2, self.diameter / 2];
+        self.triangleRadius = self.diameter / 2 - 30;
+        self.$picker = $('<div></div>')
+            .hide()
+            .attr('id', 'canvasColorPicker-' + self.id)
+            .insertAfter(
+                self.$target
+            ).html(
+                '<canvas width="400" height="400" style="position: absolute"></canvas>'
+                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
+                + '<canvas width="400" height="400" style="position: absolute"></canvas>'
+            );
+        self.canvases = self.$picker.find('canvas');
         /**
         * Register events
         */
-        $this.focus(function () {
+        $this.mouseover(function () {
+            drawHueSelector(self);
+            drawSaturationLimunositySelector(self);
+            drawIndicators(self);
+            self.ready = true;
+            $(this).unbind('mouseover');
+        }).focus(function () {
+            if (! self.ready) {
+                drawHueSelector(self);
+                drawSaturationLimunositySelector(self);
+                drawIndicators(self);
+            }
             self.$picker.fadeIn('fast');
         }).blur(function () {
             self.$picker.fadeOut('medium');
@@ -723,11 +721,10 @@
             );
             return this.each(function () {
                 var $this = $(this);
-                if (! $this.data('id')) {
+                if (! $this.data('canvasColorPicker')) {
+                    $this.data('canvasColorPicker', 1);
                     // Instantiate new ColorPicker
-                    var id = next_picker_id++;
-                    $this.data($.extend(settings, {'id':id}));
-                    ColorPickers[id] = new ColorPicker($this, id);
+                    new ColorPicker($this, settings);
                     // Register callbacks for all events
                     var events = [
                         'create',
@@ -735,7 +732,7 @@
                     ];
                     for (var i in events) {
                         var name = events[i];
-                        var data = $this.data(name);
+                        var data = settings[name];
                         if (typeof data === 'function') {
                             $this.bind(
                                 name + '.canvasColorPicker',
@@ -747,9 +744,6 @@
                     $this.trigger('create.canvasColorPicker');
                  }
             });
-        },
-        id: function() {
-            return this.data('id');
         },
         destroy: function () {
             this
@@ -770,17 +764,11 @@
         }
     };
 })(jQuery, document, {
-
+    diameter: 210
 });
 
-var init = false;
 $(function () {
-    $('#color').mouseover(function() {
-        if (! init) {
-            init = true;
-            $(this).canvasColorPicker();
-        }
-    });
+    $('#color').canvasColorPicker();
 });
 
     </script>
