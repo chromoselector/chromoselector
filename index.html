@@ -785,9 +785,9 @@
 });
 
 $(function () {
-    $('#color').canvasColorPicker({
-        diameter: 250,
-        target: '#target'
+    $('#color1, #color2').canvasColorPicker({
+        autoshow: true,
+        diameter: 250
     });
 });
 
@@ -800,7 +800,7 @@ $(function () {
     </style>
 </head>
 <body>
-    <input id="color" name="color" type="text" value="#ff0000" />
-    <span id="target"></span>
+    <input id="color1" name="color" type="text" value="#ff0000" />
+    <button id="color2">#ff0000</button>
 </body>
 </html>
