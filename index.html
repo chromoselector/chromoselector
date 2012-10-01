@@ -617,6 +617,12 @@
             l: width/maxWidth
         };
     }
+    function ColorPicker_drawAll(self) {
+        ColorPicker_drawHueSelector(self);
+        ColorPicker_drawSaturationLimunositySelector(self);
+        ColorPicker_drawIndicators(self);
+        self.ready = true;
+    }
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
         var self = this;
@@ -655,29 +661,30 @@
             );
         self.canvases = self.$picker.find('canvas').css('position', 'absolute');
         self.tempCanvas = $(canvasString)[0];
+
+        if (! self.settings.autoshow) {
+            ColorPicker_drawAll(self);
+            self.ready = true;
+        } else {
+            self.$source.mouseover(function () {
+                ColorPicker_drawAll(self);
+                $(this).unbind('mouseover');
+            }).focus(function () {
+                if (! self.ready) {
+                    ColorPicker_drawAll(self);
+                }
+                if (self.settings.autoshow) {
+                    self.$picker.fadeIn('fast');
+                }
+            }).blur(function () {
+                if (self.settings.autoshow) {
+                    self.$picker.fadeOut('fast');
+                }
+            });
+        }
         /**
         * Register events
         */
-        self.$source.mouseover(function () {
-            ColorPicker_drawHueSelector(self);
-            ColorPicker_drawSaturationLimunositySelector(self);
-            ColorPicker_drawIndicators(self);
-            self.ready = true;
-            $(this).unbind('mouseover');
-        }).focus(function () {
-            if (! self.ready) {
-                ColorPicker_drawHueSelector(self);
-                ColorPicker_drawSaturationLimunositySelector(self);
-                ColorPicker_drawIndicators(self);
-            }
-            if (self.settings.autoshow) {
-                self.$picker.fadeIn('fast');
-            }
-        }).blur(function () {
-            if (self.settings.autoshow) {
-                self.$picker.fadeOut('fast');
-            }
-        });
         self.$picker.bind('mousedown', function (e) {
             e.preventDefault();
             var radius = self.diameter/2 - 15;
