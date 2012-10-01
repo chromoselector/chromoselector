@@ -151,10 +151,16 @@
     /**
      * 2D MATHS
      */
+    function roundPoint(point) {
+        return [
+            Math_round(point[0]),
+            Math_round(point[1])
+        ];
+    }
     function getPointOnCircle(radius, degrees, offset) {
         return [
-            offset + Math_round(radius * Math_cos(degrees)),
-            offset + Math_round(radius * Math_sin(degrees))
+            offset + (radius * Math_cos(degrees)),
+            offset + (radius * Math_sin(degrees))
         ];
     }
     function getMidpoint(p1, p2) {
@@ -252,9 +258,11 @@
         };
         var deg = Math_PI*5/4;
         var radius = circleRadius - lineWidth / 2 - 2;
-        var squarePoint1 = getPointOnCircle(radius, deg, diameter/2);
-        var squarePoint2 = getPointOnCircle(radius, deg + Math_PI,  diameter/2);
+        var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
+        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math_PI,  diameter/2));
         var side = Math_ceil(squarePoint1[0] / 2);
+
+        // drawPart(0, diameter, 0, diameter)
         drawPart(squarePoint1[0], diameter - squarePoint1[0], 0, squarePoint1[1]);
         drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
@@ -350,8 +358,8 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_min(points[0][axis] - 2, points[1][axis] - 2, points[2][axis] - 2),
-                    end: Math_max(points[0][axis] + 2, points[1][axis] + 2, points[2][axis] + 2)
+                    start: Math_round(Math_min(points[0][axis] - 2, points[1][axis] - 2, points[2][axis] - 2)),
+                    end: Math_round(Math_max(points[0][axis] + 2, points[1][axis] + 2, points[2][axis] + 2))
                 };
             };
             var limitX = limits(points, 0);
