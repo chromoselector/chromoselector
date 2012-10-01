@@ -762,6 +762,21 @@
                  }
             });
         },
+        show: function (speed) {
+            return this.each(function () {
+                var self = $(this).data('self');
+                if (! self.ready) {
+                    ColorPicker_drawAll(self);
+                }
+                self.$picker.fadeIn(speed);
+            });
+        },
+        hide: function () {
+            return this.each(function () {
+                var self = $(this).data('self');
+                self.$picker.fadeOut(speed);
+            });
+        },
         setColor: function (value) {
 
         },
