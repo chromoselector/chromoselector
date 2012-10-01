@@ -211,7 +211,6 @@
         var blur = 10;
         var circleRadius = (diameter / 2) - 15;
         var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
-
         var getValue = function (degree) {
             degree %= 360;
             if (degree >= 240) {
@@ -236,44 +235,47 @@
                 }
             }
         };
-
         var deg = Math.PI*5/4;
         var radius = circleRadius - lineWidth / 2 - 3;
         var squarePoint1 = getPointOnCircle(radius, deg, diameter/2);
         var squarePoint2 = getPointOnCircle(radius, deg + Math.PI,  diameter/2);
         var side = Math.ceil(squarePoint1[0] / 2);
-
         drawPart(squarePoint1[0], diameter - squarePoint1[0], 0, squarePoint1[1]);
         drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
         drawPart(squarePoint1[0], diameter - squarePoint1[0], squarePoint2[1], diameter);
-
         drawPart(side, squarePoint1[0], side, squarePoint1[1]);
         drawPart(side, squarePoint1[0], squarePoint2[1], diameter - side);
         drawPart(squarePoint2[0], squarePoint2[0] + side, side, squarePoint1[1]);
         drawPart(squarePoint2[0], squarePoint2[0] + side, squarePoint2[1], diameter - side);
-
-        var arc = function () {
-            ctx.beginPath();
-            ctx.arc(self.origin[0], self.origin[1], circleRadius, 0, Math.PI*2, false);
-            ctx.closePath();
-            ctx.stroke();
-        };
         // copy the image data back onto the canvas
         ctx.putImageData(imageData, 0, 0); // at coords 0,0
         // cut out doughnut
-        ctx.globalCompositeOperation = "destination-in";
+        /** webkit bug prevents usage of "destination-in" */
+        ctx.globalCompositeOperation = "destination-out";
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
-        arc();
+        ctx.beginPath();
+        ctx.arc(self.origin[0], self.origin[1], circleRadius - 8, 0, Math.PI*2, false);
+        ctx.closePath();
+        ctx.fill();
+        ctx.lineWidth = 50;
+        ctx.beginPath();
+        ctx.arc(self.origin[0], self.origin[1], circleRadius + 35, 0, Math.PI*2, false);
+        ctx.closePath();
+        ctx.stroke();
         // shadow
-        ctx.globalCompositeOperation = "destination-over";
+       /* ctx.globalCompositeOperation = "destination-over";
         ctx.lineWidth = blur;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = blur;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
-        arc();
+        ctx.beginPath();
+        ctx.arc(self.origin[0], self.origin[1], circleRadius, 0, Math.PI*2, false);
+        ctx.closePath();
+        ctx.fill();
+        */
         ctx.globalCompositeOperation = "source-over";
     }
 
