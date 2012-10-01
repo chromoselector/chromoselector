@@ -232,7 +232,7 @@
                 return 0;
             } else if (degree >= 180) {
                 return 255 * ((240 - degree) / 60);
-            } else if (degree >= 90) {
+            } else if (degree >= 60) {
                 return 255;
             }
             return 255 * (degree / 60);
