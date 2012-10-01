@@ -318,7 +318,14 @@
             point1,
             point3
         );
-        var l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
+        var l;
+        if (inputPoint[0] < lumIntersectionPoint1[0]) {
+            l = 255;
+        } else if (inputPoint[0] > lumIntersectionPoint2[0]) {
+            l = 0;
+        } else {
+            l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
+        }
         var a = (getDistance(point1, inputPoint) / getDistance(point1, alphaIntersectionPoint)) * 255;
         if (a < 0) {
             a = 0;
