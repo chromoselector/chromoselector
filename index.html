@@ -251,7 +251,7 @@
             }
         };
         var deg = Math_PI*5/4;
-        var radius = circleRadius - lineWidth / 2 - 3;
+        var radius = circleRadius - lineWidth / 2 - 2;
         var squarePoint1 = getPointOnCircle(radius, deg, diameter/2);
         var squarePoint2 = getPointOnCircle(radius, deg + Math_PI,  diameter/2);
         var side = Math_ceil(squarePoint1[0] / 2);
@@ -350,8 +350,8 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_min(points[0][axis], points[1][axis], points[2][axis]),
-                    end: Math_max(points[0][axis], points[1][axis], points[2][axis])
+                    start: Math_min(points[0][axis] - 2, points[1][axis] - 2, points[2][axis] - 2),
+                    end: Math_max(points[0][axis] + 2, points[1][axis] + 2, points[2][axis] + 2)
                 };
             };
             var limitX = limits(points, 0);
@@ -764,7 +764,7 @@ $(function () {
     </script>
     <style type="text/css">
         #mySlider {
-            margin: 10em;
+            margin: 2em;
         }
         body {
             background: #adf;
