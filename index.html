@@ -667,9 +667,13 @@
                 ColorPicker_drawSaturationLimunositySelector(self);
                 ColorPicker_drawIndicators(self);
             }
-            self.$picker.fadeIn('fast');
+            if (self.settings.autoshow) {
+                self.$picker.fadeIn('fast');
+            }
         }).blur(function () {
-            self.$picker.fadeOut('fast');
+            if (self.settings.autoshow) {
+                self.$picker.fadeOut('fast');
+            }
         });
         self.$picker.bind('mousedown', function (e) {
             e.preventDefault();
