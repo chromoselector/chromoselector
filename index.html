@@ -780,6 +780,14 @@
                 self.$picker.fadeOut(speed);
             });
         },
+        save: function() {
+            var self = $(this).data('self');
+            self.$source.val(
+                self.color.hex
+            ).html(
+                self.color.hex
+            );
+        },
         setColor: function (value) {
 
         },
