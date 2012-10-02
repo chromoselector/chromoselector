@@ -802,6 +802,17 @@
         getColor: function () {
 
         },
+        api: function () {
+            var retval = {};
+            var that = this;
+            retval.show     = function (speed) { methods.show.apply(that, [speed]); return this; };
+            retval.hide     = function (speed) { methods.hide.apply(that, [speed]); return this; };
+            retval.save     = function () { methods.save.call(that); return this; };
+            retval.getColor = function () { return methods.getColor.call(that); };
+            retval.setColor = function (color) { methods.setColor.apply(that, [color]); return this; };
+            retval.destroy  = function () { methods.destroy.call(that); };
+            return retval;
+        },
         destroy: function () {
             this
             .trigger('destroy.canvasColorPicker')
