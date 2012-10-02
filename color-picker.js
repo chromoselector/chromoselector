@@ -553,15 +553,24 @@
         ColorPicker_setValue(self);
     }
     function ColorPicker_setValue(self) {
-        if (! self.timeout && self.settings.autoupdate) {
+        if (! self.timeout) {
             self.timeout = setTimeout(function () {
                 self.timeout = false;
-                self.$source.val(
-                    self.color.hex
-                ).html(
-                    self.color.hex
-                );
+                ColorPicker_update(self);
             }, 100);
+        }
+    };
+    function ColorPicker_update(self) {
+        if (typeof self.settings.update != 'undefined') {
+            if (typeof self.settings.update == 'function') {
+                self.settings.update.apply(self.$source, [self.color]);
+            }
+        } else {
+            self.$source.val(
+                self.color.hex
+            ).html(
+                self.color.hex
+            );
         }
     };
     function ColorPicker_handleSatLumDrag(self, e) {
@@ -812,8 +821,8 @@
                 self.$picker.fadeIn(speed);
             });
         },
-        hide: function () {
-            return this.each(function (speed) {
+        hide: function (speed) {
+            return this.each(function () {
                 var self = $(this).data('self');
                 if (! speed) {
                     speed = 0;
@@ -822,24 +831,18 @@
             });
         },
         save: function() {
-            return this.each(function (speed) {
+            return this.each(function () {
                 var self = $(this).data('self');
-                self.$source.val(
-                    self.color.hex
-                ).html(
-                    self.color.hex
-                );
+                ColorPicker_update(self);
             });
         },
         setColor: function (value) {
             return this.each(function () {
-                var self = $(this).data('self');
-                self.color.setColor(value);
+                $(this).data('self').color.setColor(value);
             });
         },
         getColor: function () {
-            var self = this.data('self');
-            return self.color;
+            return this.data('self').color;
         },
         api: function () {
             var retval = {};
@@ -872,7 +875,7 @@
     };
 })(jQuery, document, {
     autoshow: true,
-    autoupdate: true,
+    update: undefined,
     diameter: 210,
     target: null
 });

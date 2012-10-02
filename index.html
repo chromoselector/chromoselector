@@ -16,7 +16,7 @@ $(function () {
     $('#color1, #color2').canvasColorPicker({
         autoshow: false,
         target: $target,
-        autoupdate: false
+        update: false
     }).click(function () {
         var api = $(this).canvasColorPicker('api').show();
         $dialog.dialog({
