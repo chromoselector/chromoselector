@@ -33,47 +33,57 @@
      * COLOR MANAGEMENT
      */
     function Color(value) {
-        this.rgb = { r:0, g:0, b:0 };
-        this.hsl = { h:0, s:0, l:0 };
-        this.hex = "#ff0000";
-        this.setColor(value);
+        var self = this;
+        self.rgb = { r:0, g:0, b:0 };
+        self.hsl = { h:0, s:0, l:0 };
+        self.hex = "#000000";
+        self.setColor(value);
     };
+    // Shorten references to prototype
+    Color.p = Color.prototype;
     // setters
-    Color.prototype.setColor = function (value) {
+    Color.p.setColor = function(value) {
+        var self = this;
         if (typeof value == 'string') {
             this.setHex(value);
         } else if (typeof value == 'object') {
             var haveFields = function (value, fields) {
-                for (var i in fields) {
-                    if (! value.hasOwnProperty(fields[i]) || value[fields[i]] < 0 || value[fields[i]] > 1) {
+                for (var i in fields.split('')) {
+                    if (typeof value[fields[i]] == 'undefined') { // value validation
                         return false;
                     }
                 }
                 return true;
             };
-            if (haveFields(value, ['h','s','l'])) {
-                this.setHsl(value);
-            } else if (haveFields(value, ['r','g','b'])) {
-                this.setRgb(value);
+            if (haveFields(value, 'hsl')) {
+                self.setHsl(value);
+            } else if (haveFields(value, 'rgb')) {
+                self.setRgb(value);
             } else if (typeof value.hsl == 'object') {
-                this.setColor(value.hsl);
+                self.setColor(value.hsl);
             } else if (typeof value.rgb == 'object') {
-                this.setColor(value.rgb);
+                self.setColor(value.rgb);
             }
         }
-    };
-    Color.prototype.setRgb = function (value) {
-        this.rgb = value;
-        this.hsl = this.rgb2hsl(value);
-        this.hex = this.rgb2hex(value);
-    };
-    Color.prototype.setHsl = function (value) {
+        return self;
+    }
+    Color.p.setRgb = function(value) {
+        var self = this;
+        self.rgb = value;
+        self.hsl = Color_rgb2hsl(value);
+        self.hex = Color_rgb2hex(value);
+        return self;
+    }
+    Color.p.setHsl = function(value) {
+        var self = this;
         value.h = Math_abs(value.h % 360);
-        this.hsl = value;
-        this.rgb = this.hsl2rgb(value);
-        this.hex = this.rgb2hex(this.rgb);
-    };
-    Color.prototype.setHex = function (value) {
+        self.hsl = value;
+        self.rgb = Color_hsl2rgb(value);
+        self.hex = Color_rgb2hex(self.rgb);
+        return self;
+    }
+    Color.p.setHex = function(value) {
+        var self = this;
         var r = /^#([0-9a-f]{3}){1,2}$/i;
         if (r.test(value)) {
             if (value.length === 4) {
@@ -81,13 +91,15 @@
                     return match + match;
                 });
             }
-            this.hex = value;
-            this.rgb = this.hex2rgb(value);
-            this.hsl = this.rgb2hsl(this.rgb);
+            self.hex = value;
+            self.rgb = Color_hex2rgb(value);
+            self.hsl = Color_rgb2hsl(self.rgb);
         }
-    };
+        return self;
+    }
+
     // converters
-    Color.prototype.rgb2hsl = function (value) {
+    function Color_rgb2hsl(value) {
         var r = value.r,
         g = value.g,
         b = value.b,
@@ -113,8 +125,8 @@
             s: s,
             l: l
         };
-    };
-    Color.prototype.rgb2hex = function (value) {
+    }
+    function Color_rgb2hex(value) {
         var convert = function (value) {
             value = Math_round(value * 255);
             var retval = value.toString(16);
@@ -124,8 +136,8 @@
             return retval;
         };
         return "#" + convert(value.r) + convert(value.g) + convert(value.b);
-    };
-    Color.prototype.hsl2rgb = function (value) {
+    }
+    function Color_hsl2rgb(value) {
         var r, g, b;
         if (value.s == 0) {
             r = g = b = value.l; // achromatic
@@ -158,8 +170,8 @@
             g: g,
             b: b
         };
-    };
-    Color.prototype.hex2rgb = function (value) {
+    }
+    function Color_hex2rgb(value) {
         var convert = function (v) {
             return parseInt('0x' + v, 16) / 255;
         };
@@ -168,7 +180,7 @@
             g: convert(value.substring(3,5)),
             b: convert(value.substring(5,7))
         };
-    };
+    }
 
     /**
      * 2D MATHS
@@ -401,7 +413,11 @@
         degrees = (1 - hue) * Math_PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
-        ctx.fillStyle = new Color({ h:hue, s:1, l:0.5 }).hex;
+        ctx.fillStyle = Color_rgb2hex(
+            Color_hsl2rgb({
+                h:hue, s:1, l:0.5
+            })
+        );
         ctx.fillRect(0,0,self.diameter,self.diameter);
         // Copy rotated mask
         ctx.save();
