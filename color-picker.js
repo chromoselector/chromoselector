@@ -46,6 +46,29 @@
         this.hex = "#ff0000";
     };
     // setters
+    Color.prototype.setColor = function (value) {
+        if (typeof value == 'string') {
+            this.setHex(value);
+        } else if (typeof value == 'object') {
+            var haveFields = function (value, fields) {
+                for (var i in fields) {
+                    if (! value.hasOwnProperty(fields[i]) || value[fields[i]] < 0 || value[fields[i]] > 1) {
+                        return false;
+                    }
+                }
+                return true;
+            };
+            if (haveFields(value, ['h','s','l'])) {
+                this.setHsl(value);
+            } else if (haveFields(value, ['r','g','b'])) {
+                this.setRgb(value);
+            } else if (typeof value.hsl == 'object') {
+                this.setColor(value.hsl);
+            } else if (typeof value.rgb == 'object') {
+                this.setColor(value.rgb);
+            }
+        }
+    };
     Color.prototype.setRgb = function (value) {
         this.rgb = value;
         this.hsl = this.rgb2hsl(value);
@@ -807,7 +830,7 @@
         setColor: function (value) {
             return this.each(function () {
                 var self = $(this).data('self');
-                // self.color.set(value);
+                self.color.setColor(value);
             });
         },
         getColor: function () {
