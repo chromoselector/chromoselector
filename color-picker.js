@@ -76,7 +76,10 @@
     }
     Color.p.setHsl = function(value) {
         var self = this;
-        value.h = Math_abs(value.h % 360);
+        value.h = value.h - Math.floor(value.h);
+        if (value.h < 0) {
+            value.h = 1 + value.h;
+        }
         self.hsl = value;
         self.rgb = Color_hsl2rgb(value);
         self.hex = Color_rgb2hex(self.rgb);
