@@ -6,7 +6,6 @@
  *   CMYK and HSV colors
  *   Alpha selection
  *   Basic resizing
- *   Add missing event triggers
  *
  * v 1.1.0:
  *   IE 6+ support
@@ -884,15 +883,37 @@
         getColor: function () {
             return this.data(namespace).color;
         },
+        resize: function (diameter) {
+            return this.each(function () {
+                var self = $(this).data(namespace);
+                if (diameter != self.diameter) {
+                    self.ready = false;
+                    self.diameter = diameter;
+                    self.settings.diameter = diameter;
+                    self.triangleRadius = diameter / 2 - 30;
+                    self.canvases
+                        .each(function () {
+                            this.width = diameter;
+                            this.height = diameter;
+                        })
+                        .add(self.$picker)
+                        .width(diameter)
+                        .height(diameter);
+                    self.tempCanvas.width = diameter;
+                    self.tempCanvas.height = diameter;
+                    ColorPicker_drawAll(self);
+                }
+            });
+        },
         api: function () {
-            var retval = {};
-            var that = this;
+            var retval = {}, that = this;
             retval.show     = function (speed) { methods.show.apply(that, [speed]); return this; };
             retval.hide     = function (speed) { methods.hide.apply(that, [speed]); return this; };
             retval.save     = function ()      { methods.save.call(that); return this; };
             retval.getColor = function ()      { return methods.getColor.call(that); };
             retval.setColor = function (color) { methods.setColor.apply(that, [color]); return this; };
             retval.destroy  = function ()      { methods.destroy.call(that); };
+            retval.resize   = function (size)  { methods.resize.apply(that, [size]); return this; };
             return retval;
         },
         destroy: function () {
