@@ -642,26 +642,27 @@
         self.diameter = self.settings.diameter;
         self.triangleRadius = self.diameter / 2 - 30;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
+        var $target;
         if (self.settings.target) {
-            self.$picker = $(self.settings.target);
+            $target = $(self.settings.target);
         }
-        if (! self.$picker || ! self.$picker.length) {
-            self.$picker = $('<div/>').appendTo('body').css({
+        if (! $target || ! $target.length) {
+            $target = $('<div/>').appendTo('body').css({
                 top: self.$source.offset().top + self.$source.height() + 5,
                 left: self.$source.offset().left
             })
             .width(0)
             .height(0)
-            .css('position', 'absolute')
-            .hide();
-        } else {
-            self.$picker.width(self.diameter).height(self.diameter);
+            .css('position', 'absolute');
         }
-        self.$picker
-            .hide()
-            .html(
-                canvasString + canvasString + canvasString
-            );
+        self.$picker = $('<div/>').width(self.diameter).height(self.diameter);
+        $target.append(
+            self.$picker
+                .hide()
+                .html(
+                    canvasString + canvasString + canvasString
+                )
+        );
         self.canvases = self.$picker.find('canvas').css('position', 'absolute');
         self.tempCanvas = $(canvasString)[0];
 
