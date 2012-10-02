@@ -592,7 +592,7 @@
             str = self.$source.val() || self.$source.html();
         }
         if (typeof self.settings.str2color == 'function') {
-            return self.settings.str2color.apply(null, [str]);
+            return new Color(self.settings.str2color.apply(null, [str]));
         }
         return new Color(str);
     }
@@ -823,7 +823,6 @@
                 defaults,
                 options
             );
-
             return this.each(function () {
                 var $this = $(this);
                 if (! $this.data('canvasColorPicker')) {
