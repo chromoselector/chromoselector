@@ -554,25 +554,48 @@
     }
     function ColorPicker_setValue(self) {
         if (! self.timeout) {
-            self.timeout = setTimeout(function () {
+            self.$source.trigger('update.canvasColorPicker');
+            var f = function () {
                 self.timeout = false;
-                ColorPicker_update(self);
-            }, 100);
-        }
-    };
-    function ColorPicker_update(self) {
-        if (typeof self.settings.update != 'undefined') {
-            if (typeof self.settings.update == 'function') {
-                self.settings.update.apply(self.$source, [self.color]);
+            };
+            if (self.settings.autosave) {
+                f = function () {
+                    self.timeout = false;
+                    ColorPicker_save(self);
+                };
             }
+            self.timeout = setTimeout(f, 100);
+        }
+    }
+    function ColorPicker_save(self) {
+        var str = "";
+        if (typeof self.settings.color2str == 'function') {
+            str = self.settings.color2str.apply(null, [self.color]);
+        } else {
+            str = self.color.hex;
+        }
+        if (typeof self.settings.save == 'function') {
+            self.settings.save.apply(self.$source[0], [str]);
         } else {
             self.$source.val(
-                self.color.hex
+                str
             ).html(
-                self.color.hex
+                str
             );
         }
-    };
+    }
+    function ColorPicker_load(self) {
+        var str;
+        if (typeof self.settings.load == 'function') {
+            str = self.settings.load.call(self.$source);
+        } else {
+            str = self.$source.val() || self.$source.html();
+        }
+        if (typeof self.settings.str2color == 'function') {
+            return self.settings.str2color.apply(null, [str]);
+        }
+        return new Color(str);
+    }
     function ColorPicker_handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
         var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
@@ -666,6 +689,7 @@
         ColorPicker_drawSaturationLimunositySelector(self);
         ColorPicker_drawIndicators(self);
         self.ready = true;
+        self.$source.trigger('ready.canvasColorPicker');
     }
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
@@ -675,11 +699,11 @@
         */
         self.ready = false;
         self.settings = settings;
-        self.color = new Color($this.val() || $this.html());
         self.draggingHue = false;
         self.draggingSatLum = false;
         self.drawing = false;
         self.$source = $this;
+        self.color = ColorPicker_load(self);
         self.diameter = self.settings.diameter;
         self.triangleRadius = self.diameter / 2 - 30;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
@@ -709,7 +733,6 @@
 
         if (! self.settings.autoshow) {
             ColorPicker_drawAll(self);
-            self.ready = true;
         } else {
             self.$source.mouseover(function () {
                 ColorPicker_drawAll(self);
@@ -719,11 +742,15 @@
                     ColorPicker_drawAll(self);
                 }
                 if (self.settings.autoshow) {
-                    self.$picker.fadeIn('fast');
+                    self.$picker.fadeIn('fast', function () {
+                        self.$source.trigger('show.canvasColorPicker');
+                    });
                 }
             }).blur(function () {
                 if (self.settings.autoshow) {
-                    self.$picker.fadeOut('fast');
+                    self.$picker.fadeOut('fast', function () {
+                        self.$source.trigger('hide.canvasColorPicker');
+                    });
                 }
             });
         }
@@ -791,8 +818,11 @@
                     // Register callbacks for all events
                     var events = [
                         'create',
-                        'colorChange',
-                        'destroy'
+                        'ready',
+                        'update',
+                        'destroy',
+                        'show',
+                        'hide'
                     ];
                     for (var i in events) {
                         var name = events[i];
@@ -804,7 +834,6 @@
                             );
                         }
                     }
-                    // Trigger create event now
                     $this.trigger('create.canvasColorPicker');
                  }
             });
@@ -819,6 +848,8 @@
                     speed = 0;
                 }
                 self.$picker.fadeIn(speed);
+                self.$source.trigger('show.canvasColorPicker');
+
             });
         },
         hide: function (speed) {
@@ -828,12 +859,13 @@
                     speed = 0;
                 }
                 self.$picker.fadeOut(speed);
+                self.$source.trigger('hide.canvasColorPicker');
             });
         },
         save: function() {
             return this.each(function () {
                 var self = $(this).data('self');
-                ColorPicker_update(self);
+                ColorPicker_save(self);
             });
         },
         setColor: function (value) {
@@ -856,10 +888,19 @@
             return retval;
         },
         destroy: function () {
-            this
-            .trigger('destroy.canvasColorPicker')
-            .unbind('.canvasColorPicker')
-            .remove();
+            return this.each(function () {
+                var self = $(this).data('self')
+                if ($(self.settings.target).length) {
+                    self.$picker.remove();
+                } else {
+                    self.$picker.parent().remove();
+                }
+                $(this)
+                .removeData('canvasColorPicker')
+                .removeData('self')
+                .trigger('destroy.canvasColorPicker')
+                .unbind('.canvasColorPicker');
+            });
         }
     };
 
@@ -874,8 +915,20 @@
         }
     };
 })(jQuery, document, {
-    autoshow: true,
-    update: undefined,
-    diameter: 210,
-    target: null
+    autoshow:   true,
+    autosave:   true,
+    diameter:   210,
+    target:     null,
+
+    create:    undefined,
+    ready:     undefined,
+    destroy:   undefined,
+    update:    undefined,
+    show:      undefined,
+    hide:      undefined,
+
+    save:      undefined,
+    load:      undefined,
+    str2color: undefined,
+    color2str: undefined
 });
