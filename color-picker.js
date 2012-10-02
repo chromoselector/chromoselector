@@ -88,9 +88,9 @@
     };
     // converters
     Color.prototype.rgb2hsl = function (value) {
-        var r = value.r / 255,
-        g = value.g / 255,
-        b = value.b / 255,
+        var r = value.r,
+        g = value.g,
+        b = value.b,
         max = Math_max(r, g, b),
         min = Math_min(r, g, b),
         h,
@@ -116,6 +116,7 @@
     };
     Color.prototype.rgb2hex = function (value) {
         var convert = function (value) {
+            value = Math_round(value * 255);
             var retval = value.toString(16);
             if (value < 16) {
                 retval = "0" + retval;
@@ -153,14 +154,14 @@
             b = hue2rgb(p, q, value.h - 1/3);
         }
         return {
-            r: Math_round(r * 255),
-            g: Math_round(g * 255),
-            b: Math_round(b * 255)
+            r: r,
+            g: g,
+            b: b
         };
     };
     Color.prototype.hex2rgb = function (value) {
         var convert = function (v) {
-            return parseInt('0x' + v, 16);
+            return parseInt('0x' + v, 16) / 255;
         };
         return {
             r: convert(value.substring(1,3)),
