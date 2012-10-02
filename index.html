@@ -771,12 +771,18 @@
                 if (! self.ready) {
                     ColorPicker_drawAll(self);
                 }
+                if (! speed) {
+                    speed = 0;
+                }
                 self.$picker.fadeIn(speed);
             });
         },
         hide: function () {
-            return this.each(function () {
+            return this.each(function (speed) {
                 var self = $(this).data('self');
+                if (! speed) {
+                    speed = 0;
+                }
                 self.$picker.fadeOut(speed);
             });
         },
@@ -787,9 +793,10 @@
             ).html(
                 self.color.hex
             );
+            return this;
         },
         setColor: function (value) {
-
+            return this;
         },
         getColor: function () {
 
