@@ -867,13 +867,16 @@
         },
         save: function() {
             return this.each(function () {
-                var self = $(this).data('self');
-                ColorPicker_save(self);
+                ColorPicker_save($(this).data('self'));
             });
         },
         setColor: function (value) {
             return this.each(function () {
-                $(this).data('self').color.setColor(value);
+                var self = $(this).data('self');
+                self.color.setColor(value);
+                ColorPicker_drawSaturationLimunositySelector(self);
+                ColorPicker_drawIndicators(self);
+                ColorPicker_setValue(self);
             });
         },
         getColor: function () {
