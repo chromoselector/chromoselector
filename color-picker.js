@@ -596,6 +596,27 @@
         }
         return new Color(str);
     }
+    function ColorPicker_show(self, speed) {
+        if (! self.ready) {
+            ColorPicker_drawAll(self);
+        }
+        if (! speed) {
+            speed = self.settings.speed;
+        }
+        self.$source.trigger('beforeShow.canvasColorPicker');
+        self.$picker.fadeIn(speed, function () {
+            self.$source.trigger('show.canvasColorPicker');
+        });
+    }
+    function ColorPicker_hide(self, speed) {
+        if (! speed) {
+            speed = self.settings.speed;
+        }
+        self.$source.trigger('beforeHide.canvasColorPicker');
+        self.$picker.fadeOut(speed, function () {
+            self.$source.trigger('hide.canvasColorPicker');
+        });
+    }
     function ColorPicker_handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
         var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
@@ -736,21 +757,15 @@
         } else {
             self.$source.mouseover(function () {
                 ColorPicker_drawAll(self);
-                $(this).unbind('mouseover');
+                self.$source.unbind('mouseover');
             }).focus(function () {
                 if (! self.ready) {
                     ColorPicker_drawAll(self);
                 }
-                if (self.settings.autoshow) {
-                    self.$picker.fadeIn('fast', function () {
-                        self.$source.trigger('show.canvasColorPicker');
-                    });
-                }
+                ColorPicker_show(self);
             }).blur(function () {
                 if (self.settings.autoshow) {
-                    self.$picker.fadeOut('fast', function () {
-                        self.$source.trigger('hide.canvasColorPicker');
-                    });
+                    ColorPicker_hide(self);
                 }
             });
         }
@@ -822,7 +837,9 @@
                         'update',
                         'destroy',
                         'show',
-                        'hide'
+                        'hide',
+                        'beforeShow',
+                        'beforeHide'
                     ];
                     for (var i in events) {
                         var name = events[i];
@@ -840,26 +857,12 @@
         },
         show: function (speed) {
             return this.each(function () {
-                var self = $(this).data('self');
-                if (! self.ready) {
-                    ColorPicker_drawAll(self);
-                }
-                if (! speed) {
-                    speed = 0;
-                }
-                self.$picker.fadeIn(speed);
-                self.$source.trigger('show.canvasColorPicker');
-
+                ColorPicker_show($(this).data('self'), speed);
             });
         },
         hide: function (speed) {
             return this.each(function () {
-                var self = $(this).data('self');
-                if (! speed) {
-                    speed = 0;
-                }
-                self.$picker.fadeOut(speed);
-                self.$source.trigger('hide.canvasColorPicker');
+                ColorPicker_hide($(this).data('self'), speed);
             });
         },
         save: function() {
@@ -917,18 +920,21 @@
 })(jQuery, document, {
     autoshow:   true,
     autosave:   true,
+    speed:      400,
     diameter:   210,
     target:     null,
 
-    create:    undefined,
-    ready:     undefined,
-    destroy:   undefined,
-    update:    undefined,
-    show:      undefined,
-    hide:      undefined,
+    create:     undefined,
+    ready:      undefined,
+    destroy:    undefined,
+    update:     undefined,
+    beforeShow: undefined,
+    show:       undefined,
+    beforeHide: undefined,
+    hide:       undefined,
 
-    save:      undefined,
-    load:      undefined,
-    str2color: undefined,
-    color2str: undefined
+    save:       undefined,
+    load:       undefined,
+    str2color:  undefined,
+    color2str:  undefined
 });
