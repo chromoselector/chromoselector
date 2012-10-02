@@ -518,7 +518,7 @@
         ColorPicker_setValue(self);
     }
     function ColorPicker_setValue(self) {
-        if (! self.timeout) {
+        if (! self.timeout && self.settings.autoupdate) {
             self.timeout = setTimeout(function () {
                 self.timeout = false;
                 self.$source.val(
@@ -649,12 +649,15 @@
             self.$picker = $('<div/>').appendTo('body').css({
                 top: self.$source.offset().top + self.$source.height() + 5,
                 left: self.$source.offset().left
-            });
-        }
-        self.$picker
+            })
             .width(0)
             .height(0)
             .css('position', 'absolute')
+            .hide();
+        } else {
+            self.$picker.width(self.diameter).height(self.diameter);
+        }
+        self.$picker
             .hide()
             .html(
                 canvasString + canvasString + canvasString
@@ -803,15 +806,41 @@
     };
 })(jQuery, document, {
     autoshow: true,
+    autoupdate: true,
     diameter: 210,
     target: null
 });
 
+
 $(function () {
-    $('#color1, #color2').canvasColorPicker({
-        autoshow: true,
-        diameter: 250
-    });
+    $('#color1, #color2').canvasColorPicker();
+
+    /**
+    var $target = $('<div/>');
+    var $dialog = $('<div/>').append($target);
+    $('#color1').canvasColorPicker({
+        autoshow: false,
+        target: $target,
+        diameter: 300,
+        autoupdate: false
+    }).canvasColorPicker('show', 0);
+    $('button').click(function () {
+       $dialog.dialog({
+            title: 'Color picker',
+            width: 330,
+            modal: true,
+            resizable: false,
+            buttons: {
+                Ok: function() {
+                    $('#color1').canvasColorPicker('save');
+                    $(this).dialog("destroy");
+                },
+                Cancel: function() {
+                    $(this).dialog("destroy");
+                }
+            }
+        });
+    });*/
 });
 
 </script>
