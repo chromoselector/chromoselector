@@ -788,19 +788,24 @@
             });
         },
         save: function() {
-            var self = $(this).data('self');
-            self.$source.val(
-                self.color.hex
-            ).html(
-                self.color.hex
-            );
-            return this;
+            return this.each(function (speed) {
+                var self = $(this).data('self');
+                self.$source.val(
+                    self.color.hex
+                ).html(
+                    self.color.hex
+                );
+            });
         },
         setColor: function (value) {
-            return this;
+            return this.each(function () {
+                var self = $(this).data('self');
+                // self.color.set(value);
+            });
         },
         getColor: function () {
-
+            var self = this.data('self');
+            return self.color;
         },
         api: function () {
             var retval = {};
