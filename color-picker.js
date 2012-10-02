@@ -16,6 +16,10 @@
 (function ($, document, defaults) {
     "use strict";
     /**
+     * Namespace for events and data
+     */
+    var namespace = 'canvasColorPicker';
+    /**
      * Shorten names of math functions
      */
     var m = Math;
@@ -554,7 +558,7 @@
     }
     function ColorPicker_setValue(self) {
         if (! self.timeout) {
-            self.$source.trigger('update.canvasColorPicker');
+            self.$source.trigger('update.' + namespace);
             var f = function () {
                 self.timeout = false;
             };
@@ -603,18 +607,18 @@
         if (! speed) {
             speed = self.settings.speed;
         }
-        self.$source.trigger('beforeShow.canvasColorPicker');
+        self.$source.trigger('beforeShow.' + namespace);
         self.$picker.fadeIn(speed, function () {
-            self.$source.trigger('show.canvasColorPicker');
+            self.$source.trigger('show.' + namespace);
         });
     }
     function ColorPicker_hide(self, speed) {
         if (! speed) {
             speed = self.settings.speed;
         }
-        self.$source.trigger('beforeHide.canvasColorPicker');
+        self.$source.trigger('beforeHide.' + namespace);
         self.$picker.fadeOut(speed, function () {
-            self.$source.trigger('hide.canvasColorPicker');
+            self.$source.trigger('hide.' + namespace);
         });
     }
     function ColorPicker_handleSatLumDrag(self, e) {
@@ -710,7 +714,7 @@
         ColorPicker_drawSaturationLimunositySelector(self);
         ColorPicker_drawIndicators(self);
         self.ready = true;
-        self.$source.trigger('ready.canvasColorPicker');
+        self.$source.trigger('ready.' + namespace);
     }
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
@@ -825,10 +829,9 @@
             );
             return this.each(function () {
                 var $this = $(this);
-                if (! $this.data('canvasColorPicker')) {
-                    $this.data('canvasColorPicker', 1);
+                if (! $this.data(namespace)) {
                     // Instantiate new ColorPicker
-                    $this.data('self', new ColorPicker($this, settings));
+                    $this.data(namespace, new ColorPicker($this, settings));
                     // Register callbacks for all events
                     var events = [
                         'create',
@@ -845,33 +848,33 @@
                         var data = settings[name];
                         if (typeof data === 'function') {
                             $this.bind(
-                                name + '.canvasColorPicker',
+                                name + '.' + namespace,
                                 data
                             );
                         }
                     }
-                    $this.trigger('create.canvasColorPicker');
+                    $this.trigger('create.' + namespace);
                  }
             });
         },
         show: function (speed) {
             return this.each(function () {
-                ColorPicker_show($(this).data('self'), speed);
+                ColorPicker_show($(this).data(namespace), speed);
             });
         },
         hide: function (speed) {
             return this.each(function () {
-                ColorPicker_hide($(this).data('self'), speed);
+                ColorPicker_hide($(this).data(namespace), speed);
             });
         },
         save: function() {
             return this.each(function () {
-                ColorPicker_save($(this).data('self'));
+                ColorPicker_save($(this).data(namespace));
             });
         },
         setColor: function (value) {
             return this.each(function () {
-                var self = $(this).data('self');
+                var self = $(this).data(namespace);
                 self.color.setColor(value);
                 ColorPicker_drawSaturationLimunositySelector(self);
                 ColorPicker_drawIndicators(self);
@@ -879,7 +882,7 @@
             });
         },
         getColor: function () {
-            return this.data('self').color;
+            return this.data(namespace).color;
         },
         api: function () {
             var retval = {};
@@ -894,7 +897,7 @@
         },
         destroy: function () {
             return this.each(function () {
-                var self = $(this).data('self')
+                var self = $(this).data(namespace)
                 if (! $(self.settings.target).length){
                     if (self.$picker.siblings().length) {
                         self.$picker.remove();
@@ -905,22 +908,21 @@
                     self.$picker.remove();
                 }
                 $(this)
-                .removeData('canvasColorPicker')
-                .removeData('self')
-                .trigger('destroy.canvasColorPicker')
-                .unbind('.canvasColorPicker');
+                .removeData(namespace)
+                .trigger('destroy.' + namespace)
+                .unbind('.' + namespace);
             });
         }
     };
 
     /** Extend jQuery */
-    $.fn.canvasColorPicker = function(method) {
+    $.fn[namespace] = function(method) {
         if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || ! method) {
             return methods.init.apply(this, arguments);
         } else {
-            $.error('Method ' +  method + ' does not exist on jQuery.canvasColorPicker');
+            $.error('Method ' +  method + ' does not exist on jQuery.' + namespace);
         }
     };
 })(jQuery, document, {
