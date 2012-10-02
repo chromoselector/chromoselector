@@ -32,18 +32,11 @@
     /**
      * COLOR MANAGEMENT
      */
-    var Color = function () {
-        this.rgb = {
-            r: 0,
-            g: 0,
-            b: 0
-        };
-        this.hsl = {
-            h: 0,
-            s: 0,
-            l: 0
-        };
+    function Color(value) {
+        this.rgb = { r:0, g:0, b:0 };
+        this.hsl = { h:0, s:0, l:0 };
         this.hex = "#ff0000";
+        this.setColor(value);
     };
     // setters
     Color.prototype.setColor = function (value) {
@@ -404,16 +397,10 @@
             tempCtx.putImageData(maskImageData, 0, 0);
         }
 
-        var clr = new Color();
-        clr.setHsl({
-            h: hue,
-            s: 1,
-            l: 0.5
-        });
         degrees = (1 - hue) * Math_PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
-        ctx.fillStyle = clr.hex;
+        ctx.fillStyle = new Color({ h:hue, s:1, l:0.5 }).hex;
         ctx.fillRect(0,0,self.diameter,self.diameter);
         // Copy rotated mask
         ctx.save();
@@ -659,10 +646,7 @@
         */
         self.ready = false;
         self.settings = settings;
-        self.color = new Color();
-        self.color.setHex(
-            $this.val() || $this.html()
-        );
+        self.color = new Color($this.val() || $this.html());
         self.draggingHue = false;
         self.draggingSatLum = false;
         self.drawing = false;
