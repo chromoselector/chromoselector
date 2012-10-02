@@ -896,10 +896,14 @@
         destroy: function () {
             return this.each(function () {
                 var self = $(this).data('self')
-                if ($(self.settings.target).length) {
-                    self.$picker.remove();
+                if (! $(self.settings.target).length){
+                    if (self.$picker.siblings().length) {
+                        self.$picker.remove();
+                    } else {
+                        self.$picker.parent().remove();
+                    }
                 } else {
-                    self.$picker.parent().remove();
+                    self.$picker.remove();
                 }
                 $(this)
                 .removeData('canvasColorPicker')
