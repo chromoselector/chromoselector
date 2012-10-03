@@ -52,11 +52,14 @@
         } else if (typeof value == 'object') {
             var haveFields = function (value, fields) {
                 for (var i in fields.split('')) {
-                    if (typeof value[fields[i]] == 'undefined') { // value validation
-                        return false;
+                    if (typeof value[fields[i]] != 'number'
+                        || value[fields[i]] < 0
+                        || value[fields[i]] > 1
+                    ) {
+                        return 0;
                     }
                 }
-                return true;
+                return 1;
             };
             if (haveFields(value, 'hsl')) {
                 self.setHsl(value);
