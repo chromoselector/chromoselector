@@ -181,13 +181,15 @@
         };
     }
     function Color_hex2rgb(value) {
-        var convert = function (v) {
-            return parseInt('0x' + v, 16) / 255;
-        };
+        var retval = {},
+        value = value.match(/[0-9a-f]{1,2}/gi);
+        for (var i in value) {
+            retval[i] = parseInt('0x' + value[i], 16) / 255;
+        }
         return {
-            r: convert(value.substring(1,3)),
-            g: convert(value.substring(3,5)),
-            b: convert(value.substring(5,7))
+            r: retval[0],
+            g: retval[1],
+            b: retval[2]
         };
     }
 
