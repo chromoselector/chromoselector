@@ -600,13 +600,18 @@
             str = self.$source.val() || self.$source.html();
         }
         if (typeof self.settings.str2color == 'function') {
-            return new Color(self.settings.str2color.apply(null, [str]));
+            self.color = new Color(self.settings.str2color.apply(null, [str]));
+        } else {
+            self.color = new Color(str);
         }
-        return new Color(str);
     }
     function ColorPicker_show(self, speed) {
         if (! self.ready) {
             ColorPicker_drawAll(self);
+        } else {
+            ColorPicker_load(self);
+            ColorPicker_drawSaturationLimunositySelector(self);
+            ColorPicker_drawIndicators(self);
         }
         if (! speed) {
             speed = self.settings.speed;
@@ -732,7 +737,7 @@
         self.draggingSatLum = false;
         self.drawing = false;
         self.$source = $this;
-        self.color = ColorPicker_load(self);
+        ColorPicker_load(self); // sets self.color
         self.diameter = self.settings.diameter;
         self.triangleRadius = self.diameter / 2 - 30;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
@@ -780,6 +785,12 @@
         /**
         * Register events
         */
+        self.$source.keyup(function () {
+            self.$source.trigger('update.' + namespace);
+            ColorPicker_load(self);
+            ColorPicker_drawSaturationLimunositySelector(self);
+            ColorPicker_drawIndicators(self);
+        });
         self.$picker.bind('mousedown', function (e) {
             e.preventDefault();
             var radius = self.diameter/2 - 15;
