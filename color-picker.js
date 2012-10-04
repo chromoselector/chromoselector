@@ -46,12 +46,12 @@
     Color.p = Color.prototype;
     // setters
     Color.p.setColor = function(value) {
-        var self = this;
+        var self = this, i;
         if (typeof value == 'string') {
             this.setHex(value);
         } else if (typeof value == 'object') {
             var haveFields = function (value, fields) {
-                for (var i in fields.split('')) {
+                for (i in fields.split('')) {
                     if (typeof value[fields[i]] != 'number'
                         || value[fields[i]] < 0
                         || value[fields[i]] > 1
@@ -181,9 +181,9 @@
         };
     }
     function Color_hex2rgb(value) {
-        var retval = {},
+        var i, retval = {},
         value = value.match(/[0-9a-f]{1,2}/gi);
-        for (var i in value) {
+        for (i in value) {
             retval[i] = parseInt('0x' + value[i], 16) / 255;
         }
         return {
@@ -260,8 +260,8 @@
      * Sets a pixel on a canvas
      */
     function setPixel(imageData, x, y, pixel) {
-        var index = (x + y * imageData.width) * 4;
-        for (var i=0; i<4; i++) {
+        var i, index = (x + y * imageData.width) * 4;
+        for (i=0; i<4; i++) {
             imageData.data[index+i] = pixel[i];
         }
     }
@@ -406,9 +406,10 @@
             };
             var limitX = limits(points, 0);
             var limitY = limits(points, 1);
+            var i, j;
             // draw
-            for (var i = limitX.start; i <= limitX.end; i++) {
-                for (var j = limitY.start; j <= limitY.end; j++) {
+            for (i = limitX.start; i <= limitX.end; i++) {
+                for (j = limitY.start; j <= limitY.end; j++) {
                     setPixel(
                         maskImageData,
                         i,
@@ -517,8 +518,8 @@
 
     /** The color picker functions */
     function ColorPicker_getPoints(self, hue) {
-        var points = [];
-        for (var i = 0; i < 3; i++) {
+        var i, points = [];
+        for (i = 0; i < 3; i++) {
             points[i] = getPointOnCircle(
                 self.triangleRadius,
                 hue,
@@ -673,8 +674,8 @@
             points[vertices3[index]]
         );
         if (getDistance(intersect, points[vertices1[index]]) >= getDistance(points[0], points[1])) {
-            var minDistance = Math_min.apply(null, distances);
-            for (var i=0; i<3; i++) {
+            var i, minDistance = Math_min.apply(null, distances);
+            for (i=0; i<3; i++) {
                 if (distances[i] === minDistance) {
                     intersect = points[i];
                     break;
@@ -848,7 +849,7 @@
                     // Instantiate new ColorPicker
                     $this.data(namespace, new ColorPicker($this, settings));
                     // Register callbacks for all events
-                    var events = [
+                    var i, events = [
                         'create',
                         'ready',
                         'update',
@@ -858,7 +859,7 @@
                         'beforeShow',
                         'beforeHide'
                     ];
-                    for (var i in events) {
+                    for (i in events) {
                         var name = events[i];
                         var data = settings[name];
                         if (typeof data === 'function') {
