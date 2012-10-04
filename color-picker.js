@@ -531,9 +531,10 @@
     }
     function ColorPicker_reDrawHue(self, e) {
         var offset = self.$picker.offset();
+        var coords = getEventPosition(e, self.$picker);
         var angle = Math_atan2(
-            e.pageX - offset.left - self.diameter / 2,
-            e.pageY - offset.top - self.diameter / 2
+            coords[0] - self.diameter / 2,
+            coords[1] - self.diameter / 2
         ) * (180/Math_PI) + 270;
         self.color.setHsl({
             h: angle / 360,
@@ -635,10 +636,7 @@
         var offset = self.$picker.offset();
         var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
         var points = ColorPicker_getPoints(self, degrees);
-        var inputPoint = [
-            e.pageX - offset.left,
-            e.pageY - offset.top
-        ];
+        var inputPoint = getEventPosition(e, self.$picker);
         var sanitisedInputPoint = inputPoint;
         if (! pointInTriangle(inputPoint, points[0], points[1], points[2])) {
             var i, distances = [];
@@ -792,14 +790,11 @@
             ColorPicker_drawSaturationLimunositySelector(self);
             ColorPicker_drawIndicators(self);
         });
-        self.$picker.bind('mousedown', function (e) {
+        self.$picker.bind('mousedown touchstart', function (e) {
             e.preventDefault();
             var radius = self.diameter/2 - 15;
             var offset = self.$picker.offset();
-            var inputPoint = [
-                e.pageX - offset.left,
-                e.pageY - offset.top
-            ];
+            var inputPoint = getEventPosition(e, self.$picker);
             var lineWidth = 9;
             if (
                 pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
@@ -817,25 +812,47 @@
                 }
             }
         });
-        $([window, document]).bind('mousemove', function (e) {
-            e.preventDefault();
+        $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
+                e.preventDefault();
                 ColorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
+                e.preventDefault();
                 ColorPicker_handleSatLumDrag(self, e);
             }
-        }).bind('mouseup', function (e) {
-            e.preventDefault();
+        }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
+                e.preventDefault();
                 self.draggingHue = false;
                 ColorPicker_reDrawHue(self, e);
-            }
-            if (self.draggingSatLum) {
+            } else if (self.draggingSatLum) {
+                e.preventDefault();
                 self.draggingSatLum = false;
                 ColorPicker_handleSatLumDrag(self, e);
             }
         });
     };
+
+    function getEventPosition(e, $obj) {
+        var x = 0, y = 0;
+        var oe = e.originalEvent;
+        var touch = oe.touches || oe.changedTouches;
+        var offset = $obj.parent().offset();
+        if (touch) {
+            // touchscreen
+            x = touch[0].pageX - offset.left;
+            y = touch[0].pageY - offset.top;
+        } else if (e.pageX /*&& this.mouse*/) {
+            // mouse
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top;
+        } else {
+            // a mouse event being fired during a touch swipe
+            // This seems to be an Android bug
+            // FIXME: need to handle this error :(
+        }
+        return [x, y];
+    }
 
     var methods = {
         init: function(options) {
