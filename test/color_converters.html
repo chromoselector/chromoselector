@@ -1,12 +1,11 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script src="../libs/jquery-1.8.1.js" type="text/javascript"></script>
     <script src="../color-picker.js" type="text/javascript"></script>
     <script type="text/javascript">
-   // TESTSUITE.init();
+    TESTSUITE(window);
     $(function () {
         test1(0);
     });
@@ -18,8 +17,8 @@
         for (var g = 0; g < 256; g++) {
             for (var b = 0; b < 256; b++) {
                 var oldColor = {r:round(r/255),g:round(g/255),b:round(b/255)};
-                var newColor = TESTSUITE.Color_hsl2rgb(
-                    TESTSUITE.Color_rgb2hsl(
+                var newColor = Color_hsl2rgb(
+                    Color_rgb2hsl(
                         oldColor
                     )
                 );
@@ -48,8 +47,8 @@
         for (var g = 0; g < 256; g++) {
             for (var b = 0; b < 256; b++) {
                 var oldColor = {r:r/255,g:g/255,b:b/255};
-                var newColor = TESTSUITE.Color_hex2rgb(
-                    TESTSUITE.Color_rgb2hex(
+                var newColor = Color_hex2rgb(
+                    Color_rgb2hex(
                         oldColor
                     )
                 );

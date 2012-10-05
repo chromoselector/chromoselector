@@ -15,25 +15,39 @@
 (function ($, document, window, defaults) {
     "use strict";
     if (typeof TESTSUITE === 'undefined') {
-        window.TESTSUITE = {};
-        TESTSUITE.init = function () {
-            m = Math;
-            Math_cos = m.cos;
-            Math_sin = m.sin;
-            Math_round = m.round;
-            Math_sqrt = m.sqrt;
-            Math_abs = m.abs;
-            Math_min = m.min;
-            Math_max = m.max;
-            Math_PI = m.PI;
-            Math_atan2 = m.atan2;
-            Math_ceil = m.ceil;
+        window.TESTSUITE = function (w) {
+            w.m = Math;
+            w.Math_cos = m.cos;
+            w.Math_sin = m.sin;
+            w.Math_round = m.round;
+            w.Math_sqrt = m.sqrt;
+            w.Math_abs = m.abs;
+            w.Math_min = m.min;
+            w.Math_max = m.max;
+            w.Math_PI = m.PI;
+            w.Math_atan2 = m.atan2;
+            w.Math_ceil = m.ceil;
+            w.Color = Color;
+            w.Color_rgb2hsl = Color_rgb2hsl;
+            w.Color_rgb2hex = Color_rgb2hex;
+            w.Color_hsl2rgb = Color_hsl2rgb;
+            w.Color_hex2rgb = Color_hex2rgb;
+
+            w.setPixel = setPixel;
+
+            w.roundPoint = roundPoint;
+            w.getPointOnCircle = getPointOnCircle;
+            w.getLumAlphaColor = getLumAlphaColor;
+            w.ColorPicker_getPoints = ColorPicker_getPoints;
+           /* w.i = 0;
+            w.x = 0;
+            w.y = 0;
+            w.j = 0;
+            w.degree= 0;
+            w.r = 0;
+            w.g = 0;
+            w.b = 0;*/
         }
-        TESTSUITE.Color = Color;
-        TESTSUITE.Color_rgb2hsl = Color_rgb2hsl;
-        TESTSUITE.Color_rgb2hex = Color_rgb2hex;
-        TESTSUITE.Color_hsl2rgb = Color_hsl2rgb;
-        TESTSUITE.Color_hex2rgb = Color_hex2rgb;
     }
     /**
      * Namespace for events and data
