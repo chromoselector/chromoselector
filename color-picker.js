@@ -475,11 +475,18 @@
         ctx.restore();
         // cut out triangle
         ctx.beginPath();
-        ctx.moveTo(points[0][0], points[0][1]);
+        ctx.moveTo(0, 0);
         ctx.lineTo(points[1][0], points[1][1]);
+        ctx.lineTo(points[0][0], points[0][1]);
         ctx.lineTo(points[2][0], points[2][1]);
+        ctx.lineTo(points[1][0], points[1][1]);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, self.diameter);
+        ctx.lineTo(self.diameter, self.diameter);
+        ctx.lineTo(self.diameter, 0);
+        ctx.lineTo(0, 0);
         ctx.closePath();
-        ctx.globalCompositeOperation = "destination-in";
+        ctx.globalCompositeOperation = "destination-out";
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fill();
         // shadow
