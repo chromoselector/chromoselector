@@ -12,8 +12,29 @@
  *   better performance rendering colorwheel
  *   shorter code
  */
-(function ($, document, defaults) {
+(function ($, document, window, defaults) {
     "use strict";
+    if (typeof TESTSUITE === 'undefined') {
+        window.TESTSUITE = {};
+        TESTSUITE.init = function () {
+            m = Math;
+            Math_cos = m.cos;
+            Math_sin = m.sin;
+            Math_round = m.round;
+            Math_sqrt = m.sqrt;
+            Math_abs = m.abs;
+            Math_min = m.min;
+            Math_max = m.max;
+            Math_PI = m.PI;
+            Math_atan2 = m.atan2;
+            Math_ceil = m.ceil;
+        }
+        TESTSUITE.Color = Color;
+        TESTSUITE.Color_rgb2hsl = Color_rgb2hsl;
+        TESTSUITE.Color_rgb2hex = Color_rgb2hex;
+        TESTSUITE.Color_hsl2rgb = Color_hsl2rgb;
+        TESTSUITE.Color_hex2rgb = Color_hex2rgb;
+    }
     /**
      * Namespace for events and data
      */
@@ -980,11 +1001,13 @@
             $.error('Method ' +  method + ' does not exist on jQuery.' + namespace);
         }
     };
-})(jQuery, document, {
+})(jQuery, document, window, {
     autoshow:   true,
     autosave:   true,
     speed:      400,
-    diameter:   210,
+    diameter:   210
+    /*
+    ,
     target:     null,
 
     create:     undefined,
@@ -1000,4 +1023,5 @@
     load:       undefined,
     str2color:  undefined,
     color2str:  undefined
+    */
 });
