@@ -743,6 +743,9 @@
         } else {
             self.color = new Color(str);
         }
+        if (self.settings.preview && self.$preview) {
+            self.$preview.find('p').css('background', self.color.hex);
+        }
     }
     function ColorPicker_show(self, speed) {
         if (! self.ready) {
