@@ -9,7 +9,7 @@
     "use strict";
     window.TESTSUITE(window);
     var self = {
-        diameter: 220
+        diameter: 400
     };
     var origin = [self.diameter / 2, self.diameter / 2];
     var rad2deg = (180/Math_PI);
@@ -17,15 +17,24 @@
     $(function () {
 
         var canvas = document.createElement('canvas');
-        canvas.width = 220;
-        canvas.height = 220;
+        canvas.width = 400;
+        canvas.height = 400;
         canvas.style.display = 'block';
         self.canvases = [$(canvas).clone().appendTo('body')[0]];
+        var startTime = new Date();
         test1(self);
+        var duration = new Date() - startTime;
+        $('body').append(duration+" mS<br/>")
         self.canvases = [$(canvas).clone().appendTo('body')[0]];
+        startTime = new Date();
         test2(self);
+        duration = new Date() - startTime;
+        $('body').append(duration+" mS<br/>")
         self.canvases = [$(canvas).clone().appendTo('body')[0]];
+        startTime = new Date();
         test3(self);
+        duration = new Date() - startTime;
+        $('body').append(duration+" mS<br/>")
     });
 
     function drawPart(imageData, startX, endX, startY, endY) {
