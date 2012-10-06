@@ -31,9 +31,7 @@
             w.Color_rgb2hex = Color_rgb2hex;
             w.Color_hsl2rgb = Color_hsl2rgb;
             w.Color_hex2rgb = Color_hex2rgb;
-
             w.setPixel = setPixel;
-
             w.roundPoint = roundPoint;
             w.getPointOnCircle = getPointOnCircle;
             w.getLumAlphaColor = getLumAlphaColor;
@@ -911,7 +909,7 @@
             self.$source.mouseover(function () {
                 ColorPicker_drawAll(self);
                 self.$source.unbind('mouseover');
-            }).focus(function () {
+            }).bind('focus click', function () {
                 if (! self.ready) {
                     ColorPicker_drawAll(self);
                 }
@@ -928,6 +926,10 @@
             ColorPicker_load(self);
             ColorPicker_drawSaturationLimunositySelector(self);
             ColorPicker_drawIndicators(self);
+        }).keydown(function (e) {
+            if (e.keyCode == 27) {
+                ColorPicker_hide(self);
+            }
         });
         self.$container.bind('mousedown touchstart', function (e) {
             preventDefault(e)
