@@ -4,13 +4,13 @@
  * v 1.0.0:
  *   Fix positioning issues
  *   CMYK and HSV colors
- *   Alpha selection
- *   Basic resizing
+ *   User-defined colorwheel width
  *
  * v 1.1.0:
  *   IE 6+ support
  *   better performance rendering colorwheel
  *   shorter code
+ *   Alpha selection
  */
 (function ($, document, window, defaults) {
     "use strict";
@@ -561,6 +561,20 @@
         ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
+
+        /** draw resizer */
+        if (self.settings.resizable) {
+            ctx.strokestyle = '#666666';
+            ctx.lineWidth = 1;
+            ctx.lineCap="round";
+            ctx.moveTo(self.diameter-20, self.diameter-2);
+            ctx.lineTo(self.diameter-2, self.diameter-20);
+            ctx.moveTo(self.diameter-13, self.diameter-2);
+            ctx.lineTo(self.diameter-2, self.diameter-13);
+            ctx.moveTo(self.diameter-7, self.diameter-2);
+            ctx.lineTo(self.diameter-2, self.diameter-7);
+            ctx.stroke();
+        }
         setTimeout(function () {
             self.drawing = false;
         }, 4);
@@ -784,9 +798,11 @@
         self.settings = settings;
         self.draggingHue = false;
         self.draggingSatLum = false;
+        self.resizing = false;
         self.drawing = false;
         self.$source = $this;
         ColorPicker_load(self); // sets self.color
+        self.settings.diameter = ColorPicker_fixDiameter(self.settings.diameter);
         self.diameter = self.settings.diameter;
         self.triangleRadius = self.diameter / 2 - 30;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
@@ -801,9 +817,12 @@
             })
             .width(0)
             .height(0)
-            .css('position', 'absolute');
+            .css('position', 'absolute')
+            .css('overflow', 'visible');
         }
-        self.$picker = $('<div/>').width(self.diameter).height(self.diameter);
+        self.$picker = $('<div/>')
+            .css({position:'relative'})
+            .width(self.diameter).height(self.diameter);
         $target.append(
             self.$picker
                 .hide()
@@ -811,7 +830,8 @@
                     canvasString + canvasString + canvasString
                 )
         );
-        self.canvases = self.$picker.find('canvas').css('position', 'absolute');
+        self.canvases = self.$picker.find('canvas')
+            .css({position:'absolute',width:'100%',height:'100%'});
         self.tempCanvas = $(canvasString)[0];
 
         if (! self.settings.autoshow) {
@@ -841,47 +861,76 @@
             ColorPicker_drawIndicators(self);
         });
         self.$picker.bind('mousedown touchstart', function (e) {
-            e.preventDefault();
+            preventDefault(e)
             var radius = self.diameter/2 - 15;
             var offset = self.$picker.offset();
             var inputPoint = getEventPosition(e, self.$picker);
             var lineWidth = 9;
-            if (
-                pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
-                &&
-                ! pointInCircle(inputPoint, self.diameter/2, radius-lineWidth)
+            if (self.settings.resizable
+                && inputPoint[0] > self.diameter-20
+                && inputPoint[1] > self.diameter-20
             ) {
-                self.draggingHue = true;
-                ColorPicker_reDrawHue(self, e);
+                self.resizing = true;
             } else {
-                var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
-                var points = ColorPicker_getPoints(self, degrees);
-                if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
-                    self.draggingSatLum = true;
-                    ColorPicker_handleSatLumDrag(self, e);
+                if (
+                    pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
+                    &&
+                    ! pointInCircle(inputPoint, self.diameter/2, radius-lineWidth)
+                ) {
+                    self.draggingHue = true;
+                    ColorPicker_reDrawHue(self, e);
+                } else {
+                    var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+                    var points = ColorPicker_getPoints(self, degrees);
+                    if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
+                        self.draggingSatLum = true;
+                        ColorPicker_handleSatLumDrag(self, e);
+                    }
                 }
             }
         });
         $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
-                e.preventDefault();
+                preventDefault(e)
                 ColorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
-                e.preventDefault();
+                preventDefault(e)
                 ColorPicker_handleSatLumDrag(self, e);
+            } else if (self.resizing) {
+                preventDefault(e)
+                var newDiameter = ColorPicker_fixDiameter(getEventPosition(e, self.$picker)[0]);
+                self.$picker.width(newDiameter).height(newDiameter);
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
-                e.preventDefault();
+                preventDefault(e)
                 self.draggingHue = false;
                 ColorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
-                e.preventDefault();
+                preventDefault(e)
                 self.draggingSatLum = false;
                 ColorPicker_handleSatLumDrag(self, e);
+            } else if (self.resizing) {
+                preventDefault(e)
+                self.resizing = false;
+                ColorPicker_resize(self, self.$picker.width());
             }
         });
     };
+
+    function preventDefault(e) {
+        e.preventDefault();
+    }
+
+    function ColorPicker_fixDiameter(diameter) {
+        if (diameter > 400) {
+            diameter = 400;
+        } else if (diameter < 100) {
+            diameter = 100;
+        }
+        return diameter + diameter % 2;
+
+    }
 
     function getEventPosition(e, $obj) {
         var x = 0, y = 0;
@@ -902,6 +951,24 @@
             // FIXME: need to handle this error :(
         }
         return [x, y];
+    }
+
+    function ColorPicker_resize(self, diameter) {
+        if (diameter != self.diameter) {
+            self.ready = false;
+            self.diameter = diameter;
+            self.settings.diameter = diameter;
+            self.triangleRadius = diameter / 2 - 30;
+            self.canvases
+                .each(function () {
+                    this.width = diameter;
+                    this.height = diameter;
+                })
+                .add(self.$picker);
+            self.tempCanvas.width = diameter;
+            self.tempCanvas.height = diameter;
+            ColorPicker_drawAll(self);
+        }
     }
 
     var methods = {
@@ -969,24 +1036,7 @@
         },
         resize: function (diameter) {
             return this.each(function () {
-                var self = $(this).data(namespace);
-                if (diameter != self.diameter) {
-                    self.ready = false;
-                    self.diameter = diameter;
-                    self.settings.diameter = diameter;
-                    self.triangleRadius = diameter / 2 - 30;
-                    self.canvases
-                        .each(function () {
-                            this.width = diameter;
-                            this.height = diameter;
-                        })
-                        .add(self.$picker)
-                        .width(diameter)
-                        .height(diameter);
-                    self.tempCanvas.width = diameter;
-                    self.tempCanvas.height = diameter;
-                    ColorPicker_drawAll(self);
-                }
+                ColorPicker_resize($(this).data(namespace), diameter)
             });
         },
         api: function () {
@@ -1034,7 +1084,9 @@
     autoshow:   true,
     autosave:   true,
     speed:      400,
-    diameter:   210
+    diameter:   210,
+    resizable: true,
+
     /*
     ,
     target:     null,
