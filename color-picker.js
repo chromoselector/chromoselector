@@ -31,6 +31,8 @@
             w.Color_rgb2hex = Color_rgb2hex;
             w.Color_hsl2rgb = Color_hsl2rgb;
             w.Color_hex2rgb = Color_hex2rgb;
+            w.Color_rgb2cmyk = Color_rgb2cmyk;
+            w.Color_cmyk2rgb = Color_cmyk2rgb;
             w.setPixel = setPixel;
             w.roundPoint = roundPoint;
             w.getPointOnCircle = getPointOnCircle;
@@ -69,8 +71,10 @@
      */
     function Color(value) {
         var self = this;
+        // default to black
         self.rgb = { r:0, g:0, b:0 };
         self.hsl = { h:0, s:0, l:0 };
+        self.cmyk = { c: 0, m: 0, y:0, k:1 };
         self.hex = "#000000";
         self.setColor(value);
     };
@@ -97,10 +101,14 @@
                 self.setHsl(value);
             } else if (haveFields(value, 'rgb')) {
                 self.setRgb(value);
+            } else if (haveFields(value, 'cmyk')) {
+                self.setCmyk(value);
             } else if (typeof value.hsl == 'object') {
                 self.setColor(value.hsl);
             } else if (typeof value.rgb == 'object') {
                 self.setColor(value.rgb);
+            } else if (typeof value.cmyk == 'object') {
+                self.setColor(value.cmyk);
             }
         }
         return self;
@@ -109,6 +117,7 @@
         var self = this;
         self.rgb = value;
         self.hsl = Color_rgb2hsl(value);
+        self.cmyk = Color_rgb2cmyk(value);
         self.hex = Color_rgb2hex(value);
         return self;
     }
@@ -120,6 +129,7 @@
         }
         self.hsl = value;
         self.rgb = Color_hsl2rgb(value);
+        self.cmyk = Color_rgb2cmyk(self.rgb);
         self.hex = Color_rgb2hex(self.rgb);
         return self;
     }
@@ -134,8 +144,17 @@
             }
             self.hex = value;
             self.rgb = Color_hex2rgb(value);
+            self.cmyk = Color_rgb2cmyk(self.rgb);
             self.hsl = Color_rgb2hsl(self.rgb);
         }
+        return self;
+    }
+    Color.p.setCmyk = function(value) {
+        var self = this;
+        self.cmyk = value;
+        self.rgb = Color_cmyk2rgb(value);
+        self.hsl = Color_rgb2hsl(self.rgb);
+        self.hex = Color_rgb2hex(self.rgb);
         return self;
     }
 
@@ -222,6 +241,35 @@
             r: retval[0],
             g: retval[1],
             b: retval[2]
+        };
+    }
+    function Color_rgb2cmyk(value) {
+        // achromatic
+        if (value.r == value.g && value.g == value.b) {
+            return {
+                c:0,
+                m:0,
+                y:0,
+                k:1 - value.r
+            };
+        }
+        var k = Math_min(
+            1 - value.r,
+            1 - value.g,
+            1 - value.b
+        );
+        return {
+            c:(1 - value.r - k) / (1 - k),
+            m:(1 - value.g - k) / (1 - k),
+            y:(1 - value.b - k) / (1 - k),
+            k:k
+        };
+    }
+    function Color_cmyk2rgb(value) {
+        return {
+            r: 1 - Math_min(1, value.c * ( 1 - value.k ) + value.k),
+            g: 1 - Math_min(1, value.m * ( 1 - value.k ) + value.k),
+            b: 1 - Math_min(1, value.y * ( 1 - value.k ) + value.k)
         };
     }
 

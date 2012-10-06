@@ -7,19 +7,21 @@
     <script src="../color-picker.js" type="text/javascript"></script>
     <script type="text/javascript">
     TESTSUITE(window);
+    var startTime = new Date();
     $(function () {
         test1(0);
     });
     function round(v) {
         return Math.round(v * 10000000000) / 10000000000;
     }
+
     function test1(r) {
         $('#test1 > div > div').width((r / 255) * 400);
         for (var g = 0; g < 256; g++) {
             for (var b = 0; b < 256; b++) {
                 var oldColor = {r:round(r/255),g:round(g/255),b:round(b/255)};
-                var newColor = Color_hsl2rgb(
-                    Color_rgb2hsl(
+                var newColor = Color_cmyk2rgb(
+                    Color_rgb2cmyk(
                         oldColor
                     )
                 );
@@ -40,19 +42,27 @@
         if (r < 255) {
             setTimeout(function () { test1(++r) }, 1);
         } else {
+            $('#test1').append((new Date() - startTime) + ' mS<br />')
+            startTime = new Date();
             test2(0)
         }
     }
+
+
+
     function test2(r) {
         $('#test2 > div > div').width((r / 255) * 400);
         for (var g = 0; g < 256; g++) {
             for (var b = 0; b < 256; b++) {
-                var oldColor = {r:r/255,g:g/255,b:b/255};
-                var newColor = Color_hex2rgb(
-                    Color_rgb2hex(
+                var oldColor = {r:round(r/255),g:round(g/255),b:round(b/255)};
+                var newColor = Color_hsl2rgb(
+                    Color_rgb2hsl(
                         oldColor
                     )
                 );
+                newColor.r = round(newColor.r);
+                newColor.g = round(newColor.g);
+                newColor.b = round(newColor.b);
                 if (oldColor.r != newColor.r
                     || oldColor.g != newColor.g
                     || oldColor.b != newColor.b
@@ -66,6 +76,38 @@
         }
         if (r < 255) {
             setTimeout(function () { test2(++r) }, 1);
+        } else {
+            $('#test2').append((new Date() - startTime) + ' mS<br />')
+            startTime = new Date();
+            test3(0)
+        }
+    }
+    function test3(r) {
+        $('#test3 > div > div').width((r / 255) * 400);
+        for (var g = 0; g < 256; g++) {
+            for (var b = 0; b < 256; b++) {
+                var oldColor = {r:r/255,g:g/255,b:b/255};
+                var newColor = Color_hex2rgb(
+                    Color_rgb2hex(
+                        oldColor
+                    )
+                );
+                if (oldColor.r != newColor.r
+                    || oldColor.g != newColor.g
+                    || oldColor.b != newColor.b
+                ) {
+                    $('#error').append( "test3: " +
+                        oldColor.r + "," + oldColor.g + "," + oldColor.b + " -> "
+                        + newColor.r + "," + newColor.g + "," + newColor.b + "\n"
+                    )
+                }
+            }
+        }
+        if (r < 255) {
+            setTimeout(function () { test3(++r) }, 1);
+        } else {
+            $('#test3').append((new Date() - startTime) + ' mS<br />')
+            startTime = new Date();
         }
     }
     </script>
@@ -92,10 +134,14 @@
 </head>
 <body>
     <div id="test1">
-        rgb2hsl and back
+        rgb2cmyk and back
         <div class="progress_container"><div></div></div>
     </div>
     <div id="test2">
+        rgb2hsl and back
+        <div class="progress_container"><div></div></div>
+    </div>
+    <div id="test3">
         rgb2hex and back
         <div class="progress_container"><div></div></div>
     </div>
