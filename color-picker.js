@@ -307,12 +307,6 @@
      * straight relative to the x-axis
      */
     function getLumAlphaColor(point1, point2, point3, inputPoint) {
-        var alphaIntersectionPoint = intersectLineLine(
-            inputPoint,
-            point1,
-            point2,
-            point3
-        );
         var lumIntersectionPoint1 = intersectLineLine(
             inputPoint,
             [inputPoint[0] + 20, inputPoint[1]],
@@ -333,13 +327,7 @@
         } else {
             l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
         }
-        var a = (getDistance(point1, inputPoint) / getDistance(point1, alphaIntersectionPoint)) * 255;
-        if (a < 0) {
-            a = 0;
-        } else if (a > 255) {
-            a = 255;
-        }
-        return [ l, l, l, a ];
+        return [ l, l, l, 255];
     }
 
     /**
@@ -431,20 +419,21 @@
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
+            var startTime = new Date();
             var maskImageData = ctx.createImageData(self.diameter, self.diameter);
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_round(Math_min(points[0][axis] - 2, points[1][axis] - 2, points[2][axis] - 2)),
-                    end: Math_round(Math_max(points[0][axis] + 2, points[1][axis] + 2, points[2][axis] + 2))
+                    start: Math_round(Math_min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math_round(Math_max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
                 };
             };
             var limitX = limits(points, 0);
             var limitY = limits(points, 1);
             var i, j;
             // draw
-            for (i = limitX.start; i <= limitX.end; i++) {
-                for (j = limitY.start; j <= limitY.end; j++) {
+            for (i = points[0][0] - 3; i <= limitX.end; i++) {
+                for (j = limitY.start + (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
                     setPixel(
                         maskImageData,
                         i,
@@ -453,8 +442,32 @@
                     );
                 }
             }
+            for (i = limitX.start; i <= points[0][0] - 3; i++) {
+                for (j = limitY.start - (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
+                    setPixel(
+                        maskImageData,
+                        i,
+                        j,
+                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
+                    );
+                }
+            }
+
             tempCtx = self.tempCanvas.getContext('2d');
             tempCtx.putImageData(maskImageData, 0, 0);
+
+
+            var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
+            lingrad.addColorStop(1, 'rgba(0,0,0,0)');
+            lingrad.addColorStop(0, 'rgba(0,0,0,255)');
+            tempCtx.fillStyle = lingrad;
+            tempCtx.globalCompositeOperation = "destination-out";
+            tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
+            tempCtx.globalCompositeOperation = "source-over";
+                       // var startTime = new Date();
+
+            var duration = new Date() - startTime;
+            $('body').append(duration+",")
         }
 
         degrees = (1 - hue) * Math_PI * 2;
