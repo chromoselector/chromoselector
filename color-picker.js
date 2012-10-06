@@ -2,8 +2,8 @@
  * TODO:
  *
  * v 1.0.0:
- *   Fix positioning issues
  *   CMYK and HSV colors
+ *   Documentation
  *
  * v 1.1.0:
  *   IE 6+ support
@@ -704,6 +704,7 @@
         if (! speed) {
             speed = self.settings.speed;
         }
+        ColorPicker_fixPosition(self);
         self.$source.trigger('beforeShow.' + namespace);
         self.$picker.fadeIn(speed, function () {
             self.$source.trigger('show.' + namespace);
@@ -830,19 +831,16 @@
         self.shadowRatio = self.settings.shadow / self.diameter;
         self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
-        var $target;
         if (self.settings.target) {
-            $target = $(self.settings.target);
+            self.$target = $(self.settings.target);
         }
-        if (! $target || ! $target.length) {
-            $target = $('<div/>').appendTo('body').css({
-                top: self.$source.offset().top + self.$source.outerHeight(),
-                left: self.$source.offset().left
-            })
-            .width(0)
-            .height(0)
-            .css('position', 'absolute')
-            .css('overflow', 'visible');
+        if (! self.$target || ! self.$target.length) {
+            self.$target = $('<div/>')
+                .appendTo('body')
+                .width(0)
+                .height(0)
+                .css('position', 'absolute')
+                .css('overflow', 'visible');
         }
         self.$picker = $('<div/>')
             .css({
@@ -867,7 +865,7 @@
                 'border-radius': borderRadius
             });
         }
-        $target.append(
+        self.$target.append(
             self.$picker
                 .hide()
                 .html(
@@ -962,6 +960,8 @@
                 self.resizing = false;
                 ColorPicker_resize(self, self.$picker.width());
             }
+        }).bind('resize', function () {
+            ColorPicker_fixPosition(self);
         });
     };
 
@@ -976,6 +976,16 @@
             diameter = 100;
         }
         return diameter + diameter % 2;
+
+    }
+    function ColorPicker_fixPosition(self) {
+        if (! self.settings.target) {
+            var offset = self.$source.offset();
+            self.$target.css({
+                top: offset.top + self.$source.outerHeight(),
+                left: offset.left
+            })
+        }
 
     }
 
