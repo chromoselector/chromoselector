@@ -186,16 +186,29 @@
             l: l
         };
     }
-    function Color_rgb2hex(value) {
-        var convert = function (value) {
-            value = Math_round(value * 255);
-            var retval = value.toString(16);
-            if (value < 16) {
-                retval = "0" + retval;
+    function Color_rgb2hex(input) {
+        var value, byte, retval = '', i=0;
+        for (;i<3;i++) {
+            byte = Math_round(input[['r','g','b'][i]] * 255);
+            value = byte.toString(16);
+            if (byte < 16) {
+                value = "0" + value;
             }
-            return retval;
+            retval += value;
+        }
+        return '#' + retval;
+
+    }
+    function Color_hex2rgb(value) {
+        var i=0, retval = {};
+        for (;i<3;i++) {
+            retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
+        }
+        return {
+            r: retval[0],
+            g: retval[1],
+            b: retval[2]
         };
-        return "#" + convert(value.r) + convert(value.g) + convert(value.b);
     }
     function Color_hsl2rgb(value) {
         var r, g, b;
@@ -231,18 +244,7 @@
             b: b
         };
     }
-    function Color_hex2rgb(value) {
-        var i, retval = {},
-        value = value.match(/[0-9a-f]{1,2}/gi);
-        for (i in value) {
-            retval[i] = parseInt('0x' + value[i], 16) / 255;
-        }
-        return {
-            r: retval[0],
-            g: retval[1],
-            b: retval[2]
-        };
-    }
+
     function Color_rgb2cmyk(value) {
         // achromatic
         if (value.r == value.g && value.g == value.b) {
