@@ -39,14 +39,14 @@
             w.getPointOnCircle = getPointOnCircle;
             w.getLumAlphaColor = getLumAlphaColor;
             w.ColorPicker_getPoints = ColorPicker_getPoints;
-           /* w.i = 0;
+            w.i = 0;
             w.x = 0;
             w.y = 0;
             w.j = 0;
             w.degree= 0;
             w.r = 0;
             w.g = 0;
-            w.b = 0;*/
+            w.b = 0;
         }
     }
     /**
@@ -419,7 +419,6 @@
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
-            var startTime = new Date();
             var maskImageData = ctx.createImageData(self.diameter, self.diameter);
             // triangle limits
             var limits = function (points, axis) {
@@ -464,10 +463,6 @@
             tempCtx.globalCompositeOperation = "destination-out";
             tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
             tempCtx.globalCompositeOperation = "source-over";
-                       // var startTime = new Date();
-
-            var duration = new Date() - startTime;
-            $('body').append(duration+",")
         }
 
         degrees = (1 - hue) * Math_PI * 2;
