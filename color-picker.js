@@ -4,7 +4,6 @@
  * v 1.0.0:
  *   Fix positioning issues
  *   CMYK and HSV colors
- *   User-defined colorwheel width
  *
  * v 1.1.0:
  *   IE 6+ support
@@ -1016,6 +1015,7 @@
             self.tempCanvas.width = diameter;
             self.tempCanvas.height = diameter;
             ColorPicker_drawAll(self);
+            self.$source.trigger('resize.' + namespace);
         }
     }
 
@@ -1039,7 +1039,8 @@
                         'show',
                         'hide',
                         'beforeShow',
-                        'beforeHide'
+                        'beforeHide',
+                        'resize'
                     ];
                     for (i in events) {
                         var name = events[i];
@@ -1135,7 +1136,7 @@
     diameter:   180,
     width:      18,
     resizable:  true,
-    //class:      null,
+    class:      null,
     shadow:     0
     /*
     ,
@@ -1149,6 +1150,7 @@
     show:       undefined,
     beforeHide: undefined,
     hide:       undefined,
+    resize:     undefined,
 
     save:       undefined,
     load:       undefined,
