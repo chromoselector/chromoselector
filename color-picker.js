@@ -836,7 +836,7 @@
         }
         if (! $target || ! $target.length) {
             $target = $('<div/>').appendTo('body').css({
-                top: self.$source.offset().top + self.$source.innerHeight() + 5,
+                top: self.$source.offset().top + self.$source.outerHeight(),
                 left: self.$source.offset().left
             })
             .width(0)
