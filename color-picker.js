@@ -564,15 +564,21 @@
 
         /** draw resizer */
         if (self.settings.resizable) {
-            ctx.strokestyle = '#666666';
+            if (self.$picker.css('border-bottom-color')) {
+                ctx.strokeStyle = self.$picker.css('border-bottom-color');
+            } else {
+                ctx.strokeStyle = '#444';
+            }
             ctx.lineWidth = 1;
             ctx.lineCap="round";
+            ctx.beginPath();
             ctx.moveTo(self.diameter-20, self.diameter-2);
             ctx.lineTo(self.diameter-2, self.diameter-20);
             ctx.moveTo(self.diameter-13, self.diameter-2);
             ctx.lineTo(self.diameter-2, self.diameter-13);
             ctx.moveTo(self.diameter-7, self.diameter-2);
             ctx.lineTo(self.diameter-2, self.diameter-7);
+            ctx.closePath();
             ctx.stroke();
         }
         setTimeout(function () {
@@ -898,7 +904,10 @@
                 ColorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
                 preventDefault(e)
-                var newDiameter = ColorPicker_fixDiameter(getEventPosition(e, self.$picker)[0]);
+                var inputPoint = getEventPosition(e, self.$picker);
+                var newDiameter = ColorPicker_fixDiameter(
+                    Math_max(inputPoint[0], inputPoint[1])
+                );
                 self.$picker.width(newDiameter).height(newDiameter);
             }
         }).bind('mouseup touchend', function (e) {
