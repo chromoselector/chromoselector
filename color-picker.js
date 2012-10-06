@@ -970,13 +970,14 @@
     }
 
     function ColorPicker_fixDiameter(diameter) {
+        diameter = diameter | 0;
+        diameter = diameter + diameter % 2;
         if (diameter > 400) {
             diameter = 400;
         } else if (diameter < 100) {
             diameter = 100;
         }
-        return diameter + diameter % 2;
-
+        return diameter;
     }
     function ColorPicker_fixPosition(self) {
         if (! self.settings.target) {
@@ -986,7 +987,6 @@
                 left: offset.left
             })
         }
-
     }
 
     function getEventPosition(e, $obj) {
