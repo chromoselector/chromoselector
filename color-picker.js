@@ -855,7 +855,8 @@
 
         self.$container = $('<div/>')
             .append(self.$picker)
-            .width(self.diameter);
+            .width(self.diameter)
+            .css('position','absolute');
 
         self.$preview = $('<p />')
             .css({
@@ -866,7 +867,7 @@
                 $('<p />')
                     .css({
                         margin:0,
-                        height: '30px',
+                        height: self.settings.previewHeight + 'px',
                         width: '100%',
                         background: self.color.hex
                     })
@@ -1024,9 +1025,13 @@
         if (! self.settings.target) {
             var offset = self.$source.offset();
             self.$target.css({
+                top: 0,
+                left: 0
+            });
+            self.$container.css({
                 top: offset.top + self.$source.outerHeight(),
                 left: offset.left
-            })
+            });
         }
     }
 
@@ -1181,15 +1186,16 @@
         }
     };
 })(jQuery, document, window, {
-    autoshow:   true,
-    autosave:   true,
-    speed:      400,
-    diameter:   180,
-    width:      18,
-    resizable:  true,
-    class:      null,
-    shadow:     0,
-    preview:    true
+    autoshow:      true,
+    autosave:      true,
+    speed:         400,
+    diameter:      180,
+    width:         18,
+    resizable:     true,
+    class:         null,
+    shadow:        0,
+    preview:       true,
+    previewHeight: 25
     /*
     ,
     target:     null,
