@@ -14,29 +14,7 @@ $(function () {
     var $target = $('<div/>');
     var $dialog = $('<div/>').append($target);
     $('#color1, #color2').canvasColorPicker({
-        autoshow: false,
-        target: $target,
-        update: false
-    }).click(function () {
-        var api = $(this).canvasColorPicker('api').show();
-        $dialog.dialog({
-            title: 'Color picker',
-            modal: true,
-            resizable: false,
-            buttons: {
-                Ok: function() {
-                    api.save().hide();
-                    $(this).dialog("destroy");
-                },
-                Cancel: function() {
-                    api.hide();
-                    $(this).dialog("destroy");
-                }
-            },
-            close: function () {
-                api.hide();
-            }
-        });
+        diameter: $('#color1').outerWidth() - 3
     });
 });
 </script>
