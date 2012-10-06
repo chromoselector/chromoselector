@@ -890,7 +890,7 @@
         }
         if (! self.$target || ! self.$target.length) {
             self.$target = $('<div/>')
-                .appendTo('body')
+                .prependTo('body')
                 .width(0)
                 .height(0)
                 .css('position', 'absolute')
@@ -1211,14 +1211,14 @@
         destroy: function () {
             return this.each(function () {
                 var self = $(this).data(namespace)
-                if (! $(self.settings.target).length){
-                    if (self.$picker.siblings().length) {
-                        self.$picker.remove();
+                if ($(self.settings.target).length){
+                    if (self.$container.siblings().length) {
+                        self.$container.remove();
                     } else {
-                        self.$picker.parent().remove();
+                        self.$target.remove();
                     }
                 } else {
-                    self.$picker.remove();
+                    self.$target.remove();
                 }
                 $(this)
                 .removeData(namespace)
