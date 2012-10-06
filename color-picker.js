@@ -337,9 +337,9 @@
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
         var imageData = ctx.createImageData(diameter, diameter);
-        var lineWidth = 18;
-        var blur = 10;
-        var circleRadius = (diameter / 2) - 15;
+        var lineWidth = self.widthRatio * diameter;
+        var shadow = self.shadowRatio * diameter;
+        var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
         var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
         var origin = [self.diameter / 2, self.diameter / 2];
         var getValue = function (degree) {
@@ -385,26 +385,25 @@
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - 8, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math_PI*2, false);
         ctx.closePath();
         ctx.fill();
-        ctx.lineWidth = circleRadius * 2 - 16;
+        ctx.lineWidth = circleRadius * 2 - (self.widthRatio * diameter / 2);
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math_PI*2, false);
         ctx.closePath();
         ctx.stroke();
         // shadow
-       /* ctx.globalCompositeOperation = "destination-over";
-        ctx.lineWidth = blur;
+        ctx.globalCompositeOperation = "destination-over";
+        ctx.lineWidth = lineWidth / 2;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
-        ctx.shadowBlur = blur;
+        ctx.shadowBlur = shadow;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math_PI*2, false);
         ctx.closePath();
-        ctx.fill();
-        */
+        ctx.stroke();
         ctx.globalCompositeOperation = "source-over";
     }
 
@@ -415,6 +414,7 @@
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,self.diameter, self.diameter);
         var degrees = -Math_PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
@@ -498,18 +498,33 @@
         ctx.fillStyle = "rgba(0,0,0,1)";
         ctx.fill();
         // shadow
-       /* ctx.beginPath();
+        var newPoints = [];
+        newPoints[0] = [
+            self.diameter / 2 * 0.05 + points[0][0] * 0.95,
+            self.diameter / 2 * 0.05 + points[0][1] * 0.95
+        ];
+        newPoints[1] = [
+            self.diameter / 2 * 0.05 + points[1][0] * 0.95,
+            self.diameter / 2 * 0.05 + points[1][1] * 0.95
+        ];
+        newPoints[2] = [
+            self.diameter / 2 * 0.05 + points[2][0] * 0.95,
+            self.diameter / 2 * 0.05 + points[2][1] * 0.95
+        ];
         ctx.globalCompositeOperation = "destination-over";
-        ctx.moveTo(points[0][0], points[0][1]);
-        ctx.lineTo(points[1][0], points[1][1]);
-        ctx.lineTo(points[2][0], points[2][1]);
+        ctx.beginPath();
+        ctx.moveTo(newPoints[0][0], newPoints[0][1]);
+        ctx.lineTo(newPoints[1][0], newPoints[1][1]);
+        ctx.lineTo(newPoints[2][0], newPoints[2][1]);
         ctx.closePath();
-        ctx.fillStyle = "#000";
-        ctx.shadowColor = 'rgba(0,0,0,0.2)';
-        ctx.shadowBlur = 5;
+        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowBlur = self.shadowRatio * self.diameter;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
-        ctx.fill();*/
+        ctx.fill();
+        ctx.shadowColor = 'rgba(0,0,0,0)';
+        ctx.shadowBlur = 0;
         ctx.globalCompositeOperation = "source-over";
     }
 
@@ -520,7 +535,9 @@
         var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
         var points = ColorPicker_getPoints(self, degrees);
         /** draw hue indicator */
-        var indicator = getPointOnCircle(self.diameter / 2 - 15, degrees, self.diameter / 2);
+        var circleRadius = (self.diameter / 2) - 5 - (self.widthRatio * self.diameter * 2 / 3);
+
+        var indicator = getPointOnCircle(circleRadius, degrees, self.diameter / 2);
         ctx.strokeStyle = "rgba(1,1,1,1)";
         ctx.lineWidth = 2;
         ctx.beginPath();
@@ -810,7 +827,9 @@
         ColorPicker_load(self); // sets self.color
         self.settings.diameter = ColorPicker_fixDiameter(self.settings.diameter);
         self.diameter = self.settings.diameter;
-        self.triangleRadius = self.diameter / 2 - 30;
+        self.widthRatio = self.settings.width / self.diameter;
+        self.shadowRatio = self.settings.shadow / self.diameter;
+        self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
         var $target;
         if (self.settings.target) {
@@ -818,7 +837,7 @@
         }
         if (! $target || ! $target.length) {
             $target = $('<div/>').appendTo('body').css({
-                top: self.$source.offset().top + self.$source.height() + 5,
+                top: self.$source.offset().top + self.$source.innerHeight() + 5,
                 left: self.$source.offset().left
             })
             .width(0)
@@ -827,8 +846,28 @@
             .css('overflow', 'visible');
         }
         self.$picker = $('<div/>')
-            .css({position:'relative'})
-            .width(self.diameter).height(self.diameter);
+            .css({
+                position:'relative'
+            })
+            .width(self.diameter)
+            .height(self.diameter);
+        if (self.settings.class) {
+            self.$picker.attr('class',self.settings.class)
+        } else {
+            var borderRadius = '0px 0px 0px 50%';
+            if (! self.settings.resizable) {
+                borderRadius = '0px 0px 50% 50%';
+            }
+            var borderColor = '1px solid rgba(82,37,18,0.5)';
+            self.$picker.css({
+                background:'rgba(228,204,193,0.5)',
+                'border-bottom':borderColor,
+                'border-left':borderColor,
+                'border-right':borderColor,
+                '-webkit-border-radius': borderRadius,
+                'border-radius': borderRadius
+            });
+        }
         $target.append(
             self.$picker
                 .hide()
@@ -868,10 +907,10 @@
         });
         self.$picker.bind('mousedown touchstart', function (e) {
             preventDefault(e)
-            var radius = self.diameter/2 - 15;
+            var lineWidth = self.widthRatio * self.diameter / 2;
+            var circleRadius = (self.diameter / 2) - (lineWidth/2) - lineWidth;
             var offset = self.$picker.offset();
             var inputPoint = getEventPosition(e, self.$picker);
-            var lineWidth = 9;
             if (self.settings.resizable
                 && inputPoint[0] > self.diameter-20
                 && inputPoint[1] > self.diameter-20
@@ -879,9 +918,9 @@
                 self.resizing = true;
             } else {
                 if (
-                    pointInCircle(inputPoint, self.diameter/2, radius+lineWidth)
+                    pointInCircle(inputPoint, self.diameter/2, circleRadius+lineWidth)
                     &&
-                    ! pointInCircle(inputPoint, self.diameter/2, radius-lineWidth)
+                    ! pointInCircle(inputPoint, self.diameter/2, circleRadius-lineWidth)
                 ) {
                     self.draggingHue = true;
                     ColorPicker_reDrawHue(self, e);
@@ -967,7 +1006,7 @@
             self.ready = false;
             self.diameter = diameter;
             self.settings.diameter = diameter;
-            self.triangleRadius = diameter / 2 - 30;
+            self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
             self.canvases
                 .each(function () {
                     this.width = diameter;
@@ -1093,9 +1132,11 @@
     autoshow:   true,
     autosave:   true,
     speed:      400,
-    diameter:   210,
-    resizable: true,
-
+    diameter:   180,
+    width:      18,
+    resizable:  true,
+    //class:      null,
+    shadow:     0
     /*
     ,
     target:     null,
