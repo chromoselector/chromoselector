@@ -1,17 +1,20 @@
 /**
+ *
+ * jQuery 1.3+
+ *
  * TODO:
  *
  * v 1.0.0:
  *   Documentation
  *   refactor hue2rgb
  *   converters code
+ *   Alpha selection
  *
  * v 1.1.0:
  *   IE 6+ support
  *   HSV support
  *   better performance rendering colorwheel
  *   shorter code
- *   Alpha selection
  */
 (function ($, document, window, Math, defaults) {
     "use strict";
@@ -409,12 +412,12 @@
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2);
         ctx.closePath();
         ctx.fill();
         ctx.lineWidth = circleRadius * 2 - (self.widthRatio * diameter / 2);
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math.PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math.PI*2);
         ctx.closePath();
         ctx.stroke();
         // shadow
@@ -425,7 +428,7 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2);
         ctx.closePath();
         ctx.stroke();
         ctx.globalCompositeOperation = "source-over";
@@ -565,7 +568,7 @@
         ctx.strokeStyle = "rgba(1,1,1,1)";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2, false);
+        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2);
         ctx.closePath();
         ctx.stroke();
 
@@ -599,7 +602,7 @@
             (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
         ];
         ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2, false);
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2);
         ctx.closePath();
         ctx.stroke();
 
@@ -623,7 +626,7 @@
             ctx.stroke();
         }
         setTimeout(function () {
-            self.drawing = false;
+            self.drawing = 0;
         }, 4);
     }
 
@@ -658,7 +661,7 @@
         ColorPicker_drawIndicators(
             self
         );
-        self.drawing = true;
+        self.drawing = 1;
         ColorPicker_setValue(self);
     }
     function ColorPicker_reDrawSatLum(self, s, l) {
@@ -670,18 +673,18 @@
         ColorPicker_drawIndicators(
             self
         );
-        self.drawing = true;
+        self.drawing = 1;
         ColorPicker_setValue(self);
     }
     function ColorPicker_setValue(self) {
         if (! self.timeout) {
             self.$source.trigger('update.' + namespace);
             var f = function () {
-                self.timeout = false;
+                self.timeout = 0;
             };
             if (self.settings.autosave) {
                 f = function () {
-                    self.timeout = false;
+                    self.timeout = 0;
                     ColorPicker_save(self);
                 };
             }
@@ -853,7 +856,7 @@
         ColorPicker_drawHueSelector(self);
         ColorPicker_drawSaturationLimunositySelector(self);
         ColorPicker_drawIndicators(self);
-        self.ready = true;
+        self.ready = 1;
         self.$source.trigger('ready.' + namespace);
     }
     /** The color picker object */
@@ -862,12 +865,12 @@
         /**
         * Properties
         */
-        self.ready = false;
+        self.ready = 0;
         self.settings = settings;
-        self.draggingHue = false;
-        self.draggingSatLum = false;
-        self.resizing = false;
-        self.drawing = false;
+        self.draggingHue = 0;
+        self.draggingSatLum = 0;
+        self.resizing = 0;
+        self.drawing = 0;
         self.$source = $this;
         ColorPicker_load(self); // sets self.color
         self.diameter = ColorPicker_fixDiameter(self.settings.diameter);
@@ -991,20 +994,20 @@
                 && inputPoint[0] > self.diameter-20
                 && inputPoint[1] > self.diameter-20
             ) {
-                self.resizing = true;
+                self.resizing = 1;
             } else {
                 if (
                     pointInCircle(inputPoint, self.diameter/2, circleRadius+lineWidth)
                     &&
                     ! pointInCircle(inputPoint, self.diameter/2, circleRadius-lineWidth)
                 ) {
-                    self.draggingHue = true;
+                    self.draggingHue = 1;
                     ColorPicker_reDrawHue(self, e);
                 } else {
                     var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
                     var points = ColorPicker_getPoints(self, degrees);
                     if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
-                        self.draggingSatLum = true;
+                        self.draggingSatLum = 1;
                         ColorPicker_handleSatLumDrag(self, e);
                     }
                 }
@@ -1040,15 +1043,15 @@
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
                 preventDefault(e)
-                self.draggingHue = false;
+                self.draggingHue = 0;
                 ColorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
                 preventDefault(e)
-                self.draggingSatLum = false;
+                self.draggingSatLum = 0;
                 ColorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
                 preventDefault(e)
-                self.resizing = false;
+                self.resizing = 0;
                 ColorPicker_resize(self, self.$picker.width());
             }
         }).bind('resize', function () {
@@ -1107,7 +1110,7 @@
 
     function ColorPicker_resize(self, diameter) {
         if (diameter != self.diameter) {
-            self.ready = false;
+            self.ready = 0;
             self.diameter = diameter;
             self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
             self.canvases
