@@ -874,7 +874,7 @@
         self.$source = $this;
         ColorPicker_load(self); // sets self.color
         self.diameter = ColorPicker_fixDiameter(self.settings.diameter);
-        self.widthRatio = self.settings.width / self.diameter;
+        self.widthRatio = self.settings.width / 3;
         self.shadowRatio = self.settings.shadow / self.diameter;
         self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
@@ -1252,7 +1252,7 @@
     autosave:      true,
     speed:         400,
     diameter:      180,
-    width:         18,
+    width:         0.2,
     resizable:     true,
     class:         null,
     shadow:        0,
