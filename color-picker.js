@@ -737,18 +737,32 @@
         }
         ColorPicker_fixPosition(self);
         self.$source.trigger('beforeShow.' + namespace);
-        self.$container.fadeIn(speed, function () {
-            self.$source.trigger('show.' + namespace);
-        });
+        var effect = self.effect == 'fade' ? 'fadeIn' : 'slideDown';
+        self.$container[effect].apply(
+            self.$container,
+            [
+                speed,
+                function () {
+                    self.$source.trigger('show.' + namespace);
+                }
+            ]
+        );
     }
     function ColorPicker_hide(self, speed) {
         if (! speed) {
             speed = self.settings.speed;
         }
         self.$source.trigger('beforeHide.' + namespace);
-        self.$container.fadeOut(speed, function () {
-            self.$source.trigger('hide.' + namespace);
-        });
+        var effect = self.effect == 'fade' ? 'fadeOut' : 'slideUp';
+        self.$container[effect].apply(
+            self.$container,
+            [
+                speed,
+                function () {
+                    self.$source.trigger('hide.' + namespace);
+                }
+            ]
+        );
     }
     function ColorPicker_handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
@@ -932,6 +946,12 @@
         self.canvases = self.$picker.find('canvas')
             .css({position:'absolute',width:'100%',height:'100%'});
         self.tempCanvas = $(canvasString)[0];
+
+        self.effect = 'fade';
+        if (self.settings.effect == 'slide') {
+            self.effect = 'slide';
+        }
+
 
         if (! self.settings.autoshow) {
             ColorPicker_drawAll(self);
@@ -1223,7 +1243,8 @@
     class:         null,
     shadow:        0,
     preview:       true,
-    previewHeight: 25
+    previewHeight: 25,
+    effect:        'fade'
     /*
     ,
     target:     null,
