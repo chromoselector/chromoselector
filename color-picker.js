@@ -2,30 +2,21 @@
  * TODO:
  *
  * v 1.0.0:
- *   CMYK and HSV colors
  *   Documentation
+ *   refactor hue2rgb
+ *   converters code
  *
  * v 1.1.0:
  *   IE 6+ support
+ *   HSV support
  *   better performance rendering colorwheel
  *   shorter code
  *   Alpha selection
  */
-(function ($, document, window, defaults) {
+(function ($, document, window, Math, defaults) {
     "use strict";
     if (typeof TESTSUITE === 'undefined') {
         window.TESTSUITE = function (w) {
-            w.m = Math;
-            w.Math_cos = m.cos;
-            w.Math_sin = m.sin;
-            w.Math_round = m.round;
-            w.Math_sqrt = m.sqrt;
-            w.Math_abs = m.abs;
-            w.Math_min = m.min;
-            w.Math_max = m.max;
-            w.Math_PI = m.PI;
-            w.Math_atan2 = m.atan2;
-            w.Math_ceil = m.ceil;
             w.Color = Color;
             w.Color_rgb2hsl = Color_rgb2hsl;
             w.Color_rgb2hex = Color_rgb2hex;
@@ -52,20 +43,6 @@
      * Namespace for events and data
      */
     var namespace = 'canvasColorPicker';
-    /**
-     * Shorten names of math functions
-     */
-    var m = Math;
-    var Math_cos = m.cos;
-    var Math_sin = m.sin;
-    var Math_round = m.round;
-    var Math_sqrt = m.sqrt;
-    var Math_abs = m.abs;
-    var Math_min = m.min;
-    var Math_max = m.max;
-    var Math_PI = m.PI;
-    var Math_atan2 = m.atan2;
-    var Math_ceil = m.ceil;
     /**
      * COLOR MANAGEMENT
      */
@@ -163,8 +140,8 @@
         var r = value.r,
         g = value.g,
         b = value.b,
-        max = Math_max(r, g, b),
-        min = Math_min(r, g, b),
+        max = Math.max(r, g, b),
+        min = Math.min(r, g, b),
         h,
         s,
         l = (max + min) / 2;
@@ -189,7 +166,7 @@
     function Color_rgb2hex(input) {
         var value, byte, retval = '', i=0;
         for (;i<3;i++) {
-            byte = Math_round(input[['r','g','b'][i]] * 255);
+            byte = Math.round(input[['r','g','b'][i]] * 255);
             value = byte.toString(16);
             if (byte < 16) {
                 value = "0" + value;
@@ -255,7 +232,7 @@
                 k:1 - value.r
             };
         }
-        var k = Math_min(
+        var k = Math.min(
             1 - value.r,
             1 - value.g,
             1 - value.b
@@ -269,9 +246,9 @@
     }
     function Color_cmyk2rgb(value) {
         return {
-            r: 1 - Math_min(1, value.c * ( 1 - value.k ) + value.k),
-            g: 1 - Math_min(1, value.m * ( 1 - value.k ) + value.k),
-            b: 1 - Math_min(1, value.y * ( 1 - value.k ) + value.k)
+            r: 1 - Math.min(1, value.c * ( 1 - value.k ) + value.k),
+            g: 1 - Math.min(1, value.m * ( 1 - value.k ) + value.k),
+            b: 1 - Math.min(1, value.y * ( 1 - value.k ) + value.k)
         };
     }
 
@@ -280,14 +257,14 @@
      */
     function roundPoint(point) {
         return [
-            Math_round(point[0]),
-            Math_round(point[1])
+            Math.round(point[0]),
+            Math.round(point[1])
         ];
     }
     function getPointOnCircle(radius, degrees, offset) {
         return [
-            offset + (radius * Math_cos(degrees)),
-            offset + (radius * Math_sin(degrees))
+            offset + (radius * Math.cos(degrees)),
+            offset + (radius * Math.sin(degrees))
         ];
     }
     function getMidpoint(p1, p2) {
@@ -312,12 +289,12 @@
         return -1 / ((p2[1] - p1[1]) / (p2[0] - p1[0]));
     }
     function getDistance(p1, p2) {
-        return Math_sqrt(
+        return Math.sqrt(
             (p1[0]-p2[0])*(p1[0]-p2[0]) + (p1[1]-p2[1])*(p1[1]-p2[1])
         );
     }
     function pointOnLine(point, slope) {
-        if (Math_abs(slope) === Infinity) {
+        if (Math.abs(slope) === Infinity) {
             return [
                 point[0],
                 point[1] + 100
@@ -387,7 +364,7 @@
         var lineWidth = self.widthRatio * diameter;
         var shadow = self.shadowRatio * diameter;
         var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
-        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
+        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
         var origin = [self.diameter / 2, self.diameter / 2];
         var getValue = function (degree) {
             degree %= 360;
@@ -405,7 +382,7 @@
                 x = i - origin[0];
                 for (j = startY; j < endY; j++) {
                     y = j - origin[1];
-                    degree = Math_atan2(x, y) * rad2deg + 270;
+                    degree = Math.atan2(x, y) * rad2deg + 270;
                     r = getValue(degree + 120);
                     g = getValue(degree);
                     b = getValue(degree + 240);
@@ -413,10 +390,10 @@
                 }
             }
         };
-        var deg = Math_PI*5/4;
+        var deg = Math.PI*5/4;
         var radius = circleRadius - lineWidth / 2 - 2;
         var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
-        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math_PI,  diameter/2));
+        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math.PI,  diameter/2));
 
        // drawPart(0, diameter, 0, diameter)
         drawPart(0, diameter, 0, squarePoint1[1]);
@@ -432,12 +409,12 @@
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2, false);
         ctx.closePath();
         ctx.fill();
         ctx.lineWidth = circleRadius * 2 - (self.widthRatio * diameter / 2);
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math.PI*2, false);
         ctx.closePath();
         ctx.stroke();
         // shadow
@@ -448,7 +425,7 @@
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2, false);
         ctx.closePath();
         ctx.stroke();
         ctx.globalCompositeOperation = "source-over";
@@ -462,7 +439,7 @@
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.diameter, self.diameter);
-        var degrees = -Math_PI / 2;
+        var degrees = -Math.PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
@@ -470,8 +447,8 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_round(Math_min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
-                    end: Math_round(Math_max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
+                    start: Math.round(Math.min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math.round(Math.max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
                 };
             };
             var limitX = limits(points, 0);
@@ -512,7 +489,7 @@
             tempCtx.globalCompositeOperation = "source-over";
         }
 
-        degrees = (1 - hue) * Math_PI * 2;
+        degrees = (1 - hue) * Math.PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = Color_rgb2hex(
@@ -524,7 +501,7 @@
         // Copy rotated mask
         ctx.save();
         ctx.translate(self.diameter/2, self.diameter/2);
-        ctx.rotate(degrees + Math_PI / 2);
+        ctx.rotate(degrees + Math.PI / 2);
         ctx.translate(-self.diameter/2, -self.diameter/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
@@ -579,7 +556,7 @@
         var canvas = self.canvases[2];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.diameter, self.diameter);
-        var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+        var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = ColorPicker_getPoints(self, degrees);
         /** draw hue indicator */
         var circleRadius = (self.diameter / 2) - 5 - (self.widthRatio * self.diameter * 2 / 3);
@@ -588,7 +565,7 @@
         ctx.strokeStyle = "rgba(1,1,1,1)";
         ctx.lineWidth = 2;
         ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math_PI*2, false);
+        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2, false);
         ctx.closePath();
         ctx.stroke();
 
@@ -622,7 +599,7 @@
             (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
         ];
         ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math_PI*2, false);
+        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2, false);
         ctx.closePath();
         ctx.stroke();
 
@@ -659,17 +636,17 @@
                 hue,
                 self.diameter / 2
             );
-            hue -= Math_PI * 2 / 3;
+            hue -= Math.PI * 2 / 3;
         }
         return points;
     }
     function ColorPicker_reDrawHue(self, e) {
         var offset = self.$picker.offset();
         var coords = getEventPosition(self, e, self.$picker);
-        var angle = Math_atan2(
+        var angle = Math.atan2(
             coords[0] - self.diameter / 2,
             coords[1] - self.diameter / 2
-        ) * (180/Math_PI) + 270;
+        ) * (180/Math.PI) + 270;
         self.color.setHsl({
             h: angle / 360,
             s: self.color.hsl.s,
@@ -775,7 +752,7 @@
     }
     function ColorPicker_handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
-        var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+        var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = ColorPicker_getPoints(self, degrees);
         var inputPoint = getEventPosition(self, e, self.$picker);
         var sanitisedInputPoint = inputPoint;
@@ -787,7 +764,7 @@
                     inputPoint
                 );
             }
-            var maxDistance = Math_max.apply(null, distances);
+            var maxDistance = Math.max.apply(null, distances);
             for (i=0; i<3; i++) {
                 if (distances[i] === maxDistance) {
                     sanitisedInputPoint = ColorPicker_sanitiseDragInput(inputPoint, points, distances, i);
@@ -813,7 +790,7 @@
             points[vertices3[index]]
         );
         if (getDistance(intersect, points[vertices1[index]]) >= getDistance(points[0], points[1])) {
-            var i, minDistance = Math_min.apply(null, distances);
+            var i, minDistance = Math.min.apply(null, distances);
             for (i=0; i<3; i++) {
                 if (distances[i] === minDistance) {
                     intersect = points[i];
@@ -1005,7 +982,7 @@
                     self.draggingHue = true;
                     ColorPicker_reDrawHue(self, e);
                 } else {
-                    var degrees = (1 - self.color.hsl.h) * Math_PI * 2;
+                    var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
                     var points = ColorPicker_getPoints(self, degrees);
                     if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
                         self.draggingSatLum = true;
@@ -1025,7 +1002,7 @@
                 preventDefault(e)
                 var inputPoint = getEventPosition(self, e, self.$picker);
                 var newDiameter = ColorPicker_fixDiameter(
-                    Math_max(inputPoint[0], inputPoint[1])
+                    Math.max(inputPoint[0], inputPoint[1])
                 );
                 self.$container.width(newDiameter).height(
                     newDiameter + self.$preview.outerHeight()
@@ -1238,7 +1215,7 @@
             $.error('Method ' +  method + ' does not exist on jQuery.' + namespace);
         }
     };
-})(jQuery, document, window, {
+})(jQuery, document, window, Math, {
     autoshow:      true,
     autosave:      true,
     speed:         400,
