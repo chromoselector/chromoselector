@@ -9,10 +9,25 @@
     TESTSUITE(window);
     var startTime = new Date();
     $(function () {
-        test1(0);
+        $('#start1').click(function () {
+            startTime = new Date();
+            test1(0);
+        });
+        $('#start2').click(function () {
+            startTime = new Date();
+            test2(0);
+        });
+        $('#start3').click(function () {
+            startTime = new Date();
+            test3(0);
+        });
+        $('#start4').click(function () {
+            startTime = new Date();
+            test4(0);
+        });
     });
     function round(v) {
-        return Math.round(v * 10000000000) / 10000000000;
+        return Math.round(v * 10000000) / 10000000;
     }
 
     function test1(r) {
@@ -137,14 +152,17 @@
         rgb2cmyk and back
         <div class="progress_container"><div></div></div>
     </div>
+    <button id="start1">Start</button>
     <div id="test2">
         rgb2hsl and back
         <div class="progress_container"><div></div></div>
     </div>
+    <button id="start1">Start</button>
     <div id="test3">
         rgb2hex and back
         <div class="progress_container"><div></div></div>
     </div>
+    <button id="start1">Start</button>
     <pre id="error">Error log:</pre>
 </body>
 </html>
