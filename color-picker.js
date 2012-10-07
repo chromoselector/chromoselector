@@ -942,6 +942,17 @@
                 'border-radius': borderRadius
             });
         }
+        // adjust diamtere to account for borders
+        self.diameter -= parseInt(
+            parseInt(self.$container.css('border-left-width'), 10)
+            + parseInt(self.$container.css('border-right-width'), 10),
+            10
+        ) || 0;
+        self.$picker
+            .height(self.diameter)
+            .add(self.$container)
+            .width(self.diameter)
+
         self.$target.append(
             self.$container
                 .hide()
