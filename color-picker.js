@@ -1140,6 +1140,7 @@
     var methods = {
         init: function(options) {
             var settings = $.extend(
+                {},
                 defaults,
                 options
             );
