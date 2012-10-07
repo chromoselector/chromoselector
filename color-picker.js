@@ -856,8 +856,7 @@
         self.drawing = false;
         self.$source = $this;
         ColorPicker_load(self); // sets self.color
-        self.settings.diameter = ColorPicker_fixDiameter(self.settings.diameter);
-        self.diameter = self.settings.diameter;
+        self.diameter = ColorPicker_fixDiameter(self.settings.diameter);
         self.widthRatio = self.settings.width / self.diameter;
         self.shadowRatio = self.settings.shadow / self.diameter;
         self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
@@ -1090,7 +1089,6 @@
         if (diameter != self.diameter) {
             self.ready = false;
             self.diameter = diameter;
-            self.settings.diameter = diameter;
             self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
             self.canvases
                 .each(function () {
