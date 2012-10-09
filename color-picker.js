@@ -358,54 +358,59 @@
     }
 
     /**
+     * Draws the colorsheel background
+     */
+    var Cache = {
+        ColorWheelBg: 0
+    };
+    function ColorPicker_drawColorWheelBg(canvas, diameter) {
+        var ctx = canvas.getContext("2d");
+        var temp = $("<canvas>")
+            .attr("width", diameter)
+            .attr("height", diameter)[0];
+        var tempCtx = temp.getContext("2d");
+        if (! Cache.tempData) {
+            Cache.ColorWheelBg = ctx.createImageData(80, 80);
+            var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
+            var getValue = function (degree) {
+                degree %= 360;
+                if (degree >= 240) {
+                    return 0;
+                } else if (degree >= 180) {
+                    return 255 * ((240 - degree) / 60);
+                } else if (degree >= 60) {
+                    return 255;
+                }
+                return 255 * (degree / 60);
+            };
+            for (i = 0; i < 80; i++) {
+                x = i - 40;
+                for (j = 0; j < 80; j++) {
+                    y = j - 40;
+                    degree = Math.atan2(x, y) * rad2deg + 270;
+                    r = getValue(degree + 120);
+                    g = getValue(degree);
+                    b = getValue(degree + 240);
+                    setPixel(Cache.ColorWheelBg, i, j, [r, g, b, 255]);
+                }
+            }
+        }
+        ctx.putImageData(Cache.ColorWheelBg, 0, 0);
+        tempCtx.scale(diameter/80, diameter/80);
+        tempCtx.drawImage(canvas, 0, 0);
+        ctx.drawImage(temp, 0, 0);
+    }
+
+    /**
      * Draws the rainbow wheel
      */
     function ColorPicker_drawHueSelector(self) {
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
-        var imageData = ctx.createImageData(diameter, diameter);
+        ColorPicker_drawColorWheelBg(self.canvases[0], diameter);
         var lineWidth = self.widthRatio * diameter;
-        var shadow = self.shadowRatio * diameter;
         var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
-        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
-        var origin = [self.diameter / 2, self.diameter / 2];
-        var getValue = function (degree) {
-            degree %= 360;
-            if (degree >= 240) {
-                return 0;
-            } else if (degree >= 180) {
-                return 255 * ((240 - degree) / 60);
-            } else if (degree >= 60) {
-                return 255;
-            }
-            return 255 * (degree / 60);
-        };
-        var drawPart = function (startX, endX, startY, endY) {
-            for (i = startX; i < endX; i++) {
-                x = i - origin[0];
-                for (j = startY; j < endY; j++) {
-                    y = j - origin[1];
-                    degree = Math.atan2(x, y) * rad2deg + 270;
-                    r = getValue(degree + 120);
-                    g = getValue(degree);
-                    b = getValue(degree + 240);
-                    setPixel(imageData, i, j, [r, g, b, 255]);
-                }
-            }
-        };
-        var deg = Math.PI*5/4;
-        var radius = circleRadius - lineWidth / 2 - 2;
-        var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
-        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math.PI,  diameter/2));
-
-       // drawPart(0, diameter, 0, diameter)
-        drawPart(0, diameter, 0, squarePoint1[1]);
-        drawPart(0, diameter, squarePoint2[1], diameter);
-        drawPart(0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
-        drawPart(squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
-
-        // copy the image data back onto the canvas
-        ctx.putImageData(imageData, 0, 0); // at coords 0,0
+        var origin = [diameter / 2, diameter / 2];
         // cut out doughnut
         /** webkit bug prevents usage of "destination-in" */
         ctx.globalCompositeOperation = "destination-out";
@@ -424,7 +429,7 @@
         ctx.globalCompositeOperation = "destination-over";
         ctx.lineWidth = lineWidth / 2;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
-        ctx.shadowBlur = shadow;
+        ctx.shadowBlur = self.shadowRatio * diameter;
         ctx.shadowOffsetX = 0;
         ctx.shadowOffsetY = 0;
         ctx.beginPath();
