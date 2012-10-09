@@ -902,7 +902,8 @@
         self.$container = $('<div/>')
             .append(self.$picker)
             .width(self.diameter)
-            .css('position','absolute');
+            .css('position','absolute')
+            .css('z-index',self.settings.zIndex);
 
         self.$preview = $('<p />')
             .css({
@@ -1249,17 +1250,18 @@
         }
     };
 })(jQuery, document, window, Math, {
-    autoshow:      true,
-    autosave:      true,
-    speed:         400,
-    diameter:      180,
-    width:         0.2,
-    resizable:     true,
-    class:         null,
-    shadow:        0,
-    preview:       true,
-    previewHeight: 25,
-    effect:        'fade'
+    autoshow:      true,     // bool
+    autosave:      true,    // bool
+    speed:         400,     // post int | 'fast' | 'slow' | 'medium'
+    diameter:      180,     // pos int
+    width:         0.35,    // float
+    resizable:     true,    // bool
+    class:         null,    // string
+    shadow:        0,        // float
+    preview:       true,    // bool
+    previewHeight: 25,      // pos int
+    effect:        'fade',  // 'fade' | 'slide'
+    zIndex:        4000
     /*
     ,
     target:     null,
