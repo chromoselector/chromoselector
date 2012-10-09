@@ -290,12 +290,12 @@
         if (Math.abs(slope) === Infinity) {
             return [
                 point[0],
-                point[1] + 100
+                point[1] + 1
             ];
         }
         return [
-            point[0] + 100,
-            slope * 100 + point[1]
+            point[0] + 1,
+            slope + point[1]
         ];
     }
     function intersectLineLine(a1, a2, b1, b2) {
