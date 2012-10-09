@@ -52,22 +52,20 @@
     function Color(value) {
         var self = this;
         // default to black
-        self.rgb = { r:0, g:0, b:0 };
-        self.hsl = { h:0, s:0, l:0 };
-        self.cmyk = { c: 0, m: 0, y:0, k:1 };
-        self.hex = "#000000";
+        self.rgb  = { r:0, g:0, b:0 };
+        self.hsl  = { h:0, s:0, l:0 };
+        self.cmyk = { c:0, m:0, y:0, k:1 };
+        self.hex  = "#000000";
         self.setColor(value);
     };
-    // Shorten references to prototype
-    Color.p = Color.prototype;
     // setters
-    Color.p.setColor = function(value) {
-        var self = this, i;
+    Color.prototype.setColor = function(value) {
+        var self = this;
         if (typeof value == 'string') {
-            this.setHex(value);
+            Color_setHex(self, value);
         } else if (typeof value == 'object') {
             var haveFields = function (value, fields) {
-                for (i in fields.split('')) {
+                for (var i in fields.split('')) {
                     if (typeof value[fields[i]] != 'number'
                         || value[fields[i]] < 0
                         || value[fields[i]] > 1
@@ -78,11 +76,11 @@
                 return 1;
             };
             if (haveFields(value, 'hsl')) {
-                self.setHsl(value);
+                Color_setHsl(self, value);
             } else if (haveFields(value, 'rgb')) {
-                self.setRgb(value);
+                Color_setRgb(self, value);
             } else if (haveFields(value, 'cmyk')) {
-                self.setCmyk(value);
+                Color_setCmyk(self, value);
             } else if (typeof value.hsl == 'object') {
                 self.setColor(value.hsl);
             } else if (typeof value.rgb == 'object') {
@@ -93,16 +91,13 @@
         }
         return self;
     }
-    Color.p.setRgb = function(value) {
-        var self = this;
+    function Color_setRgb(self, value) {
         self.rgb = value;
         self.hsl = Color_rgb2hsl(value);
         self.cmyk = Color_rgb2cmyk(value);
         self.hex = Color_rgb2hex(value);
-        return self;
     }
-    Color.p.setHsl = function(value) {
-        var self = this;
+    function Color_setHsl(self, value) {
         value.h = value.h - Math.floor(value.h);
         if (value.h < 0) {
             value.h = 1 + value.h;
@@ -111,10 +106,8 @@
         self.rgb = Color_hsl2rgb(value);
         self.cmyk = Color_rgb2cmyk(self.rgb);
         self.hex = Color_rgb2hex(self.rgb);
-        return self;
     }
-    Color.p.setHex = function(value) {
-        var self = this;
+    function Color_setHex(self, value) {
         var r = /^#([0-9a-f]{3}){1,2}$/i;
         if (r.test(value)) {
             if (value.length === 4) {
@@ -127,15 +120,12 @@
             self.cmyk = Color_rgb2cmyk(self.rgb);
             self.hsl = Color_rgb2hsl(self.rgb);
         }
-        return self;
     }
-    Color.p.setCmyk = function(value) {
-        var self = this;
+    function Color_setCmyk(self, value) {
         self.cmyk = value;
         self.rgb = Color_cmyk2rgb(value);
         self.hsl = Color_rgb2hsl(self.rgb);
         self.hex = Color_rgb2hex(self.rgb);
-        return self;
     }
 
     // converters
@@ -648,7 +638,7 @@
             coords[0] - self.diameter / 2,
             coords[1] - self.diameter / 2
         ) * (180/Math.PI) + 270;
-        self.color.setHsl({
+        Color_setHsl(self.color, {
             h: angle / 360,
             s: self.color.hsl.s,
             l: self.color.hsl.l
@@ -663,7 +653,7 @@
         ColorPicker_setValue(self);
     }
     function ColorPicker_reDrawSatLum(self, s, l) {
-        self.color.setHsl({
+        Color_setHsl(self.color, {
             h: self.color.hsl.h,
             s: s,
             l: l
