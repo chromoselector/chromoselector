@@ -430,8 +430,6 @@
         ctx.lineWidth = lineWidth / 2;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * diameter;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2);
         ctx.closePath();
@@ -486,7 +484,6 @@
 
             tempCtx = self.tempCanvas.getContext('2d');
             tempCtx.putImageData(maskImageData, 0, 0);
-
 
             var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
             lingrad.addColorStop(1, 'rgba(0,0,0,0)');
@@ -552,8 +549,6 @@
         ctx.fillStyle = 'rgba(0,0,0,1)';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * self.diameter;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 0;
         ctx.fill();
         ctx.shadowColor = 'rgba(0,0,0,0)';
         ctx.shadowBlur = 0;
