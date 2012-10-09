@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="../libs/jquery-1.8.1.js" type="text/javascript"></script>
+    <script src="../jquery-1.8.1.js" type="text/javascript"></script>
     <script src="../color-picker.js" type="text/javascript"></script>
     <script type="text/javascript">
 (function (window, $) {
@@ -24,7 +24,7 @@
 
     };
     var origin = [self.diameter / 2, self.diameter / 2];
-    var rad2deg = (180/Math_PI);
+    var rad2deg = (180/Math.PI);
 
     $(function () {
         $('body').append(tempCanvas);
@@ -53,8 +53,8 @@
 
     function limits(points, axis) {
         return {
-            start: Math_round(Math_min(points[0][axis] - 2, points[1][axis] - 2, points[2][axis] - 2)),
-            end: Math_round(Math_max(points[0][axis] + 2, points[1][axis] + 2, points[2][axis] + 2))
+            start: Math.round(Math.min(points[0][axis] - 2, points[1][axis] - 2, points[2][axis] - 2)),
+            end: Math.round(Math.max(points[0][axis] + 2, points[1][axis] + 2, points[2][axis] + 2))
         };
     }
 
@@ -62,7 +62,7 @@
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
-        var degrees = -Math_PI / 2;
+        var degrees = -Math.PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
@@ -71,26 +71,16 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_round(Math_min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
-                    end: Math_round(Math_max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
+                    start: Math.round(Math.min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math.round(Math.max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
                 };
             };
             var limitX = limits(points, 0);
             var limitY = limits(points, 1);
             var i, j;
             // draw
-            for (i = points[0][0] - 3; i <= limitX.end; i++) {
-                for (j = limitY.start + (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
-                    setPixel(
-                        maskImageData,
-                        i,
-                        j,
-                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
-                    );
-                }
-            }
-            for (i = limitX.start; i <= points[0][0] - 3; i++) {
-                for (j = limitY.start - (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
+            for (i = limitX.start; i <= limitX.end; i++) {
+                for (j = limitY.start; j <= limitY.end; j++) {
                     setPixel(
                         maskImageData,
                         i,
@@ -112,7 +102,7 @@
             tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
             tempCtx.globalCompositeOperation = "source-over";
         }
-        degrees = (1 - hue) * Math_PI * 2;
+        degrees = (1 - hue) * Math.PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = Color_rgb2hex(
@@ -124,7 +114,7 @@
         // Copy rotated mask
        /* ctx.save();
         ctx.translate(self.diameter/2, self.diameter/2);
-        ctx.rotate(degrees + Math_PI / 2);
+        ctx.rotate(degrees + Math.PI / 2);
         ctx.translate(-self.diameter/2, -self.diameter/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
@@ -157,7 +147,7 @@
        var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
-        var degrees = -Math_PI / 2;
+        var degrees = -Math.PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
@@ -166,26 +156,16 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_round(Math_min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
-                    end: Math_round(Math_max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
+                    start: Math.round(Math.min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math.round(Math.max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
                 };
             };
             var limitX = limits(points, 0);
             var limitY = limits(points, 1);
             var i, j;
             // draw
-            for (i = points[0][0] - 3; i <= limitX.end; i++) {
-                for (j = limitY.start + (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
-                    setPixel(
-                        maskImageData,
-                        i,
-                        j,
-                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
-                    );
-                }
-            }
-            for (i = limitX.start; i <= points[0][0] - 3; i++) {
-                for (j = limitY.start - (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
+            for (i = limitX.start; i <= limitX.end; i++) {
+                for (j = limitY.start; j <= limitY.end; j++) {
                     setPixel(
                         maskImageData,
                         i,
@@ -207,7 +187,7 @@
             tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
             tempCtx.globalCompositeOperation = "source-over";
         }
-        degrees = (1 - hue) * Math_PI * 2;
+        degrees = (1 - hue) * Math.PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = Color_rgb2hex(
@@ -227,7 +207,7 @@
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
-        var degrees = -Math_PI / 2;
+        var degrees = -Math.PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
@@ -236,26 +216,16 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_round(Math_min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
-                    end: Math_round(Math_max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
+                    start: Math.round(Math.min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math.round(Math.max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
                 };
             };
             var limitX = limits(points, 0);
             var limitY = limits(points, 1);
             var i, j;
             // draw
-            for (i = points[0][0] - 3; i <= limitX.end; i++) {
-                for (j = limitY.start + (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
-                    setPixel(
-                        maskImageData,
-                        i,
-                        j,
-                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
-                    );
-                }
-            }
-            for (i = limitX.start; i <= points[0][0] - 3; i++) {
-                for (j = limitY.start - (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
+            for (i = limitX.start; i <= limitX.end; i++) {
+                for (j = limitY.start; j <= limitY.end; j++) {
                     setPixel(
                         maskImageData,
                         i,
@@ -278,7 +248,7 @@
             tempCtx.globalCompositeOperation = "source-over";
         }
 
-        degrees = (1 - hue) * Math_PI * 2;
+        degrees = (1 - hue) * Math.PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = Color_rgb2hex(
@@ -290,7 +260,7 @@
         // Copy rotated mask
         ctx.save();
         ctx.translate(self.diameter/2, self.diameter/2);
-        ctx.rotate(degrees + Math_PI / 2);
+        ctx.rotate(degrees + Math.PI / 2);
         ctx.translate(-self.diameter/2, -self.diameter/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
@@ -301,7 +271,7 @@
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
-        var degrees = -Math_PI / 2;
+        var degrees = -Math.PI / 2;
         var points = ColorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
@@ -310,26 +280,16 @@
             // triangle limits
             var limits = function (points, axis) {
                 return {
-                    start: Math_round(Math_min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
-                    end: Math_round(Math_max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
+                    start: Math.round(Math.min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math.round(Math.max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
                 };
             };
             var limitX = limits(points, 0);
             var limitY = limits(points, 1);
             var i, j;
             // draw
-            for (i = points[0][0] - 3; i <= limitX.end; i++) {
-                for (j = limitY.start + (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
-                    setPixel(
-                        maskImageData,
-                        i,
-                        j,
-                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
-                    );
-                }
-            }
-            for (i = limitX.start; i <= points[0][0] - 3; i++) {
-                for (j = limitY.start - (1.7*(i-points[0][0]) | 0) - 3; j <= limitY.end; j++) {
+            for (i = limitX.start; i <= limitX.end; i++) {
+                for (j = limitY.start; j <= limitY.end; j++) {
                     setPixel(
                         maskImageData,
                         i,
@@ -352,7 +312,7 @@
             tempCtx.globalCompositeOperation = "source-over";
         }
 
-        degrees = (1 - hue) * Math_PI * 2;
+        degrees = (1 - hue) * Math.PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = Color_rgb2hex(
@@ -364,7 +324,7 @@
         // Copy rotated mask
         ctx.save();
         ctx.translate(self.diameter/2, self.diameter/2);
-        ctx.rotate(degrees + Math_PI / 2);
+        ctx.rotate(degrees + Math.PI / 2);
         ctx.translate(-self.diameter/2, -self.diameter/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();

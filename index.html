@@ -3,14 +3,11 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="./libs/jquery-1.8.1.js" type="text/javascript"></script>
+    <script src="./jquery-1.8.1.js" type="text/javascript"></script>
     <script src="./color-picker.js" type="text/javascript"></script>
     <script type="text/javascript">
         $(function () {
-            $('#color1, #color2').canvasColorPicker({
-                diameter: $('#color1').outerWidth(),
-                width: 0.3
-            })
+            $('#color1, #color2').canvasColorPicker()
         });
     </script>
     <style type="text/css">

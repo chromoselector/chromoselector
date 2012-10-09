@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="../libs/jquery-1.8.1.js" type="text/javascript"></script>
+    <script src="../color-picker.js" type="text/javascript"></script>
+    <script src="examples/custom-format.js" type="text/javascript"></script>
+    <script type="text/javascript">
+$(function () {
+    $('#color1').canvasColorPicker({
+        str2color: function (str) {
+            var arr = str.split(',');
+            return {
+                h: parseInt(arr[0], 10) / 360,
+                s: parseInt(arr[1], 10) / 100,
+                l: parseInt(arr[2], 10) / 100
+            };
+        },
+        color2str: function (color) {
+            return Math.round(color.hsl.h * 360) + ',' +
+                   Math.round(color.hsl.s * 100) + ',' +
+                   Math.round(color.hsl.l * 100);
+        }
+    })
+    $('#color2').canvasColorPicker({
+        str2color: function (str) {
+            try {
+                var color = $.parseJSON(str);
+                for (var i in color) {
+                    color[i] /= 100;
+                }
+                return color;
+            } catch (e) {}
+        },
+        color2str: function (color) {
+            return '{' +
+            '"c":' + Math.round(color.cmyk.c * 100) + ',' +
+            '"m":' + Math.round(color.cmyk.m * 100) + ',' +
+            '"y":' + Math.round(color.cmyk.y * 100) + ',' +
+            '"k":' + Math.round(color.cmyk.k * 100) +
+            '}';
+        }
+    })
+    $('#color3').canvasColorPicker({
+        str2color: function (str) {
+            return '#' + str;
+        },
+        color2str: function (color) {
+            return color.hex.substring(1);
+        }
+    })
+    $('#color4').canvasColorPicker({
+        str2color: function (str) {
+            var num = parseInt(str, 10) || 0;
+            return {
+                r: ((num & (255*255*255)) >> 16) / 255,
+                g: ((num & (255*255)) >> 8) / 255,
+                b: ((num & (255))) / 255
+            };
+        },
+        color2str: function (color) {
+            var num = (Math.round(color.rgb.r * 255) << 16)
+                + (Math.round(color.rgb.g * 255) << 8)
+                + Math.round(color.rgb.b * 255)
+            return num;
+        }
+    })
+
+    $('a').click(function () {
+        var $this = $(this);
+        if ($this.hasClass('hide')) {
+            $this.parent().find('fieldset').slideUp();
+        } else {
+            $this.parent().find('fieldset').slideDown();
+        }
+        $this.hide().siblings('a').show();
+
+    });
+});
+</script>
+    <style type="text/css">
+        body {
+            margin: 0;
+            background: url('bg.png');
+            font-family: sans, sans-serif, verdana, arial;
+            height: 100%;
+        }
+        #page {
+            margin: auto;
+            min-width: 230px;
+            max-width: 520px;
+            padding: 2em 1em;
+            background: #ddd;
+            height: 100%;
+            clear: both;
+        }
+        form {
+            clear: both;
+
+        }
+        form > input {
+            float: right;
+            text-align: right;
+            padding: 0.5em;
+            font-family: mono, monospace, courier;
+            font-size: 0.8em;
+            font-weight: bold;
+            width: 230px;
+            border: 1px solid #444;
+            -webkit-box-shadow:  2px 2px 12px 0.2px rgba(0, 0, 0, 0.3);
+            box-shadow:  2px 2px 12px 0.2px rgba(0, 0, 0, 0.3);
+            -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
+            -moz-box-sizing: border-box;    /* Firefox, other Gecko */
+            box-sizing: border-box;         /* Opera/IE 8+ */
+        }
+        form > div {
+            display: block;
+            clear: both;
+            overflow: hidden;
+        }
+        form > div, form > input {
+            float: left;
+            width: 250px;
+            margin: 0;
+            padding: 0.5em;
+        }
+        a {
+            font-size: 0.8em;
+            color: #04f;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        a.hide {
+            display: none;
+        }
+        pre {
+            line-height: 1.1em;
+            margin: 0;
+            white-space: pre-wrap;
+        }
+        fieldset {
+            margin: 0.5em 0;
+            background: #eee;
+            padding: 1em;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="page">
+    <form action="#">
+        <div>Comma separated HSL:<div style="clear: both"></div></div><div style="clear: both"></div>
+        <input id="color1" type="text" value="0,0,0" />
+        <div style="clear: both"></div>
+        <div>
+            Notes
+            <div style="clear: both"></div>
+        </div>
+        <div style="clear: both"></div>
+
+        <div>
+            <a>Show code</a> <a class="hide">Hide code</a>
+            <div style="clear: both"></div>
+
+            <fieldset>
+                <pre>
+&lt;form action=&quot;#&quot;&gt;
+    &lt;div&gt;Comma separated HSL:&lt;/div&gt;
+    &lt;input id=&quot;color1&quot; type=&quot;text&quot; value=&quot;0,0,0&quot; /&gt;
+&lt;/form&gt;
+                </pre>
+                <div style="clear: both"></div>
+            </fieldset>
+            <div style="clear: both"></div>
+
+            <fieldset>
+                <pre class="js">$(function () {
+  $('#color1').canvasColorPicker({
+    str2color: function (str) {
+      var arr = str.split(',');
+      return {
+        h: parseInt(arr[0], 10) / 360,
+        s: parseInt(arr[1], 10) / 100,
+        l: parseInt(arr[2], 10) / 100
+      };
+    },
+    color2str: function (color) {
+      return Math.round(
+        color.hsl.h * 360
+      ) + ',' +
+      Math.round(
+        color.hsl.s * 100
+      ) + ',' +
+      Math.round(
+        color.hsl.l * 100
+      );
+    }
+  })
+});</pre>
+<div style="clear: both"></div>
+
+            </fieldset>
+            <div style="clear: both"></div>
+
+        </div>
+<div style="clear: both"></div>
+</form>
+<div style="clear: both"></div>
+    </div>
+</body>
+</html>

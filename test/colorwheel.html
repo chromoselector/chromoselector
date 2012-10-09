@@ -3,17 +3,16 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script src="../libs/jquery-1.8.1.js" type="text/javascript"></script>
+    <script src="../jquery-1.8.1.js" type="text/javascript"></script>
     <script src="../color-picker.js" type="text/javascript"></script>
     <script type="text/javascript">
 (function (window) {
     "use strict";
     window.TESTSUITE(window);
     var self = {
-        diameter: 400
+        diameter: 400,
+        widthRatio: 0.1
     };
-    var origin = [self.diameter / 2, self.diameter / 2];
-    var rad2deg = (180/Math_PI);
 
     $(function () {
 
@@ -38,79 +37,68 @@
         $('body').append(duration+" mS<br/>")
     });
 
-    function drawPart(imageData, startX, endX, startY, endY) {
-        for (i = startX; i < endX; i++) {
-            x = i - origin[0];
-            for (j = startY; j < endY; j++) {
-                y = j - origin[1];
-                degree = Math_atan2(x, y) * rad2deg + 270;
-                r = getValue(degree + 120);
-                g = getValue(degree);
-                b = getValue(degree + 240);
-                setPixel(imageData, i, j, [r, g, b, 255]);
+    var Cache = {
+        ColorWheelBg: 0
+    };
+    function ColorPicker_drawColorWheelBg(retval, diameter) {
+        var retvalCtx = retval.getContext("2d");
+        var temp = $("<canvas>")
+            .attr("width", diameter)
+            .attr("height", diameter)[0];
+        var tempCtx = temp.getContext("2d");
+        if (! Cache.ColorWheelBg) {
+            Cache.ColorWheelBg = retvalCtx.createImageData(80, 80);
+            var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
+            var getValue = function (degree) {
+                degree %= 360;
+                if (degree >= 240) {
+                    return 0;
+                } else if (degree >= 180) {
+                    return 255 * ((240 - degree) / 60);
+                } else if (degree >= 60) {
+                    return 255;
+                }
+                return 255 * (degree / 60);
+            };
+            for (i = 0; i < 80; i++) {
+                x = i - 40;
+                for (j = 0; j < 80; j++) {
+                    y = j - 40;
+                    degree = Math.atan2(x, y) * rad2deg + 270;
+                    r = getValue(degree + 120);
+                    g = getValue(degree);
+                    b = getValue(degree + 240);
+                    setPixel(Cache.ColorWheelBg, i, j, [r, g, b, 255]);
+                }
             }
         }
-    }
-    function getValue(degree) {
-        degree %= 360;
-        if (degree >= 240) {
-            return 0;
-        } else if (degree >= 180) {
-            return 255 * ((240 - degree) / 60);
-        } else if (degree >= 60) {
-            return 255;
-        }
-        return 255 * (degree / 60);
+        retvalCtx.putImageData(Cache.ColorWheelBg, 0, 0);
+        tempCtx.scale(diameter/80, diameter/80);
+        tempCtx.drawImage(retval, 0, 0);
+        retvalCtx.drawImage(temp, 0, 0);
     }
     function test1(self) {
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
-        var imageData = ctx.createImageData(diameter, diameter);
-        var lineWidth = 18;
-        var blur = 10;
-        var circleRadius = (diameter / 2) - 15;
-        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
-        var origin = [self.diameter / 2, self.diameter / 2];
-        var deg = Math_PI*5/4;
-        var radius = circleRadius - lineWidth / 2 - 2;
-        var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
-        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math_PI,  diameter/2));
-       // drawPart(0, diameter, 0, diameter)
-        drawPart(imageData, 0, diameter, 0, squarePoint1[1]);
-        drawPart(imageData, 0, diameter, squarePoint2[1], diameter);
-        drawPart(imageData, 0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
-        drawPart(imageData, squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
-        // copy the image data back onto the canvas
-        ctx.putImageData(imageData, 0, 0); // at coords 0,0
+        ColorPicker_drawColorWheelBg(self.canvases[0], diameter);
     }
 
     function test2(self) {
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
-        var imageData = ctx.createImageData(diameter, diameter);
-        var lineWidth = 18;
-        var blur = 10;
-        var circleRadius = (diameter / 2) - 15;
-        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
-        var origin = [self.diameter / 2, self.diameter / 2];
-        var deg = Math_PI*5/4;
-        var radius = circleRadius - lineWidth / 2 - 2;
-        var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
-        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math_PI,  diameter/2));
-       // drawPart(0, diameter, 0, diameter)
-        drawPart(imageData, 0, diameter, 0, squarePoint1[1]);
-        drawPart(imageData, 0, diameter, squarePoint2[1], diameter);
-        drawPart(imageData, 0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
-        drawPart(imageData, squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
-        // copy the image data back onto the canvas
-        ctx.putImageData(imageData, 0, 0); // at coords 0,0
+        ColorPicker_drawColorWheelBg(self.canvases[0], diameter);
+
+        var lineWidth = self.widthRatio * diameter;
+        var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
+        var origin = [diameter / 2, diameter / 2];
+
         // cut out doughnut
-        /** webkit bug prevents usage of "destination-in" */
+        /** webkit bug prevents usage of "destination-in" **/
         ctx.globalCompositeOperation = "destination-out";
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - 8, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2);
         ctx.closePath();
         ctx.fill();
         ctx.globalCompositeOperation = "source-over";
@@ -119,38 +107,26 @@
     function test3(self) {
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
-        var imageData = ctx.createImageData(diameter, diameter);
-        var lineWidth = 18;
-        var blur = 10;
-        var circleRadius = (diameter / 2) - 15;
-        var degree, i, j, x, y, r, g, b, rad2deg = (180/Math_PI);
-        var origin = [self.diameter / 2, self.diameter / 2];
-        var deg = Math_PI*5/4;
-        var radius = circleRadius - lineWidth / 2 - 2;
-        var squarePoint1 = roundPoint(getPointOnCircle(radius, deg, diameter/2));
-        var squarePoint2 = roundPoint(getPointOnCircle(radius, deg + Math_PI,  diameter/2));
-       // drawPart(0, diameter, 0, diameter)
-        drawPart(imageData, 0, diameter, 0, squarePoint1[1]);
-        drawPart(imageData, 0, diameter, squarePoint2[1], diameter);
-        drawPart(imageData, 0, squarePoint1[0], squarePoint1[1], diameter - squarePoint1[1]);
-        drawPart(imageData, squarePoint2[0], diameter, squarePoint1[1], diameter - squarePoint1[1]);
-        // copy the image data back onto the canvas
-        ctx.putImageData(imageData, 0, 0); // at coords 0,0
+        ColorPicker_drawColorWheelBg(self.canvases[0], diameter);
+
+        var lineWidth = self.widthRatio * diameter;
+        var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
+        var origin = [diameter / 2, diameter / 2];
+
         // cut out doughnut
-        /** webkit bug prevents usage of "destination-in" */
+        /** webkit bug prevents usage of "destination-in" **/
         ctx.globalCompositeOperation = "destination-out";
         ctx.strokeStyle = "rgba(0,0,0,1)";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - 8, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2);
         ctx.closePath();
         ctx.fill();
-        ctx.lineWidth = circleRadius * 2 - 16;
+        ctx.lineWidth = circleRadius * 2 - (self.widthRatio * diameter / 2);
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math_PI*2, false);
+        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math.PI*2);
         ctx.closePath();
         ctx.stroke();
-        ctx.globalCompositeOperation = "source-over";
     }
 })(window);
     </script>
