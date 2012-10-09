@@ -940,7 +940,7 @@
             }
             var borderColor = '1px solid rgba(82,37,18,0.5)';
             self.$container.css({
-                background:'rgba(228,204,193,0.5)',
+                background:'rgba(228,204,193,0.8)',
                 'border-bottom':borderColor,
                 'border-left':borderColor,
                 'border-right':borderColor,
