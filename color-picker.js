@@ -28,7 +28,6 @@
             w.Color_rgb2cmyk = Color_rgb2cmyk;
             w.Color_cmyk2rgb = Color_cmyk2rgb;
             w.setPixel = setPixel;
-            w.roundPoint = roundPoint;
             w.getPointOnCircle = getPointOnCircle;
             w.getLumAlphaColor = getLumAlphaColor;
             w.ColorPicker_getPoints = ColorPicker_getPoints;
@@ -248,12 +247,6 @@
     /**
      * 2D MATHS
      */
-    function roundPoint(point) {
-        return [
-            Math.round(point[0]),
-            Math.round(point[1])
-        ];
-    }
     function getPointOnCircle(radius, degrees, offset) {
         return [
             offset + (radius * Math.cos(degrees)),
@@ -289,7 +282,8 @@
         );
     }
     function pointOnLine(point, slope) {
-        if (Math.abs(slope) === Infinity) {
+        // slope*slope == Math.abs(slope) when checking for Infinity
+        if (slope*slope === Infinity) {
             return [
                 point[0],
                 point[1] + 1
