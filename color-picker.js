@@ -319,7 +319,7 @@
      * to account for the mask always being
      * straight relative to the x-axis
      */
-    function getLumAlphaColor(point1, point2, point3, inputPoint) {
+    function getLuminosity(point1, point2, point3, inputPoint) {
         var lumIntersectionPoint1 = intersectLineLine(
             inputPoint,
             [inputPoint[0] + 20, inputPoint[1]],
@@ -451,7 +451,7 @@
                         maskImageData,
                         i,
                         j,
-                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
+                        getLuminosity(points[0], points[1], points[2], [i, j])
                     );
                 }
             }
@@ -461,7 +461,7 @@
                         maskImageData,
                         i,
                         j,
-                        getLumAlphaColor(points[0], points[1], points[2], [i, j])
+                        getLuminosity(points[0], points[1], points[2], [i, j])
                     );
                 }
             }
