@@ -282,7 +282,8 @@
         );
     }
     function pointOnLine(point, slope) {
-        // slope*slope == Math.abs(slope) when checking for Infinity
+        // slope*slope is the same as Math.abs(slope)
+        // but faster when checking if it's Infinity
         if (slope*slope === Infinity) {
             return [
                 point[0],
@@ -662,7 +663,7 @@
     }
     function ColorPicker_setValue(self) {
         if (! self.timeout) {
-            self.$source.trigger('update.' + NAMESPACE);
+            self.$source.trigger('update');
             var f = function () {
                 self.timeout = 0;
             };
@@ -723,14 +724,13 @@
             speed = self.settings.speed;
         }
         ColorPicker_fixPosition(self);
-        self.$source.trigger('beforeShow.' + NAMESPACE);
         var effect = self.effect == 'fade' ? 'fadeIn' : 'slideDown';
         self.$container[effect].apply(
             self.$container,
             [
                 speed,
                 function () {
-                    self.$source.trigger('show.' + NAMESPACE);
+                    self.$source.trigger('show');
                 }
             ]
         );
@@ -739,17 +739,19 @@
         if (! speed) {
             speed = self.settings.speed;
         }
-        self.$source.trigger('beforeHide.' + NAMESPACE);
-        var effect = self.effect == 'fade' ? 'fadeOut' : 'slideUp';
-        self.$container[effect].apply(
-            self.$container,
-            [
-                speed,
-                function () {
-                    self.$source.trigger('hide.' + NAMESPACE);
-                }
-            ]
-        );
+        var retval = self.$source.triggerHandler('beforeHide');
+        if (typeof retval == 'undefined' || retval) {
+            var effect = self.effect == 'fade' ? 'fadeOut' : 'slideUp';
+            self.$container[effect].apply(
+                self.$container,
+                [
+                    speed,
+                    function () {
+                        self.$source.trigger('hide');
+                    }
+                ]
+            );
+        }
     }
     function ColorPicker_handleSatLumDrag(self, e) {
         var offset = self.$picker.offset();
@@ -841,7 +843,7 @@
         ColorPicker_drawSaturationLimunositySelector(self);
         ColorPicker_drawIndicators(self);
         self.ready = 1;
-        self.$source.trigger('ready.' + NAMESPACE);
+        self.$source.trigger('ready');
     }
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
@@ -978,7 +980,7 @@
         * Register events
         */
         self.$source.keyup(function () {
-            self.$source.trigger('update.' + NAMESPACE);
+            self.$source.trigger('update');
             ColorPicker_load(self);
             ColorPicker_drawSaturationLimunositySelector(self);
             ColorPicker_drawIndicators(self);
@@ -1125,7 +1127,7 @@
             self.tempCanvas.width = diameter;
             self.tempCanvas.height = diameter;
             ColorPicker_drawAll(self);
-            self.$source.trigger('resize.' + NAMESPACE);
+            self.$source.trigger('resize');
         }
     }
 
@@ -1149,7 +1151,6 @@
                         'destroy',
                         'show',
                         'hide',
-                        'beforeShow',
                         'beforeHide',
                         'resize'
                     ];
@@ -1163,7 +1164,7 @@
                             );
                         }
                     }
-                    $this.trigger('create.' + NAMESPACE);
+                    $this.trigger('create');
                  }
             });
         },
@@ -1224,7 +1225,7 @@
                 }
                 $(this)
                 .removeData(NAMESPACE)
-                .trigger('destroy.' + NAMESPACE)
+                .trigger('destroy')
                 .unbind('.' + NAMESPACE);
             });
         }
@@ -1243,7 +1244,7 @@
 })(jQuery, document, window, Math, {
     autoshow:      true,     // bool
     autosave:      true,    // bool
-    speed:         400,     // post int | 'fast' | 'slow' | 'medium'
+    speed:         400,     // pos int | 'fast' | 'slow' | 'medium'
     diameter:      180,     // pos int
     width:         0.35,    // float
     resizable:     true,    // bool
@@ -1252,20 +1253,23 @@
     preview:       true,    // bool
     previewHeight: 25,      // pos int
     effect:        'fade',  // 'fade' | 'slide'
-    zIndex:        4000
+    zIndex:        4000,
+    icon:          null,    // string        position?
+    lazy:          true     // bool
     /*
     ,
-    target:     null,
+    target:     null, // 'auto', 'inline', 'dialog', '', selector, jQuery object
 
-    create:     undefined,
-    ready:      undefined,
-    destroy:    undefined,
-    update:     undefined,
-    beforeShow: undefined,
-    show:       undefined,
-    beforeHide: undefined,
-    hide:       undefined,
-    resize:     undefined,
+    create:      undefined,
+    ready:       undefined,
+    destroy:     undefined,
+    update:      undefined,
+    show:        undefined,
+    beforeHide:  undefined, // if cancelled does not trigger
+    hide:        undefined,
+    resize:      undefined,
+    resizeStart: undefined,
+    resizeStop:  undefined,
 
     save:       undefined,
     load:       undefined,
