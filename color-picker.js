@@ -54,205 +54,206 @@
     /**
      * COLOR MANAGEMENT
      */
-    function Color(value) {
-        var self = this;
-        // default to black
-        self.rgb  = { r:0, g:0, b:0 };
-        self.hsl  = { h:0, s:0, l:0 };
-        self.cmyk = { c:0, m:0, y:0, k:1 };
-        self.hex  = "#000000";
-        self.setColor(value);
-    };
-    // setters
-    Color.prototype.setColor = function(value) {
-        var self = this;
-        if (typeof value == 'string') {
-            Color_setHex(self, value);
-        } else if (typeof value == 'object' && value) {
-            var haveFields = function (value, fields) {
-                for (var i in fields.split('')) {
-                    if (typeof value[fields[i]] != 'number'
-                        || value[fields[i]] < 0
-                        || value[fields[i]] > 1
-                    ) {
-                        return 0;
+    var Color = (function () {
+        function Color(value) {
+            var self = this;
+            // default to black
+            self.rgb  = { r:0, g:0, b:0 };
+            self.hsl  = { h:0, s:0, l:0 };
+            self.cmyk = { c:0, m:0, y:0, k:1 };
+            self.hex  = "#000000";
+            self.setColor(value);
+        };
+        // setters
+        Color.prototype.setColor = function(value) {
+            var self = this;
+            if (typeof value == 'string') {
+                Color_setHex(self, value);
+            } else if (typeof value == 'object' && value) {
+                var haveFields = function (value, fields) {
+                    for (var i in fields.split('')) {
+                        if (typeof value[fields[i]] != 'number'
+                            || value[fields[i]] < 0
+                            || value[fields[i]] > 1
+                        ) {
+                            return 0;
+                        }
                     }
+                    return 1;
+                };
+                if (haveFields(value, 'sl') && typeof value.h != undefined) {
+                    value.h = value.h - Math.floor(value.h);
+                    if (value.h < 0) {
+                        value.h = 1 + value.h;
+                    }
+                    Color_setHsl(self, value);
+                } else if (haveFields(value, 'rgb')) {
+                    Color_setRgb(self, value);
+                } else if (haveFields(value, 'cmyk')) {
+                    Color_setCmyk(self, value);
+                } else {
+                    self.setColor(value.hsl)
+                        .setColor(value.rgb)
+                        .setColor(value.cmyk);
                 }
-                return 1;
-            };
-            if (haveFields(value, 'hsl')) {
-                Color_setHsl(self, value);
-            } else if (haveFields(value, 'rgb')) {
-                Color_setRgb(self, value);
-            } else if (haveFields(value, 'cmyk')) {
-                Color_setCmyk(self, value);
-            } else {
-                self.setColor(value.hsl)
-                    .setColor(value.rgb)
-                    .setColor(value.cmyk);
             }
+            return self;
         }
-        return self;
-    }
-    function Color_setRgb(self, value) {
-        self.rgb = value;
-        self.hsl = Color_rgb2hsl(value);
-        self.cmyk = Color_rgb2cmyk(value);
-        self.hex = Color_rgb2hex(value);
-    }
-    function Color_setHsl(self, value) {
-        value.h = value.h - Math.floor(value.h);
-        if (value.h < 0) {
-            value.h = 1 + value.h;
+        function Color_setRgb(self, value) {
+            self.rgb = value;
+            self.hsl = Color_rgb2hsl(value);
+            self.cmyk = Color_rgb2cmyk(value);
+            self.hex = Color_rgb2hex(value);
         }
-        self.hsl = value;
-        self.rgb = Color_hsl2rgb(value);
-        self.cmyk = Color_rgb2cmyk(self.rgb);
-        self.hex = Color_rgb2hex(self.rgb);
-    }
-    function Color_setHex(self, value) {
-        var r = /^#([0-9a-f]{3}){1,2}$/i;
-        if (r.test(value)) {
-            if (value.length === 4) {
-                value = value.replace(/[0-9a-f]/gi, function(match) {
-                    return match + match;
-                });
-            }
-            self.hex = value;
-            self.rgb = Color_hex2rgb(value);
+        function Color_setHsl(self, value) {
+            self.hsl = value;
+            self.rgb = Color_hsl2rgb(value);
             self.cmyk = Color_rgb2cmyk(self.rgb);
+            self.hex = Color_rgb2hex(self.rgb);
+        }
+        function Color_setHex(self, value) {
+            var r = /^#([0-9a-f]{3}){1,2}$/i;
+            if (r.test(value)) {
+                if (value.length === 4) {
+                    value = value.replace(/[0-9a-f]/gi, function(match) {
+                        return match + match;
+                    });
+                }
+                self.hex = value;
+                self.rgb = Color_hex2rgb(value);
+                self.cmyk = Color_rgb2cmyk(self.rgb);
+                self.hsl = Color_rgb2hsl(self.rgb);
+            }
+        }
+        function Color_setCmyk(self, value) {
+            self.cmyk = value;
+            self.rgb = Color_cmyk2rgb(value);
             self.hsl = Color_rgb2hsl(self.rgb);
+            self.hex = Color_rgb2hex(self.rgb);
         }
-    }
-    function Color_setCmyk(self, value) {
-        self.cmyk = value;
-        self.rgb = Color_cmyk2rgb(value);
-        self.hsl = Color_rgb2hsl(self.rgb);
-        self.hex = Color_rgb2hex(self.rgb);
-    }
-
-    // converters
-    function Color_rgb2hsl(value) {
-        var r = value.r,
-        g = value.g,
-        b = value.b,
-        max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
-        h,
-        s,
-        l = (max + min) / 2;
-        if (max === min) {
-            h = s = 0; // achromatic
-        } else {
-            var d = max - min;
-            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-            switch(max) {
-                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                case g: h = (b - r) / d + 2; break;
-                case b: h = (r - g) / d + 4; break;
-            }
-            h /= 6;
-        }
-        return {
-            h: h,
-            s: s,
-            l: l
-        };
-    }
-    function Color_rgb2hex(input) {
-        var value, byte, retval = '', i=0;
-        for (;i<3;i++) {
-            byte = Math.round(input[['r','g','b'][i]] * 255);
-            value = byte.toString(16);
-            if (byte < 16) {
-                value = "0" + value;
-            }
-            retval += value;
-        }
-        return '#' + retval;
-
-    }
-    function Color_hex2rgb(value) {
-        var i=0, retval = {};
-        for (;i<3;i++) {
-            retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
-        }
-        return {
-            r: retval[0],
-            g: retval[1],
-            b: retval[2]
-        };
-    }
-    function Color_hsl2rgb(value) {
-        var r, g, b;
-        if (value.s == 0) {
-            r = g = b = value.l; // achromatic
-        } else {
-            var hue2rgb = function (p, q, t) {
-                if (t < 0) {
-                    t += 1;
-                } else if (t > 1) {
-                    t -= 1;
-                }
-                if (t < 1/6) {
-                    return p + (q - p) * 6 * t;
-                }
-                if (t < 1/2) {
-                    return q;
-                }
-                if (t < 2/3) {
-                    return p + (q - p) * (2/3 - t) * 6;
-                }
-                return p;
-            };
-
-            var q;
-            if (value.l < 0.5) {
-                q = value.l * (1 + value.s);
+        // converters
+        function Color_rgb2hsl(value) {
+            var r = value.r,
+            g = value.g,
+            b = value.b,
+            max = Math.max(r, g, b),
+            min = Math.min(r, g, b),
+            h,
+            s,
+            l = (max + min) / 2;
+            if (max === min) {
+                h = s = 0; // achromatic
             } else {
-                q = value.l + value.s - value.l * value.s;
+                var d = max - min;
+                s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+                switch(max) {
+                    case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+                    case g: h = (b - r) / d + 2; break;
+                    case b: h = (r - g) / d + 4; break;
+                }
+                h /= 6;
             }
-            var p = 2 * value.l - q;
-            r = hue2rgb(p, q, value.h + 1/3);
-            g = hue2rgb(p, q, value.h);
-            b = hue2rgb(p, q, value.h - 1/3);
-        }
-        return {
-            r: r,
-            g: g,
-            b: b
-        };
-    }
-
-    function Color_rgb2cmyk(value) {
-        // achromatic
-        if (value.r == value.g && value.g == value.b) {
             return {
-                c:0,
-                m:0,
-                y:0,
-                k:1 - value.r
+                h: h,
+                s: s,
+                l: l
             };
         }
-        var k = Math.min(
-            1 - value.r,
-            1 - value.g,
-            1 - value.b
-        );
-        return {
-            c:(1 - value.r - k) / (1 - k),
-            m:(1 - value.g - k) / (1 - k),
-            y:(1 - value.b - k) / (1 - k),
-            k:k
-        };
-    }
-    function Color_cmyk2rgb(value) {
-        return {
-            r: 1 - Math.min(1, value.c * ( 1 - value.k ) + value.k),
-            g: 1 - Math.min(1, value.m * ( 1 - value.k ) + value.k),
-            b: 1 - Math.min(1, value.y * ( 1 - value.k ) + value.k)
-        };
-    }
+        function Color_rgb2hex(input) {
+            var value, byte, retval = '', i=0;
+            for (;i<3;i++) {
+                byte = Math.round(input[['r','g','b'][i]] * 255);
+                value = byte.toString(16);
+                if (byte < 16) {
+                    value = "0" + value;
+                }
+                retval += value;
+            }
+            return '#' + retval;
+
+        }
+        function Color_hex2rgb(value) {
+            var i=0, retval = {};
+            for (;i<3;i++) {
+                retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
+            }
+            return {
+                r: retval[0],
+                g: retval[1],
+                b: retval[2]
+            };
+        }
+        function Color_hsl2rgb(value) {
+            var r, g, b;
+            if (value.s == 0) {
+                r = g = b = value.l; // achromatic
+            } else {
+                var hue2rgb = function (p, q, t) {
+                    if (t < 0) {
+                        t += 1;
+                    } else if (t > 1) {
+                        t -= 1;
+                    }
+                    if (t < 1/6) {
+                        return p + (q - p) * 6 * t;
+                    }
+                    if (t < 1/2) {
+                        return q;
+                    }
+                    if (t < 2/3) {
+                        return p + (q - p) * (2/3 - t) * 6;
+                    }
+                    return p;
+                };
+
+                var q;
+                if (value.l < 0.5) {
+                    q = value.l * (1 + value.s);
+                } else {
+                    q = value.l + value.s - value.l * value.s;
+                }
+                var p = 2 * value.l - q;
+                r = hue2rgb(p, q, value.h + 1/3);
+                g = hue2rgb(p, q, value.h);
+                b = hue2rgb(p, q, value.h - 1/3);
+            }
+            return {
+                r: r,
+                g: g,
+                b: b
+            };
+        }
+        function Color_rgb2cmyk(value) {
+            // achromatic
+            if (value.r == value.g && value.g == value.b) {
+                return {
+                    c:0,
+                    m:0,
+                    y:0,
+                    k:1 - value.r
+                };
+            }
+            var k = Math.min(
+                1 - value.r,
+                1 - value.g,
+                1 - value.b
+            );
+            return {
+                c:(1 - value.r - k) / (1 - k),
+                m:(1 - value.g - k) / (1 - k),
+                y:(1 - value.b - k) / (1 - k),
+                k:k
+            };
+        }
+        function Color_cmyk2rgb(value) {
+            return {
+                r: 1 - Math.min(1, value.c * ( 1 - value.k ) + value.k),
+                g: 1 - Math.min(1, value.m * ( 1 - value.k ) + value.k),
+                b: 1 - Math.min(1, value.y * ( 1 - value.k ) + value.k)
+            };
+        }
+        return Color;
+    })();
 
     /**
      * 2D MATHS
@@ -498,11 +499,9 @@
         degrees = (1 - hue) * Math.PI * 2;
         points = ColorPicker_getPoints(self, degrees);
         // Fill background
-        ctx.fillStyle = Color_rgb2hex(
-            Color_hsl2rgb({
-                h:hue, s:1, l:0.5
-            })
-        );
+        ctx.fillStyle = new Color({
+            h:hue, s:1, l:0.5
+        }).hex;
         ctx.fillRect(0,0,self.diameter,self.diameter);
         // Copy rotated mask
         ctx.save();
@@ -660,7 +659,7 @@
             coords[0] - self.diameter / 2,
             coords[1] - self.diameter / 2
         ) * (180/Math.PI) + 270;
-        Color_setHsl(self.color, {
+        self.color.setColor({
             h: angle / 360,
             s: self.color.hsl.s,
             l: self.color.hsl.l
@@ -675,7 +674,7 @@
         ColorPicker_setValue(self);
     }
     function ColorPicker_reDrawSatLum(self, s, l) {
-        Color_setHsl(self.color, {
+        self.color.setColor({
             h: self.color.hsl.h,
             s: s,
             l: l
