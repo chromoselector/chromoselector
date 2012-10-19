@@ -621,7 +621,7 @@
         }
         setTimeout(function () {
             self.drawing = 0;
-        }, 4);
+        }, 8);
     }
 
     /** The color picker functions */
