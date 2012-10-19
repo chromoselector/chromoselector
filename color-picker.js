@@ -903,6 +903,20 @@
                 position:'absolute',
                 'z-index':self.settings.zIndex
             });
+
+        if (self.settings.icon) {
+            self.$icon = $('<a />')
+            .attr('href', '#')
+            .css('position','absolute')
+            .append(
+                $('<img/>')
+                .attr('src', self.settings.icon)
+            );
+            self.$target.append(self.$icon);
+        } else {
+            self.$icon = $([]);
+        }
+
         self.$preview = $('<p />')
             .css({
                 margin: 0,
@@ -969,14 +983,25 @@
             self.effect = 'slide';
         }
 
+        ColorPicker_fixPosition(self);
 
         if (! self.settings.autoshow) {
             ColorPicker_drawAll(self);
         } else {
-            self.$source.mouseover(function () {
+            if (self.settings.lazy) {
+                self.$source.mouseover(function () {
+                    ColorPicker_drawAll(self);
+                    self.$source.unbind('mouseover');
+                });
+            } else {
                 ColorPicker_drawAll(self);
-                self.$source.unbind('mouseover');
-            }).bind('focus click', function () {
+            }
+            var $initElement = self.$source;
+            if (self.$icon.length) {
+                $initElement = self.$icon;
+            }
+            $initElement.bind('focus click', function (e) {
+                preventDefault(e);
                 if (! self.ready) {
                     ColorPicker_drawAll(self);
                 }
@@ -1088,8 +1113,9 @@
         return diameter;
     }
     function ColorPicker_fixPosition(self) {
+        var offset;
         if (! self.settings.target) {
-            var offset = self.$source.offset();
+            offset = self.$source.offset();
             self.$target.css({
                 top: 0,
                 left: 0
@@ -1098,6 +1124,14 @@
                 top: offset.top + self.$source.outerHeight(),
                 left: offset.left
             });
+        }
+        offset = self.$source.offset();
+        self.$icon.css('top', offset.top + (self.$source.outerHeight() - self.$icon.height()) / 2);
+
+        if (self.settings.iconPos == 'left') {
+            self.$icon.css('left', offset.left - self.$icon.height());
+        } else {
+            self.$icon.css('left', offset.left + self.$source.outerWidth() + 2);
         }
     }
 
@@ -1262,13 +1296,15 @@
     preview:       true,    // bool
     previewHeight: 25,      // pos int
     effect:        'fade',  // 'fade' | 'slide'
-    zIndex:        4000,
-    icon:          null,    // string        position?
+    zIndex:        4000,    // int
+    icon:          null,    // string
+    iconPos:  'right',  // string 'left' | 'right'
     lazy:          true     // bool
     /*
     ,
     target:     null, // 'auto', 'inline', 'dialog', '', selector, jQuery object
 
+    // events registered with bind() will not be unbound on destroy API call
     create:      undefined,
     ready:       undefined,
     destroy:     undefined,
