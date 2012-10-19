@@ -112,8 +112,7 @@
             self.hex = Color_rgb2hex(self.rgb);
         }
         function Color_setHex(self, value) {
-            var r = /^#([0-9a-f]{3}){1,2}$/i;
-            if (r.test(value)) {
+            if (/^#([0-9a-f]{3}){1,2}$/i.test(value)) {
                 if (value.length === 4) {
                     value = value.replace(/[0-9a-f]/gi, function(match) {
                         return match + match;
@@ -416,7 +415,7 @@
         // cut out doughnut
         /** webkit bug prevents usage of "destination-in" */
         ctx.globalCompositeOperation = "destination-out";
-        ctx.strokeStyle = "rgba(0,0,0,1)";
+        ctx.strokeStyle = "#000";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2);
@@ -489,7 +488,7 @@
 
             var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
             lingrad.addColorStop(1, 'rgba(0,0,0,0)');
-            lingrad.addColorStop(0, 'rgba(0,0,0,1)');
+            lingrad.addColorStop(0, '#000');
             tempCtx.fillStyle = lingrad;
             tempCtx.globalCompositeOperation = "destination-out";
             tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
@@ -524,7 +523,7 @@
         ctx.lineTo(0, 0);
         ctx.closePath();
         ctx.globalCompositeOperation = "destination-out";
-        ctx.fillStyle = "rgba(0,0,0,1)";
+        ctx.fillStyle = "#000";
         ctx.fill();
         // shadow
         var newPoints = [];
@@ -546,7 +545,7 @@
         ctx.lineTo(newPoints[1][0], newPoints[1][1]);
         ctx.lineTo(newPoints[2][0], newPoints[2][1]);
         ctx.closePath();
-        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx.fillStyle = '#000';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * self.diameter;
         ctx.fill();
