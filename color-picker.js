@@ -756,6 +756,7 @@
             [
                 speed,
                 function () {
+                    ColorPicker_fixPosition(self);
                     self.$source.trigger('show');
                 }
             ]
@@ -773,6 +774,7 @@
                 [
                     speed,
                     function () {
+                        ColorPicker_fixPosition(self);
                         self.$source.trigger('hide');
                     }
                 ]
