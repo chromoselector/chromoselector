@@ -9,6 +9,7 @@
  *   refactor hue2rgb
  *   converters code
  *   Dialog mode
+ *   CSS styling
  *
  * v 1.1.0:
  *   HSV support
@@ -205,7 +206,13 @@
                 }
                 return p;
             };
-            var q = value.l < 0.5 ? value.l * (1 + value.s) : value.l + value.s - value.l * value.s;
+
+            var q;
+            if (value.l < 0.5) {
+                q = value.l * (1 + value.s);
+            } else {
+                q = value.l + value.s - value.l * value.s;
+            }
             var p = 2 * value.l - q;
             r = hue2rgb(p, q, value.h + 1/3);
             g = hue2rgb(p, q, value.h);
@@ -343,7 +350,11 @@
         } else if (inputPoint[0] > lumIntersectionPoint2[0]) {
             l = 0;
         } else {
-            l = ((lumIntersectionPoint2[0] - inputPoint[0]) / (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])) * 255;
+            l = (
+                (lumIntersectionPoint2[0] - inputPoint[0])
+                /
+                (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])
+            ) * 255;
         }
         return [ l, l, l, 255];
     }
@@ -356,7 +367,9 @@
     };
     function ColorPicker_drawColorWheelBg(canvas, diameter) {
         var ctx = canvas.getContext("2d");
-        var temp = $("<canvas>").attr("width", diameter).attr("height", diameter)[0];
+        var temp = $("<canvas>")
+            .attr("width", diameter)
+            .attr("height", diameter)[0];
         var tempCtx = temp.getContext("2d");
         if (! Cache.tempData) {
             Cache.ColorWheelBg = ctx.createImageData(80, 80);
@@ -1327,20 +1340,20 @@
         }
     };
 })(jQuery, document, window, Math, {
-    autoshow:      true,     // bool
+    autoshow:      true,    // boolga
     autosave:      true,    // bool
     speed:         400,     // pos int | 'fast' | 'slow' | 'medium'
     diameter:      180,     // pos int
     width:         0.35,    // float
     resizable:     true,    // bool
     class:         null,    // string
-    shadow:        0,        // float
+    shadow:        0,       // float
     preview:       true,    // bool
     previewHeight: 25,      // pos int
     effect:        'fade',  // 'fade' | 'slide'
     zIndex:        4000,    // int
     icon:          null,    // string
-    iconPos:  'right',  // string 'left' | 'right'
+    iconPos:      'right',  // string 'left' | 'right'
     lazy:          true     // bool
     /*
     ,
