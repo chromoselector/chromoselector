@@ -1051,6 +1051,11 @@
                 && inputPoint[1] > self.diameter-20
             ) {
                 self.resizing = 1;
+                self.resizeOffset = [
+                    self.diameter - inputPoint[0],
+                    self.diameter - inputPoint[1]
+                ];
+                $('body').css('cursor','se-resize');
             } else {
                 if (
                     pointInCircle(inputPoint, self.diameter/2, circleRadius+lineWidth)
@@ -1081,6 +1086,7 @@
                 var inputPoint = getEventPosition(self, e, self.$picker);
                 var newDiameter = ColorPicker_fixDiameter(
                     Math.max(inputPoint[0], inputPoint[1])
+                    + Math.max(self.resizeOffset[0], self.resizeOffset[1])
                 );
                 self.$container.width(newDiameter).height(
                     newDiameter + self.$preview.outerHeight()
@@ -1106,6 +1112,7 @@
                 self.draggingSatLum = 0;
                 ColorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
+                $('body').css('cursor','');
                 preventDefault(e)
                 self.resizing = 0;
                 ColorPicker_resize(self, self.$picker.width());
