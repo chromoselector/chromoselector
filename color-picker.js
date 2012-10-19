@@ -546,18 +546,11 @@
         ctx.clearRect(0,0,self.diameter, self.diameter);
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = ColorPicker_getPoints(self, degrees);
-        /** draw hue indicator */
+        /** get hue indicator position */
         var circleRadius = (self.diameter / 2) - 5 - (self.widthRatio * self.diameter * 2 / 3);
-
         var indicator = getPointOnCircle(circleRadius, degrees, self.diameter / 2);
-        ctx.strokeStyle = "rgba(1,1,1,1)";
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.arc(indicator[0], indicator[1], 4, 0, Math.PI*2);
-        ctx.closePath();
-        ctx.stroke();
 
-        /** draw sat/lum indicator */
+        /** get draw sat/lum indicator position */
         var colorPoint = [
             (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
             (points[1][1] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][1])
@@ -586,10 +579,26 @@
             (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
             (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
         ];
-        ctx.beginPath();
-        ctx.arc(colorPoint[0], colorPoint[1], 4, 0, Math.PI*2);
-        ctx.closePath();
-        ctx.stroke();
+
+        /** draw the indicators */
+        var indicators = [
+            indicator,
+            colorPoint
+        ];
+        for (var i in indicators) {
+            ctx.strokeStyle = "#fff";
+            ctx.lineWidth = 1.5;
+            ctx.beginPath();
+            ctx.arc(indicators[i][0], indicators[i][1], 6, 0, Math.PI*2);
+            ctx.closePath();
+            ctx.stroke();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = "#000";
+            ctx.beginPath();
+            ctx.arc(indicators[i][0], indicators[i][1], 4.5, 0, Math.PI*2);
+            ctx.closePath();
+            ctx.stroke();
+        }
 
         /** draw resizer */
         if (self.settings.resizable) {
