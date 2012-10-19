@@ -1000,8 +1000,6 @@
             self.effect = 'slide';
         }
 
-        ColorPicker_fixPosition(self);
-
         if (! self.settings.autoshow) {
             ColorPicker_drawAll(self);
         } else {
@@ -1113,6 +1111,10 @@
         }).bind('resize', function () {
             ColorPicker_fixPosition(self);
         });
+
+        setTimeout(function () {
+            ColorPicker_fixPosition(self);
+        }, 4);
     };
 
     function preventDefault(e) {
