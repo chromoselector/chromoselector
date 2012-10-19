@@ -917,6 +917,19 @@
             self.$icon = $([]);
         }
 
+        if (self.settings.resizable) {
+            $('<span />')
+                .width(20)
+                .height(20)
+                .css({
+                    position: 'absolute',
+                    cursor: 'se-resize',
+                    bottom: '0px',
+                    right: '0px'
+                })
+                .appendTo(self.$container);
+        }
+
         self.$preview = $('<p />')
             .css({
                 margin: 0,
