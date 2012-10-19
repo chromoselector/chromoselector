@@ -1050,6 +1050,7 @@
                 && inputPoint[0] > self.diameter-20
                 && inputPoint[1] > self.diameter-20
             ) {
+                self.$source.trigger('resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
                     self.diameter - inputPoint[0],
@@ -1101,6 +1102,7 @@
                     '-webkit-border-radius': borderRadius,
                     'border-radius': borderRadius
                 });
+                self.$source.trigger('resize');
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
@@ -1116,6 +1118,7 @@
                 preventDefault(e)
                 self.resizing = 0;
                 ColorPicker_resize(self, self.$picker.width());
+                self.$source.trigger('resizeStop');
             }
         }).bind('resize', function () {
             ColorPicker_fixPosition(self);
@@ -1199,7 +1202,6 @@
             self.tempCanvas.width = diameter;
             self.tempCanvas.height = diameter;
             ColorPicker_drawAll(self);
-            self.$source.trigger('resize');
         }
     }
 
@@ -1224,7 +1226,9 @@
                         'show',
                         'hide',
                         'beforeHide',
-                        'resize'
+                        'resize',
+                        'resizeStart',
+                        'resizeStop'
                     ];
                     for (i in events) {
                         var name = events[i];
@@ -1269,7 +1273,11 @@
         },
         resize: function (diameter) {
             return this.each(function () {
-                ColorPicker_resize($(this).data(NAMESPACE), diameter)
+                var self = $(this).data(NAMESPACE);
+                self.$source.trigger('resizeStart');
+                ColorPicker_resize(self, diameter);
+                self.$source.trigger('resize');
+                self.$source.trigger('resizeStop');
             });
         },
         reflow: function () {
