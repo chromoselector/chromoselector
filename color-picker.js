@@ -619,8 +619,8 @@
 
         /** draw resizer */
         if (self.settings.resizable) {
-            if (self.$container.css('border-bottom-color')) {
-                ctx.strokeStyle = self.$container.css('border-bottom-color');
+            if (self._container.css('border-bottom-color')) {
+                ctx.strokeStyle = self._container.css('border-bottom-color');
             } else {
                 ctx.strokeStyle = '#444';
             }
@@ -655,8 +655,8 @@
         return points;
     }
     function ColorPicker_reDrawHue(self, e) {
-        var offset = self.$picker.offset();
-        var coords = getEventPosition(self, e, self.$picker);
+        var offset = self._picker.offset();
+        var coords = getEventPosition(self, e, self._picker);
         var angle = Math.atan2(
             coords[0] - self.diameter / 2,
             coords[1] - self.diameter / 2
@@ -689,7 +689,7 @@
     }
     function ColorPicker_setValue(self) {
         if (! self.timeout) {
-            self.$source.trigger('update');
+            self._source.trigger('update');
             var f = function () {
                 self.timeout = 0;
             };
@@ -713,9 +713,9 @@
             str = self.color.hex;
         }
         if (typeof self.settings.save == 'function') {
-            self.settings.save.apply(self.$source[0], [str]);
+            self.settings.save.apply(self._source[0], [str]);
         } else {
-            self.$source.val(
+            self._source.val(
                 str
             ).html(
                 str
@@ -725,9 +725,9 @@
     function ColorPicker_load(self) {
         var str;
         if (typeof self.settings.load == 'function') {
-            str = self.settings.load.call(self.$source);
+            str = self.settings.load.call(self._source);
         } else {
-            str = self.$source.val() || self.$source.html();
+            str = self._source.val() || self._source.html();
         }
         if (typeof self.settings.str2color == 'function') {
             self.color = new Color(self.settings.str2color.apply(null, [str]));
@@ -751,13 +751,13 @@
         }
         ColorPicker_fixPosition(self);
         var effect = self.effect == 'fade' ? 'fadeIn' : 'slideDown';
-        self.$container[effect].apply(
-            self.$container,
+        self._container[effect].apply(
+            self._container,
             [
                 speed,
                 function () {
                     ColorPicker_fixPosition(self);
-                    self.$source.trigger('show');
+                    self._source.trigger('show');
                 }
             ]
         );
@@ -766,26 +766,26 @@
         if (! speed) {
             speed = self.settings.speed;
         }
-        var retval = self.$source.triggerHandler('beforeHide');
+        var retval = self._source.triggerHandler('beforeHide');
         if (typeof retval == 'undefined' || retval) {
             var effect = self.effect == 'fade' ? 'fadeOut' : 'slideUp';
-            self.$container[effect].apply(
-                self.$container,
+            self._container[effect].apply(
+                self._container,
                 [
                     speed,
                     function () {
                         ColorPicker_fixPosition(self);
-                        self.$source.trigger('hide');
+                        self._source.trigger('hide');
                     }
                 ]
             );
         }
     }
     function ColorPicker_handleSatLumDrag(self, e) {
-        var offset = self.$picker.offset();
+        var offset = self._picker.offset();
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = ColorPicker_getPoints(self, degrees);
-        var inputPoint = getEventPosition(self, e, self.$picker);
+        var inputPoint = getEventPosition(self, e, self._picker);
         var sanitisedInputPoint = inputPoint;
         if (! pointInTriangle(inputPoint, points[0], points[1], points[2])) {
             var i, distances = [];
@@ -871,7 +871,7 @@
         ColorPicker_drawSaturationLimunositySelector(self);
         ColorPicker_drawIndicators(self);
         self.ready = 1;
-        self.$source.trigger('ready');
+        self._source.trigger('ready');
     }
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
@@ -889,7 +889,7 @@
         self.resizingSaved = undefined;
 
         self.drawing = 0;
-        self.$source = $this;
+        self._source = $this;
         ColorPicker_load(self); // sets self.color
         self.diameter = ColorPicker_fixDiameter(self.settings.diameter);
         self.widthRatio = self.settings.width / 3;
@@ -897,10 +897,10 @@
         self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
         if (self.settings.target) {
-            self.$target = $(self.settings.target);
+            self._target = $(self.settings.target);
         }
-        if (! self.$target || ! self.$target.length) {
-            self.$target = $('<div/>')
+        if (! self._target || ! self._target.length) {
+            self._target = $('<div/>')
                 .prependTo('body')
                 .css({
                     width: 0,
@@ -909,7 +909,7 @@
                     overflow:'visible'
                 });
         }
-        self.$picker = $('<div/>')
+        self._picker = $('<div/>')
             .css({
                 position:'relative'
             })
@@ -919,8 +919,8 @@
                 canvasString + canvasString + canvasString
             );
 
-        self.$container = $('<div/>')
-            .append(self.$picker)
+        self._container = $('<div/>')
+            .append(self._picker)
             .width(self.diameter)
             .css({
                 position:'absolute',
@@ -928,7 +928,7 @@
             });
 
         if (self.settings.icon) {
-            self.$icon = $('<a />')
+            self._icon = $('<a />')
             .attr('href', '#')
             .css('position','absolute')
             .css('z-index', self.settings.zIndex)
@@ -936,9 +936,9 @@
                 $('<img/>')
                 .attr('src', self.settings.icon)
             );
-            self.$target.append(self.$icon);
+            self._target.append(self._icon);
         } else {
-            self.$icon = $([]);
+            self._icon = $([]);
         }
 
         if (self.settings.resizable) {
@@ -952,7 +952,7 @@
                     right: '0px',
                     'z-index': self.settings.zIndex
                 })
-                .appendTo(self.$container);
+                .appendTo(self._container);
         }
 
         self.$preview = $('<p />')
@@ -971,20 +971,20 @@
             );
 
         if (self.settings.preview) {
-            self.$container.prepend(
+            self._container.prepend(
                 self.$preview
             );
         }
 
         if (self.settings.class) {
-            self.$container.attr('class',self.settings.class)
+            self._container.attr('class',self.settings.class)
         } else {
             var borderRadius = '0px 0px 0px ' + self.diameter/2 + 'px';
             if (! self.settings.resizable) {
                 borderRadius = '0px 0px ' + self.diameter/2 + 'px ' + self.diameter/2 + 'px';
             }
             var borderColor = '1px solid rgba(82,37,18,0.5)';
-            self.$container.css({
+            self._container.css({
                 background:'rgba(228,204,193,0.8)',
                 'border-bottom':borderColor,
                 'border-left':borderColor,
@@ -995,20 +995,20 @@
         }
         // adjust diamtere to account for borders
         self.diameter -= parseInt(
-            parseInt(self.$container.css('border-left-width'), 10)
-            + parseInt(self.$container.css('border-right-width'), 10),
+            parseInt(self._container.css('border-left-width'), 10)
+            + parseInt(self._container.css('border-right-width'), 10),
             10
         ) || 0;
-        self.$picker
+        self._picker
             .height(self.diameter)
-            .add(self.$container)
+            .add(self._container)
             .width(self.diameter)
 
-        self.$target.append(
-            self.$container
+        self._target.append(
+            self._container
                 .hide()
         );
-        self.canvases = self.$picker.find('canvas')
+        self.canvases = self._picker.find('canvas')
             .css({
                 position:'absolute',
                 width:'100%',
@@ -1025,16 +1025,16 @@
             ColorPicker_drawAll(self);
         } else {
             if (self.settings.lazy) {
-                self.$source.mouseover(function () {
+                self._source.mouseover(function () {
                     ColorPicker_drawAll(self);
-                    self.$source.unbind('mouseover');
+                    self._source.unbind('mouseover');
                 });
             } else {
                 ColorPicker_drawAll(self);
             }
-            var $initElement = self.$source;
-            if (self.$icon.length) {
-                $initElement = self.$icon;
+            var $initElement = self._source;
+            if (self._icon.length) {
+                $initElement = self._icon;
             }
             $initElement.bind('focus click', function (e) {
                 preventDefault(e);
@@ -1049,8 +1049,8 @@
         /**
         * Register events
         */
-        self.$source.keyup(function () {
-            self.$source.trigger('update');
+        self._source.keyup(function () {
+            self._source.trigger('update');
             ColorPicker_load(self);
             ColorPicker_drawSaturationLimunositySelector(self);
             ColorPicker_drawIndicators(self);
@@ -1059,17 +1059,17 @@
                 ColorPicker_hide(self);
             }
         });
-        self.$container.bind('mousedown touchstart', function (e) {
+        self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e)
             var lineWidth = self.widthRatio * self.diameter / 2;
             var circleRadius = (self.diameter / 2) - (lineWidth/2) - lineWidth;
-            var offset = self.$picker.offset();
-            var inputPoint = getEventPosition(self, e, self.$picker);
+            var offset = self._picker.offset();
+            var inputPoint = getEventPosition(self, e, self._picker);
             if (self.settings.resizable
                 && inputPoint[0] > self.diameter-20
                 && inputPoint[1] > self.diameter-20
             ) {
-                self.$source.trigger('resizeStart');
+                self._source.trigger('resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
                     self.diameter - inputPoint[0],
@@ -1123,8 +1123,8 @@
                 $('body').css('cursor','');
                 preventDefault(e)
                 self.resizing = 0;
-                ColorPicker_resize(self, self.$picker.width());
-                self.$source.trigger('resizeStop');
+                ColorPicker_resize(self, self._picker.width());
+                self._source.trigger('resizeStop');
             }
         }).bind('resize', function () {
             ColorPicker_fixPosition(self);
@@ -1136,29 +1136,28 @@
     };
 
     function ColorPicker_handleresize(self, e) {
-        var inputPoint = getEventPosition(self, e, self.$picker);
+        var inputPoint = getEventPosition(self, e, self._picker);
         var newDiameter = ColorPicker_fixDiameter(
             Math.max(inputPoint[0], inputPoint[1])
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
-        self.$container.width(newDiameter).height(
+        self._container.width(newDiameter).height(
             newDiameter + self.$preview.outerHeight()
         );
-        self.$picker.width(newDiameter).height(newDiameter);
+        self._picker.width(newDiameter).height(newDiameter);
 
         var borderRadius = '0px 0px 0px ' + newDiameter/2 + 'px';
         if (! self.settings.resizable) {
             borderRadius = '0px 0px ' + newDiameter/2 + 'px ' + newDiameter/2 + 'px';
         }
-        self.$container.css({
+        self._container.css({
             '-webkit-border-radius': borderRadius,
             'border-radius': borderRadius
         });
-        self.$source.trigger('resize');
-
         // Remove busy flag asynchronously, this way the event queue
         // can clear up meanwhile. This speeds up rendering
         setTimeout(function () {
+            self._source.trigger('resize');
             if (typeof self.resizingSaved == 'undefined') {
                 self.resizingBusy = false;
             } else {
@@ -1184,26 +1183,26 @@
         return diameter;
     }
     function ColorPicker_fixPosition(self) {
-        var offset = self.$source.offset();
+        var offset = self._source.offset();
         if (! self.settings.target) {
-            self.$target.css({
+            self._target.css({
                 top: 0,
                 left: 0
             });
-            self.$container.css({
-                top: offset.top + self.$source.outerHeight(),
+            self._container.css({
+                top: offset.top + self._source.outerHeight(),
                 left: offset.left
             });
         }
-        if (self.$source.is(':visible')) {
-            self.$icon.show().css('top', offset.top + (self.$source.outerHeight() - self.$icon.height()) / 2);
+        if (self._source.is(':visible')) {
+            self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
             if (self.settings.iconPos == 'left') {
-                self.$icon.css('left', offset.left - self.$icon.height());
+                self._icon.css('left', offset.left - self._icon.height());
             } else {
-                self.$icon.css('left', offset.left + self.$source.outerWidth() + 2);
+                self._icon.css('left', offset.left + self._source.outerWidth() + 2);
             }
         } else {
-            self.$icon.hide();
+            self._icon.hide();
         }
     }
 
@@ -1238,7 +1237,7 @@
                     this.width = diameter;
                     this.height = diameter;
                 })
-                .add(self.$container);
+                .add(self._container);
             self.tempCanvas.width = diameter;
             self.tempCanvas.height = diameter;
             ColorPicker_drawAll(self);
@@ -1314,10 +1313,10 @@
         resize: function (diameter) {
             return this.each(function () {
                 var self = $(this).data(NAMESPACE);
-                self.$source.trigger('resizeStart');
+                self._source.trigger('resizeStart');
                 ColorPicker_resize(self, diameter);
-                self.$source.trigger('resize');
-                self.$source.trigger('resizeStop');
+                self._source.trigger('resize');
+                self._source.trigger('resizeStop');
             });
         },
         reflow: function () {
@@ -1340,13 +1339,13 @@
             return this.each(function () {
                 var self = $(this).data(NAMESPACE)
                 if ($(self.settings.target).length){
-                    if (self.$container.siblings().length) {
-                        self.$container.remove();
+                    if (self._container.siblings().length) {
+                        self._container.remove();
                     } else {
-                        self.$target.remove();
+                        self._target.remove();
                     }
                 } else {
-                    self.$target.remove();
+                    self._target.remove();
                 }
                 $(this)
                 .removeData(NAMESPACE)
