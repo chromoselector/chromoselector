@@ -86,12 +86,10 @@
                 Color_setRgb(self, value);
             } else if (haveFields(value, 'cmyk')) {
                 Color_setCmyk(self, value);
-            } else if (typeof value.hsl == 'object') {
-                self.setColor(value.hsl);
-            } else if (typeof value.rgb == 'object') {
-                self.setColor(value.rgb);
-            } else if (typeof value.cmyk == 'object') {
-                self.setColor(value.cmyk);
+            } else {
+                self.setColor(value.hsl)
+                    .setColor(value.rgb)
+                    .setColor(value.cmyk);
             }
         }
         return self;
