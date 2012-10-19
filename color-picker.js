@@ -1134,9 +1134,8 @@
         return diameter;
     }
     function ColorPicker_fixPosition(self) {
-        var offset;
+        var offset = self.$source.offset();
         if (! self.settings.target) {
-            offset = self.$source.offset();
             self.$target.css({
                 top: 0,
                 left: 0
@@ -1146,13 +1145,15 @@
                 left: offset.left
             });
         }
-        offset = self.$source.offset();
-        self.$icon.css('top', offset.top + (self.$source.outerHeight() - self.$icon.height()) / 2);
-
-        if (self.settings.iconPos == 'left') {
-            self.$icon.css('left', offset.left - self.$icon.height());
+        if (self.$source.is(':visible')) {
+            self.$icon.show().css('top', offset.top + (self.$source.outerHeight() - self.$icon.height()) / 2);
+            if (self.settings.iconPos == 'left') {
+                self.$icon.css('left', offset.left - self.$icon.height());
+            } else {
+                self.$icon.css('left', offset.left + self.$source.outerWidth() + 2);
+            }
         } else {
-            self.$icon.css('left', offset.left + self.$source.outerWidth() + 2);
+            self.$icon.hide();
         }
     }
 
@@ -1262,6 +1263,11 @@
         resize: function (diameter) {
             return this.each(function () {
                 ColorPicker_resize($(this).data(NAMESPACE), diameter)
+            });
+        },
+        reflow: function () {
+            return this.each(function () {
+                ColorPicker_fixPosition($(this).data(NAMESPACE))
             });
         },
         api: function () {
