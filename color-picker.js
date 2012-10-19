@@ -8,13 +8,17 @@
  *   Documentation
  *   refactor hue2rgb
  *   converters code
- *   Alpha selection
+ *   Dialog mode
  *
  * v 1.1.0:
- *   IE 6+ support
  *   HSV support
- *   better performance rendering colorwheel
  *   shorter code
+ *   Fix crooked colorwheel in webkit
+ *   Alpha selection
+ *   Side panel
+ *
+ * Future:
+ *   IE 6+ support
  */
 (function ($, document, window, Math, defaults) {
     "use strict";
