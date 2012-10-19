@@ -27,16 +27,16 @@
     if (typeof TESTSUITE === 'undefined') {
         window.TESTSUITE = function (w) {
             w.Color = Color;
-            w.Color_rgb2hsl = Color_rgb2hsl;
-            w.Color_rgb2hex = Color_rgb2hex;
-            w.Color_hsl2rgb = Color_hsl2rgb;
-            w.Color_hex2rgb = Color_hex2rgb;
-            w.Color_rgb2cmyk = Color_rgb2cmyk;
-            w.Color_cmyk2rgb = Color_cmyk2rgb;
+            w.rgb2hsl = rgb2hsl;
+            w.rgb2hex = rgb2hex;
+            w.hsl2rgb = hsl2rgb;
+            w.hex2rgb = hex2rgb;
+            w.rgb2cmyk = rgb2cmyk;
+            w.cmyk2rgb = cmyk2rgb;
             w.setPixel = setPixel;
             w.getPointOnCircle = getPointOnCircle;
             w.getLumAlphaColor = getLumAlphaColor;
-            w.ColorPicker_getPoints = ColorPicker_getPoints;
+            w.colorPicker_getPoints = colorPicker_getPoints;
             w.i = 0;
             w.x = 0;
             w.y = 0;
@@ -45,7 +45,7 @@
             w.r = 0;
             w.g = 0;
             w.b = 0;
-        }
+        };
     }
     /**
      * NAMESPACE for events and data
@@ -63,12 +63,12 @@
             self.cmyk = { c:0, m:0, y:0, k:1 };
             self.hex  = "#000000";
             self.setColor(value);
-        };
+        }
         // setters
         Color.prototype.setColor = function(value) {
             var self = this;
             if (typeof value == 'string') {
-                Color_setHex(self, value);
+                setHex(self, value);
             } else if (typeof value == 'object' && value) {
                 var haveFields = function (value, fields) {
                     for (var i in fields.split('')) {
@@ -86,11 +86,11 @@
                     if (value.h < 0) {
                         value.h = 1 + value.h;
                     }
-                    Color_setHsl(self, value);
+                    setHsl(self, value);
                 } else if (haveFields(value, 'rgb')) {
-                    Color_setRgb(self, value);
+                    setRgb(self, value);
                 } else if (haveFields(value, 'cmyk')) {
-                    Color_setCmyk(self, value);
+                    setCmyk(self, value);
                 } else {
                     self.setColor(value.hsl)
                         .setColor(value.rgb)
@@ -98,20 +98,20 @@
                 }
             }
             return self;
-        }
-        function Color_setRgb(self, value) {
+        };
+        function setRgb(self, value) {
             self.rgb = value;
-            self.hsl = Color_rgb2hsl(value);
-            self.cmyk = Color_rgb2cmyk(value);
-            self.hex = Color_rgb2hex(value);
+            self.hsl = rgb2hsl(value);
+            self.cmyk = rgb2cmyk(value);
+            self.hex = rgb2hex(value);
         }
-        function Color_setHsl(self, value) {
+        function setHsl(self, value) {
             self.hsl = value;
-            self.rgb = Color_hsl2rgb(value);
-            self.cmyk = Color_rgb2cmyk(self.rgb);
-            self.hex = Color_rgb2hex(self.rgb);
+            self.rgb = hsl2rgb(value);
+            self.cmyk = rgb2cmyk(self.rgb);
+            self.hex = rgb2hex(self.rgb);
         }
-        function Color_setHex(self, value) {
+        function setHex(self, value) {
             if (/^#([0-9a-f]{3}){1,2}$/i.test(value)) {
                 if (value.length === 4) {
                     value = value.replace(/[0-9a-f]/gi, function(match) {
@@ -119,19 +119,19 @@
                     });
                 }
                 self.hex = value;
-                self.rgb = Color_hex2rgb(value);
-                self.cmyk = Color_rgb2cmyk(self.rgb);
-                self.hsl = Color_rgb2hsl(self.rgb);
+                self.rgb = hex2rgb(value);
+                self.cmyk = rgb2cmyk(self.rgb);
+                self.hsl = rgb2hsl(self.rgb);
             }
         }
-        function Color_setCmyk(self, value) {
+        function setCmyk(self, value) {
             self.cmyk = value;
-            self.rgb = Color_cmyk2rgb(value);
-            self.hsl = Color_rgb2hsl(self.rgb);
-            self.hex = Color_rgb2hex(self.rgb);
+            self.rgb = cmyk2rgb(value);
+            self.hsl = rgb2hsl(self.rgb);
+            self.hex = rgb2hex(self.rgb);
         }
         // converters
-        function Color_rgb2hsl(value) {
+        function rgb2hsl(value) {
             var r = value.r,
             g = value.g,
             b = value.b,
@@ -158,7 +158,7 @@
                 l: l
             };
         }
-        function Color_rgb2hex(input) {
+        function rgb2hex(input) {
             var value, byte, retval = '', i=0;
             for (;i<3;i++) {
                 byte = Math.round(input[['r','g','b'][i]] * 255);
@@ -171,7 +171,7 @@
             return '#' + retval;
 
         }
-        function Color_hex2rgb(value) {
+        function hex2rgb(value) {
             var i=0, retval = {};
             for (;i<3;i++) {
                 retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
@@ -182,9 +182,9 @@
                 b: retval[2]
             };
         }
-        function Color_hsl2rgb(value) {
+        function hsl2rgb(value) {
             var r, g, b;
-            if (value.s == 0) {
+            if (value.s === 0) {
                 r = g = b = value.l; // achromatic
             } else {
                 var hue2rgb = function (p, q, t) {
@@ -222,9 +222,9 @@
                 b: b
             };
         }
-        function Color_rgb2cmyk(value) {
+        function rgb2cmyk(value) {
             // achromatic
-            if (value.r == value.g && value.g == value.b) {
+            if (value.r === value.g && value.g === value.b) {
                 return {
                     c:0,
                     m:0,
@@ -244,7 +244,7 @@
                 k:k
             };
         }
-        function Color_cmyk2rgb(value) {
+        function cmyk2rgb(value) {
             return {
                 r: 1 - Math.min(1, value.c * ( 1 - value.k ) + value.k),
                 g: 1 - Math.min(1, value.m * ( 1 - value.k ) + value.k),
@@ -263,12 +263,12 @@
             offset + (radius * Math.sin(degrees))
         ];
     }
-    function getMidpoint(p1, p2) {
+    /*function getMidpoint(p1, p2) {
         return [
             (p1[0] + p2[0]) / 2,
             (p1[1] + p2[1]) / 2
         ];
-    }
+    }*/
     function pointInCircle(point, origin, radius) {
         return getDistance(point, [origin, origin]) <= radius;
     }
@@ -364,7 +364,7 @@
     var Cache = {
         ColorWheelBg: 0
     };
-    function ColorPicker_drawColorWheelBg(canvas, diameter) {
+    function colorPicker_drawColorWheelBg(canvas, diameter) {
         var ctx = canvas.getContext("2d");
         var temp = $("<canvas>")
             .attr("width", diameter)
@@ -405,10 +405,10 @@
     /**
      * Draws the rainbow wheel
      */
-    function ColorPicker_drawHueSelector(self) {
+    function colorPicker_drawHueSelector(self) {
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
-        ColorPicker_drawColorWheelBg(self.canvases[0], diameter);
+        colorPicker_drawColorWheelBg(self.canvases[0], diameter);
         var lineWidth = self.widthRatio * diameter;
         var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
         var origin = [diameter / 2, diameter / 2];
@@ -441,13 +441,13 @@
     /**
      * Draws the triangular selector
      */
-    function ColorPicker_drawSaturationLimunositySelector(self) {
+    function colorPicker_drawSaturationLimunositySelector(self) {
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.diameter, self.diameter);
         var degrees = -Math.PI / 2;
-        var points = ColorPicker_getPoints(self, degrees);
+        var points = colorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
             var maskImageData = ctx.createImageData(self.diameter, self.diameter);
@@ -496,7 +496,7 @@
         }
 
         degrees = (1 - hue) * Math.PI * 2;
-        points = ColorPicker_getPoints(self, degrees);
+        points = colorPicker_getPoints(self, degrees);
         // Fill background
         ctx.fillStyle = new Color({
             h:hue, s:1, l:0.5
@@ -554,12 +554,12 @@
         ctx.globalCompositeOperation = "source-over";
     }
 
-    function ColorPicker_drawIndicators(self) {
+    function colorPicker_drawIndicators(self) {
         var canvas = self.canvases[2];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.diameter, self.diameter);
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
-        var points = ColorPicker_getPoints(self, degrees);
+        var points = colorPicker_getPoints(self, degrees);
         /** get hue indicator position */
         var circleRadius = (self.diameter / 2) - 5 - (self.widthRatio * self.diameter * 2 / 3);
         var indicator = getPointOnCircle(circleRadius, degrees, self.diameter / 2);
@@ -639,7 +639,7 @@
     }
 
     /** The color picker functions */
-    function ColorPicker_getPoints(self, hue) {
+    function colorPicker_getPoints(self, hue) {
         var i, points = [];
         for (i = 0; i < 3; i++) {
             points[i] = getPointOnCircle(
@@ -651,8 +651,7 @@
         }
         return points;
     }
-    function ColorPicker_reDrawHue(self, e) {
-        var offset = self._picker.offset();
+    function colorPicker_reDrawHue(self, e) {
         var coords = getEventPosition(self, e, self._picker);
         var angle = Math.atan2(
             coords[0] - self.diameter / 2,
@@ -663,28 +662,28 @@
             s: self.color.hsl.s,
             l: self.color.hsl.l
         });
-        ColorPicker_drawSaturationLimunositySelector(
+        colorPicker_drawSaturationLimunositySelector(
             self
         );
-        ColorPicker_drawIndicators(
+        colorPicker_drawIndicators(
             self
         );
         self.drawing = 1;
-        ColorPicker_setValue(self);
+        colorPicker_setValue(self);
     }
-    function ColorPicker_reDrawSatLum(self, s, l) {
+    function colorPicker_reDrawSatLum(self, s, l) {
         self.color.setColor({
             h: self.color.hsl.h,
             s: s,
             l: l
         });
-        ColorPicker_drawIndicators(
+        colorPicker_drawIndicators(
             self
         );
         self.drawing = 1;
-        ColorPicker_setValue(self);
+        colorPicker_setValue(self);
     }
-    function ColorPicker_setValue(self) {
+    function colorPicker_setValue(self) {
         if (! self.timeout) {
             self._source.trigger('update');
             var f = function () {
@@ -693,7 +692,7 @@
             if (self.settings.autosave) {
                 f = function () {
                     self.timeout = 0;
-                    ColorPicker_save(self);
+                    colorPicker_save(self);
                 };
             }
             self.timeout = setTimeout(f, 100);
@@ -702,7 +701,7 @@
             }
         }
     }
-    function ColorPicker_save(self) {
+    function colorPicker_save(self) {
         var str = "";
         if (typeof self.settings.color2str == 'function') {
             str = self.settings.color2str.apply(null, [self.color]);
@@ -719,7 +718,7 @@
             );
         }
     }
-    function ColorPicker_load(self) {
+    function colorPicker_load(self) {
         var str;
         if (typeof self.settings.load == 'function') {
             str = self.settings.load.call(self._source);
@@ -735,53 +734,52 @@
             self.$preview.find('p').css('background', self.color.hex);
         }
     }
-    function ColorPicker_show(self, speed) {
+    function colorPicker_show(self, speed) {
         if (! self.ready) {
-            ColorPicker_drawAll(self);
+            colorPicker_drawAll(self);
         } else {
-            ColorPicker_load(self);
-            ColorPicker_drawSaturationLimunositySelector(self);
-            ColorPicker_drawIndicators(self);
+            colorPicker_load(self);
+            colorPicker_drawSaturationLimunositySelector(self);
+            colorPicker_drawIndicators(self);
         }
         if (! speed) {
             speed = self.settings.speed;
         }
-        ColorPicker_fixPosition(self);
-        var effect = self.effect == 'fade' ? 'fadeIn' : 'slideDown';
+        colorPicker_fixPosition(self);
+        var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
         self._container[effect].apply(
             self._container,
             [
                 speed,
                 function () {
-                    ColorPicker_fixPosition(self);
+                    colorPicker_fixPosition(self);
                     self._source.trigger('show');
                 }
             ]
         );
     }
-    function ColorPicker_hide(self, speed) {
+    function colorPicker_hide(self, speed) {
         if (! speed) {
             speed = self.settings.speed;
         }
         var retval = self._source.triggerHandler('beforeHide');
         if (typeof retval == 'undefined' || retval) {
-            var effect = self.effect == 'fade' ? 'fadeOut' : 'slideUp';
+            var effect = self.effect === 'fade' ? 'fadeOut' : 'slideUp';
             self._container[effect].apply(
                 self._container,
                 [
                     speed,
                     function () {
-                        ColorPicker_fixPosition(self);
+                        colorPicker_fixPosition(self);
                         self._source.trigger('hide');
                     }
                 ]
             );
         }
     }
-    function ColorPicker_handleSatLumDrag(self, e) {
-        var offset = self._picker.offset();
+    function colorPicker_handleSatLumDrag(self, e) {
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
-        var points = ColorPicker_getPoints(self, degrees);
+        var points = colorPicker_getPoints(self, degrees);
         var inputPoint = getEventPosition(self, e, self._picker);
         var sanitisedInputPoint = inputPoint;
         if (! pointInTriangle(inputPoint, points[0], points[1], points[2])) {
@@ -795,19 +793,19 @@
             var maxDistance = Math.max.apply(null, distances);
             for (i=0; i<3; i++) {
                 if (distances[i] === maxDistance) {
-                    sanitisedInputPoint = ColorPicker_sanitiseDragInput(inputPoint, points, distances, i);
+                    sanitisedInputPoint = colorPicker_sanitiseDragInput(inputPoint, points, distances, i);
                     break;
                 }
             }
         }
-        var color = ColorPicker_getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
-        ColorPicker_reDrawSatLum(
+        var color = colorPicker_getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.hsl.h);
+        colorPicker_reDrawSatLum(
             self,
             color.s,
             color.l
         );
     }
-    function ColorPicker_sanitiseDragInput(inputPoint, points, distances, index) {
+    function colorPicker_sanitiseDragInput(inputPoint, points, distances, index) {
         var vertices1 = [0,1,2];
         var vertices2 = [1,0,1];
         var vertices3 = [2,2,0];
@@ -828,7 +826,7 @@
         }
         return intersect;
     }
-    function ColorPicker_getSatLumColor(point1, point2, point3, inputPoint, hue) {
+    function colorPicker_getSatLumColor(point1, point2, point3, inputPoint, hue) {
         var m = getPerpedicularSlope(point2, point3);
         var inputPoint2 = pointOnLine(inputPoint, m);
         var thePoint1 = intersectLineLine(
@@ -863,10 +861,10 @@
             l: width/maxWidth
         };
     }
-    function ColorPicker_drawAll(self) {
-        ColorPicker_drawHueSelector(self);
-        ColorPicker_drawSaturationLimunositySelector(self);
-        ColorPicker_drawIndicators(self);
+    function colorPicker_drawAll(self) {
+        colorPicker_drawHueSelector(self);
+        colorPicker_drawSaturationLimunositySelector(self);
+        colorPicker_drawIndicators(self);
         self.ready = 1;
         self._source.trigger('ready');
     }
@@ -887,8 +885,8 @@
 
         self.drawing = 0;
         self._source = $this;
-        ColorPicker_load(self); // sets self.color
-        self.diameter = ColorPicker_fixDiameter(self.settings.diameter);
+        colorPicker_load(self); // sets self.color
+        self.diameter = colorPicker_fixDiameter(self.settings.diameter);
         self.widthRatio = self.settings.width / 3;
         self.shadowRatio = self.settings.shadow / self.diameter;
         self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
@@ -974,7 +972,7 @@
         }
 
         if (self.settings.class) {
-            self._container.attr('class',self.settings.class)
+            self._container.attr('class', self.settings.class);
         } else {
             var borderRadius = '0px 0px 0px ' + self.diameter/2 + 'px';
             if (! self.settings.resizable) {
@@ -999,7 +997,7 @@
         self._picker
             .height(self.diameter)
             .add(self._container)
-            .width(self.diameter)
+            .width(self.diameter);
 
         self._target.append(
             self._container
@@ -1014,20 +1012,20 @@
         self.tempCanvas = $(canvasString)[0];
 
         self.effect = 'fade';
-        if (self.settings.effect == 'slide') {
+        if (self.settings.effect === 'slide') {
             self.effect = 'slide';
         }
 
         if (! self.settings.autoshow) {
-            ColorPicker_drawAll(self);
+            colorPicker_drawAll(self);
         } else {
             if (self.settings.lazy) {
                 self._source.mouseover(function () {
-                    ColorPicker_drawAll(self);
+                    colorPicker_drawAll(self);
                     self._source.unbind('mouseover');
                 });
             } else {
-                ColorPicker_drawAll(self);
+                colorPicker_drawAll(self);
             }
             var $initElement = self._source;
             if (self._icon.length) {
@@ -1036,11 +1034,11 @@
             $initElement.bind('focus click', function (e) {
                 preventDefault(e);
                 if (! self.ready) {
-                    ColorPicker_drawAll(self);
+                    colorPicker_drawAll(self);
                 }
-                ColorPicker_show(self);
+                colorPicker_show(self);
             }).blur(function () {
-                ColorPicker_hide(self);
+                colorPicker_hide(self);
             });
         }
         /**
@@ -1048,19 +1046,18 @@
         */
         self._source.keyup(function () {
             self._source.trigger('update');
-            ColorPicker_load(self);
-            ColorPicker_drawSaturationLimunositySelector(self);
-            ColorPicker_drawIndicators(self);
+            colorPicker_load(self);
+            colorPicker_drawSaturationLimunositySelector(self);
+            colorPicker_drawIndicators(self);
         }).keydown(function (e) {
-            if (e.keyCode == 27) {
-                ColorPicker_hide(self);
+            if (e.keyCode === 27) {
+                colorPicker_hide(self);
             }
         });
         self._container.bind('mousedown touchstart', function (e) {
-            preventDefault(e)
+            preventDefault(e);
             var lineWidth = self.widthRatio * self.diameter / 2;
             var circleRadius = (self.diameter / 2) - (lineWidth/2) - lineWidth;
-            var offset = self._picker.offset();
             var inputPoint = getEventPosition(self, e, self._picker);
             if (self.settings.resizable
                 && inputPoint[0] > self.diameter-20
@@ -1080,65 +1077,65 @@
                     ! pointInCircle(inputPoint, self.diameter/2, circleRadius-lineWidth)
                 ) {
                     self.draggingHue = 1;
-                    ColorPicker_reDrawHue(self, e);
+                    colorPicker_reDrawHue(self, e);
                 } else {
                     var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
-                    var points = ColorPicker_getPoints(self, degrees);
+                    var points = colorPicker_getPoints(self, degrees);
                     if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
                         self.draggingSatLum = 1;
-                        ColorPicker_handleSatLumDrag(self, e);
+                        colorPicker_handleSatLumDrag(self, e);
                     }
                 }
             }
         });
         $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
-                preventDefault(e)
-                ColorPicker_reDrawHue(self, e);
+                preventDefault(e);
+                colorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
-                preventDefault(e)
-                ColorPicker_handleSatLumDrag(self, e);
+                preventDefault(e);
+                colorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
-                preventDefault(e)
+                preventDefault(e);
                 if (self.resizingBusy) {
                     self.resizingSaved = e;
                 } else {
                     self.resizingBusy = true;
-                    ColorPicker_handleResizeDrag(self, e);
+                    colorPicker_handleResizeDrag(self, e);
                 }
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
-                preventDefault(e)
+                preventDefault(e);
                 self.draggingHue = 0;
-                ColorPicker_reDrawHue(self, e);
+                colorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
-                preventDefault(e)
+                preventDefault(e);
                 self.draggingSatLum = 0;
-                ColorPicker_handleSatLumDrag(self, e);
+                colorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
                 $('body').css('cursor','');
-                preventDefault(e)
+                preventDefault(e);
                 self.resizing = 0;
-                ColorPicker_resize(self, self._picker.width());
+                colorPicker_resize(self, self._picker.width());
                 self._source.trigger('resizeStop');
             }
         }).bind('resize', function () {
-            ColorPicker_fixPosition(self);
+            colorPicker_fixPosition(self);
         });
 
         setTimeout(function () {
-            ColorPicker_fixPosition(self);
+            colorPicker_fixPosition(self);
         }, 4);
     };
 
-    function ColorPicker_handleResizeDrag(self, e) {
+    function colorPicker_handleResizeDrag(self, e) {
         var inputPoint = getEventPosition(self, e, self._picker);
-        var newDiameter = ColorPicker_fixDiameter(
+        var newDiameter = colorPicker_fixDiameter(
             Math.max(inputPoint[0], inputPoint[1])
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
-        ColorPicker_resizeContainer(self, newDiameter);
+        colorPicker_resizeContainer(self, newDiameter);
         // Remove busy flag asynchronously, this way the event queue
         // can clear up meanwhile. This speeds up rendering
         setTimeout(function () {
@@ -1148,12 +1145,12 @@
             } else {
                 var target = self.resizingSaved;
                 self.resizingSaved = undefined;
-                ColorPicker_handleResizeDrag(self, target)
+                colorPicker_handleResizeDrag(self, target);
             }
         }, 8);
     }
 
-    function ColorPicker_resizeContainer(self, diameter) {
+    function colorPicker_resizeContainer(self, diameter) {
         self._container.width(diameter).height(
             diameter + self.$preview.outerHeight()
         );
@@ -1168,8 +1165,8 @@
         });
     }
 
-    function ColorPicker_resize(self, diameter) {
-        if (diameter != self.diameter) {
+    function colorPicker_resize(self, diameter) {
+        if (diameter !== self.diameter) {
             self.ready = 0;
             self.diameter = diameter;
             self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
@@ -1181,8 +1178,8 @@
                 .add(self._container);
             self.tempCanvas.width = diameter;
             self.tempCanvas.height = diameter;
-            ColorPicker_resizeContainer(self, diameter);
-            ColorPicker_drawAll(self);
+            colorPicker_resizeContainer(self, diameter);
+            colorPicker_drawAll(self);
         }
     }
 
@@ -1190,7 +1187,7 @@
         e.preventDefault();
     }
 
-    function ColorPicker_fixDiameter(diameter) {
+    function colorPicker_fixDiameter(diameter) {
         diameter = diameter | 0;
         diameter = diameter + diameter % 2;
         if (diameter > 400) {
@@ -1200,7 +1197,7 @@
         }
         return diameter;
     }
-    function ColorPicker_fixPosition(self) {
+    function colorPicker_fixPosition(self) {
         var offset = self._source.offset();
         if (! self.settings.target) {
             self._target.css({
@@ -1214,7 +1211,7 @@
         }
         if (self._source.is(':visible')) {
             self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
-            if (self.settings.iconPos == 'left') {
+            if (self.settings.iconPos === 'left') {
                 self._icon.css('left', offset.left - self._icon.height());
             } else {
                 self._icon.css('left', offset.left + self._source.outerWidth() + 2);
@@ -1237,11 +1234,11 @@
             // mouse
             x = e.pageX - offset.left;
             y = e.pageY - offset.top - self.$preview.outerHeight();
-        } else {
+        }/* else {
             // a mouse event being fired during a touch swipe
             // This seems to be an Android bug
             // FIXME: need to handle this error :(
-        }
+        }*/
         return [x, y];
     }
 
@@ -1276,26 +1273,26 @@
         },
         show: function (speed) {
             return this.each(function () {
-                ColorPicker_show($(this).data(NAMESPACE), speed);
+                colorPicker_show($(this).data(NAMESPACE), speed);
             });
         },
         hide: function (speed) {
             return this.each(function () {
-                ColorPicker_hide($(this).data(NAMESPACE), speed);
+                colorPicker_hide($(this).data(NAMESPACE), speed);
             });
         },
         save: function() {
             return this.each(function () {
-                ColorPicker_save($(this).data(NAMESPACE));
+                colorPicker_save($(this).data(NAMESPACE));
             });
         },
         setColor: function (value) {
             return this.each(function () {
                 var self = $(this).data(NAMESPACE);
                 self.color.setColor(value);
-                ColorPicker_drawSaturationLimunositySelector(self);
-                ColorPicker_drawIndicators(self);
-                ColorPicker_setValue(self);
+                colorPicker_drawSaturationLimunositySelector(self);
+                colorPicker_drawIndicators(self);
+                colorPicker_setValue(self);
             });
         },
         getColor: function () {
@@ -1305,14 +1302,14 @@
             return this.each(function () {
                 var self = $(this).data(NAMESPACE);
                 self._source.trigger('resizeStart');
-                ColorPicker_resize(self, diameter);
+                colorPicker_resize(self, diameter);
                 self._source.trigger('resize');
                 self._source.trigger('resizeStop');
             });
         },
         reflow: function () {
             return this.each(function () {
-                ColorPicker_fixPosition($(this).data(NAMESPACE))
+                colorPicker_fixPosition($(this).data(NAMESPACE));
             });
         },
         api: function () {
@@ -1329,7 +1326,7 @@
         },
         destroy: function () {
             return this.each(function () {
-                var self = $(this).data(NAMESPACE)
+                var self = $(this).data(NAMESPACE);
                 if ($(self.settings.target).length){
                     if (self._container.siblings().length) {
                         self._container.remove();
