@@ -1333,6 +1333,7 @@
             retval.setColor = function (color) { methods.setColor.apply(that, [color]); return this; };
             retval.destroy  = function ()      { methods.destroy.call(that); };
             retval.resize   = function (size)  { methods.resize.apply(that, [size]); return this; };
+            retval.reflow   = function ()      { methods.reflow.call(that); return this; };
             return retval;
         },
         destroy: function () {
