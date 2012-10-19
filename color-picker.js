@@ -1259,18 +1259,8 @@
                     // Instantiate new ColorPicker
                     $this.data(NAMESPACE, new ColorPicker($this, settings));
                     // Register callbacks for all events
-                    var i, events = [
-                        'create',
-                        'ready',
-                        'update',
-                        'destroy',
-                        'show',
-                        'hide',
-                        'beforeHide',
-                        'resize',
-                        'resizeStart',
-                        'resizeStop'
-                    ];
+                    var i;
+                    var events = 'create|ready|update|destroy|show|hide|beforeHide|resize|resizeStart|resizeStop'.split('|');
                     for (i in events) {
                         var name = events[i];
                         var data = settings[name];
