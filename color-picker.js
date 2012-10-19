@@ -883,7 +883,11 @@
         self.settings = settings;
         self.draggingHue = 0;
         self.draggingSatLum = 0;
+
         self.resizing = 0;
+        self.resizingBusy = false;
+        self.resizingSaved = undefined;
+
         self.drawing = 0;
         self.$source = $this;
         ColorPicker_load(self); // sets self.color
@@ -1099,25 +1103,12 @@
                 ColorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
                 preventDefault(e)
-                var inputPoint = getEventPosition(self, e, self.$picker);
-                var newDiameter = ColorPicker_fixDiameter(
-                    Math.max(inputPoint[0], inputPoint[1])
-                    + Math.max(self.resizeOffset[0], self.resizeOffset[1])
-                );
-                self.$container.width(newDiameter).height(
-                    newDiameter + self.$preview.outerHeight()
-                );
-                self.$picker.width(newDiameter).height(newDiameter);
-
-                var borderRadius = '0px 0px 0px ' + newDiameter/2 + 'px';
-                if (! self.settings.resizable) {
-                    borderRadius = '0px 0px ' + newDiameter/2 + 'px ' + newDiameter/2 + 'px';
+                if (self.resizingBusy) {
+                    self.resizingSaved = e;
+                } else {
+                    self.resizingBusy = true;
+                    ColorPicker_handleresize(self, e);
                 }
-                self.$container.css({
-                    '-webkit-border-radius': borderRadius,
-                    'border-radius': borderRadius
-                });
-                self.$source.trigger('resize');
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
@@ -1143,6 +1134,40 @@
             ColorPicker_fixPosition(self);
         }, 4);
     };
+
+    function ColorPicker_handleresize(self, e) {
+        var inputPoint = getEventPosition(self, e, self.$picker);
+        var newDiameter = ColorPicker_fixDiameter(
+            Math.max(inputPoint[0], inputPoint[1])
+            + Math.max(self.resizeOffset[0], self.resizeOffset[1])
+        );
+        self.$container.width(newDiameter).height(
+            newDiameter + self.$preview.outerHeight()
+        );
+        self.$picker.width(newDiameter).height(newDiameter);
+
+        var borderRadius = '0px 0px 0px ' + newDiameter/2 + 'px';
+        if (! self.settings.resizable) {
+            borderRadius = '0px 0px ' + newDiameter/2 + 'px ' + newDiameter/2 + 'px';
+        }
+        self.$container.css({
+            '-webkit-border-radius': borderRadius,
+            'border-radius': borderRadius
+        });
+        self.$source.trigger('resize');
+
+        // Remove busy flag asynchronously, this way the event queue
+        // can clear up meanwhile. This speeds up rendering
+        setTimeout(function () {
+            if (typeof self.resizingSaved == 'undefined') {
+                self.resizingBusy = false;
+            } else {
+                var target = self.resizingSaved;
+                self.resizingSaved = undefined;
+                ColorPicker_handleresize(self, target)
+            }
+        }, 8);
+    }
 
     function preventDefault(e) {
         e.preventDefault();
