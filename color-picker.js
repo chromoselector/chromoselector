@@ -67,7 +67,7 @@
         var self = this;
         if (typeof value == 'string') {
             Color_setHex(self, value);
-        } else if (typeof value == 'object') {
+        } else if (typeof value == 'object' && value) {
             var haveFields = function (value, fields) {
                 for (var i in fields.split('')) {
                     if (typeof value[fields[i]] != 'number'
