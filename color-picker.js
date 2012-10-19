@@ -472,7 +472,7 @@
 
             var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
             lingrad.addColorStop(1, 'rgba(0,0,0,0)');
-            lingrad.addColorStop(0, 'rgba(0,0,0,255)');
+            lingrad.addColorStop(0, 'rgba(0,0,0,1)');
             tempCtx.fillStyle = lingrad;
             tempCtx.globalCompositeOperation = "destination-out";
             tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
