@@ -5,11 +5,12 @@
  * TODO:
  *
  * v 1.0.0:
+ *   Dialog mode
+ *   CSS styling
+ *
  *   Documentation
  *   refactor hue2rgb
  *   converters code
- *   Dialog mode
- *   CSS styling
  *
  * v 1.1.0:
  *   HSV support
@@ -1107,7 +1108,7 @@
                     self.resizingSaved = e;
                 } else {
                     self.resizingBusy = true;
-                    ColorPicker_handleresize(self, e);
+                    ColorPicker_handleResizeDrag(self, e);
                 }
             }
         }).bind('mouseup touchend', function (e) {
@@ -1135,25 +1136,13 @@
         }, 4);
     };
 
-    function ColorPicker_handleresize(self, e) {
+    function ColorPicker_handleResizeDrag(self, e) {
         var inputPoint = getEventPosition(self, e, self._picker);
         var newDiameter = ColorPicker_fixDiameter(
             Math.max(inputPoint[0], inputPoint[1])
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
-        self._container.width(newDiameter).height(
-            newDiameter + self.$preview.outerHeight()
-        );
-        self._picker.width(newDiameter).height(newDiameter);
-
-        var borderRadius = '0px 0px 0px ' + newDiameter/2 + 'px';
-        if (! self.settings.resizable) {
-            borderRadius = '0px 0px ' + newDiameter/2 + 'px ' + newDiameter/2 + 'px';
-        }
-        self._container.css({
-            '-webkit-border-radius': borderRadius,
-            'border-radius': borderRadius
-        });
+        ColorPicker_resizeContainer(self, newDiameter);
         // Remove busy flag asynchronously, this way the event queue
         // can clear up meanwhile. This speeds up rendering
         setTimeout(function () {
@@ -1163,9 +1152,42 @@
             } else {
                 var target = self.resizingSaved;
                 self.resizingSaved = undefined;
-                ColorPicker_handleresize(self, target)
+                ColorPicker_handleResizeDrag(self, target)
             }
         }, 8);
+    }
+
+    function ColorPicker_resizeContainer(self, diameter) {
+        self._container.width(diameter).height(
+            diameter + self.$preview.outerHeight()
+        );
+        self._picker.width(diameter).height(diameter);
+        var borderRadius = '0px 0px 0px ' + diameter/2 + 'px';
+        if (! self.settings.resizable) {
+            borderRadius = '0px 0px ' + diameter/2 + 'px ' + diameter/2 + 'px';
+        }
+        self._container.css({
+            '-webkit-border-radius': borderRadius,
+            'border-radius': borderRadius
+        });
+    }
+
+    function ColorPicker_resize(self, diameter) {
+        if (diameter != self.diameter) {
+            self.ready = 0;
+            self.diameter = diameter;
+            self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
+            self.canvases
+                .each(function () {
+                    this.width = diameter;
+                    this.height = diameter;
+                })
+                .add(self._container);
+            self.tempCanvas.width = diameter;
+            self.tempCanvas.height = diameter;
+            ColorPicker_resizeContainer(self, diameter);
+            ColorPicker_drawAll(self);
+        }
     }
 
     function preventDefault(e) {
@@ -1225,23 +1247,6 @@
             // FIXME: need to handle this error :(
         }
         return [x, y];
-    }
-
-    function ColorPicker_resize(self, diameter) {
-        if (diameter != self.diameter) {
-            self.ready = 0;
-            self.diameter = diameter;
-            self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
-            self.canvases
-                .each(function () {
-                    this.width = diameter;
-                    this.height = diameter;
-                })
-                .add(self._container);
-            self.tempCanvas.width = diameter;
-            self.tempCanvas.height = diameter;
-            ColorPicker_drawAll(self);
-        }
     }
 
     var methods = {
@@ -1384,7 +1389,7 @@
     lazy:          true     // bool
     /*
     ,
-    target:     null, // 'auto', 'inline', 'dialog', '', selector, jQuery object
+    target:     null, // 'auto', 'inline', 'dialog', 'promptDialog', selector, jQuery object
 
     // events registered with bind() will not be unbound on destroy API call
     create:      undefined,
