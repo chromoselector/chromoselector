@@ -912,6 +912,7 @@
             self.$icon = $('<a />')
             .attr('href', '#')
             .css('position','absolute')
+            .css('z-index', self.settings.zIndex)
             .append(
                 $('<img/>')
                 .attr('src', self.settings.icon)
@@ -929,7 +930,8 @@
                     position: 'absolute',
                     cursor: 'se-resize',
                     bottom: '0px',
-                    right: '0px'
+                    right: '0px',
+                    'z-index': self.settings.zIndex
                 })
                 .appendTo(self.$container);
         }
