@@ -633,9 +633,6 @@
             ctx.closePath();
             ctx.stroke();
         }
-        setTimeout(function () {
-            self.drawing = 0;
-        }, 8);
     }
 
     /** The color picker functions */
@@ -668,7 +665,6 @@
         colorPicker_drawIndicators(
             self
         );
-        self.drawing = 1;
         colorPicker_setValue(self);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
@@ -680,7 +676,6 @@
         colorPicker_drawIndicators(
             self
         );
-        self.drawing = 1;
         colorPicker_setValue(self);
     }
     function colorPicker_setValue(self) {
@@ -883,7 +878,6 @@
         self.resizingBusy = 0;
         self.resizingSaved = undefined;
 
-        self.drawing = 0;
         self._source = $this;
         colorPicker_load(self); // sets self.color
         self.diameter = colorPicker_fixDiameter(self.settings.diameter);
