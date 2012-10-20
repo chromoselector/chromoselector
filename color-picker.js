@@ -6,7 +6,6 @@
  *
  * v 1.0.0:
  *   Dialog mode
- *   CSS styling
  *
  *   Documentation
  *   refactor hue2rgb
@@ -18,6 +17,7 @@
  *   Fix crooked colorwheel in webkit
  *   Alpha selection
  *   Side panel
+ *   Better slide animation
  *
  * Future:
  *   IE 6+ support
@@ -359,7 +359,7 @@
     }
 
     /**
-     * Draws the colorsheel background
+     * Draws the colorwheel background
      */
     var Cache = {
         ColorWheelBg: 0
@@ -905,6 +905,7 @@
                 });
         }
         self._picker = $('<div/>')
+            .addClass('ccp-widget')
             .css({
                 position:'relative'
             })
@@ -917,16 +918,13 @@
         self._container = $('<div/>')
             .append(self._picker)
             .width(self.diameter)
-            .css({
-                position:'absolute',
-                'z-index':self.settings.zIndex
-            });
+            .addClass('ccp-container')
+            .css('position','absolute');
 
         if (self.settings.icon) {
-            self._icon = $('<a />')
-            .attr('href', '#')
+            self._icon = $('<a />', {href: '#'})
+            .addClass('ccp-icon')
             .css('position','absolute')
-            .css('z-index', self.settings.zIndex)
             .append(
                 $('<img/>')
                 .attr('src', self.settings.icon)
@@ -938,31 +936,23 @@
 
         if (self.settings.resizable) {
             $('<span />')
+                .addClass('ccp-resizer')
                 .width(20)
                 .height(20)
                 .css({
                     position: 'absolute',
-                    cursor: 'se-resize',
                     bottom: '0px',
-                    right: '0px',
-                    'z-index': self.settings.zIndex
+                    right: '0px'
                 })
                 .appendTo(self._container);
         }
 
         self.$preview = $('<p />')
-            .css({
-                margin: 0,
-                padding: '10px 10px 0 10px'
-            })
+            .addClass('ccp-preview-container')
             .append(
                 $('<p />')
-                    .css({
-                        margin:0,
-                        height: self.settings.previewHeight + 'px',
-                        width: '100%',
-                        background: self.color.hex
-                    })
+                .addClass('ccp-preview-widget')
+                .css('background', self.color.hex)
             );
 
         if (self.settings.preview) {
@@ -971,29 +961,15 @@
             );
         }
 
-        if (self.settings.class) {
-            self._container.attr('class', self.settings.class);
-        } else {
-            var borderRadius = '0px 0px 0px ' + self.diameter/2 + 'px';
-            if (! self.settings.resizable) {
-                borderRadius = '0px 0px ' + self.diameter/2 + 'px ' + self.diameter/2 + 'px';
-            }
-            var borderColor = '1px solid rgba(82,37,18,0.5)';
-            self._container.css({
-                background:'rgba(228,204,193,0.8)',
-                'border-bottom':borderColor,
-                'border-left':borderColor,
-                'border-right':borderColor,
-                '-webkit-border-radius': borderRadius,
-                'border-radius': borderRadius
-            });
+        var borderRadius = '0px 0px 0px ' + self.diameter/2 + 'px';
+        if (! self.settings.resizable) {
+            borderRadius = '0px 0px ' + self.diameter/2 + 'px ' + self.diameter/2 + 'px';
         }
-        // adjust diamtere to account for borders
-        self.diameter -= parseInt(
-            parseInt(self._container.css('border-left-width'), 10)
-            + parseInt(self._container.css('border-right-width'), 10),
-            10
-        ) || 0;
+        self._container.css({
+            '-webkit-border-radius': borderRadius,
+            'border-radius': borderRadius
+        });
+
         self._picker
             .height(self.diameter)
             .add(self._container)
@@ -1069,7 +1045,6 @@
                     self.diameter - inputPoint[0],
                     self.diameter - inputPoint[1]
                 ];
-                $('body').css('cursor','se-resize');
             } else {
                 if (
                     pointInCircle(inputPoint, self.diameter/2, circleRadius+lineWidth)
@@ -1114,7 +1089,6 @@
                 self.draggingSatLum = 0;
                 colorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
-                $('body').css('cursor','');
                 preventDefault(e);
                 self.resizing = 0;
                 colorPicker_resize(self, self._picker.width());
@@ -1361,12 +1335,9 @@
     diameter:      180,     // pos int
     width:         0.35,    // float
     resizable:     true,    // bool
-    class:         null,    // string
     shadow:        0,       // float
     preview:       true,    // bool
-    previewHeight: 25,      // pos int
     effect:        'fade',  // 'fade' | 'slide'
-    zIndex:        4000,    // int
     icon:          null,    // string
     iconPos:      'right',  // string 'left' | 'right'
     lazy:          true     // bool

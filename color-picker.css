@@ -1,0 +1,24 @@
+.ccp-container {
+    z-index: 4000;
+    background: #e4ccc1;
+    background: rgba(228, 204, 193, 0.8);
+    border: 1px solid #521;
+    border-color: rgba(82, 37, 18, 0.5);
+}
+.ccp-container .ccp-preview-container {
+    margin: 0;
+    padding: 10px 10px 0;
+}
+.ccp-container .ccp-preview-widget {
+    margin: 0;
+    height: 25px;
+    width: 100%;
+}
+.ccp-container .ccp-widget {
+}
+.ccp-container .ccp-resizer {
+    cursor: se-resize;
+}
+.ccp-icon {
+    z-index: 4000;
+}
