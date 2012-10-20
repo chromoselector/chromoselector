@@ -885,6 +885,114 @@
         self.ready = 1;
         self._source.trigger('ready');
     }
+    function colorPicker_handleResizeDrag(self, e) {
+        var inputPoint = getEventPosition(self, e, self._picker);
+        var newDiameter = colorPicker_fixDiameter(
+            Math.max(inputPoint[0], inputPoint[1])
+            + Math.max(self.resizeOffset[0], self.resizeOffset[1])
+        );
+        colorPicker_resizeContainer(self, newDiameter);
+        // Remove busy flag asynchronously, this way the event queue
+        // can clear up meanwhile. This speeds up rendering
+        setTimeout(function () {
+            self._source.trigger('resize');
+            if (typeof self.resizingSaved == 'undefined') {
+                self.resizingBusy = 0;
+            } else {
+                var target = self.resizingSaved;
+                self.resizingSaved = undefined;
+                colorPicker_handleResizeDrag(self, target);
+            }
+        }, 8);
+    }
+    function colorPicker_resizeContainer(self, diameter) {
+        self._container.width(diameter).height(
+            diameter + self.$preview.outerHeight()
+        );
+        self._picker.width(diameter).height(diameter);
+        var borderRadius = '0px 0px 0px ' + diameter/2 + 'px';
+        if (! self.settings.resizable) {
+            borderRadius = '0px 0px ' + diameter/2 + 'px ' + diameter/2 + 'px';
+        }
+        self._container.css({
+            '-webkit-border-radius': borderRadius,
+            'border-radius': borderRadius
+        });
+    }
+    function colorPicker_resize(self, diameter) {
+        if (diameter !== self.diameter) {
+            self.ready = 0;
+            self.diameter = diameter;
+            self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
+            self.canvases
+                .each(function () {
+                    this.width = diameter;
+                    this.height = diameter;
+                })
+                .add(self._container);
+            self.tempCanvas.width = diameter;
+            self.tempCanvas.height = diameter;
+            colorPicker_resizeContainer(self, diameter);
+            colorPicker_drawAll(self);
+        }
+    }
+    function preventDefault(e) {
+        e.preventDefault();
+    }
+    function colorPicker_fixDiameter(diameter) {
+        diameter = diameter | 0;
+        diameter = diameter + diameter % 2;
+        if (diameter > 400) {
+            diameter = 400;
+        } else if (diameter < 100) {
+            diameter = 100;
+        }
+        return diameter;
+    }
+    function colorPicker_fixPosition(self) {
+        var offset = self._source.offset();
+        if (! self.settings.target) {
+            self._target.css({
+                top: 0,
+                left: 0
+            });
+            self._container.css({
+                top: offset.top + self._source.outerHeight(),
+                left: offset.left
+            });
+        }
+        if (self._source.is(':visible')) {
+            self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
+            if (self.settings.iconPos === 'left') {
+                self._icon.css('left', offset.left - self._icon.height());
+            } else {
+                self._icon.css('left', offset.left + self._source.outerWidth() + 2);
+            }
+        } else {
+            self._icon.hide();
+        }
+    }
+    function getEventPosition(self, e, $obj) {
+        var x = 0, y = 0;
+        var oe = e.originalEvent;
+        var touch = oe.touches || oe.changedTouches;
+        var offset = $obj.parent().offset();
+        if (touch) {
+            // touchscreen
+            x = touch[0].pageX - offset.left;
+            y = touch[0].pageY - offset.top - self.$preview.outerHeight();
+        } else if (e.pageX /*&& this.mouse*/) {
+            // mouse
+            x = e.pageX - offset.left;
+            y = e.pageY - offset.top - self.$preview.outerHeight();
+        }/* else {
+            // a mouse event being fired during a touch swipe
+            // This seems to be an Android bug
+            // FIXME: need to handle this error :(
+        }*/
+        return [x, y];
+    }
+
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
         var self = this;
@@ -1134,119 +1242,6 @@
             colorPicker_fixPosition(self);
         }, 4);
     };
-
-    function colorPicker_handleResizeDrag(self, e) {
-        var inputPoint = getEventPosition(self, e, self._picker);
-        var newDiameter = colorPicker_fixDiameter(
-            Math.max(inputPoint[0], inputPoint[1])
-            + Math.max(self.resizeOffset[0], self.resizeOffset[1])
-        );
-        colorPicker_resizeContainer(self, newDiameter);
-        // Remove busy flag asynchronously, this way the event queue
-        // can clear up meanwhile. This speeds up rendering
-        setTimeout(function () {
-            self._source.trigger('resize');
-            if (typeof self.resizingSaved == 'undefined') {
-                self.resizingBusy = 0;
-            } else {
-                var target = self.resizingSaved;
-                self.resizingSaved = undefined;
-                colorPicker_handleResizeDrag(self, target);
-            }
-        }, 8);
-    }
-
-    function colorPicker_resizeContainer(self, diameter) {
-        self._container.width(diameter).height(
-            diameter + self.$preview.outerHeight()
-        );
-        self._picker.width(diameter).height(diameter);
-        var borderRadius = '0px 0px 0px ' + diameter/2 + 'px';
-        if (! self.settings.resizable) {
-            borderRadius = '0px 0px ' + diameter/2 + 'px ' + diameter/2 + 'px';
-        }
-        self._container.css({
-            '-webkit-border-radius': borderRadius,
-            'border-radius': borderRadius
-        });
-    }
-
-    function colorPicker_resize(self, diameter) {
-        if (diameter !== self.diameter) {
-            self.ready = 0;
-            self.diameter = diameter;
-            self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
-            self.canvases
-                .each(function () {
-                    this.width = diameter;
-                    this.height = diameter;
-                })
-                .add(self._container);
-            self.tempCanvas.width = diameter;
-            self.tempCanvas.height = diameter;
-            colorPicker_resizeContainer(self, diameter);
-            colorPicker_drawAll(self);
-        }
-    }
-
-    function preventDefault(e) {
-        e.preventDefault();
-    }
-
-    function colorPicker_fixDiameter(diameter) {
-        diameter = diameter | 0;
-        diameter = diameter + diameter % 2;
-        if (diameter > 400) {
-            diameter = 400;
-        } else if (diameter < 100) {
-            diameter = 100;
-        }
-        return diameter;
-    }
-    function colorPicker_fixPosition(self) {
-        var offset = self._source.offset();
-        if (! self.settings.target) {
-            self._target.css({
-                top: 0,
-                left: 0
-            });
-            self._container.css({
-                top: offset.top + self._source.outerHeight(),
-                left: offset.left
-            });
-        }
-        if (self._source.is(':visible')) {
-            self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
-            if (self.settings.iconPos === 'left') {
-                self._icon.css('left', offset.left - self._icon.height());
-            } else {
-                self._icon.css('left', offset.left + self._source.outerWidth() + 2);
-            }
-        } else {
-            self._icon.hide();
-        }
-    }
-
-    function getEventPosition(self, e, $obj) {
-        var x = 0, y = 0;
-        var oe = e.originalEvent;
-        var touch = oe.touches || oe.changedTouches;
-        var offset = $obj.parent().offset();
-        if (touch) {
-            // touchscreen
-            x = touch[0].pageX - offset.left;
-            y = touch[0].pageY - offset.top - self.$preview.outerHeight();
-        } else if (e.pageX /*&& this.mouse*/) {
-            // mouse
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top - self.$preview.outerHeight();
-        }/* else {
-            // a mouse event being fired during a touch swipe
-            // This seems to be an Android bug
-            // FIXME: need to handle this error :(
-        }*/
-        return [x, y];
-    }
 
     var methods = {
         init: function(options) {
