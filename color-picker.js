@@ -880,7 +880,7 @@
         self.draggingSatLum = 0;
 
         self.resizing = 0;
-        self.resizingBusy = false;
+        self.resizingBusy = 0;
         self.resizingSaved = undefined;
 
         self.drawing = 0;
@@ -1075,7 +1075,7 @@
                 if (self.resizingBusy) {
                     self.resizingSaved = e;
                 } else {
-                    self.resizingBusy = true;
+                    self.resizingBusy = 1;
                     colorPicker_handleResizeDrag(self, e);
                 }
             }
@@ -1115,7 +1115,7 @@
         setTimeout(function () {
             self._source.trigger('resize');
             if (typeof self.resizingSaved == 'undefined') {
-                self.resizingBusy = false;
+                self.resizingBusy = 0;
             } else {
                 var target = self.resizingSaved;
                 self.resizingSaved = undefined;
@@ -1338,7 +1338,7 @@
     shadow:        0,       // float
     preview:       true,    // bool
     effect:        'fade',  // 'fade' | 'slide'
-    icon:          null,    // string
+   // icon:        undefined,    // string
     iconPos:      'right',  // string 'left' | 'right'
     lazy:          true     // bool
     /*
