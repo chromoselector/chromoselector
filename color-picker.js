@@ -666,6 +666,17 @@
             self
         );
         colorPicker_setValue(self);
+        // Remove busy flag asynchronously, this way the event queue
+        // can clear up meanwhile. This speeds up rendering
+        setTimeout(function () {
+            if (typeof self.draggingHueSaved == 'undefined') {
+                self.draggingHueBusy = 0;
+            } else {
+                var target = self.draggingHueSaved;
+                self.draggingHueSaved = undefined;
+                colorPicker_reDrawHue(self, target);
+            }
+        }, 8);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
         self.color.setColor({
@@ -871,12 +882,16 @@
         */
         self.ready = 0;
         self.settings = settings;
+
         self.draggingHue = 0;
+        self.draggingHueBusy = 0;
+        // self.draggingHueSaved = undefined;
+
         self.draggingSatLum = 0;
 
         self.resizing = 0;
         self.resizingBusy = 0;
-        self.resizingSaved = undefined;
+        // self.resizingSaved = undefined;
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
@@ -1060,7 +1075,12 @@
         $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
                 preventDefault(e);
-                colorPicker_reDrawHue(self, e);
+                if (self.draggingHueBusy) {
+                    self.draggingHueSaved = e;
+                } else {
+                    self.draggingHueBusy = 1;
+                    colorPicker_reDrawHue(self, e);
+                }
             } else if (self.draggingSatLum) {
                 preventDefault(e);
                 colorPicker_handleSatLumDrag(self, e);
