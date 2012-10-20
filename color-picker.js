@@ -810,6 +810,17 @@
             color.s,
             color.l
         );
+        // Remove busy flag asynchronously, this way the event queue
+        // can clear up meanwhile. This speeds up rendering
+        setTimeout(function () {
+            if (typeof self.draggingSatLumSaved == 'undefined') {
+                self.draggingSatLumBusy = 0;
+            } else {
+                var target = self.draggingSatLumSaved;
+                self.draggingSatLumSaved = undefined;
+                colorPicker_handleSatLumDrag(self, target);
+            }
+        }, 8);
     }
     function colorPicker_sanitiseDragInput(inputPoint, points, distances, index) {
         var vertices1 = [0,1,2];
@@ -888,6 +899,8 @@
         // self.draggingHueSaved = undefined;
 
         self.draggingSatLum = 0;
+        self.draggingSatLumBusy = 0;
+        // self.draggingSatLumSaved = undefined;
 
         self.resizing = 0;
         self.resizingBusy = 0;
@@ -1083,7 +1096,12 @@
                 }
             } else if (self.draggingSatLum) {
                 preventDefault(e);
-                colorPicker_handleSatLumDrag(self, e);
+                if (self.draggingSatLumBusy) {
+                    self.draggingSatLumSaved = e;
+                } else {
+                    self.draggingSatLumBusy = 1;
+                    colorPicker_handleSatLumDrag(self, e);
+                }
             } else if (self.resizing) {
                 preventDefault(e);
                 if (self.resizingBusy) {
