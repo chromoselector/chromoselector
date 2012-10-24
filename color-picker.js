@@ -55,11 +55,13 @@
     /**
      * Time management for rendering
      */
-    function Renderer(picker, callback) {
-        this.picker = picker;
-        this.callback = callback;
-        this.saved = undefined;
-        this.busy = 0;
+    function Renderer(picker, callback, delay) {
+        var self = this;
+        self.picker = picker;
+        self.callback = callback;
+        self.delay = delay || 8;
+        // self.saved = undefined;
+        self.busy = 0;
     }
     Renderer.prototype.save = function (e) {
         var self = this;
@@ -84,7 +86,7 @@
                 self.callback.apply({}, [self.picker, target]);
                 self.stop();
             }
-        }, 8);
+        }, self.delay);
     };
 
     /**
@@ -701,7 +703,7 @@
         colorPicker_drawIndicators(
             self
         );
-        colorPicker_setValue(self);
+        self.valueRenderer.save(self.color);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
         self.color.setColor({
@@ -712,25 +714,16 @@
         colorPicker_drawIndicators(
             self
         );
-        colorPicker_setValue(self);
+        self.valueRenderer.save(self.color);
     }
-    function colorPicker_setValue(self) {
-        if (! self.timeout) {
-            self._source.trigger('update');
-            var f = function () {
-                self.timeout = 0;
-            };
-            if (self.settings.autosave) {
-                f = function () {
-                    self.timeout = 0;
-                    colorPicker_save(self);
-                };
-            }
-            self.timeout = setTimeout(f, 100);
-            if (self.settings.preview) {
-                self.$preview.find('p').css('background', self.color.hex);
-            }
+    function colorPicker_update(self) {
+        if (self.settings.autosave) {
+            colorPicker_save(self);
         }
+        if (self.settings.preview) {
+            self.$preview.find('p').css('background', self.color.hex);
+        }
+        self._source.trigger('update');
     }
     function colorPicker_save(self) {
         var str = "";
@@ -1012,6 +1005,8 @@
 
         self.resizing = 0;
         self.resizingRenderer = new Renderer(self, colorPicker_handleResizeDrag);
+
+        self.valueRenderer = new Renderer(self, colorPicker_update, 100);
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
