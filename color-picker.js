@@ -13,11 +13,12 @@
  *
  * v 1.1.0:
  *   HSV support
- *   shorter code
  *   Fix crooked colorwheel in webkit
  *   Alpha selection
  *   Side panel
  *   Better slide animation
+ *   Faster shadow - rotate instead of blurring
+ *   shorter code
  *
  * Future:
  *   IE 6+ support
@@ -284,9 +285,9 @@
         }
         function cmyk2rgb(value) {
             return {
-                r: 1 - Math.min(1, value.c * ( 1 - value.k ) + value.k),
-                g: 1 - Math.min(1, value.m * ( 1 - value.k ) + value.k),
-                b: 1 - Math.min(1, value.y * ( 1 - value.k ) + value.k)
+                r: 1 - Math.min(1, value.c * (1 - value.k) + value.k),
+                g: 1 - Math.min(1, value.m * (1 - value.k) + value.k),
+                b: 1 - Math.min(1, value.y * (1 - value.k) + value.k)
             };
         }
         return Color;
@@ -1335,13 +1336,13 @@
         }
     };
 })(jQuery, document, window, Math, {
-    autoshow:      true,    // boolga
+    autoshow:      true,    // bool
     autosave:      true,    // bool
     speed:         400,     // pos int | 'fast' | 'slow' | 'medium'
     diameter:      180,     // pos int
     width:         0.35,    // float
     resizable:     true,    // bool
-    shadow:        0,       // float
+    shadow:        12,       // pos int
     preview:       true,    // bool
     effect:        'fade',  // 'fade' | 'slide'
    // icon:        undefined,    // string
