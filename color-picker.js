@@ -51,6 +51,42 @@
      * NAMESPACE for events and data
      */
     var NAMESPACE = 'canvasColorPicker';
+
+    /**
+     * Time management for rendering
+     */
+    function Renderer(picker, callback) {
+        this.picker = picker;
+        this.callback = callback;
+        this.saved = undefined;
+        this.busy = 0;
+    }
+    Renderer.prototype.save = function (e) {
+        var self = this;
+        if (self.busy) {
+            self.saved = e;
+        } else {
+            self.busy = 1;
+            self.callback.apply({}, [self.picker, e]);
+            self.stop();
+        }
+    };
+    Renderer.prototype.stop = function () {
+        // Removes the busy flag asynchronously, this way the event queue
+        // can clear up meanwhile. This speeds up rendering.
+        var self = this;
+        setTimeout(function () {
+            if (typeof self.saved == 'undefined') {
+                self.busy = 0;
+            } else {
+                var target = self.saved;
+                self.saved = undefined;
+                self.callback.apply({}, [self.picker, target]);
+                self.stop();
+            }
+        }, 8);
+    };
+
     /**
      * COLOR MANAGEMENT
      */
@@ -666,17 +702,6 @@
             self
         );
         colorPicker_setValue(self);
-        // Remove busy flag asynchronously, this way the event queue
-        // can clear up meanwhile. This speeds up rendering
-        setTimeout(function () {
-            if (typeof self.draggingHueSaved == 'undefined') {
-                self.draggingHueBusy = 0;
-            } else {
-                var target = self.draggingHueSaved;
-                self.draggingHueSaved = undefined;
-                colorPicker_reDrawHue(self, target);
-            }
-        }, 8);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
         self.color.setColor({
@@ -810,17 +835,6 @@
             color.s,
             color.l
         );
-        // Remove busy flag asynchronously, this way the event queue
-        // can clear up meanwhile. This speeds up rendering
-        setTimeout(function () {
-            if (typeof self.draggingSatLumSaved == 'undefined') {
-                self.draggingSatLumBusy = 0;
-            } else {
-                var target = self.draggingSatLumSaved;
-                self.draggingSatLumSaved = undefined;
-                colorPicker_handleSatLumDrag(self, target);
-            }
-        }, 8);
     }
     function colorPicker_sanitiseDragInput(inputPoint, points, distances, index) {
         var vertices1 = [0,1,2];
@@ -892,18 +906,6 @@
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
         colorPicker_resizeContainer(self, newDiameter);
-        // Remove busy flag asynchronously, this way the event queue
-        // can clear up meanwhile. This speeds up rendering
-        setTimeout(function () {
-            self._source.trigger('resize');
-            if (typeof self.resizingSaved == 'undefined') {
-                self.resizingBusy = 0;
-            } else {
-                var target = self.resizingSaved;
-                self.resizingSaved = undefined;
-                colorPicker_handleResizeDrag(self, target);
-            }
-        }, 8);
     }
     function colorPicker_resizeContainer(self, diameter) {
         self._container.width(diameter).height(
@@ -1003,16 +1005,13 @@
         self.settings = settings;
 
         self.draggingHue = 0;
-        self.draggingHueBusy = 0;
-        // self.draggingHueSaved = undefined;
+        self.draggingHueRenderer = new Renderer(self, colorPicker_reDrawHue);
 
         self.draggingSatLum = 0;
-        self.draggingSatLumBusy = 0;
-        // self.draggingSatLumSaved = undefined;
+        self.draggingSatLumRenderer = new Renderer(self, colorPicker_handleSatLumDrag);
 
         self.resizing = 0;
-        self.resizingBusy = 0;
-        // self.resizingSaved = undefined;
+        self.resizingRenderer = new Renderer(self, colorPicker_handleResizeDrag);
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
@@ -1196,28 +1195,13 @@
         $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
                 preventDefault(e);
-                if (self.draggingHueBusy) {
-                    self.draggingHueSaved = e;
-                } else {
-                    self.draggingHueBusy = 1;
-                    colorPicker_reDrawHue(self, e);
-                }
+                self.draggingHueRenderer.save(e);
             } else if (self.draggingSatLum) {
                 preventDefault(e);
-                if (self.draggingSatLumBusy) {
-                    self.draggingSatLumSaved = e;
-                } else {
-                    self.draggingSatLumBusy = 1;
-                    colorPicker_handleSatLumDrag(self, e);
-                }
+                self.draggingSatLumRenderer.save(e);
             } else if (self.resizing) {
                 preventDefault(e);
-                if (self.resizingBusy) {
-                    self.resizingSaved = e;
-                } else {
-                    self.resizingBusy = 1;
-                    colorPicker_handleResizeDrag(self, e);
-                }
+                self.resizingRenderer.save(e);
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
