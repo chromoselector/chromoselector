@@ -23,8 +23,9 @@
  * Future:
  *   IE 6+ support
  */
-(function ($, document, window, Math, defaults) {
+(function ($, window, Math, defaults) {
     "use strict";
+    var document = window.document;
     if (typeof TESTSUITE === 'undefined') {
         window.TESTSUITE = function (w) {
             w.Color = Color;
@@ -968,6 +969,38 @@
             self._icon.hide();
         }
     }
+    function colorPicker_sanitiseSettingsValue(index, value) {
+        var retval;
+        if (index === 'width') {
+            var floatValue = parseFloat(value, 10) || 0;
+            retval = floatValue > 0 ? floatValue : 0;
+        } else if (index === 'effect') {
+            retval = value === 'slide' ? 'slide' : 'fade';
+        } else if (index === 'iconPos') {
+            retval = value === 'left' ? 'left' : 'right';
+        } else if (index === 'target' && (value === null || $(value).length)) {
+            retval = value;
+        } else if (index === 'icon' && typeof value === 'string') {
+            retval = value;
+        } else if (index.match(/^autoshow|autosave|resizable|preview|true$/)) {
+            retval = !!value;
+        } else if (index.match(/^speed|diameter|shadow$/)) {
+            var intValue = parseInt(value, 10) || 0;
+            retval = intValue > 0 ? intValue : 0;
+        } else if (
+            typeof value === 'function'
+            // FIXME
+           /* &&
+            defaults.indexOf(value) >= defaults.indexOf('create')*/
+        ) {
+            retval = value;
+        }
+        if (retval) {
+            return retval;
+        } else {
+            return defaults[index];
+        }
+    }
     function getEventPosition(self, e, $obj) {
         var x = 0, y = 0;
         var oe = e.originalEvent;
@@ -1225,11 +1258,11 @@
 
     var methods = {
         init: function(options) {
-            var settings = $.extend(
-                {},
-                defaults,
-                options
-            );
+            var settings = {};
+            options = options ? options : {};
+            for (var index in defaults) {
+                settings[index] = colorPicker_sanitiseSettingsValue(index, options[index]);
+            }
             return this.each(function () {
                 var $this = $(this);
                 if (! $this.data(NAMESPACE)) {
@@ -1335,22 +1368,29 @@
             $.error('Method ' +  method + ' does not exist on jQuery.' + NAMESPACE);
         }
     };
-})(jQuery, document, window, Math, {
-    autoshow:      true,    // bool
-    autosave:      true,    // bool
-    speed:         400,     // pos int | 'fast' | 'slow' | 'medium'
-    diameter:      180,     // pos int
-    width:         0.35,    // float
-    resizable:     true,    // bool
-    shadow:        12,       // pos int
-    preview:       true,    // bool
-    effect:        'fade',  // 'fade' | 'slide'
-   // icon:        undefined,    // string
-    iconPos:      'right',  // string 'left' | 'right'
-    lazy:          true     // bool
-    /*
-    ,
-    target:     null, // 'auto', 'inline', 'dialog', 'promptDialog', selector, jQuery object
+    /** Access default settings */
+    $.fn[NAMESPACE].defaults = function (index, value) {
+        if (typeof value === 'undefined') {
+            return defaults[index];
+        } else {
+            defaults[index] = colorPicker_sanitiseSettingsValue(index, value);
+        }
+        return this;
+    };
+})(jQuery, window, Math, {
+    autoshow:      true,       // bool
+    autosave:      true,       // bool
+    speed:         400,        // pos int | 'fast' | 'slow' | 'medium'
+    diameter:      180,        // pos int
+    width:         .35,        // float
+    resizable:     true,       // bool
+    shadow:        12,         // pos int
+    preview:       true,       // bool
+    effect:        'fade',     // 'fade' | 'slide'
+    icon:          undefined,  // string
+    iconPos:      'right',     // string 'left' | 'right'
+    lazy:          true,       // bool
+    target:        null,       // null, selector, jQuery object
 
     // events registered with bind() will not be unbound on destroy API call
     create:      undefined,
@@ -1368,5 +1408,4 @@
     load:       undefined,
     str2color:  undefined,
     color2str:  undefined
-    */
 });
