@@ -2,14 +2,15 @@
  * ChromoSelector 1.0.0 for jQuery 1.3+
  *
  * TODO:
- *   Dialog mode
  *   Documentation
+ *   Fix crooked colorwheel in webkit
+ *   Fix property names (diameter, iconpos, width)
  *   refactor hue2rgb
  *   converters code
  *
  * v 1.1.0:
+ *   Dialog mode
  *   HSV support
- *   Fix crooked colorwheel in webkit
  *   Alpha selection
  *   Side panel
  *   Better slide animation
@@ -331,6 +332,7 @@
     function pointOnLine(point, slope) {
         // slope*slope is the same as Math.abs(slope)
         // but faster when checking if it's Infinity
+        // See: http://jsperf.com/abs-test
         if (slope*slope === Infinity) {
             return [
                 point[0],
