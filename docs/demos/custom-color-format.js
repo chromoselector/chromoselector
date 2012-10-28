@@ -1,5 +1,5 @@
 $(document).bind('pageinit', function () {
-    $('#custom-color-format #color1').canvasColorPicker({
+    $('#custom-color-format #color1').chromoselector({
         str2color: function (str) {
             var arr = str.split(',');
             return {
@@ -14,7 +14,7 @@ $(document).bind('pageinit', function () {
                    Math.round(color.hsl.l * 100);
         }
     });
-    $('#custom-color-format #color2').canvasColorPicker({
+    $('#custom-color-format #color2').chromoselector({
         str2color: function (str) {
             try {
                 var color = $.parseJSON(str);
@@ -33,7 +33,7 @@ $(document).bind('pageinit', function () {
             '}';
         }
     });
-    $('#custom-color-format #color3').canvasColorPicker({
+    $('#custom-color-format #color3').chromoselector({
         str2color: function (str) {
             return '#' + str;
         },
@@ -41,7 +41,7 @@ $(document).bind('pageinit', function () {
             return color.hex.substring(1);
         }
     });
-    $('#custom-color-format #color4').canvasColorPicker({
+    $('#custom-color-format #color4').chromoselector({
         str2color: function (str) {
             var num = parseInt(str, 10) || 0;
             return {

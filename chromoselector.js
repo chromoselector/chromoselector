@@ -1,12 +1,8 @@
 /**
- *
- * jQuery 1.3+
+ * ChromoSelector 1.0.0 for jQuery 1.3+
  *
  * TODO:
- *
- * v 1.0.0:
  *   Dialog mode
- *
  *   Documentation
  *   refactor hue2rgb
  *   converters code
@@ -19,9 +15,6 @@
  *   Better slide animation
  *   Faster shadow - rotate instead of blurring
  *   shorter code
- *
- * Future:
- *   IE 6+ support
  */
 (function ($, window, Math, defaults) {
     "use strict";
@@ -52,7 +45,7 @@
     /**
      * NAMESPACE for events and data
      */
-    var NAMESPACE = 'canvasColorPicker';
+    var NAMESPACE = 'chromoselector';
 
     /**
      * Time management for rendering
@@ -971,9 +964,15 @@
     }
     function colorPicker_sanitiseSettingsValue(index, value) {
         var retval;
-        if (index === 'width') {
+        if (index === 'width' && typeof value != 'undefined') {
             var floatValue = parseFloat(value, 10) || 0;
-            retval = floatValue > 0 ? floatValue : 0;
+            if (floatValue < .1) {
+                retval = .1;
+            } else if (floatValue > 1) {
+                retval = 1;
+            } else {
+                retval = floatValue;
+            }
         } else if (index === 'effect') {
             retval = value === 'slide' ? 'slide' : 'fade';
         } else if (index === 'iconPos') {
@@ -1382,9 +1381,9 @@
     autosave:      true,       // bool
     speed:         400,        // pos int | 'fast' | 'slow' | 'medium'
     diameter:      180,        // pos int
-    width:         .35,        // float
+    width:         .33,        // float
     resizable:     true,       // bool
-    shadow:        12,         // pos int
+    shadow:        8,          // pos int
     preview:       true,       // bool
     effect:        'fade',     // 'fade' | 'slide'
     icon:          undefined,  // string
