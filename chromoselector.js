@@ -100,12 +100,11 @@
         // setters
         Color.prototype.setColor = function(value) {
             var self = this;
-            if (typeof value == 'string') {
-                setHex(self, value);
-            } else if (typeof value == 'object' && value) {
+            if (typeof value == 'object' && value) {
                 var haveFields = function (value, fields) {
                     for (var i in fields.split('')) {
                         if (typeof value[fields[i]] != 'number'
+                            || isNaN(value[fields[i]])
                             || value[fields[i]] < 0
                             || value[fields[i]] > 1
                         ) {
@@ -114,7 +113,10 @@
                     }
                     return 1;
                 };
-                if (haveFields(value, 'sl') && typeof value.h != undefined) {
+                if (haveFields(value, 'sl')
+                    && typeof value.h == 'number'
+                    && ! isNaN(value.h)
+                ) {
                     value.h = value.h - Math.floor(value.h);
                     if (value.h < 0) {
                         value.h = 1 + value.h;
@@ -129,6 +131,8 @@
                         .setColor(value.rgb)
                         .setColor(value.cmyk);
                 }
+            } else if (typeof value == 'string') {
+                setHex(self, value);
             }
             return self;
         };
