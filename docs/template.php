@@ -39,9 +39,9 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '</script>';
     $html .= '</head>';
 
-    if ($type == 'interior') {
+    if ($type != 'home') {
         $html .= '<body>';
-        $html .= '<div data-role="page" class="type-interior" id="icon">';
+        $html .= '<div data-role="page" class="type-interior" id="' . $type . '">';
         $html .= '<div data-role="header" data-theme="a">';
         $html .= '<h1>' . $title . '</h1>';
         $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
