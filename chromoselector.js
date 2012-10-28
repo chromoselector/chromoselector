@@ -716,7 +716,7 @@
             colorPicker_save(self);
         }
         if (self.settings.preview) {
-            self.$preview.find('p').css('background', self.color.hex);
+            self.$preview.find('div').css('background', self.color.hex);
         }
         self._source.trigger('update');
     }
@@ -750,7 +750,7 @@
             self.color = new Color(str);
         }
         if (self.settings.preview && self.$preview) {
-            self.$preview.find('p').css('background', self.color.hex);
+            self.$preview.find('div').css('background', self.color.hex);
         }
     }
     function colorPicker_show(self, speed) {
@@ -1062,7 +1062,7 @@
                 });
         }
         self._picker = $('<div/>')
-            .addClass('ccp-widget')
+            .addClass('ui-cs-widget')
             .css({
                 position:'relative'
             })
@@ -1075,12 +1075,12 @@
         self._container = $('<div/>')
             .append(self._picker)
             .width(self.diameter)
-            .addClass('ccp-container')
+            .addClass('ui-cs-container')
             .css('position','absolute');
 
         if (self.settings.icon) {
             self._icon = $('<a />', {href: '#'})
-            .addClass('ccp-icon')
+            .addClass('ui-cs-icon')
             .css('position','absolute')
             .append(
                 $('<img/>')
@@ -1093,7 +1093,7 @@
 
         if (self.settings.resizable) {
             $('<span />')
-                .addClass('ccp-resizer')
+                .addClass('ui-cs-resizer')
                 .width(20)
                 .height(20)
                 .css({
@@ -1104,11 +1104,11 @@
                 .appendTo(self._container);
         }
 
-        self.$preview = $('<p />')
-            .addClass('ccp-preview-container')
+        self.$preview = $('<div />')
+            .addClass('ui-cs-preview-container')
             .append(
-                $('<p />')
-                .addClass('ccp-preview-widget')
+                $('<div />')
+                .addClass('ui-cs-preview-widget')
                 .css('background', self.color.hex)
             );
 

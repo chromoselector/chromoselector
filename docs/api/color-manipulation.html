@@ -1,0 +1,75 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'interior', 'Documentation / API / Color Manipulation');
+$html .= '<div class="content-primary">';
+$html .= '<h2>Color Manipulation</h2>';
+$html .= 'ChoromoSelector provides an easy way to manipulate colors in various formats.';
+$html .= '<h3>Getting a color:</h3> ';
+$html .= '<pre class="instant"><code class="javascript">// Assuming that the plugin has already been instanciated before
+var color = $("#myColorPicker").choromoselector("getColor");</code></pre>';
+$html .= 'You can expect to receive an object like the following:';
+$html .= '<pre class="instant"><code class="javascript">{
+    hsl: { h: 0, s: 0, l: 0 },
+    rgb: { r: 0, g: 0, b: 0 },
+    hex: "#000",
+    cmyk: { c: 0, m: 0, y: 0, k: 1 },
+    setColor: function (color) { ... }
+}</code></pre>';
+$html .= '<strong>Note:</strong> that values for hsl, rgb and cmyk colors are all normalised between 0 and 1.';
+$html .= '<h3>Setting a color:</h3> ';
+$html .= '<pre class="instant"><code class="javascript">// Hex strings, Objects of type Color
+// and those representing colors in various
+// formats are all acceptable input
+$("#myColorPicker").choromoselector("setColor", { h: 0, s: 0, l: 0 });
+$("#myColorPicker").choromoselector("setColor", { r: 0, g: 0, b: 0 });
+$("#myColorPicker").choromoselector("setColor", "#000");
+$("#myColorPicker").choromoselector("setColor", { c: 0, m: 0, y: 0, k: 1 });
+
+// A previously obtained Color object can be reused
+var color = $("#myColorPicker").choromoselector("getColor");
+// Do something else here ...
+...
+// Restore the old color
+$("#myColorPicker").choromoselector("setColor", color);
+// The color can also be reassigned
+color.setColor("#a8d");
+$("#myColorPicker").choromoselector("setColor", color);
+// These are also all valid ways to set a color:
+$("#myColorPicker").choromoselector("setColor", color.hsl);
+$("#myColorPicker").choromoselector("setColor", color.rgb);
+$("#myColorPicker").choromoselector("setColor", color.hex);
+$("#myColorPicker").choromoselector("setColor", color.cmyk);
+</code></pre>';
+$html .= '<h3>Converting colors:</h3>';
+$html .= '<p>Note that in these examples the color value of the picker does not change, ';
+$html .= 'but we are only using the obtained object for the conversions.</p>';
+$html .= '<pre class="instant"><code class="javascript">// Converting from Hex
+var color = $("#myColorPicker").choromoselector("getColor");
+color.setColor("#ff0000"); // red
+console.log(color.hsl)  // prints: { h: 0, s: 1, l: 0.5 }
+console.log(color.rgb)  // prints: { r: 1, g: 0, b: 0 }
+console.log(color.cmyk) // prints: { c: 0, m: 1, y: 1, k: 0 }
+</code></pre>';
+
+$html .= '<pre class="instant"><code class="javascript">// Converting from Hsl
+var color = $("#myColorPicker").choromoselector("getColor");
+color.setColor({ h: 0, s: 1, l: 0.5 }); // red
+console.log(color.hex)  // prints: "#ff0000"
+console.log(color.rgb)  // prints: { r: 1, g: 0, b: 0 }
+console.log(color.cmyk) // prints: { c: 0, m: 1, y: 1, k: 0 }
+</code></pre>';
+$html .= '<strong>See also:</strong><p><a href="../demos/custom-color-format.html">Demo - Custom Color Format</a></p>';
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getApiMenu('..', 'color-manipulation');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo $html;
+
+?>
