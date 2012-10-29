@@ -1258,7 +1258,7 @@
 
         setTimeout(function () {
             colorPicker_fixPosition(self);
-        }, 4);
+        }, 40);
     };
 
     var methods = {
