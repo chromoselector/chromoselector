@@ -19,29 +19,6 @@
 (function ($, window, Math, defaults) {
     "use strict";
     var document = window.document;
-    if (typeof TESTSUITE === 'undefined') {
-        window.TESTSUITE = function (w) {
-            w.Color = Color;
-            w.rgb2hsl = rgb2hsl;
-            w.rgb2hex = rgb2hex;
-            w.hsl2rgb = hsl2rgb;
-            w.hex2rgb = hex2rgb;
-            w.rgb2cmyk = rgb2cmyk;
-            w.cmyk2rgb = cmyk2rgb;
-            w.setPixel = setPixel;
-            w.getPointOnCircle = getPointOnCircle;
-            w.getLumAlphaColor = getLumAlphaColor;
-            w.colorPicker_getPoints = colorPicker_getPoints;
-            w.i = 0;
-            w.x = 0;
-            w.y = 0;
-            w.j = 0;
-            w.degree= 0;
-            w.r = 0;
-            w.g = 0;
-            w.b = 0;
-        };
-    }
     /**
      * NAMESPACE for events and data
      */

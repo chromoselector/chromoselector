@@ -1,5 +1,5 @@
 all:
-	uglifyjs --define TESTSUITE=false chromoselector.js > chromoselector.min.js
+	uglifyjs chromoselector.js > chromoselector.min.js
 	cat chromoselector.js | sed 's/\.settings/.s/g' | \
 		    sed 's/\._container/.a/g' | \
 			   sed 's/\._target/.b/g' | \
@@ -23,8 +23,8 @@ all:
 	      sed 's/\.ColorWheelBg/.s/g' | \
 			  sed 's/\.resizing/.t/g' \
 	> color-picker.2.js
-	uglifyjs -nc -b --define TESTSUITE=false chromoselector.2.js > chromoselector.2.min.js
+	uglifyjs -nc -b chromoselector.2.js > chromoselector.2.min.js
 	yui-compressor chromoselector.css > chromoselector.min.css
 
 b:
-	uglifyjs -b --define TESTSUITE=false chromoselector.js > chromoselector.min.js
+	uglifyjs -b chromoselector.js > chromoselector.min.js
