@@ -1,253 +1,71 @@
-<?php
-
-require '../template.php';
-require 'menu.php';
-
-$html  = getHeader('..', 'interior', 'Documentation / API / Methods');
-$html .= '<div class="content-primary">';
-
-$html .= '<fieldset class="ui-grid-a">';
-$html .= '<div class="ui-block-a">';
-$html .= '<a class="expand" href="#" data-role="button" data-mini="true">Expand all</a></div>';
-$html .= '<div class="ui-block-b">';
-$html .= '<a class="collapse" href="#" data-role="button" data-mini="true">Collapse all</a></div>';
-$html .= '</fieldset>';
-
-$html .= '<h2>Methods</h2>';
-
-
-$template  = '<div data-role="collapsible"';
-$template .= ' data-theme="b" data-content-theme="d"';
-$template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
-$template .= '<h3>%s</h3>';
-$template .= '<p class="ui-li-aside"><strong>Returns:</strong> %s</p>';
-$template .= '<p><strong>Description:</strong><br />%s</p>';
-$template .= '<p><strong>Parameters:</strong>%s</p>';
-$template .= '%s';
-$template .= '%s';
-$template .= '</div>';
-
-$properties = array(
-    'api()' => array(
-        'params' => array(),
-        'return' => 'An <a href="./api-object.html">API object</a>',
-        'description' => 'Provides faster access to the ChromoSelector API.',
-        'links' => array(
-            array('url' => './api-object.html', 'text' => 'Object - API')
-        )
-    ),
-    'destroy()' => array(
-        'params' => array(),
-        'return' => '<i>void</i>',
-        'description' => 'Destroys the color picker, unbinds all registered events and removes itself from the DOM.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Create the color picker\n"
-                ."    $('input.color').chromoselector();\n"
-                ."    // Destroy the color picker if we are about\n"
-                ."    // to swap out the contents of the page\n"
-                ."    $('#changePage').click(function () {\n"
-                ."        $('input.color').chromoselector('destroy');\n"
-                ."    });\n"
-                ."});\n"
-        ),
-        'links' => array(
-            array('url' => './events.html#destroy', 'text' => 'Events - destroy')
-        )
-    ),
-    'getColor()' => array(
-        'params' => array(),
-        'return' => 'A <a href="./color-manipulation.html">Color</a> object',
-        'description' => 'Retrieves to currently selected color in the picker.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
-                ."    // Get the current color\n"
-                ."    var color = $('#myColorPicker').chromoselector('getColor');\n"
-                ."    // Print the color to the console in different formats\n"
-                ."    console.log(color.hex, color.rgb, color.hsl, color.cmyk);\n"
-                ."});\n"
-        )
-    ),
-    'hide()' => array(
-        'params' => array(
-            array(
-                'type' => 'int',
-                'name' => 'speed',
-                'comment' => 'Duration of the transition animation in milliseconds'
-            )
-        ),
-        'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Initiates a hide operation. Note that that the operation may be aborted if '
-                        . 'a "beforeHide" event returns a value that evaluates to <i>false</i>.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
-                ."    // Hide picker when the user clicks on an external close button\n"
-                ."    $('#closeButton').click(function () {\n"
-                ."        $('#myColorPicker').chromoselector('hide');\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'reflow()' => array(
-        'params' => array(),
-        'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Repositions the color picker and the icon relatively to the source text input. '
-                        . 'Should be called when the layout of the page is updated.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
-                ."    setTimeout(function () {\n"
-                ."        // Hide the message at the top of the page\n"
-                ."        $('#top_message').click(function () {\n"
-                ."            // Fix the position of the colorpicker since the page layout has changed\n"
-                ."            $('#myColorPicker').chromoselector('reflow');\n"
-                ."        });\n"
-                ."    }, 1000);\n"
-                ."});\n"
-        )
-    ),
-    'resize()' => array(
-        'params' => array(
-            array(
-                'type' => 'int',
-                'name' => 'size',
-                'comment' => 'The new width'
-            )
-        ),
-        'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Resizes the color-picker to the specified width.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Create the color picker and set its width to 300px\n"
-                ."    $('#myColorPicker').chromoselector().chromoselector('resize', 300);\n"
-                ."    // The above is the same as:\n"
-                ."    // $('#myColorPicker').chromoselector({ diameter:300 });\n"
-                ."});\n"
-        )
-    ),
-    'save()' => array(
-        'params' => array(),
-        'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Saves the value of the currently selected color into the source text input.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Same as setting autosave to true\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        autosave: false,\n"
-                ."        update: function () {\n"
-                ."            $(this).chromoselector('save');\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'setColor()' => array(
-        'params' => array(
-            array(
-                'type' => '<a href="./color-manipulation.html">Color object</a> | Object | string',
-                'name' => 'color',
-                'comment' => 'The new color'
-            )
-        ),
-        'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Changes the currently selected color in the color picker.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    var \$pickers = $('input.color').chromoselector();\n"
-                ."    // Set color to green\n"
-                ."    \$pickers.chromoselector('setColor', '#0f0');\n"
-                ."    // Set color to orange\n"
-                ."    \$pickers.chromoselector('setColor', '#ff8000');\n"
-                ."    // Set color to blue\n"
-                ."    \$pickers.chromoselector('setColor', { r: 0, g: 0, b: 1});\n"
-                ."    // Set color to aqua\n"
-                ."    \$pickers.chromoselector('setColor', { h: 0.5, s: 1, l: 0.5});\n"
-                ."    // Set color to red\n"
-                ."    \$pickers.chromoselector('setColor', { c: 0, m: 1, y: 1, k: 0}\n"
-                ."});\n"
-        )
-    ),
-    'show()' => array(
-        'params' => array(
-            array(
-                'type' => 'int',
-                'name' => 'speed',
-                'comment' => 'Duration of the transition animation in milliseconds'
-            )
-        ),
-        'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Shows the color picker.',
-        'samples' => array(
-            "$(document).ready(function () {\n"
-                ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
-                ."    // Show it immediately\n"
-                ."    $('#myColorPicker').chromoselector('show');\n"
-                ."});\n"
-        )
-    ),
-);
-
-
-foreach ($properties as $key => $value) {
-    $samples = '';
-    if (! empty($value['samples'])) {
-        $samples .= '<p><strong>Sample usage:</strong>';
-        foreach ($value['samples'] as $sample) {
-            $samples .= '<pre><code class="javascript">' . htmlspecialchars($sample) . '</code></pre>';
+<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : Documentation / API / Methods</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" /><link rel="stylesheet" type="text/css" href="../libs/jqm-docs.css" /><link rel="stylesheet" type="text/css" href="../../chromoselector.min.css" /><link rel="stylesheet" href="../libs/default.min.css"><link href="../libs/images/favicon.png" rel="shortcut icon" /><script src="../../jquery-1.7.2.min.js" type="text/javascript"></script><script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script><script src="../../chromoselector.min.js" type="text/javascript"></script><script src="../demos/custom-color-format.js" type="text/javascript"></script><script src="../demos/icon.js" type="text/javascript"></script><script src="../libs/highlight.pack.js" type="text/javascript"></script><script>$(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});</script></head><body><div data-role="page" class="type-interior" id="interior"><div data-role="header" data-theme="a"><h1>Documentation / API / Methods</h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a></div><div data-role="content"><div class="content-primary"><fieldset class="ui-grid-a"><div class="ui-block-a"><a class="expand" href="#" data-role="button" data-mini="true">Expand all</a></div><div class="ui-block-b"><a class="collapse" href="#" data-role="button" data-mini="true">Collapse all</a></div></fieldset><h2>Methods</h2><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>api()</h3><p class="ui-li-aside"><strong>Returns:</strong> An <a href="./api-object.html">API object</a></p><p><strong>Description:</strong><br />Provides faster access to the ChromoSelector API.</p><p><strong>Parameters:</strong><i>None</i></p><strong>See also:</strong><ul><li><a href="./api-object.html">Object - API</a></li></ul></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>destroy()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>void</i></p><p><strong>Description:</strong><br />Destroys the color picker, unbinds all registered events and removes itself from the DOM.</p><p><strong>Parameters:</strong><i>None</i></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Create the color picker
+    $('input.color').chromoselector();
+    // Destroy the color picker if we are about
+    // to swap out the contents of the page
+    $('#changePage').click(function () {
+        $('input.color').chromoselector('destroy');
+    });
+});
+</code></pre></p><strong>See also:</strong><ul><li><a href="./events.html#destroy">Events - destroy</a></li></ul></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>getColor()</h3><p class="ui-li-aside"><strong>Returns:</strong> A <a href="./color-manipulation.html">Color</a> object</p><p><strong>Description:</strong><br />Retrieves to currently selected color in the picker.</p><p><strong>Parameters:</strong><i>None</i></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Create the color picker
+    $('#myColorPicker').chromoselector();
+    // Get the current color
+    var color = $('#myColorPicker').chromoselector('getColor');
+    // Print the color to the console in different formats
+    console.log(color.hex, color.rgb, color.hsl, color.cmyk);
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>hide()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>self</i> (Can be chained)</p><p><strong>Description:</strong><br />Initiates a hide operation. Note that that the operation may be aborted if a "beforeHide" event returns a value that evaluates to <i>false</i>.</p><p><strong>Parameters:</strong><ul><li>int <strong>speed</strong>: Duration of the transition animation in milliseconds</li></ul></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Create the color picker
+    $('#myColorPicker').chromoselector();
+    // Hide picker when the user clicks on an external close button
+    $('#closeButton').click(function () {
+        $('#myColorPicker').chromoselector('hide');
+    });
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>reflow()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>self</i> (Can be chained)</p><p><strong>Description:</strong><br />Repositions the color picker and the icon relatively to the source text input. Should be called when the layout of the page is updated.</p><p><strong>Parameters:</strong><i>None</i></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Create the color picker
+    $('#myColorPicker').chromoselector();
+    setTimeout(function () {
+        // Hide the message at the top of the page
+        $('#top_message').click(function () {
+            // Fix the position of the colorpicker since the page layout has changed
+            $('#myColorPicker').chromoselector('reflow');
+        });
+    }, 1000);
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>resize()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>self</i> (Can be chained)</p><p><strong>Description:</strong><br />Resizes the color-picker to the specified width.</p><p><strong>Parameters:</strong><ul><li>int <strong>size</strong>: The new width</li></ul></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Create the color picker and set its width to 300px
+    $('#myColorPicker').chromoselector().chromoselector('resize', 300);
+    // The above is the same as:
+    // $('#myColorPicker').chromoselector({ diameter:300 });
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>save()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>self</i> (Can be chained)</p><p><strong>Description:</strong><br />Saves the value of the currently selected color into the source text input.</p><p><strong>Parameters:</strong><i>None</i></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Same as setting autosave to true
+    $('input.color').chromoselector({
+        autosave: false,
+        update: function () {
+            $(this).chromoselector('save');
         }
-        $samples .= '</p>';
-    }
-
-    $params = '';
-    if (! empty($value['params'])) {
-        $params .= '<ul>';
-        foreach ($value['params'] as $param) {
-            $params .= '<li>'. $param['type'];
-            $params .= ' <strong>' . htmlspecialchars($param['name']) . '</strong>';
-            $params .= ': ' . htmlspecialchars($param['comment']) . '</li>';
-        }
-        $params .= '</ul>';
-    } else {
-        $params .= '<i>None</i>';
-    }
-
-    $links = '';
-    if (! empty($value['links'])) {
-        $links = '<strong>See also:</strong><ul>';
-        foreach ($value['links'] as $link) {
-            $links .= '<li>';
-            $links .= '<a href="'. $link['url'] . '">' . $link['text'] . '</a>';
-            $links .= '</li>';
-        }
-        $links .= '</ul>';
-    }
-
-    $html .= sprintf(
-        $template,
-        $key,
-        $value['return'],
-        $value['description'],
-        $params,
-        $samples,
-        $links
-    );
-}
-
-
-$html .= '</div>';
-$html .= '<div class="content-secondary">';
-$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
-$html .= getApiMenu('..', 'methods');
-$html .= '</ul>';
-$html .= '</div>';
-$html .= getFooter();
-
-echo $html;
-
-?>
+    });
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>setColor()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>self</i> (Can be chained)</p><p><strong>Description:</strong><br />Changes the currently selected color in the color picker.</p><p><strong>Parameters:</strong><ul><li><a href="./color-manipulation.html">Color object</a> | Object | string <strong>color</strong>: The new color</li></ul></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    var $pickers = $('input.color').chromoselector();
+    // Set color to green
+    $pickers.chromoselector('setColor', '#0f0');
+    // Set color to orange
+    $pickers.chromoselector('setColor', '#ff8000');
+    // Set color to blue
+    $pickers.chromoselector('setColor', { r: 0, g: 0, b: 1});
+    // Set color to aqua
+    $pickers.chromoselector('setColor', { h: 0.5, s: 1, l: 0.5});
+    // Set color to red
+    $pickers.chromoselector('setColor', { c: 0, m: 1, y: 1, k: 0}
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>show()</h3><p class="ui-li-aside"><strong>Returns:</strong> <i>self</i> (Can be chained)</p><p><strong>Description:</strong><br />Shows the color picker.</p><p><strong>Parameters:</strong><ul><li>int <strong>speed</strong>: Duration of the transition animation in milliseconds</li></ul></p><p><strong>Sample usage:</strong><pre><code class="javascript">$(document).ready(function () {
+    // Create the color picker
+    $('#myColorPicker').chromoselector();
+    // Show it immediately
+    $('#myColorPicker').chromoselector('show');
+});
+</code></pre></p></div></div><div class="content-secondary"><ul data-role="listview"  data-theme="c" data-dividertheme="d"><li data-role="list-divider">API</li><li><a href="../api/properties.html">Properties</a></li><li><a href="../api/events.html">Events</a></li><li data-theme="e"><a href="../api/methods.html">Methods</a></li><li><a href="../api/api-object.html">Api Object</a></li><li><a href="../api/overriding-defaults.html">Overriding Defaults</a></li><li><a href="../api/color-manipulation.html">Color Manipulation</a></li><li><a href="../api/theming.html">Theming</a></li></ul></div></div><div data-role="footer" class="footer-docs" data-theme="c"><p>v1.0.0</p><p style="float: right">&copy; 2012 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p></div></div></body></html>

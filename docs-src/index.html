@@ -1,0 +1,37 @@
+<?php
+
+include 'template.php';
+include 'api/menu.php';
+
+$html  = getHeader('.', 'home', 'Documentation');
+$html .= '        <div class="content-secondary">';
+$html .= '            <div id="jqm-homeheader">';
+$html .= '                <h1><img src="libs/images/logo.png" alt="Chromoselector logo" /></h1>';
+$html .= '                <p>a jQuery canvas color picker plugin.</p>';
+$html .= '            </div>';
+$html .= '            <p class="intro"><strong>Welcome.</strong> The ChromoSelector jQuery plugin provides an easy to use way to add color pickers to forms on your pages, thus allowing users to select colors in many formats in a user-friendly fashion. For jQuery 1.3.0+</p>';
+$html .= '            <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="a">';
+$html .= '                <li data-role="list-divider">Overview</li>';
+$html .= '                <li data-theme="e"><a href="other.html">Purchase</a></li>';
+$html .= '                <li><a href="other.html">Introduction and Features</a></li>';
+$html .= '                <li><a href="docs/about/platforms.html">System Requirements</a></li>';
+$html .= '                <li><a href="docs/about/getting-started.html">Quick Start Guide</a></li>';
+$html .= '                <li><a href="docs/about/platforms.html">Support</a></li>';
+$html .= '            </ul>';
+$html .= '        </div><!--/content-primary-->';
+$html .= '        <div class="content-primary">';
+$html .= '            <nav>';
+$html .= '                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="b">';
+$html .= '                    <li data-role="list-divider">Demos</li>';
+$html .= '                    <li><a href="demos/basic-usage.html">Basic Usage</a></li>';
+$html .= '                    <li><a href="demos/ui-dialog.html">jQuery UI Dialog</a></li>';
+$html .= '                    <li><a href="demos/custom-color-format.html">Custom Color Formats</a></li>';
+$html .= '                    <li><a href="demos/icon.html">Other demos</a></li>';
+$html .= getApiMenu();
+$html .= '              </ul>';
+$html .= '            </nav>';
+$html .= '        </div>';
+$html .= getFooter();
+echo $html;
+
+?>

@@ -1,436 +1,171 @@
-<?php
-
-require '../template.php';
-require 'menu.php';
-
-$html  = getHeader('..', 'interior', 'Documentation / API / Properties');
-$html .= '<div class="content-primary">';
-
-$html .= '<fieldset class="ui-grid-a">';
-$html .= '<div class="ui-block-a">';
-$html .= '<a class="expand" href="#" data-role="button" data-mini="true">Expand all</a></div>';
-$html .= '<div class="ui-block-b">';
-$html .= '<a class="collapse" href="#" data-role="button" data-mini="true">Collapse all</a></div>';
-$html .= '</fieldset>';
-
-$html .= '<h2>General Properties</h2>';
-
-$template  = '<div data-role="collapsible"';
-$template .= ' data-theme="b" data-content-theme="d"';
-$template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
-$template .= '<h3>%s</h3>';
-$template .= '<p class="ui-li-aside"><strong>Default:</strong> %s</p>';
-$template .= '<p><strong>Description:</strong><br />%s</p>';
-$template .= '<p><strong>Values:</strong> %s</p>';
-$template .= '%s';
-$template .= '%s';
-$template .= '</div>';
-
-$properties = array(
-    'autosave' => array(
-        'default' => '<i>true</i>',
-        'description' => 'Whether to automatically update the value in the source text'
-                    . ' input when the user selects a new color. In you set this to false, '
-                    . 'you will need to manually invoke the "save" method on the chromoselector object'
-                    . 'when you would like for the color to be saved.',
-        'values' => '<i>true</i> or <i>false</i>',
-        'samples' => array(
-            "// This is the default\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        autosave: true\n"
-                ."    });\n"
-                ."});\n",
-            "// This will save the color when the colorpicker loses focus\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        autosave: false\n"
-                ."    }).blur(function () {\n"
-                ."        $(this).chromoselector('save');\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'autoshow' => array(
-        'default' => '<i>true</i>',
-        'description' => 'Whether to automatically show the color picker when the '
-                    . 'source text input receives focus. If you set this to false, '
-                    . 'you will need to manually invoke the "show" and "hide" methods '
-                    . 'on the chromoselector object when you would like to show and hide '
-                    . 'the color picker.',
-        'values' => '<i>true</i> or <i>false</i>',
-        'samples' => array(
-            "// This is the default\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        autoshow: true\n"
-                ."    });\n"
-                ."});\n",
-            "// This will show color picker when the user clicks inside\n"
-                . "// the source text input and hide it when the element loses focus\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        autoshow: false\n"
-                ."    }).click(function () {\n"
-                ."        $(this).chromoselector('show');\n"
-                ."    }).blur(function () {\n"
-                ."        $(this).chromoselector('hide');\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'diameter' => array(
-        'default' => '180',
-        'description' => 'The total width of the color picker widget in pixels. '
-                       . 'This includes a fixed padding on both sides.',
-        'values' => 'An integer between 100 and 400. Any values outside of '
-                    . 'this range will be clipped to the nearest legal value.',
-        'samples' => array(
-            "// Sets the outside widget width to 320 pixels\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        diameter: 320\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'effect' => array(
-        'default' => '"fade"',
-        'description' => 'Which animation effect to use when showing/hiding the color picker widget.'
-                        . ' If you wish to disable animations, set the "speed" property to 0.',
-        'values' => '"fade" or "slide"',
-        'samples' => array(
-            "// Slides the picker down/up when showing/hiding it\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        effect: 'slide'\n"
-                ."    });\n"
-                ."});\n",
-            "// No animation\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        speed: 0\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'icon' => array(
-        'default' => '<i>undefined</i>',
-        'description' => 'The URL to an image file. This is used to display an icon '
-                            . 'beside the color picker, which is then used to show it '
-                            . 'when clicked.',
-        'values' => 'A string containing the URL of the icon to show.',
-        'samples' => array(
-            "// Absolute address\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        icon: 'http://www.chromoselector.com/images/favicon.png'\n"
-                ."    });\n"
-                ."});\n",
-            "// Relative address\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        icon: '../images/favicon.png'\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'iconPos' => array(
-        'default' => '"right"',
-        'description' => 'Defines on which side of the source text input to display the icon. '
-                        . 'Does nothing, if the "icon" property is not set.',
-        'values' => '"left" or "right"',
-        'samples' => array(
-            "// Display icon on left\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        icon: 'http://www.chromoselector.com/images/favicon.png',\n"
-                ."        iconPos: 'left'\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'lazy' => array(
-        'default' => '<i>true</i>',
-        'description' => 'Whether to defer the rendering of the color picker object.<br/> '
-                        . '<p>When set to <i>true</i>, the rendering of the colorpicker does not start '
-                        . 'until the mouseover event is triggered on the source text input. '
-                        . 'When set to <i>false</i>, the rendering occurs straight away.</p>'
-                        . 'Does nothing, if the "autoshow" property is set to <i>false</i>.',
-        'values' => '<i>true</i> or <i>false</i>',
-        'samples' => array(
-            "// Render the color picker when the page is loaded\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        lazy: false\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'preview' => array(
-        'default' => '<i>true</i>',
-        'description' => 'Whether to show a preview box of the currently selected color '
-                         . 'above the color picker widget. You can show a preview somewhere '
-                         . 'else by registering to the "update" event.',
-        'values' => '<i>true</i> or <i>false</i>',
-        'samples' => array(
-            "// This is the default\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        preview: true\n"
-                ."    });\n"
-                ."});\n",
-            "// Don't show a preview\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        preview: false\n"
-                ."    });\n"
-                ."});\n",
-            "// Show a preview in the background of the input element\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        preview: false,\n"
-                ."        update: function () {\n"
-                ."            $(this).css(\n"
-                ."                'background-color',\n"
-                ."                $(this).chromoselector('getColor').hex\n"
-                ."            );\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'resizable' => array(
-        'default' => '<i>true</i>',
-        'description' => 'Whether the color picker should be resizable or not.',
-        'values' => '<i>true</i> or <i>false</i>',
-        'samples' => array(
-            "// This is the default\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        resizable: true\n"
-                ."    });\n"
-                ."});\n",
-            "// Do not allow resizing\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        resizable: false\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'shadow' => array(
-        'default' => '8',
-        'description' => 'The amount of shadow to drop under the color picker in pixels. '
-                        . 'The shadow will be scaled in proporting to the color picker '
-                        . 'during resize operations.',
-        'values' => 'A positive integer or 0',
-        'samples' => array(
-            "// No shadow\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        shadow: 0\n"
-                ."    });\n"
-                ."});\n",
-            "// A big shadow\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        shadow: 16\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'speed' => array(
-        'default' => '400',
-        'description' => 'The duration of the show/hide animations.',
-        'values' => 'A positive integer or 0, this will be interpreted as a number of milliseconds, '
-                    . 'also: "fast", "medium" and "slow"',
-        'samples' => array(
-            "// A slow animation\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        speed: 'slow'\n"
-                ."    });\n"
-                ."});\n",
-            "// No animation\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        speed: 0\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'target' => array(
-        'default' => '<i>null</i>',
-        'description' => 'Allows to specify a terget container where to put the '
-                        . 'color picker. If a custom container is used, note that '
-                        . 'you will need to ensure yourself that the color picker '
-                        . 'is correctly positioned on the page.',
-        'values' => '<i>null</i> to use the default target container positioned below the '
-                    . 'source text input<br />A selector, a DOM object or a jQuery object are also acceptable '
-                    . 'and will allow custom positioning of the color picker.',
-        'samples' => array(
-            "// Sample custom target\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        target: '#myContainer'\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'width' => array(
-        'default' => '.33',
-        'description' => 'The thickness of the hue selector (the outer ring of the color picker)',
-        'values' => 'A number between 0.1 and 1.0',
-        'samples' => array(
-            "// Use a thin hue selector\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        width: 0.2\n"
-                ."    });\n"
-                ."});\n"
-        )
-    )
-);
-
-
-foreach ($properties as $key => $value) {
-    $samples = '';
-    if (! empty($value['samples'])) {
-        foreach ($value['samples'] as $sample) {
-            $samples .= '<pre><code class="javascript">' . htmlspecialchars($sample) . '</code></pre>';
+<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : Documentation / API / Properties</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" /><link rel="stylesheet" type="text/css" href="../libs/jqm-docs.css" /><link rel="stylesheet" type="text/css" href="../../chromoselector.min.css" /><link rel="stylesheet" href="../libs/default.min.css"><link href="../libs/images/favicon.png" rel="shortcut icon" /><script src="../../jquery-1.7.2.min.js" type="text/javascript"></script><script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script><script src="../../chromoselector.min.js" type="text/javascript"></script><script src="../demos/custom-color-format.js" type="text/javascript"></script><script src="../demos/icon.js" type="text/javascript"></script><script src="../libs/highlight.pack.js" type="text/javascript"></script><script>$(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});</script></head><body><div data-role="page" class="type-interior" id="interior"><div data-role="header" data-theme="a"><h1>Documentation / API / Properties</h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a></div><div data-role="content"><div class="content-primary"><fieldset class="ui-grid-a"><div class="ui-block-a"><a class="expand" href="#" data-role="button" data-mini="true">Expand all</a></div><div class="ui-block-b"><a class="collapse" href="#" data-role="button" data-mini="true">Collapse all</a></div></fieldset><h2>General Properties</h2><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>autosave</h3><p class="ui-li-aside"><strong>Default:</strong> <i>true</i></p><p><strong>Description:</strong><br />Whether to automatically update the value in the source text input when the user selects a new color. In you set this to false, you will need to manually invoke the "save" method on the chromoselector objectwhen you would like for the color to be saved.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><pre><code class="javascript">// This is the default
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        autosave: true
+    });
+});
+</code></pre><pre><code class="javascript">// This will save the color when the colorpicker loses focus
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        autosave: false
+    }).blur(function () {
+        $(this).chromoselector('save');
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>autoshow</h3><p class="ui-li-aside"><strong>Default:</strong> <i>true</i></p><p><strong>Description:</strong><br />Whether to automatically show the color picker when the source text input receives focus. If you set this to false, you will need to manually invoke the "show" and "hide" methods on the chromoselector object when you would like to show and hide the color picker.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><pre><code class="javascript">// This is the default
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        autoshow: true
+    });
+});
+</code></pre><pre><code class="javascript">// This will show color picker when the user clicks inside
+// the source text input and hide it when the element loses focus
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        autoshow: false
+    }).click(function () {
+        $(this).chromoselector('show');
+    }).blur(function () {
+        $(this).chromoselector('hide');
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>diameter</h3><p class="ui-li-aside"><strong>Default:</strong> 180</p><p><strong>Description:</strong><br />The total width of the color picker widget in pixels. This includes a fixed padding on both sides.</p><p><strong>Values:</strong> An integer between 100 and 400. Any values outside of this range will be clipped to the nearest legal value.</p><pre><code class="javascript">// Sets the outside widget width to 320 pixels
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        diameter: 320
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>effect</h3><p class="ui-li-aside"><strong>Default:</strong> "fade"</p><p><strong>Description:</strong><br />Which animation effect to use when showing/hiding the color picker widget. If you wish to disable animations, set the "speed" property to 0.</p><p><strong>Values:</strong> "fade" or "slide"</p><pre><code class="javascript">// Slides the picker down/up when showing/hiding it
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        effect: 'slide'
+    });
+});
+</code></pre><pre><code class="javascript">// No animation
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        speed: 0
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>icon</h3><p class="ui-li-aside"><strong>Default:</strong> <i>undefined</i></p><p><strong>Description:</strong><br />The URL to an image file. This is used to display an icon beside the color picker, which is then used to show it when clicked.</p><p><strong>Values:</strong> A string containing the URL of the icon to show.</p><pre><code class="javascript">// Absolute address
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        icon: 'http://www.chromoselector.com/images/favicon.png'
+    });
+});
+</code></pre><pre><code class="javascript">// Relative address
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        icon: '../images/favicon.png'
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>iconPos</h3><p class="ui-li-aside"><strong>Default:</strong> "right"</p><p><strong>Description:</strong><br />Defines on which side of the source text input to display the icon. Does nothing, if the "icon" property is not set.</p><p><strong>Values:</strong> "left" or "right"</p><pre><code class="javascript">// Display icon on left
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        icon: 'http://www.chromoselector.com/images/favicon.png',
+        iconPos: 'left'
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>lazy</h3><p class="ui-li-aside"><strong>Default:</strong> <i>true</i></p><p><strong>Description:</strong><br />Whether to defer the rendering of the color picker object.<br/> <p>When set to <i>true</i>, the rendering of the colorpicker does not start until the mouseover event is triggered on the source text input. When set to <i>false</i>, the rendering occurs straight away.</p>Does nothing, if the "autoshow" property is set to <i>false</i>.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><pre><code class="javascript">// Render the color picker when the page is loaded
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        lazy: false
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>preview</h3><p class="ui-li-aside"><strong>Default:</strong> <i>true</i></p><p><strong>Description:</strong><br />Whether to show a preview box of the currently selected color above the color picker widget. You can show a preview somewhere else by registering to the "update" event.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><pre><code class="javascript">// This is the default
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        preview: true
+    });
+});
+</code></pre><pre><code class="javascript">// Don't show a preview
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        preview: false
+    });
+});
+</code></pre><pre><code class="javascript">// Show a preview in the background of the input element
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        preview: false,
+        update: function () {
+            $(this).css(
+                'background-color',
+                $(this).chromoselector('getColor').hex
+            );
         }
-    }
-
-    $links = '';
-    if (! empty($value['links'])) {
-        $links = '<strong>See also:</strong><ul>';
-        foreach ($value['links'] as $link) {
-            $links .= '<li>';
-            $links .= '<a href="'. $link['url'] . '">' . $link['text'] . '</a>';
-            $links .= '</li>';
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>resizable</h3><p class="ui-li-aside"><strong>Default:</strong> <i>true</i></p><p><strong>Description:</strong><br />Whether the color picker should be resizable or not.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><pre><code class="javascript">// This is the default
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        resizable: true
+    });
+});
+</code></pre><pre><code class="javascript">// Do not allow resizing
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        resizable: false
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>shadow</h3><p class="ui-li-aside"><strong>Default:</strong> 8</p><p><strong>Description:</strong><br />The amount of shadow to drop under the color picker in pixels. The shadow will be scaled in proporting to the color picker during resize operations.</p><p><strong>Values:</strong> A positive integer or 0</p><pre><code class="javascript">// No shadow
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        shadow: 0
+    });
+});
+</code></pre><pre><code class="javascript">// A big shadow
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        shadow: 16
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>speed</h3><p class="ui-li-aside"><strong>Default:</strong> 400</p><p><strong>Description:</strong><br />The duration of the show/hide animations.</p><p><strong>Values:</strong> A positive integer or 0, this will be interpreted as a number of milliseconds, also: "fast", "medium" and "slow"</p><pre><code class="javascript">// A slow animation
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        speed: 'slow'
+    });
+});
+</code></pre><pre><code class="javascript">// No animation
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        speed: 0
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>target</h3><p class="ui-li-aside"><strong>Default:</strong> <i>null</i></p><p><strong>Description:</strong><br />Allows to specify a terget container where to put the color picker. If a custom container is used, note that you will need to ensure yourself that the color picker is correctly positioned on the page.</p><p><strong>Values:</strong> <i>null</i> to use the default target container positioned below the source text input<br />A selector, a DOM object or a jQuery object are also acceptable and will allow custom positioning of the color picker.</p><pre><code class="javascript">// Sample custom target
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        target: '#myContainer'
+    });
+});
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>width</h3><p class="ui-li-aside"><strong>Default:</strong> .33</p><p><strong>Description:</strong><br />The thickness of the hue selector (the outer ring of the color picker)</p><p><strong>Values:</strong> A number between 0.1 and 1.0</p><pre><code class="javascript">// Use a thin hue selector
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        width: 0.2
+    });
+});
+</code></pre></div><h2>Callbacks</h2><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>save()</h3><p class="ui-li-aside"><strong>Default:</strong> <i>undefined</i></p><p><strong>Description:</strong><br />This function is responsible for saving back the value of the color to the source element. When not defined, a default internal function is used.</p><p><strong>Values:</strong> <i>undefined</i> or <i>function</i></p><p><strong>Sample usage:</strong><pre><code class="javascript">// This is the equivalent of the default function
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        save: function (value) {
+            // The value comes in already formatted
+            // and only needs to be placed somewhere
+            $(this).val(
+                value
+            ).html(
+                value
+            );
         }
-        $links .= '</ul>';
-    }
-
-    $html .= sprintf(
-        $template,
-        $key,
-        $value['default'],
-        $value['description'],
-        $value['values'],
-        $samples,
-        $links
-    );
-}
-
-$html .= '<h2>Callbacks</h2>';
-
-$properties = array(
-    'save()' => array(
-        'default' => '<i>undefined</i>',
-        'description' => 'This function is responsible for saving back the value of the color '
-                        . 'to the source element. When not defined, a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
-        'samples' => array(
-            "// This is the equivalent of the default function\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        save: function (value) {\n"
-                ."            // The value comes in already formatted\n"
-                ."            // and only needs to be placed somewhere\n"
-                ."            $(this).val(\n"
-                ."                value\n"
-                ."            ).html(\n"
-                ."                value\n"
-                ."            );\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'load()' => array(
-        'default' => '<i>undefined</i>',
-        'description' => 'This function is responsible for reading in the value of the color '
-                        . 'from the source element. When not defined, a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
-        'samples' => array(
-            "// This is the equivalent of the default function\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        // The value only needs to be read in here\n"
-                ."        // the parsing will be done at a later stage\n"
-                ."        load: function () {\n"
-                ."            return $(this).val() || $(this).html();\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
-    'str2color()' => array(
-        'default' => '<i>undefined</i>',
-        'description' => 'This function is responsible for parsing a string into a format '
-                        . 'that can be interpreted by the Color class. When not defined, '
-                        . 'a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
-        'links' => array(
-            array('url' => '../demos/custom-color-format.html', 'text' => 'Demo - Custom Color Format'),
-            array('url' => 'color-manipulation.html', 'text' => 'Object - Color')
-        )
-    ),
-    'color2str()' => array(
-        'default' => '<i>undefined</i>',
-        'description' => 'This function is responsible for parsing a string into a format '
-                        . 'that can be interpreted by the Color class. When not defined, '
-                        . 'a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
-        'links' => array(
-            array('url' => '../demos/custom-color-format.html', 'text' => 'Demo - Custom Color Format'),
-            array('url' => 'color-manipulation.html', 'text' => 'Object - Color')
-        )
-    )
-);
-
-foreach ($properties as $key => $value) {
-    $samples = '';
-    if (! empty($value['samples'])) {
-        $samples = '<p><strong>Sample usage:</strong>';
-        foreach ($value['samples'] as $sample) {
-            $samples .= '<pre><code class="javascript">' . htmlspecialchars($sample) . '</code></pre>';
+    });
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>load()</h3><p class="ui-li-aside"><strong>Default:</strong> <i>undefined</i></p><p><strong>Description:</strong><br />This function is responsible for reading in the value of the color from the source element. When not defined, a default internal function is used.</p><p><strong>Values:</strong> <i>undefined</i> or <i>function</i></p><p><strong>Sample usage:</strong><pre><code class="javascript">// This is the equivalent of the default function
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        // The value only needs to be read in here
+        // the parsing will be done at a later stage
+        load: function () {
+            return $(this).val() || $(this).html();
         }
-        $samples .= '</p>';
-    }
-
-    $links = '';
-    if (! empty($value['links'])) {
-        $links = '<strong>See also:</strong><p>';
-        foreach ($value['links'] as $link) {
-            $links .= '';
-            $links .= '<a href="'. $link['url'] . '">' . $link['text'] . '</a>';
-            $links .= '</p>';
-        }
-        $links .= '';
-    }
-
-    $html .= sprintf(
-        $template,
-        $key,
-        $value['default'],
-        $value['description'],
-        $value['values'],
-        $samples,
-        $links
-    );
-}
-
-$html .= '</div>';
-$html .= '<div class="content-secondary">';
-$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
-$html .= getApiMenu('..', 'properties');
-$html .= '</ul>';
-$html .= '</div>';
-$html .= getFooter();
-
-echo $html;
-
-?>
+    });
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>str2color()</h3><p class="ui-li-aside"><strong>Default:</strong> <i>undefined</i></p><p><strong>Description:</strong><br />This function is responsible for parsing a string into a format that can be interpreted by the Color class. When not defined, a default internal function is used.</p><p><strong>Values:</strong> <i>undefined</i> or <i>function</i></p><strong>See also:</strong><p><a href="../demos/custom-color-format.html">Demo - Custom Color Format</a></p><a href="color-manipulation.html">Object - Color</a></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>color2str()</h3><p class="ui-li-aside"><strong>Default:</strong> <i>undefined</i></p><p><strong>Description:</strong><br />This function is responsible for parsing a string into a format that can be interpreted by the Color class. When not defined, a default internal function is used.</p><p><strong>Values:</strong> <i>undefined</i> or <i>function</i></p><strong>See also:</strong><p><a href="../demos/custom-color-format.html">Demo - Custom Color Format</a></p><a href="color-manipulation.html">Object - Color</a></p></div></div><div class="content-secondary"><ul data-role="listview"  data-theme="c" data-dividertheme="d"><li data-role="list-divider">API</li><li data-theme="e"><a href="../api/properties.html">Properties</a></li><li><a href="../api/events.html">Events</a></li><li><a href="../api/methods.html">Methods</a></li><li><a href="../api/api-object.html">Api Object</a></li><li><a href="../api/overriding-defaults.html">Overriding Defaults</a></li><li><a href="../api/color-manipulation.html">Color Manipulation</a></li><li><a href="../api/theming.html">Theming</a></li></ul></div></div><div data-role="footer" class="footer-docs" data-theme="c"><p>v1.0.0</p><p style="float: right">&copy; 2012 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p></div></div></body></html>

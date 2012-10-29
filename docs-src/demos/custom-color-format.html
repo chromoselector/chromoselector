@@ -1,0 +1,153 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'custom-color-format', 'Documentation / Demos / Custom Color Formats');
+$html .= '<div class="content-primary">';
+$html .= '<form action="#" method="get">';
+$html .= '<h2>Custom Color Formats</h2>';
+
+$template  = '<div data-role="collapsible" data-collapsed="false"';
+$template .= ' data-theme="b" data-content-theme="d"';
+$template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$template .= '<h3>%s</h3>';
+$template .= '<div data-role="fieldcontain">';
+$template .= '<label for="%s">Pick a color:</label>';
+$template .= '<input type="text" name="%s" id="%s" value="%s" />';
+$template .= '</div>';
+$template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
+$template .= '<h3>Code</h3>';
+$template .= '<pre><code class="javascript">%s</code></pre>';
+$template .= '</div>';
+$template .= '</div>';
+
+$demos = array(
+    array(
+        'title' => 'Hex RGB without "#"',
+        'id' => 'color1',
+        'value' => '000000',
+        'code' => "$(function () {\n"
+                . "    $('#color1').chromoselector({\n"
+                . "        str2color: function (str) {\n"
+                . "            return '#' + str;\n"
+                . "        },\n"
+                . "        color2str: function (color) {\n"
+                . "            return color.hex.substring(1);\n"
+                . "        }\n"
+                . "     })\n"
+                . "});\n"
+    ),
+    array(
+        'title' => 'Comma separated HSL',
+        'id' => 'color2',
+        'value' => '0,0,0',
+        'code' => "$(function () {\n"
+                . "    $('#color2').chromoselector({\n"
+                . "        str2color: function (str) {\n"
+                . "            var arr = str.split(',');\n"
+                . "            return {\n"
+                . "                h: parseInt(arr[0], 10) / 360,\n"
+                . "                s: parseInt(arr[1], 10) / 100,\n"
+                . "                l: parseInt(arr[2], 10) / 100\n"
+                . "            };\n"
+                . "        },\n"
+                . "        color2str: function (color) {\n"
+                . "            return Math.round(\n"
+                . "                color.hsl.h * 360\n"
+                . "            ) + ',' +\n"
+                . "            Math.round(\n"
+                . "                color.hsl.s * 100\n"
+                . "            ) + ',' +\n"
+                . "            Math.round(\n"
+                . "                color.hsl.l * 100\n"
+                . "            );\n"
+                . "        }\n"
+                . "     })\n"
+                . "});\n"
+    ),
+    array(
+        'title' => 'JSON encoded CMYK',
+        'id' => 'color3',
+        'value' => '{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}',
+        'code' => "$(function () {\n"
+                . "    $('#color3').chromoselector({\n"
+                . "        str2color: function (str) {\n"
+                . "            try {\n"
+                . "                var color = $.parseJSON(str);\n"
+                . "                for (var i in color) {\n"
+                . "                    color[i] /= 100;\n"
+                . "                }\n"
+                . "                return color;\n"
+                . "            } catch (e) {}\n"
+                . "        },\n"
+                . "        color2str: function (color) {\n"
+                . "            return '{' +\n"
+                . "                '\"c\":' + Math.round(\n"
+                . "                    color.cmyk.c * 100\n"
+                . "                ) + ',' +\n"
+                . "                '\"m\":' + Math.round(\n"
+                . "                    color.cmyk.m * 100\n"
+                . "                ) + ',' +\n"
+                . "                '\"y\":' + Math.round(\n"
+                . "                    color.cmyk.y * 100\n"
+                . "                ) + ',' +\n"
+                . "                '\"k\":' + Math.round(\n"
+                . "                    color.cmyk.k * 100\n"
+                . "                ) +\n"
+                . "            '}';\n"
+                . "        }\n"
+                . "     })\n"
+                . "});\n"
+    ),
+    array(
+        'title' => 'RGB as an integer',
+        'id' => 'color4',
+        'value' => '0',
+        'code' => "$(function () {\n"
+                . "    $('#color3').chromoselector({\n"
+                . "        str2color: function (str) {\n"
+                . "            var num = parseInt(str, 10) || 0;\n"
+                . "            return {\n"
+                . "                r: ((num &amp; (255 * 255 * 255)) &gt;&gt; 16) / 255,\n"
+                . "                g: ((num &amp; (255 * 255)) &gt;&gt; 8) / 255,\n"
+                . "                b: ((num &amp; 255)) / 255\n"
+                . "            };\n"
+                . "        },\n"
+                . "        color2str: function (color) {\n"
+                . "            var num = (Math.round(color.rgb.r * 255) &lt;&lt; 16)\n"
+                . "                + (Math.round(color.rgb.g * 255) &lt;&lt; 8)\n"
+                . "                + Math.round(color.rgb.b * 255)\n"
+                . "            return num;\n"
+                . "        }\n"
+                . "     })\n"
+                . "});\n"
+    ),
+);
+
+
+foreach ($demos as $value) {
+    $html .= sprintf(
+        $template,
+        $value['title'],
+        $value['id'],
+        $value['id'],
+        $value['id'],
+        $value['value'],
+        $value['code']
+    );
+}
+
+$html .= '</form>';
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getDemosMenu('..', 'custom-color-format');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo $html;
+
+?>
+

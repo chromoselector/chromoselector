@@ -1,0 +1,45 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'interior', 'Documentation / API / Theming');
+$html .= '<div class="content-primary">';
+$html .= '<h2>Theming</h2>';
+$html .= '<p>The color picker can be themed in the chromoselector.css file. <br />Here is a sample structures of elements you might expect to see in a color picker and their classes:</p>';
+$html .= '<pre class="instant"><code>';
+$html .= htmlspecialchars('<!--
+The outermost container is the target element, it is generated
+automatically, unless you have manually specified a target.
+ -->
+<div>
+    <!-- The optional icon, used to open the color picker -->
+    <a class="ui-cs-icon" style="position: absolute;">
+        <img />
+    </a>
+    <!-- This element contains the parts that make up a color picker -->
+    <div class="ui-cs-container" style="position: absolute;">
+        <!-- Color picker preview -->
+        <div class="ui-cs-preview-container">
+            <div class="ui-cs-preview-widget"></div>
+        </div>
+        <!-- This element contains the canvases on which the color picker is rendered -->
+        <div class="ui-cs-widget" style="position: relative;">
+            ...
+        </div>
+        <!-- This is what you drag to resize the color picker -->
+        <span class="ui-cs-resizer" style="position: absolute;"></span>
+    </div>
+</div>');
+$html .= '</code></pre>';
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getApiMenu('..', 'theming');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo $html;
+
+?>

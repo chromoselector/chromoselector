@@ -1,16 +1,4 @@
-<?php
-
-require '../template.php';
-require 'menu.php';
-
-$html  = getHeader('..', 'interior', 'Documentation / API / The API object');
-$html .= '<div class="content-primary">';
-$html .= '<h2>The API object</h2>';
-$html .= '<p>';
-$html .= 'The purpose of the API object is to shorten the code when ';
-$html .= 'accessing the ChromoSelector API. <br /><br />Example of ';
-$html .= 'basic API usage:';
-$html .= '<pre class="instant"><code class="javascript">$(document).ready(function () {
+<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : Documentation / API / The API object</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" /><link rel="stylesheet" type="text/css" href="../libs/jqm-docs.css" /><link rel="stylesheet" type="text/css" href="../../chromoselector.min.css" /><link rel="stylesheet" href="../libs/default.min.css"><link href="../libs/images/favicon.png" rel="shortcut icon" /><script src="../../jquery-1.7.2.min.js" type="text/javascript"></script><script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script><script src="../../chromoselector.min.js" type="text/javascript"></script><script src="../demos/custom-color-format.js" type="text/javascript"></script><script src="../demos/icon.js" type="text/javascript"></script><script src="../libs/highlight.pack.js" type="text/javascript"></script><script>$(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});</script></head><body><div data-role="page" class="type-interior" id="interior"><div data-role="header" data-theme="a"><h1>Documentation / API / The API object</h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a></div><div data-role="content"><div class="content-primary"><h2>The API object</h2><p>The purpose of the API object is to shorten the code when accessing the ChromoSelector API. <br /><br />Example of basic API usage:<pre class="instant"><code class="javascript">$(document).ready(function () {
     // Instanciate the color picker
     $("#myColorPicker").chromoselector();
     // Show it
@@ -19,9 +7,7 @@ $html .= '<pre class="instant"><code class="javascript">$(document).ready(functi
     $("#myColorPicker").chromoselector("setColor", "#123456");
     // Log new color to console in HSL format
     console.log($("#myColorPicker").chromoselector("getColor").hsl);
-});</code></pre>';
-$html .= '<br />Same as above, but using the API object:';
-$html .= '<pre class="instant"><code class="javascript">$(document).ready(function () {
+});</code></pre><br />Same as above, but using the API object:<pre class="instant"><code class="javascript">$(document).ready(function () {
     // Instanciate the color picker
     var $picker = $("#myColorPicker").chromoselector();
     // Get an instance of the API object
@@ -30,25 +16,11 @@ $html .= '<pre class="instant"><code class="javascript">$(document).ready(functi
     api.show();
     api.setColor("#123456");
     console.log(api.getColor().hsl);
-});</code></pre>';
-$html .= '<br />Most API object function calls can be chained, so the above can be again reduced to the following:';
-$html .= '<pre class="instant"><code class="javascript">$(document).ready(function () {
+});</code></pre><br />Most API object function calls can be chained, so the above can be again reduced to the following:<pre class="instant"><code class="javascript">$(document).ready(function () {
     // Instanciate the color picker and get the API object
     var api = $("#myColorPicker").chromoselector().chromoselector("api");
     // Now do everything else
     console.log(
         api.show().setColor("#123456").getColor().hsl
     );
-});</code></pre>';
-$html .= '</p>';
-$html .= '</div>';
-$html .= '<div class="content-secondary">';
-$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
-$html .= getApiMenu('..', 'api-object');
-$html .= '</ul>';
-$html .= '</div>';
-$html .= getFooter();
-
-echo $html;
-
-?>
+});</code></pre></p></div><div class="content-secondary"><ul data-role="listview"  data-theme="c" data-dividertheme="d"><li data-role="list-divider">API</li><li><a href="../api/properties.html">Properties</a></li><li><a href="../api/events.html">Events</a></li><li><a href="../api/methods.html">Methods</a></li><li data-theme="e"><a href="../api/api-object.html">Api Object</a></li><li><a href="../api/overriding-defaults.html">Overriding Defaults</a></li><li><a href="../api/color-manipulation.html">Color Manipulation</a></li><li><a href="../api/theming.html">Theming</a></li></ul></div></div><div data-role="footer" class="footer-docs" data-theme="c"><p>v1.0.0</p><p style="float: right">&copy; 2012 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p></div></div></body></html>

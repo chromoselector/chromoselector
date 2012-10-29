@@ -1,282 +1,168 @@
-<?php
-
-require '../template.php';
-require 'menu.php';
-
-$html  = getHeader('..', 'interior', 'Documentation / API / Events');
-$html .= '<div class="content-primary">';
-
-$html .= '<fieldset class="ui-grid-a">';
-$html .= '<div class="ui-block-a">';
-$html .= '<a class="expand" href="#" data-role="button" data-mini="true">Expand all</a></div>';
-$html .= '<div class="ui-block-b">';
-$html .= '<a class="collapse" href="#" data-role="button" data-mini="true">Collapse all</a></div>';
-$html .= '</fieldset>';
-
-$html .= '<h2>Events</h2>';
-
-
-$template  = '<div data-role="collapsible"';
-$template .= ' data-theme="b" data-content-theme="d"';
-$template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
-$template .= '<h3>%s</h3>';
-$template .= '<p><strong>Description:</strong><br />%s</p>';
-$template .= '<p><strong>Sample usage:</strong>%s</p>';
-$template .= '</div>';
-
-$properties = array(
-    'beforeHide' => array(
-        'description' => 'This event is triggered when the color picker is about to be hidden. '
-                        . ' If cancelled, the event will be aborted and the color picker will stay open.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        beforeHide: function () {\n"
-                ."            // Require confirmation to hide\n"
-                ."            return confirm('Are you sure you want to hide the color picker?');\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('beforeHide', function () {\n"
-                ."            // Require confirmation to hide\n"
-                ."            return confirm('Are you sure you want to hide the color picker?');\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'create' => array(
-        'description' => 'This event is triggered after the plugin has been instanciated, but before '
-                        . 'the color picker has been rendered.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        create: function () {\n"
-                ."            // Do something\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('create', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'destroy' => array(
-        'description' => 'This event is triggered when the "destroy" method is called '
-                        . 'on the plugin and it is going to be destroyed shortly.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        destroy: function () {\n"
-                ."            // Do something\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('destroy', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'hide' => array(
-        'description' => 'This event is triggered after the color picker has been hidden.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        hide: function () {\n"
-                ."            // Do something\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('hide', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'ready' => array(
-        'description' => 'This event is triggered when the color picker has been rendered '
-                        . 'on the canvas. This will occur once, before the color picker is '
-                        . 'shown for the first time and the exact timing depends on the '
-                        . 'value of the "autoshow" property.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        ready: function () {\n"
-                ."            // Do something\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('ready', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'show' => array(
-        'description' => 'This event is triggered after the color picker has been shown.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        show: function () {\n"
-                ."            // Do something\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('show', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'resizeStart' => array(
-        'description' => 'This event is triggered when the user initiates a resize operation '
-                        . 'or after a call to the "resize" method.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        resizeStart: function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('resizeStart', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'resize' => array(
-        'description' => 'This event is repeatedly triggered while the user is performing a resize operation. '
-                        . 'It is also triggered once after a call to the "resize" method.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        resize: function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('resize', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'resizeStop' => array(
-        'description' => 'This event is triggered when the user finishes a resize operation '
-                        . 'or after a call to the "resize" method.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        resizeStop: function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('resizeStop', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n",
-        )
-    ),
-    'update' => array(
-        'description' => 'This event is triggered when the user changes the color on the color picker. '
-                        .'This event is throttled and the event handler will only be called on average '
-                        .'once every 100 milliseconds.',
-        'samples' => array(
-            "// Bind to the event before instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        preview: false,\n"
-                ."        update: function () {\n"
-                ."            // Show a preview in the background of the input element\n"
-                ."            $(this).css(\n"
-                ."                'background-color',\n"
-                ."                $(this).chromoselector('getColor').hex\n"
-                ."            );\n"
-                ."        }\n"
-                ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('update', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
-                ."});\n"
-        )
-    ),
-);
-
-foreach ($properties as $key => $value) {
-    $samples = '';
-    foreach ($value['samples'] as $sample) {
-        $samples .= '<pre><code class="javascript">' . htmlspecialchars($sample) . '</code></pre>';
-    }
-
-    $html .= sprintf(
-        $template,
-        $key,
-        $value['description'],
-        $samples
-    );
-}
-
-$html .= '</div>';
-$html .= '<div class="content-secondary">';
-$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
-$html .= getApiMenu('..', 'events');
-$html .= '</ul>';
-$html .= '</div>';
-$html .= getFooter();
-
-echo $html;
-
-?>
+<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : Documentation / API / Events</title><meta http-equiv="Content-Type" content="text/html; charset=utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" /><link rel="stylesheet" type="text/css" href="../libs/jqm-docs.css" /><link rel="stylesheet" type="text/css" href="../../chromoselector.min.css" /><link rel="stylesheet" href="../libs/default.min.css"><link href="../libs/images/favicon.png" rel="shortcut icon" /><script src="../../jquery-1.7.2.min.js" type="text/javascript"></script><script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script><script src="../../chromoselector.min.js" type="text/javascript"></script><script src="../demos/custom-color-format.js" type="text/javascript"></script><script src="../demos/icon.js" type="text/javascript"></script><script src="../libs/highlight.pack.js" type="text/javascript"></script><script>$(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});</script></head><body><div data-role="page" class="type-interior" id="interior"><div data-role="header" data-theme="a"><h1>Documentation / API / Events</h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a></div><div data-role="content"><div class="content-primary"><fieldset class="ui-grid-a"><div class="ui-block-a"><a class="expand" href="#" data-role="button" data-mini="true">Expand all</a></div><div class="ui-block-b"><a class="collapse" href="#" data-role="button" data-mini="true">Collapse all</a></div></fieldset><h2>Events</h2><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>beforeHide</h3><p><strong>Description:</strong><br />This event is triggered when the color picker is about to be hidden.  If cancelled, the event will be aborted and the color picker will stay open.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        beforeHide: function () {
+            // Require confirmation to hide
+            return confirm('Are you sure you want to hide the color picker?');
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('beforeHide', function () {
+            // Require confirmation to hide
+            return confirm('Are you sure you want to hide the color picker?');
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>create</h3><p><strong>Description:</strong><br />This event is triggered after the plugin has been instanciated, but before the color picker has been rendered.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        create: function () {
+            // Do something
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('create', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>destroy</h3><p><strong>Description:</strong><br />This event is triggered when the "destroy" method is called on the plugin and it is going to be destroyed shortly.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        destroy: function () {
+            // Do something
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('destroy', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>hide</h3><p><strong>Description:</strong><br />This event is triggered after the color picker has been hidden.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        hide: function () {
+            // Do something
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('hide', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>ready</h3><p><strong>Description:</strong><br />This event is triggered when the color picker has been rendered on the canvas. This will occur once, before the color picker is shown for the first time and the exact timing depends on the value of the "autoshow" property.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        ready: function () {
+            // Do something
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('ready', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>show</h3><p><strong>Description:</strong><br />This event is triggered after the color picker has been shown.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        show: function () {
+            // Do something
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('show', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>resizeStart</h3><p><strong>Description:</strong><br />This event is triggered when the user initiates a resize operation or after a call to the "resize" method.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        resizeStart: function () {
+            // Do something
+        })
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('resizeStart', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>resize</h3><p><strong>Description:</strong><br />This event is repeatedly triggered while the user is performing a resize operation. It is also triggered once after a call to the "resize" method.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        resize: function () {
+            // Do something
+        })
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('resize', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>resizeStop</h3><p><strong>Description:</strong><br />This event is triggered when the user finishes a resize operation or after a call to the "resize" method.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        resizeStop: function () {
+            // Do something
+        })
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('resizeStop', function () {
+            // Do something
+        })
+});
+</code></pre></p></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>update</h3><p><strong>Description:</strong><br />This event is triggered when the user changes the color on the color picker. This event is throttled and the event handler will only be called on average once every 100 milliseconds.</p><p><strong>Sample usage:</strong><pre><code class="javascript">// Bind to the event before instantiating the plugin
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        preview: false,
+        update: function () {
+            // Show a preview in the background of the input element
+            $(this).css(
+                'background-color',
+                $(this).chromoselector('getColor').hex
+            );
+        }
+    });
+});
+</code></pre><pre><code class="javascript">// Bind to the event after instantiating the plugin
+$(document).ready(function () {
+    $('input.color')
+        .chromoselector()
+        .bind('update', function () {
+            // Do something
+        })
+});
+</code></pre></p></div></div><div class="content-secondary"><ul data-role="listview"  data-theme="c" data-dividertheme="d"><li data-role="list-divider">API</li><li><a href="../api/properties.html">Properties</a></li><li data-theme="e"><a href="../api/events.html">Events</a></li><li><a href="../api/methods.html">Methods</a></li><li><a href="../api/api-object.html">Api Object</a></li><li><a href="../api/overriding-defaults.html">Overriding Defaults</a></li><li><a href="../api/color-manipulation.html">Color Manipulation</a></li><li><a href="../api/theming.html">Theming</a></li></ul></div></div><div data-role="footer" class="footer-docs" data-theme="c"><p>v1.0.0</p><p style="float: right">&copy; 2012 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p></div></div></body></html>
