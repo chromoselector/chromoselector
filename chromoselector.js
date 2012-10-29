@@ -3,9 +3,7 @@
  *
  * TODO:
  *   Documentation
- *   Fix crooked colorwheel in webkit
  *   Fix property names (diameter, iconpos, width)
- *   refactor hue2rgb
  *   converters code
  *
  * v 1.1.0:
@@ -14,6 +12,7 @@
  *   Alpha selection
  *   Side panel
  *   Better slide animation
+ *   refactor hue2rgb
  *   Faster shadow - rotate instead of blurring
  *   shorter code
  */
@@ -460,11 +459,17 @@
         ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2);
         ctx.closePath();
         ctx.fill();
-        ctx.lineWidth = circleRadius * 2 - (self.widthRatio * diameter / 2);
-        ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius * 2, 0, Math.PI*2);
-        ctx.closePath();
-        ctx.stroke();
+
+        var tempCanvas = $('<canvas/>').attr('width', self.diameter).attr('height', self.diameter)[0];
+        var tempCtx = tempCanvas.getContext('2d');
+        tempCtx.fillRect(0,0,600,600);
+        tempCtx.globalCompositeOperation = "destination-out";
+        tempCtx.beginPath();
+        tempCtx.arc(origin[0], origin[1], circleRadius + (self.widthRatio * diameter / 4), 0, Math.PI*2);
+        tempCtx.closePath();
+        tempCtx.fill();
+        ctx.drawImage(tempCanvas, 0, 0);
+
         // shadow
         ctx.globalCompositeOperation = "destination-over";
         ctx.lineWidth = lineWidth / 2;
