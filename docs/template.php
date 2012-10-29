@@ -7,13 +7,13 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
 
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jqm-docs.css" />';
-    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/../chromoselector.css" />';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/../chromoselector.min.css" />';
     $html .= '<link rel="stylesheet" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
     $html .= '<script src="' . $path . '/../jquery-1.7.2.min.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>';
-    $html .= '<script src="' . $path . '/../chromoselector.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $path . '/../chromoselector.min.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/custom-color-format.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/icon.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/highlight.pack.js" type="text/javascript"></script>';
