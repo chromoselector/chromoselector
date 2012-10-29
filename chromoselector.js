@@ -1085,7 +1085,7 @@
             .css('position','absolute');
 
         if (self.settings.icon) {
-            self._icon = $('<a />', {href: '#'})
+            self._icon = $('<a />', {href: '#', tabindex:'999'})
             .addClass('ui-cs-icon')
             .css('position','absolute')
             .append(
