@@ -408,7 +408,7 @@
             .attr("width", diameter)
             .attr("height", diameter)[0];
         var tempCtx = temp.getContext("2d");
-        if (! Cache.tempData) {
+        if (! Cache.ColorWheelBg) {
             Cache.ColorWheelBg = ctx.createImageData(80, 80);
             var degree, i, j, x, y, r, g, b, rad2deg = (180/Math.PI);
             var getValue = function (degree) {
