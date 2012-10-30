@@ -1,5 +1,10 @@
 #!/bin/bash
 
+rm -rf docs/libs/
+mkdir docs/libs
+cp -R docs-src/libs/* docs/libs/
+
+
 rm -f docs/*.html
 wget -O docs/index.html http://localhost/chromoselector/docs-src/index.html
 
