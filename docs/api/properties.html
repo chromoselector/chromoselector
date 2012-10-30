@@ -59,11 +59,11 @@ $(document).ready(function () {
         icon: '../images/favicon.png'
     });
 });
-</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>iconPos</h3><p class="ui-li-aside"><strong>Default:</strong> "right"</p><p><strong>Description:</strong><br />Defines on which side of the source text input to display the icon. Does nothing, if the "icon" property is not set.</p><p><strong>Values:</strong> "left" or "right"</p><pre><code class="javascript">// Display icon on left
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>iconpos</h3><p class="ui-li-aside"><strong>Default:</strong> "right"</p><p><strong>Description:</strong><br />Defines on which side of the source text input to display the icon. Does nothing, if the "icon" property is not set.</p><p><strong>Values:</strong> "left" or "right"</p><pre><code class="javascript">// Display icon on left
 $(document).ready(function () {
     $('input.color').chromoselector({
         icon: 'http://www.chromoselector.com/images/favicon.png',
-        iconPos: 'left'
+        iconpos: 'left'
     });
 });
 </code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>lazy</h3><p class="ui-li-aside"><strong>Default:</strong> <i>true</i></p><p><strong>Description:</strong><br />Whether to defer the rendering of the color picker object.<br/> <p>When set to <i>true</i>, the rendering of the colorpicker does not start until the mouseover event is triggered on the source text input. When set to <i>false</i>, the rendering occurs straight away.</p>Does nothing, if the "autoshow" property is set to <i>false</i>.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><pre><code class="javascript">// Render the color picker when the page is loaded

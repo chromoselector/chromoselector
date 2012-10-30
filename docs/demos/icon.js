@@ -4,7 +4,7 @@ $(function () {
     });
     $('#icon #color2').chromoselector({
         icon: '../libs/images/palette.png',
-        iconPos: 'left'
+        iconpos: 'left'
     });
     $('#icon').bind('updatelayout', function () {
         $(this).find('#color1, #color2').chromoselector('reflow');

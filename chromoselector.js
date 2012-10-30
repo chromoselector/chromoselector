@@ -941,7 +941,7 @@
         }
         if (self._source.is(':visible')) {
             self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
-            if (self.settings.iconPos === 'left') {
+            if (self.settings.iconpos === 'left') {
                 self._icon.css('left', offset.left - self._icon.height());
             } else {
                 self._icon.css('left', offset.left + self._source.outerWidth() + 2);
@@ -963,7 +963,7 @@
             }
         } else if (index === 'effect') {
             retval = value === 'slide' ? 'slide' : 'fade';
-        } else if (index === 'iconPos') {
+        } else if (index === 'iconpos') {
             retval = value === 'left' ? 'left' : 'right';
         } else if (index === 'target' && (value === null || $(value).length)) {
             retval = value;
@@ -1375,7 +1375,7 @@
     preview:       true,       // bool
     effect:        'fade',     // 'fade' | 'slide'
     icon:          undefined,  // string
-    iconPos:      'right',     // string 'left' | 'right'
+    iconpos:      'right',     // string 'left' | 'right'
     lazy:          true,       // bool
     target:        null,       // null, selector, jQuery object
 
