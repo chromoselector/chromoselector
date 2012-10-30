@@ -3,7 +3,6 @@
  *
  * TODO:
  *   Documentation
- *   Fix property names (diameter, width)
  *   converters code
  *
  * v 1.1.0:
@@ -464,15 +463,16 @@
      * Draws the triangular selector
      */
     function colorPicker_drawSaturationLimunositySelector(self) {
+        var width = self.width;
         var hue = self.color.hsl.h;
         var canvas = self.canvases[1];
         var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,self.width, self.width);
+        ctx.clearRect(0,0,width, width);
         var degrees = -Math.PI / 2;
         var points = colorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
-            var maskImageData = ctx.createImageData(self.width, self.width);
+            var maskImageData = ctx.createImageData(width, width);
             // triangle limits
             var limits = function (points, axis) {
                 return {
@@ -523,12 +523,12 @@
         ctx.fillStyle = new Color({
             h:hue, s:1, l:0.5
         }).hex;
-        ctx.fillRect(0,0,self.width,self.width);
+        ctx.fillRect(0,0,width,width);
         // Copy rotated mask
         ctx.save();
-        ctx.translate(self.width/2, self.width/2);
+        ctx.translate(width/2, width/2);
         ctx.rotate(degrees + Math.PI / 2);
-        ctx.translate(-self.width/2, -self.width/2);
+        ctx.translate(-width/2, -width/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
         // cut out triangle
@@ -539,9 +539,9 @@
         ctx.lineTo(points[2][0], points[2][1]);
         ctx.lineTo(points[1][0], points[1][1]);
         ctx.lineTo(0, 0);
-        ctx.lineTo(0, self.width);
-        ctx.lineTo(self.width, self.width);
-        ctx.lineTo(self.width, 0);
+        ctx.lineTo(0, width);
+        ctx.lineTo(width, width);
+        ctx.lineTo(width, 0);
         ctx.lineTo(0, 0);
         ctx.closePath();
         ctx.globalCompositeOperation = "destination-out";
@@ -550,16 +550,16 @@
         // shadow
         var newPoints = [];
         newPoints[0] = [
-            self.width / 2 * 0.05 + points[0][0] * 0.95,
-            self.width / 2 * 0.05 + points[0][1] * 0.95
+            width / 2 * 0.05 + points[0][0] * 0.95,
+            width / 2 * 0.05 + points[0][1] * 0.95
         ];
         newPoints[1] = [
-            self.width / 2 * 0.05 + points[1][0] * 0.95,
-            self.width / 2 * 0.05 + points[1][1] * 0.95
+            width / 2 * 0.05 + points[1][0] * 0.95,
+            width / 2 * 0.05 + points[1][1] * 0.95
         ];
         newPoints[2] = [
-            self.width / 2 * 0.05 + points[2][0] * 0.95,
-            self.width / 2 * 0.05 + points[2][1] * 0.95
+            width / 2 * 0.05 + points[2][0] * 0.95,
+            width / 2 * 0.05 + points[2][1] * 0.95
         ];
         ctx.globalCompositeOperation = "destination-over";
         ctx.beginPath();
@@ -569,7 +569,7 @@
         ctx.closePath();
         ctx.fillStyle = '#000';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
-        ctx.shadowBlur = self.shadowRatio * self.width;
+        ctx.shadowBlur = self.shadowRatio * width;
         ctx.fill();
         ctx.shadowColor = 'rgba(0,0,0,0)';
         ctx.shadowBlur = 0;
@@ -577,19 +577,21 @@
     }
 
     function colorPicker_drawIndicators(self) {
+        var width = self.width;
+        var hslColor = self.color.hsl;
         var canvas = self.canvases[2];
         var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,self.width, self.width);
-        var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+        ctx.clearRect(0,0,width, width);
+        var degrees = (1 - hslColor.h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
         /** get hue indicator position */
-        var circleRadius = (self.width / 2) - 5 - (self.ringwidthRatio * self.width * 2 / 3);
-        var indicator = getPointOnCircle(circleRadius, degrees, self.width / 2);
+        var circleRadius = (width / 2) - 5 - (self.ringwidthRatio * width * 2 / 3);
+        var indicator = getPointOnCircle(circleRadius, degrees, width / 2);
 
         /** get draw sat/lum indicator position */
         var colorPoint = [
-            (points[1][0] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][0]),
-            (points[1][1] * self.color.hsl.l + (1-self.color.hsl.l) * points[2][1])
+            (points[1][0] * hslColor.l + (1-hslColor.l) * points[2][0]),
+            (points[1][1] * hslColor.l + (1-hslColor.l) * points[2][1])
         ];
         var m = getPerpedicularSlope(points[1], points[2]);
         var colorPoint2 = pointOnLine(colorPoint, m);
@@ -612,8 +614,8 @@
             slopePoint
         );
         colorPoint = [
-            (thePoint2[0] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[0]),
-            (thePoint2[1] * self.color.hsl.s + (1-self.color.hsl.s) * thePoint1[1])
+            (thePoint2[0] * hslColor.s + (1-hslColor.s) * thePoint1[0]),
+            (thePoint2[1] * hslColor.s + (1-hslColor.s) * thePoint1[1])
         ];
 
         /** draw the indicators */
@@ -646,12 +648,12 @@
             ctx.lineWidth = 1;
             ctx.lineCap="round";
             ctx.beginPath();
-            ctx.moveTo(self.width-20, self.width-2);
-            ctx.lineTo(self.width-2, self.width-20);
-            ctx.moveTo(self.width-13, self.width-2);
-            ctx.lineTo(self.width-2, self.width-13);
-            ctx.moveTo(self.width-7, self.width-2);
-            ctx.lineTo(self.width-2, self.width-7);
+            ctx.moveTo(width-20, width-2);
+            ctx.lineTo(width-2, width-20);
+            ctx.moveTo(width-13, width-2);
+            ctx.lineTo(width-2, width-13);
+            ctx.moveTo(width-7, width-2);
+            ctx.lineTo(width-2, width-7);
             ctx.closePath();
             ctx.stroke();
         }
@@ -929,26 +931,28 @@
         return width;
     }
     function colorPicker_fixPosition(self) {
-        var offset = self._source.offset();
+        var $source = self._source;
+        var offset = $source.offset();
+        var $icon = self._icon;
         if (! self.settings.target) {
             self._target.css({
                 top: 0,
                 left: 0
             });
             self._container.css({
-                top: offset.top + self._source.outerHeight(),
+                top: offset.top + $source.outerHeight(),
                 left: offset.left
             });
         }
-        if (self._source.is(':visible')) {
-            self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
+        if ($source.is(':visible')) {
+            $icon.show().css('top', offset.top + ($source.outerHeight() - $icon.height()) / 2);
             if (self.settings.iconpos === 'left') {
-                self._icon.css('left', offset.left - self._icon.height());
+                $icon.css('left', offset.left - $icon.height());
             } else {
-                self._icon.css('left', offset.left + self._source.outerWidth() + 2);
+                $icon.css('left', offset.left + $source.outerWidth() + 2);
             }
         } else {
-            self._icon.hide();
+            $icon.hide();
         }
     }
     function colorPicker_sanitiseSettingsValue(index, value) {
@@ -994,14 +998,15 @@
         var oe = e.originalEvent;
         var touch = oe.touches || oe.changedTouches;
         var offset = $obj.parent().offset();
+        var previewHeight = self.$preview.outerHeight();
         if (touch) {
             // touchscreen
             x = touch[0].pageX - offset.left;
-            y = touch[0].pageY - offset.top - self.$preview.outerHeight();
+            y = touch[0].pageY - offset.top - previewHeight;
         } else if (e.pageX /*&& this.mouse*/) {
             // mouse
             x = e.pageX - offset.left;
-            y = e.pageY - offset.top - self.$preview.outerHeight();
+            y = e.pageY - offset.top - previewHeight;
         }/* else {
             // a mouse event being fired during a touch swipe
             // This seems to be an Android bug
@@ -1032,11 +1037,13 @@
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
-        self.width = colorPicker_fixDiameter(self.settings.width);
+
+        var width = colorPicker_fixDiameter(self.settings.width);
+        self.width = width;
         self.ringwidthRatio = self.settings.ringwidth / 3;
-        self.shadowRatio = self.settings.shadow / self.width;
-        self.triangleRadius = self.width / 2 - 10 - self.ringwidthRatio * self.width;
-        var canvasString = '<canvas width="' + self.width + '" height="' + self.width + '"></canvas>';
+        self.shadowRatio = self.settings.shadow / width;
+        self.triangleRadius = width / 2 - 10 - self.ringwidthRatio * width;
+        var canvasString = '<canvas width="' + width + '" height="' + width + '"></canvas>';
         if (self.settings.target) {
             self._target = $(self.settings.target);
         }
@@ -1055,15 +1062,15 @@
             .css({
                 position:'relative'
             })
-            .width(self.width)
-            .height(self.width)
+            .width(width)
+            .height(width)
             .html(
                 canvasString + canvasString + canvasString
             );
 
         self._container = $('<div/>')
             .append(self._picker)
-            .width(self.width)
+            .width(width)
             .addClass('ui-cs-container')
             .css('position','absolute');
 
@@ -1107,9 +1114,9 @@
             );
         }
 
-        var borderRadius = '0px 0px 0px ' + self.width/2 + 'px';
+        var borderRadius = '0px 0px 0px ' + width/2 + 'px';
         if (! self.settings.resizable) {
-            borderRadius = '0px 0px ' + self.width/2 + 'px ' + self.width/2 + 'px';
+            borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
         }
         self._container.css({
             '-webkit-border-radius': borderRadius,
@@ -1117,9 +1124,9 @@
         });
 
         self._picker
-            .height(self.width)
+            .height(width)
             .add(self._container)
-            .width(self.width);
+            .width(width);
 
         self._target.append(
             self._container
@@ -1178,24 +1185,24 @@
         });
         self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e);
-            var lineWidth = self.ringwidthRatio * self.width / 2;
-            var circleRadius = (self.width / 2) - (lineWidth/2) - lineWidth;
+            var lineWidth = self.ringwidthRatio * width / 2;
+            var circleRadius = (width / 2) - (lineWidth/2) - lineWidth;
             var inputPoint = getEventPosition(self, e, self._picker);
             if (self.settings.resizable
-                && inputPoint[0] > self.width-20
-                && inputPoint[1] > self.width-20
+                && inputPoint[0] > width-20
+                && inputPoint[1] > width-20
             ) {
                 self._source.trigger('resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
-                    self.width - inputPoint[0],
-                    self.width - inputPoint[1]
+                    width - inputPoint[0],
+                    width - inputPoint[1]
                 ];
             } else {
                 if (
-                    pointInCircle(inputPoint, self.width/2, circleRadius+lineWidth)
+                    pointInCircle(inputPoint, width/2, circleRadius+lineWidth)
                     &&
-                    ! pointInCircle(inputPoint, self.width/2, circleRadius-lineWidth)
+                    ! pointInCircle(inputPoint, width/2, circleRadius-lineWidth)
                 ) {
                     self.draggingHue = 1;
                     colorPicker_reDrawHue(self, e);
