@@ -1312,8 +1312,9 @@
                 var self = $(this).data(NAMESPACE);
                 self._source.trigger('resizeStart');
                 colorPicker_resize(self, width);
-                self._source.trigger('resize');
-                self._source.trigger('resizeStop');
+                self._source
+                    .trigger('resize')
+                    .trigger('resizeStop');
             });
         },
         reflow: function () {
