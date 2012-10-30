@@ -328,10 +328,10 @@ $html .= '<h2>Callbacks</h2>';
 
 $properties = array(
     'save()' => array(
-        'default' => '<i>undefined</i>',
+        'default' => '<i>null</i>',
         'description' => 'This function is responsible for saving back the value of the color '
                         . 'to the source element. When not defined, a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
+        'values' => '<i>null</i> or <i>function</i>',
         'samples' => array(
             "// This is the equivalent of the default function\n"
                 ."$(document).ready(function () {\n"
@@ -350,10 +350,10 @@ $properties = array(
         )
     ),
     'load()' => array(
-        'default' => '<i>undefined</i>',
+        'default' => '<i>null</i>',
         'description' => 'This function is responsible for reading in the value of the color '
                         . 'from the source element. When not defined, a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
+        'values' => '<i>null</i> or <i>function</i>',
         'samples' => array(
             "// This is the equivalent of the default function\n"
                 ."$(document).ready(function () {\n"
@@ -368,22 +368,22 @@ $properties = array(
         )
     ),
     'str2color()' => array(
-        'default' => '<i>undefined</i>',
+        'default' => '<i>null</i>',
         'description' => 'This function is responsible for parsing a string into a format '
                         . 'that can be interpreted by the Color class. When not defined, '
                         . 'a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
+        'values' => '<i>null</i> or <i>function</i>',
         'links' => array(
             array('url' => '../demos/custom-color-format.html', 'text' => 'Demo - Custom Color Format'),
             array('url' => 'color-manipulation.html', 'text' => 'Object - Color')
         )
     ),
     'color2str()' => array(
-        'default' => '<i>undefined</i>',
+        'default' => '<i>null</i>',
         'description' => 'This function is responsible for parsing a string into a format '
                         . 'that can be interpreted by the Color class. When not defined, '
                         . 'a default internal function is used.',
-        'values' => '<i>undefined</i> or <i>function</i>',
+        'values' => '<i>null</i> or <i>function</i>',
         'links' => array(
             array('url' => '../demos/custom-color-format.html', 'text' => 'Demo - Custom Color Format'),
             array('url' => 'color-manipulation.html', 'text' => 'Object - Color')

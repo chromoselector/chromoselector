@@ -1373,25 +1373,25 @@
     shadow:        8,          // pos int
     preview:       true,       // bool
     effect:        'fade',     // 'fade' | 'slide'
-    icon:          undefined,  // string
+    icon:          null,       // string
     iconpos:      'right',     // string 'left' | 'right'
     lazy:          true,       // bool
     target:        null,       // null, selector, jQuery object
 
     // events registered with bind() will not be unbound on destroy API call
-    create:      undefined,
-    ready:       undefined,
-    destroy:     undefined,
-    update:      undefined,
-    show:        undefined,
-    beforeHide:  undefined, // if cancelled does not trigger
-    hide:        undefined,
-    resize:      undefined,
-    resizeStart: undefined,
-    resizeStop:  undefined,
+    create:      null,
+    ready:       null,
+    destroy:     null,
+    update:      null,
+    show:        null,
+    beforeHide:  null, // if cancelled does not trigger
+    hide:        null,
+    resize:      null,
+    resizeStart: null,
+    resizeStop:  null,
 
-    save:       undefined,
-    load:       undefined,
-    str2color:  undefined,
-    color2str:  undefined
+    save:       null,
+    load:       null,
+    str2color:  null,
+    color2str:  null
 });
