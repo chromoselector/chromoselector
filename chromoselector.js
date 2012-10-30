@@ -548,24 +548,14 @@
         ctx.fillStyle = "#000";
         ctx.fill();
         // shadow
-        var newPoints = [];
-        newPoints[0] = [
-            width / 2 * 0.05 + points[0][0] * 0.95,
-            width / 2 * 0.05 + points[0][1] * 0.95
-        ];
-        newPoints[1] = [
-            width / 2 * 0.05 + points[1][0] * 0.95,
-            width / 2 * 0.05 + points[1][1] * 0.95
-        ];
-        newPoints[2] = [
-            width / 2 * 0.05 + points[2][0] * 0.95,
-            width / 2 * 0.05 + points[2][1] * 0.95
-        ];
+        var shadowPoint = function (index, axis) {
+            return width / 2 * 0.05 + points[index][axis] * 0.95;
+        };
         ctx.globalCompositeOperation = "destination-over";
         ctx.beginPath();
-        ctx.moveTo(newPoints[0][0], newPoints[0][1]);
-        ctx.lineTo(newPoints[1][0], newPoints[1][1]);
-        ctx.lineTo(newPoints[2][0], newPoints[2][1]);
+        ctx.moveTo(shadowPoint(0, 0), shadowPoint(0, 1));
+        ctx.lineTo(shadowPoint(1, 0), shadowPoint(1, 1));
+        ctx.lineTo(shadowPoint(2, 0), shadowPoint(2, 1));
         ctx.closePath();
         ctx.fillStyle = '#000';
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
