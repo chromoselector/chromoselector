@@ -3,10 +3,11 @@
  *
  * TODO:
  *   Documentation
- *   Fix property names (diameter, iconpos, width)
+ *   Fix property names (diameter, width)
  *   converters code
  *
  * v 1.1.0:
+ *   Improved mobile support
  *   Dialog mode
  *   HSV support
  *   Alpha selection
@@ -424,7 +425,7 @@
         var diameter = self.diameter;
         var ctx = self.canvases[0].getContext("2d");
         colorPicker_drawColorWheelBg(self.canvases[0], diameter);
-        var lineWidth = self.widthRatio * diameter;
+        var lineWidth = self.ringwidthRatio * diameter;
         var circleRadius = (diameter / 2) - 5 - lineWidth / 2;
         var origin = [diameter / 2, diameter / 2];
         // cut out doughnut
@@ -433,7 +434,7 @@
         ctx.strokeStyle = "#000";
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - (self.widthRatio * diameter / 2), 0, Math.PI*2);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.ringwidthRatio * diameter / 2), 0, Math.PI*2);
         ctx.closePath();
         ctx.fill();
 
@@ -442,7 +443,7 @@
         tempCtx.fillRect(0,0,600,600);
         tempCtx.globalCompositeOperation = "destination-out";
         tempCtx.beginPath();
-        tempCtx.arc(origin[0], origin[1], circleRadius + (self.widthRatio * diameter / 4), 0, Math.PI*2);
+        tempCtx.arc(origin[0], origin[1], circleRadius + (self.ringwidthRatio * diameter / 4), 0, Math.PI*2);
         tempCtx.closePath();
         tempCtx.fill();
         ctx.drawImage(tempCanvas, 0, 0);
@@ -582,7 +583,7 @@
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
         /** get hue indicator position */
-        var circleRadius = (self.diameter / 2) - 5 - (self.widthRatio * self.diameter * 2 / 3);
+        var circleRadius = (self.diameter / 2) - 5 - (self.ringwidthRatio * self.diameter * 2 / 3);
         var indicator = getPointOnCircle(circleRadius, degrees, self.diameter / 2);
 
         /** get draw sat/lum indicator position */
@@ -901,7 +902,7 @@
         if (diameter !== self.diameter) {
             self.ready = 0;
             self.diameter = diameter;
-            self.triangleRadius = diameter / 2 - 10 - self.widthRatio * diameter;
+            self.triangleRadius = diameter / 2 - 10 - self.ringwidthRatio * diameter;
             self.canvases
                 .each(function () {
                     this.width = diameter;
@@ -1032,9 +1033,9 @@
         self._source = $this;
         colorPicker_load(self); // sets self.color
         self.diameter = colorPicker_fixDiameter(self.settings.diameter);
-        self.widthRatio = self.settings.width / 3;
+        self.ringwidthRatio = self.settings.ringwidth / 3;
         self.shadowRatio = self.settings.shadow / self.diameter;
-        self.triangleRadius = self.diameter / 2 - 10 - self.widthRatio * self.diameter;
+        self.triangleRadius = self.diameter / 2 - 10 - self.ringwidthRatio * self.diameter;
         var canvasString = '<canvas width="' + self.diameter + '" height="' + self.diameter + '"></canvas>';
         if (self.settings.target) {
             self._target = $(self.settings.target);
@@ -1177,7 +1178,7 @@
         });
         self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e);
-            var lineWidth = self.widthRatio * self.diameter / 2;
+            var lineWidth = self.ringwidthRatio * self.diameter / 2;
             var circleRadius = (self.diameter / 2) - (lineWidth/2) - lineWidth;
             var inputPoint = getEventPosition(self, e, self._picker);
             if (self.settings.resizable
@@ -1369,7 +1370,7 @@
     autosave:      true,       // bool
     speed:         400,        // pos int | 'fast' | 'slow' | 'medium'
     diameter:      180,        // pos int
-    width:         .33,        // float
+    ringwidth:     .33,        // float
     resizable:     true,       // bool
     shadow:        8,          // pos int
     preview:       true,       // bool
