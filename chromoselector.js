@@ -601,10 +601,10 @@
             points[1],
             points[2]
         );
-        var maxWidth = getDistance(points[1], points[2]);
-        var width = getDistance(points[2], thePoint1);
+        var maxLength = getDistance(points[1], points[2]);
+        var length = getDistance(points[2], thePoint1);
         var slopePoint = points[2];
-        if (width >= maxWidth / 2) {
+        if (length >= maxLength / 2) {
             slopePoint = points[1];
         }
         var thePoint2 = intersectLineLine(
