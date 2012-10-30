@@ -12,6 +12,13 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
     $html .= '<script src="' . $path . '/../jquery-1.7.2.min.js" type="text/javascript"></script>';
+
+    $html .= '<script type="text/javascript">';
+    $html .= '$(document).live("mobileinit", function(){';
+    $html .= '$.mobile.ajaxEnabled = false;';
+    $html .= '});';
+    $html .= '</script>';
+
     $html .= '<script src="' . $path . '/libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/../chromoselector.min.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/custom-color-format.js" type="text/javascript"></script>';

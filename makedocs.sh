@@ -9,7 +9,8 @@ for file in $list; do
   wget -O docs/api/$file http://localhost/chromoselector/docs-src/api/$file;
 done
 
-rm -f docs/demos/*.html
+rm -f docs/demos/*
+cp docs-src/demos/*.js docs/demos/
 list=$(cd docs-src/demos && ls *.html);
 for file in $list; do
   wget -O docs/demos/$file http://localhost/chromoselector/docs-src/demos/$file;
