@@ -1026,7 +1026,6 @@
 
         self.resizing = 0;
         self.resizingRenderer = new Renderer(self, colorPicker_handleResizeDrag);
-
         self.valueRenderer = new Renderer(self, colorPicker_update, 100);
 
         self._source = $this;
@@ -1300,8 +1299,7 @@
                 self.color.setColor(value);
                 colorPicker_drawSaturationLimunositySelector(self);
                 colorPicker_drawIndicators(self);
-                // FIXME: need to call 'update' here
-                // colorPicker_setValue(self);
+                self.valueRenderer.save(self.color);
             });
         },
         getColor: function () {
