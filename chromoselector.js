@@ -718,7 +718,7 @@
             );
         }
     }
-    function colorPicker_load(self) {
+    function colorPicker_load(self, redraw) {
         var str;
         if (typeof self.settings.load == 'function') {
             str = self.settings.load.call(self._source);
@@ -732,6 +732,10 @@
         }
         if (self.settings.preview && self.$preview) {
             self.$preview.find('div').css('background', self.color.hex);
+        }
+        if (redraw) {
+            colorPicker_drawSaturationLimunositySelector(self);
+            colorPicker_drawIndicators(self);
         }
     }
     function colorPicker_show(self, speed) {
@@ -1285,13 +1289,19 @@
                 colorPicker_save($(this).data(NAMESPACE));
             });
         },
+        load: function() {
+            return this.each(function () {
+                colorPicker_load($(this).data(NAMESPACE), 1);
+            });
+        },
         setColor: function (value) {
             return this.each(function () {
                 var self = $(this).data(NAMESPACE);
                 self.color.setColor(value);
                 colorPicker_drawSaturationLimunositySelector(self);
                 colorPicker_drawIndicators(self);
-                colorPicker_setValue(self);
+                // FIXME: need to call 'update' here
+                // colorPicker_setValue(self);
             });
         },
         getColor: function () {
@@ -1317,6 +1327,7 @@
             retval.show     = function (speed) { methods.show.apply(that, [speed]); return this; };
             retval.hide     = function (speed) { methods.hide.apply(that, [speed]); return this; };
             retval.save     = function ()      { methods.save.call(that); return this; };
+            retval.load     = function ()      { methods.load.call(that); return this; };
             retval.getColor = function ()      { return methods.getColor.call(that); };
             retval.setColor = function (color) { methods.setColor.apply(that, [color]); return this; };
             retval.destroy  = function ()      { methods.destroy.call(that); };
