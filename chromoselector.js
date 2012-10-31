@@ -968,7 +968,7 @@
             retval = value;
         } else if (index === 'icon' && typeof value === 'string') {
             retval = value;
-        } else if (index.match(/^autoshow|autosave|resizable|preview|true$/)) {
+        } else if (index.match(/^autoshow|autosave|resizable|preview$/)) {
             retval = !!value;
         } else if (index.match(/^speed|width|shadow$/)) {
             var intValue = parseInt(value, 10) || 0;
