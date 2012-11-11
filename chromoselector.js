@@ -946,37 +946,40 @@
     }
     function colorPicker_sanitiseSettingsValue(index, value) {
         var retval;
-        if (index === 'ringwidth' && typeof value != 'undefined') {
-            var floatValue = parseFloat(value, 10) || 0;
-            if (floatValue < .1) {
-                retval = .1;
-            } else if (floatValue > 1) {
-                retval = 1;
+        if (typeof value != 'undefined') {
+            if (index === 'ringwidth') {
+                var floatValue = parseFloat(value, 10) || 0;
+                if (floatValue < .1) {
+                    retval = .1;
+                } else if (floatValue > 1) {
+                    retval = 1;
+                } else {
+                    retval = floatValue;
+                }
+            } else if (index === 'effect') {
+                retval = value === 'slide' ? 'slide' : 'fade';
+            } else if (index === 'iconpos') {
+                retval = value === 'left' ? 'left' : 'right';
+            } else if (index === 'target' && (value === null || $(value).length)) {
+                retval = value;
+            } else if (index === 'icon' && typeof value === 'string') {
+                retval = value;
+            } else if (index.match(/^autoshow|autosave|resizable|preview$/)) {
+                retval = !!value;
+            } else if (index.match(/^speed|width|shadow$/)) {
+                var intValue = parseInt(value, 10) || 0;
+                retval = intValue > 0 ? intValue : 0;
+            } else if (
+                typeof value === 'function'
+                &&
+                value.match(
+                    /^create|ready|destroy|update|show|beforeHide|hide|resize|resizeStart|resizeStop|save|load|str2color|color2str$/
+                )
+            ) {
+                retval = value;
             } else {
-                retval = floatValue;
+                return defaults[index];
             }
-        } else if (index === 'effect') {
-            retval = value === 'slide' ? 'slide' : 'fade';
-        } else if (index === 'iconpos') {
-            retval = value === 'left' ? 'left' : 'right';
-        } else if (index === 'target' && (value === null || $(value).length)) {
-            retval = value;
-        } else if (index === 'icon' && typeof value === 'string') {
-            retval = value;
-        } else if (index.match(/^autoshow|autosave|resizable|preview$/)) {
-            retval = !!value;
-        } else if (index.match(/^speed|width|shadow$/)) {
-            var intValue = parseInt(value, 10) || 0;
-            retval = intValue > 0 ? intValue : 0;
-        } else if (
-            typeof value === 'function'
-            // FIXME
-           /* &&
-            defaults.indexOf(value) >= defaults.indexOf('create')*/
-        ) {
-            retval = value;
-        }
-        if (retval) {
             return retval;
         } else {
             return defaults[index];
