@@ -1,17 +1,26 @@
 /**
  * ChromoSelector 1.0.0 for jQuery 1.3+
  *
- * TODO:
+ * TODO
+ *
+ * v 1.0.0:
+ *   opera bug
  *   Documentation
  *   converters code
  *
+ * v 1.0.1:
+ *   Better slide animation
+ *
  * v 1.1.0:
+ *   Alpha selection
+ *   HSV support
+ *
+ * v 1.2.0:
+ *   Side panel
+ *
+ * v 2.0.0:
  *   Improved mobile support
  *   Dialog mode
- *   HSV support
- *   Alpha selection
- *   Side panel
- *   Better slide animation
  *   refactor hue2rgb
  *   Faster shadow - rotate instead of blurring
  *   shorter code
