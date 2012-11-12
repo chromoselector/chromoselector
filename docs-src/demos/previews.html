@@ -1,0 +1,92 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'previews', 'Documentation / Demos / Previews');
+$html .= '<div class="content-primary">';
+$html .= '<form action="#" method="get">';
+$html .= '<h2>Previews</h2>';
+
+$template  = '<div data-role="collapsible" data-collapsed="false"';
+$template .= ' data-theme="b" data-content-theme="d"';
+$template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$template .= '<h3>%s</h3>';
+$template .= '<div data-role="fieldcontain">';
+$template .= '<label for="%s">Pick a color:</label>';
+$template .= '<input type="text" name="%s" id="%s" value="%s" />';
+$template .= '</div>';
+$template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
+$template .= '<h3>Code</h3>';
+$template .= '<pre><code class="javascript">%s</code></pre>';
+$template .= '</div>';
+$template .= '</div>';
+
+$demos = array(
+    array(
+        'title' => 'Inline Preview',
+        'id' => 'inline',
+        'color' => '#000000',
+        'code' => "$(function () {\n"
+                . "    $('#inline').chromoselector({\n"
+                . "        preview: true\n"
+                . "     })\n"
+                . "});\n"
+    ),
+    array(
+        'title' => 'No Preview',
+        'id' => 'no_preview',
+        'color' => '#000000',
+        'code' => "$(function () {\n"
+                . "    $('#no_preview').chromoselector({\n"
+                . "        preview: false\n"
+                . "     })\n"
+                . "});\n"
+    ),
+    array(
+        'title' => 'Preview in textfield',
+        'id' => 'textfield',
+        'color' => '#7bda1b',
+        'code' => "$(function () {\n"
+                . "    var updatePreview = function() {\n"
+                . "        var color = $(this).chromoselector('getColor');\n"
+                . "        $(this).css({\n"
+                . "            'background-color': color.hex,\n"
+                . "            'color': color.getTextColor().hex,\n"
+                . "            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().hex\n"
+                . "        });\n"
+                . "    };\n"
+                . "    $('#textfield').chromoselector({\n"
+                . "        preview: false,\n"
+                . "        create: updatePreview,\n"
+                . "        update: updatePreview\n"
+                . "    });\n"
+                . "});\n"
+    )
+);
+
+foreach ($demos as $value) {
+    $html .= sprintf(
+        $template,
+        $value['title'],
+        $value['id'],
+        $value['id'],
+        $value['id'],
+        $value['color'],
+        $value['code']
+    );
+}
+
+$html .= '</form>';
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getDemosMenu('..', 'ui-dialog');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo $html;
+
+?>
+

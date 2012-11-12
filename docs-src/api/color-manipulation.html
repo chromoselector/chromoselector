@@ -61,7 +61,31 @@ console.log(color.hex)  // prints: "#ff0000"
 console.log(color.rgb)  // prints: { r: 1, g: 0, b: 0 }
 console.log(color.cmyk) // prints: { c: 0, m: 1, y: 1, k: 0 }
 </code></pre>';
+
+$html .= '<h3>Getting a contrasting color:</h3>';
+$html .= '<p>You may need a contrasting color if you need to print text on the background of the selected color. Here\'s how to obtain one:</p>';
+$html .= '<pre class="instant"><code class="javascript">$("#textfield").chromoselector("setColor", "#0f0"); // green
+var color = $("#textfield").chromoselector("getColor");
+color.hex // #0f0
+color.getTextColor().hex // #000 (black)
+color.getTextColor().getTextColor().hex // #fff (white)
+</code></pre>';
+$html .= '<pre class="instant"><code class="javascript">
+// Change the input textfield colors on update
+$("#textfield").chromoselector({
+    preview: false,
+    update: function() {
+    var color = $(this).chromoselector("getColor");
+    $(this).css({
+        "background-color": color.hex,
+        "color": color.getTextColor().hex
+    });
+}
+});
+</code></pre>';
+
 $html .= '<strong>See also:</strong><p><a href="../demos/custom-color-format.html">Demo - Custom Color Format</a></p>';
+$html .= '<p><a href="../demos/previews.html">Demo - Previews</a></p>';
 $html .= '</div>';
 $html .= '<div class="content-secondary">';
 $html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';

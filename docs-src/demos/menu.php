@@ -1,14 +1,14 @@
 <?php
 
 function getDemosMenu($path = '.', $selected = '') {
-    $html  = '<li data-role="list-divider">API</li>';
+    $html  = '<li data-role="list-divider">Demos</li>';
     $elms = array(
         'basic-usage' => 'Basic Usage',
         'ui-dialog' => 'jQuery UI Dialog',
         'custom-color-format' => 'Custom Color Formats',
-        'icon' => 'Icon',
+        'previews' => 'Previews',
         'custom-style' => 'Custom Style',
-        'previews' => 'Previews'
+        'icon' => 'Icon'
     );
     foreach ($elms as $key => $value) {
         if ($key == $selected) {
