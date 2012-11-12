@@ -971,19 +971,16 @@
         var oe = e.originalEvent;
         var touch = oe.touches || oe.changedTouches;
         var offset = $obj.parent().offset();
+        var previewHeight = self.$preview.outerHeight();
         if (touch) {
             // touchscreen
             x = touch[0].pageX - offset.left;
-            y = touch[0].pageY - offset.top - self.$preview.outerHeight();
-        } else if (e.pageX /*&& this.mouse*/) {
+            y = touch[0].pageY - offset.top - previewHeight;
+        } else if (e.pageX) {
             // mouse
             x = e.pageX - offset.left;
-            y = e.pageY - offset.top - self.$preview.outerHeight();
-        }/* else {
-            // a mouse event being fired during a touch swipe
-            // This seems to be an Android bug
-            // FIXME: need to handle this error :(
-        }*/
+            y = e.pageY - offset.top - previewHeight;
+        }
         return [x, y];
     }
 
