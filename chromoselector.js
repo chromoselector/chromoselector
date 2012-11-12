@@ -100,6 +100,9 @@
             }
             return self;
         };
+        Color.prototype.getTextColor = function() {
+            return this.hsl.l < 0.3 ? '#fff' : '#000';
+        };
         function setRgb(self, value) {
             self.rgb = value;
             self.hsl = rgb2hsl(value);
