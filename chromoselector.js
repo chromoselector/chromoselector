@@ -101,7 +101,12 @@
             return self;
         };
         Color.prototype.getTextColor = function() {
-            return this.hsl.l < 0.3 ? '#fff' : '#000';
+            var self = this;
+            color = (self.rgb.r + self.rgb.g +  self.rgb.b) / 3;
+            if (self.hsl.h < .75 && self.hsl.h > .6) {
+                color *= .65;
+            }
+            return new Color(color < .3 ? '#fff' : '#000');
         };
         function setRgb(self, value) {
             self.rgb = value;
