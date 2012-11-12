@@ -959,7 +959,7 @@
             } else if (
                 typeof value === 'function'
                 &&
-                value.match(
+                index.match(
                     /^create|ready|destroy|update|show|beforeHide|hide|resize|resizeStart|resizeStop|save|load|str2color|color2str$/
                 )
             ) {
