@@ -1050,6 +1050,9 @@
             .append(
                 $('<img/>')
                 .attr('src', self.settings.icon)
+                .load(function () {
+                    colorPicker_fixPosition(self);
+                })
             );
             self._target.append(self._icon);
         } else {
@@ -1231,10 +1234,6 @@
         }).bind('resize', function () {
             colorPicker_fixPosition(self);
         });
-
-        setTimeout(function () {
-            colorPicker_fixPosition(self);
-        }, 40);
     };
 
     var methods = {
