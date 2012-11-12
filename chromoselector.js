@@ -23,44 +23,31 @@
      * NAMESPACE for events and data
      */
     var NAMESPACE = 'chromoselector';
-
     /**
-     * Time management for rendering
+     * Function call throttling
      */
-    function Renderer(picker, callback, delay) {
-        var self = this;
-        self.picker = picker;
-        self.callback = callback;
-        self.delay = delay || 8;
-        // self.saved = undefined;
-        self.busy = 0;
-    }
-    Renderer.prototype.save = function (e) {
-        var self = this;
-        if (self.busy) {
-            self.saved = e;
-        } else {
-            self.busy = 1;
-            self.callback.apply({}, [self.picker, e]);
-            self.stop();
-        }
-    };
-    Renderer.prototype.stop = function () {
-        // Removes the busy flag asynchronously, this way the event queue
-        // can clear up meanwhile. This speeds up rendering.
-        var self = this;
-        setTimeout(function () {
-            if (typeof self.saved == 'undefined') {
-                self.busy = 0;
-            } else {
-                var target = self.saved;
-                self.saved = undefined;
-                self.callback.apply({}, [self.picker, target]);
-                self.stop();
-            }
-        }, self.delay);
-    };
-
+    var throttle = (function() {
+        return function(fn, timeout) {
+            var timer, args, invoke, tick;
+            timeout = timeout || 4;
+            tick = function () {
+                if (invoke) {
+                    fn.apply({}, args);
+                    invoke = 0;
+                    timer = setTimeout(tick, timeout);
+                } else {
+                    timer = 0;
+                }
+            };
+            return function() {
+                args = arguments;
+                invoke = 1;
+                if (! timer) {
+                    tick();
+                }
+            };
+        };
+    })();
     /**
      * COLOR MANAGEMENT
      */
@@ -676,7 +663,7 @@
         colorPicker_drawIndicators(
             self
         );
-        self.valueRenderer.save(self.color);
+        self.valueRenderer(self);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
         self.color.setColor({
@@ -687,7 +674,7 @@
         colorPicker_drawIndicators(
             self
         );
-        self.valueRenderer.save(self.color);
+        self.valueRenderer(self);
     }
     function colorPicker_update(self) {
         if (self.settings.autosave) {
@@ -1016,14 +1003,14 @@
         self.settings = settings;
 
         self.draggingHue = 0;
-        self.draggingHueRenderer = new Renderer(self, colorPicker_reDrawHue);
+        self.draggingHueRenderer = throttle(colorPicker_reDrawHue);
 
         self.draggingSatLum = 0;
-        self.draggingSatLumRenderer = new Renderer(self, colorPicker_handleSatLumDrag);
+        self.draggingSatLumRenderer = throttle(colorPicker_handleSatLumDrag);
 
         self.resizing = 0;
-        self.resizingRenderer = new Renderer(self, colorPicker_handleResizeDrag);
-        self.valueRenderer = new Renderer(self, colorPicker_update, 100);
+        self.resizingRenderer = throttle(colorPicker_handleResizeDrag);
+        self.valueRenderer = throttle(colorPicker_update, 100);
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
@@ -1193,13 +1180,13 @@
                     ! pointInCircle(inputPoint, self.width/2, circleRadius-lineWidth)
                 ) {
                     self.draggingHue = 1;
-                    colorPicker_reDrawHue(self, e);
+                    self.draggingHueRenderer(self, e);
                 } else {
                     var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
                     var points = colorPicker_getPoints(self, degrees);
                     if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
                         self.draggingSatLum = 1;
-                        colorPicker_handleSatLumDrag(self, e);
+                        self.draggingSatLumRenderer(self, e);
                     }
                 }
             }
@@ -1207,13 +1194,13 @@
         $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
                 preventDefault(e);
-                self.draggingHueRenderer.save(e);
+                self.draggingHueRenderer(self, e);
             } else if (self.draggingSatLum) {
                 preventDefault(e);
-                self.draggingSatLumRenderer.save(e);
+                self.draggingSatLumRenderer(self, e);
             } else if (self.resizing) {
                 preventDefault(e);
-                self.resizingRenderer.save(e);
+                self.resizingRenderer(self, e);
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
@@ -1294,7 +1281,7 @@
                 self.color.setColor(value);
                 colorPicker_drawSaturationLimunositySelector(self);
                 colorPicker_drawIndicators(self);
-                self.valueRenderer.save(self.color);
+                self.valueRenderer(self);
             });
         },
         getColor: function () {
