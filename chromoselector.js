@@ -264,12 +264,6 @@
             offset + (radius * Math.sin(degrees))
         ];
     }
-    /*function getMidpoint(p1, p2) {
-        return [
-            (p1[0] + p2[0]) / 2,
-            (p1[1] + p2[1]) / 2
-        ];
-    }*/
     function pointInCircle(point, origin, radius) {
         return getDistance(point, [origin, origin]) <= radius;
     }
