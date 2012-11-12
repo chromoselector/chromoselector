@@ -725,6 +725,11 @@
         }
     }
     function colorPicker_show(self, speed) {
+        if (self.hiding) {
+            clearTimeout(self.hiding);
+            self.hiding = 0;
+            return;
+        }
         if (! self.ready) {
             colorPicker_drawAll(self);
         } else {
@@ -749,23 +754,26 @@
         );
     }
     function colorPicker_hide(self, speed) {
-        if (! speed) {
-            speed = self.settings.speed;
-        }
-        var retval = self._source.triggerHandler('beforeHide');
-        if (typeof retval == 'undefined' || retval) {
-            var effect = self.effect === 'fade' ? 'fadeOut' : 'slideUp';
-            self._container[effect].apply(
-                self._container,
-                [
-                    speed,
-                    function () {
-                        colorPicker_fixPosition(self);
-                        self._source.trigger('hide');
-                    }
-                ]
-            );
-        }
+        self.hiding = setTimeout(function () {
+            self.hiding = 0;
+            if (! speed) {
+                speed = self.settings.speed;
+            }
+            var retval = self._source.triggerHandler('beforeHide');
+            if (typeof retval == 'undefined' || retval) {
+                var effect = self.effect === 'fade' ? 'fadeOut' : 'slideUp';
+                self._container[effect].apply(
+                    self._container,
+                    [
+                        speed,
+                        function () {
+                            colorPicker_fixPosition(self);
+                            self._source.trigger('hide');
+                        }
+                    ]
+                );
+            }
+        }, 100);
     }
     function colorPicker_handleSatLumDrag(self, e) {
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
@@ -1010,6 +1018,8 @@
         self.resizing = 0;
         self.resizingRenderer = throttle(colorPicker_handleResizeDrag);
         self.valueRenderer = throttle(colorPicker_update, 100);
+
+        self.hiding = 0;
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
