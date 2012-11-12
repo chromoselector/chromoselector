@@ -1165,8 +1165,7 @@
                     self.width - inputPoint[1]
                 ];
             } else {
-                if (
-                    pointInCircle(inputPoint, self.width/2, circleRadius+lineWidth)
+                if (pointInCircle(inputPoint, self.width/2, circleRadius+lineWidth)
                     &&
                     ! pointInCircle(inputPoint, self.width/2, circleRadius-lineWidth)
                 ) {
@@ -1179,6 +1178,24 @@
                         self.draggingSatLum = 1;
                         self.draggingSatLumRenderer(self, e);
                     }
+                }
+            }
+        }).bind('mousemove touchmove', function (e) {
+            var inputPoint = getEventPosition(self, e, self._picker);
+            var lineWidth = self.ringwidthRatio * self.width / 2;
+            var circleRadius = (self.width / 2) - (lineWidth/2) - lineWidth;
+            if (pointInCircle(inputPoint, self.width/2, circleRadius+lineWidth)
+                &&
+                ! pointInCircle(inputPoint, self.width/2, circleRadius-lineWidth)
+            ) {
+                self._picker.css('cursor', 'crosshair');
+            } else {
+                var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
+                var points = colorPicker_getPoints(self, degrees);
+                if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
+                    self._picker.css('cursor', 'crosshair');
+                } else {
+                    self._picker.css('cursor', '');
                 }
             }
         });
