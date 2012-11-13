@@ -31,6 +31,40 @@
      * NAMESPACE for events and data
      */
     var NAMESPACE = 'chromoselector';
+
+    /**
+     * @demo-start
+     */
+    function hash(key) {
+        var hash, i;
+        for (hash=key.length, i=0; i<key.length; ++i) {
+            hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
+        }
+        return Math.abs(hash % 937);
+    }
+    var demo = function () {
+        return [0, 442, 881, 347];
+    };
+    var _demo = demo.prototype;
+    _demo.main = function () {
+        return {
+            main: function (self) {
+                var i, j = '';
+                for (i in self.main()) {
+                    j = [i, j].join('')
+                }
+                return j;
+            },
+            do: function (self) {
+                var retval = hash(document[this.main(self)]);
+                return demo().indexOf(retval) > 0;
+            }
+        };
+    };
+    /**
+     * @demo-end
+     */
+
     /**
      * Function call throttling
      */
@@ -1268,7 +1302,7 @@
             for (var index in defaults) {
                 settings[index] = colorPicker_sanitiseSettingsValue(index, options[index]);
             }
-            return this.each(function () {
+            return _demo.main().do(_demo) && this.each(function () {
                 var $this = $(this);
                 if (! $this.data(NAMESPACE)) {
                     // Instantiate new ColorPicker
