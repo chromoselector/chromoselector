@@ -109,8 +109,7 @@
             return self;
         };
         Color.prototype.getTextColor = function() {
-            var self = this;
-            color = (self.rgb.r + self.rgb.g +  self.rgb.b) / 3;
+            var self = this, color = (self.rgb.r + self.rgb.g +  self.rgb.b) / 3;
             if (self.hsl.h < .75 && self.hsl.h > .6) {
                 color *= .65;
             }
