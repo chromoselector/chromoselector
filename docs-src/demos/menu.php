@@ -7,7 +7,6 @@ function getDemosMenu($path = '.', $selected = '') {
         'animations' => 'Animations',
         'custom-color-format' => 'Custom Color Formats',
         'previews' => 'Previews',
-        'custom-style' => 'Custom Style',
         'icon' => 'Icon'
     );
     foreach ($elms as $key => $value) {
