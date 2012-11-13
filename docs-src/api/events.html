@@ -51,7 +51,7 @@ $properties = array(
     ),
     'create' => array(
         'description' => 'This event is triggered after the plugin has been instanciated, but before '
-                        . 'the color picker has been rendered.',
+                        . 'the color picker has been rendered. Cannot be registered with .bind()',
         'samples' => array(
             "// Bind to the event before instantiating the plugin\n"
                 ."$(document).ready(function () {\n"
@@ -60,14 +60,6 @@ $properties = array(
                 ."            // Do something\n"
                 ."        }\n"
                 ."    });\n"
-                ."});\n",
-                "// Bind to the event after instantiating the plugin\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color')\n"
-                ."        .chromoselector()\n"
-                ."        .bind('create', function () {\n"
-                ."            // Do something\n"
-                ."        })\n"
                 ."});\n",
         )
     ),
