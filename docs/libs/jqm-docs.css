@@ -455,3 +455,7 @@ dl dd ul li { border: none; }
 .ui-mobile-viewport .localnav li {
     border: none;
 }
+
+#icon form > div > .ui-collapsible-content {
+    padding: 10px 55px;
+}

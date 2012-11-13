@@ -1258,6 +1258,10 @@
         }).bind('resize', function () {
             colorPicker_fixPosition(self);
         });
+
+        setTimeout(function () {
+            colorPicker_fixPosition(self);
+        }, 4)
     };
 
     var methods = {

@@ -7,7 +7,6 @@ $(function () {
         iconpos: 'left'
     });
     $('#icon').bind('updatelayout', function () {
-        $(this).find('#color1, #color2').chromoselector('reflow');
+        $(this).find('input').chromoselector('reflow');
     });
-    $('#icon form > div > .ui-collapsible-content').css('padding', '10px 55px');
 });
