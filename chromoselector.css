@@ -4,6 +4,7 @@
     background: rgba(228, 204, 193, 0.8);
     border: 1px solid #521;
     border-color: rgba(82, 37, 18, 0.5);
+    position: absolute;
 }
 .ui-cs-container .ui-cs-preview-container {
     margin: 0;

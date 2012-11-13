@@ -1062,8 +1062,7 @@
         self._container = $('<div/>')
             .append(self._picker)
             .width(self.width)
-            .addClass('ui-cs-container')
-            .css('position','absolute');
+            .addClass('ui-cs-container');
 
         if (self.settings.icon) {
             self._icon = $('<a />', {href: '#', tabindex:'999'})
