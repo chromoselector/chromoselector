@@ -1161,6 +1161,11 @@
             }).blur(function () {
                 colorPicker_hide(self);
             });
+            self._source.keydown(function (e) {
+                if (e.keyCode === 27) {
+                    colorPicker_hide(self);
+                }
+            });
         }
         /**
         * Register events
@@ -1170,10 +1175,6 @@
             colorPicker_load(self);
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
-        }).keydown(function (e) {
-            if (e.keyCode === 27) {
-                colorPicker_hide(self);
-            }
         });
         self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e);
