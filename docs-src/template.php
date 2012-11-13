@@ -25,6 +25,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<script src="' . $path . '/demos/icon.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/previews.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/animations.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $path . '/demos/display-modes.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/highlight.pack.js" type="text/javascript"></script>';
 
 

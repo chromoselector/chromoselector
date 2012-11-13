@@ -459,3 +459,13 @@ dl dd ul li { border: none; }
 #icon form > div > .ui-collapsible-content {
     padding: 10px 55px;
 }
+#picker {
+    border: 1px solid;
+    float: left;
+    padding: 1em;
+    background-color: #e4ccc1;
+}
+
+#picker input {
+    width: 100%;
+}
