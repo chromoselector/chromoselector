@@ -4,7 +4,6 @@
  * TODO
  *
  * v 1.0.0:
- *   opera bug
  *   Documentation
  *   converters code
  *
@@ -420,8 +419,8 @@
      */
     function colorPicker_drawHueSelector(self) {
         var width = self.width;
-        var ctx = self.canvases[0].getContext("2d");
-        colorPicker_drawColorWheelBg(self.canvases[0], width);
+        var ctx = self.canvases[1].getContext("2d");
+        colorPicker_drawColorWheelBg(self.canvases[1], width);
         var lineWidth = self.ringwidthRatio * width;
         var circleRadius = (width / 2) - 5 - lineWidth / 2;
         var origin = [width / 2, width / 2];
@@ -446,7 +445,7 @@
         ctx.drawImage(tempCanvas, 0, 0);
 
         // shadow
-        ctx.globalCompositeOperation = "destination-over";
+        var ctx = self.canvases[0].getContext("2d");
         ctx.lineWidth = lineWidth / 2;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * width;
@@ -454,7 +453,6 @@
         ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2);
         ctx.closePath();
         ctx.stroke();
-        ctx.globalCompositeOperation = "source-over";
     }
 
     /**
@@ -462,7 +460,7 @@
      */
     function colorPicker_drawSaturationLimunositySelector(self) {
         var hue = self.color.hsl.h;
-        var canvas = self.canvases[1];
+        var canvas = self.canvases[2];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.width, self.width);
         var degrees = -Math.PI / 2;
@@ -564,7 +562,7 @@
     }
 
     function colorPicker_drawIndicators(self) {
-        var canvas = self.canvases[2];
+        var canvas = self.canvases[3];
         var ctx = canvas.getContext("2d");
         ctx.clearRect(0,0,self.width, self.width);
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
@@ -1058,7 +1056,7 @@
             .width(self.width)
             .height(self.width)
             .html(
-                canvasString + canvasString + canvasString
+                canvasString + canvasString + canvasString + canvasString
             );
 
         self._container = $('<div/>')
