@@ -1,31 +1,35 @@
 /**
- * ChromoSelector 1.0.0 for jQuery 1.3+
- *
- * TODO
- *
- * v 1.0.0:
- *   Documentation
- *   converters code
- *
- * v 1.0.1:
- *   Better slide animation
- *
- * v 1.1.0:
- *   Alpha selection
- *   HSV support
- *
- * v 1.2.0:
- *   Side panel
- *
- * v 2.0.0:
- *   Improved mobile support
- *   Dialog mode
- *   refactor hue2rgb
- *   Faster shadow - rotate instead of blurring
- *   shorter code
+ * Copyright 2012 - www.chromoselector.com
+ * All rights reserved
  */
 (function ($, window, Math, defaults) {
     "use strict";
+    /**
+     * ChromoSelector 1.0.0 for jQuery 1.3+
+     *
+     * TODO
+     *
+     * v 1.0.0:
+     *   Documentation
+     *   converters code
+     *
+     * v 1.0.1:
+     *   Better slide animation
+     *
+     * v 1.1.0:
+     *   Alpha selection
+     *   HSV support
+     *
+     * v 1.2.0:
+     *   Side panel
+     *
+     * v 2.0.0:
+     *   Improved mobile support
+     *   Dialog mode
+     *   refactor hue2rgb
+     *   Faster shadow - rotate instead of blurring
+     *   shorter code
+     */
     var document = window.document;
     /**
      * NAMESPACE for events and data
