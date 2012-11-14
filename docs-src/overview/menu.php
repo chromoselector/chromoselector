@@ -6,7 +6,6 @@ function getOverviewMenu($path = '.', $selected = '') {
         'purchase' => 'Purchase',
         'features' => 'Features',
         'requirements' => 'Requirements',
-        'getting-started' => 'Getting Started',
         'support' => 'Support'
     );
 
