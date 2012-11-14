@@ -24,24 +24,13 @@
     &lt;script src=&quot;chromoselector.js&quot; type=&quot;text/javascript&quot;&gt;&lt;/script&gt;
     &lt;script type=&quot;text/javascript&quot;&gt;
     $(function () {
-        var updatePreview = function() {
-            var color = $(this).chromoselector('getColor');
-            $(this).css({
-                'background-color': color.hex,
-                'color': color.getTextColor().hex,
-                'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().hex
-            });
-        };
-
         $('#basic2').chromoselector({
             target: '#picker',
             autoshow: false,
             create: function () {
-                updatePreview.call(this);
                 $(this).chromoselector('show', 0);
             },
-            width: 260,
-            update: updatePreview
+            width: 260
         });
     });
     &lt;/script&gt;
