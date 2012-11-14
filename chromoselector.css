@@ -25,3 +25,9 @@
 .ui-cs-icon {
     z-index: 4000;
 }
+
+.ui-cs-container.ui-cs-static {
+    position: relative;
+    background: none;
+    border: none;
+}

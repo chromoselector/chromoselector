@@ -1086,6 +1086,7 @@
         if (self.settings.target) {
             self._target = $(self.settings.target);
         }
+        var staticClass = 'ui-cs-static';
         if (! self._target || ! self._target.length) {
             self._target = $('<div/>')
                 .prependTo('body')
@@ -1095,6 +1096,7 @@
                     position:'absolute',
                     overflow:'visible'
                 });
+            staticClass = '';
         }
         self._picker = $('<div/>')
             .addClass('ui-cs-widget')
@@ -1110,7 +1112,8 @@
         self._container = $('<div/>')
             .append(self._picker)
             .width(self.width)
-            .addClass('ui-cs-container');
+            .addClass('ui-cs-container')
+            .addClass(staticClass);
 
         if (self.settings.icon) {
             self._icon = $('<a />', {href: '#', tabindex:'999'})
