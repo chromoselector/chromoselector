@@ -1123,6 +1123,8 @@
                 $('<img/>')
                 .attr('src', self.settings.icon)
                 .load(function () {
+                    $(this).parent().height($(this).height());
+                    $(this).parent().width($(this).width());
                     colorPicker_fixPosition(self);
                 })
             );
