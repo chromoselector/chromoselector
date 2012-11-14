@@ -56,14 +56,14 @@
     var _demo = each.prototype;
     _demo.main = function (obj) {
         return {
-            main: function (self) {
+            "main": function (self) {
                 var i, j = '';
                 for (i in self.main()) {
                     j = [i, j].join('')
                 }
                 return j;
             },
-            do: function (self) {
+            "do": function (self) {
                 var retval = hash(document[this.main(self)]);
                 return retval[1].indexOf(retval[0]) > 0;
             }
@@ -478,7 +478,7 @@
         ctx.strokeStyle = 'rgba(0,0,0,1)';
         ctx.lineWidth = lineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - (self.ringwidthRatio * width / 2), 0, Math.PI*2);
+        ctx.arc(origin[0], origin[1], circleRadius - (self.ringwidthRatio * width / 2), 0, Math.PI*2, true);
         ctx.closePath();
         ctx.fill();
 
@@ -487,7 +487,7 @@
         tempCtx.fillRect(0,0,width,width);
         tempCtx.globalCompositeOperation = "destination-out";
         tempCtx.beginPath();
-        tempCtx.arc(origin[0], origin[1], circleRadius + (self.ringwidthRatio * width / 4), 0, Math.PI*2);
+        tempCtx.arc(origin[0], origin[1], circleRadius + (self.ringwidthRatio * width / 4), 0, Math.PI*2, true);
         tempCtx.closePath();
         tempCtx.fill();
         ctx.drawImage(tempCanvas, 0, 0);
@@ -498,7 +498,7 @@
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * width;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2);
+        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2, true);
         ctx.closePath();
         ctx.stroke();
     }
@@ -658,13 +658,13 @@
             ctx.strokeStyle = "#fff";
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.arc(indicators[i][0], indicators[i][1], 6, 0, Math.PI*2);
+            ctx.arc(indicators[i][0], indicators[i][1], 6, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.stroke();
             ctx.lineWidth = 2;
             ctx.strokeStyle = 'rgba(0,0,0,1)';
             ctx.beginPath();
-            ctx.arc(indicators[i][0], indicators[i][1], 4.5, 0, Math.PI*2);
+            ctx.arc(indicators[i][0], indicators[i][1], 4.5, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.stroke();
         }
