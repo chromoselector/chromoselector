@@ -6,9 +6,9 @@
         color2str: function (color) {
             return color.hex.substring(1);
         }
-     })
+     });
 });
-</code></pre></div></div><div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>Comma separated HSL</h3><div data-role="fieldcontain"><label for="color2">Pick a color:</label><input type="text" name="color2" id="color2" value="0,0,0" /></div><div data-role="collapsible" data-theme="c" data-content-theme="d"><h3>Code</h3><pre><code class="javascript">$(function () {
+</code></pre></div><a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/unLGf/">jsFiddle</a></div><div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>Comma separated HSL</h3><div data-role="fieldcontain"><label for="color2">Pick a color:</label><input type="text" name="color2" id="color2" value="0,0,0" /></div><div data-role="collapsible" data-theme="c" data-content-theme="d"><h3>Code</h3><pre><code class="javascript">$(function () {
     $('#color2').chromoselector({
         str2color: function (str) {
             var arr = str.split(',');
@@ -29,9 +29,9 @@
                 color.hsl.l * 100
             );
         }
-     })
+     });
 });
-</code></pre></div></div><div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>JSON encoded CMYK</h3><div data-role="fieldcontain"><label for="color3">Pick a color:</label><input type="text" name="color3" id="color3" value="{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}" /></div><div data-role="collapsible" data-theme="c" data-content-theme="d"><h3>Code</h3><pre><code class="javascript">$(function () {
+</code></pre></div><a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/85gw3/">jsFiddle</a></div><div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>JSON encoded CMYK</h3><div data-role="fieldcontain"><label for="color3">Pick a color:</label><input type="text" name="color3" id="color3" value="{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}" /></div><div data-role="collapsible" data-theme="c" data-content-theme="d"><h3>Code</h3><pre><code class="javascript">$(function () {
     $('#color3').chromoselector({
         str2color: function (str) {
             try {
@@ -58,10 +58,10 @@
                 ) +
             '}';
         }
-     })
+     });
 });
-</code></pre></div></div><div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>RGB as an integer</h3><div data-role="fieldcontain"><label for="color4">Pick a color:</label><input type="text" name="color4" id="color4" value="0" /></div><div data-role="collapsible" data-theme="c" data-content-theme="d"><h3>Code</h3><pre><code class="javascript">$(function () {
-    $('#color3').chromoselector({
+</code></pre></div><a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/5xv2W/">jsFiddle</a></div><div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>RGB as an integer</h3><div data-role="fieldcontain"><label for="color4">Pick a color:</label><input type="text" name="color4" id="color4" value="0" /></div><div data-role="collapsible" data-theme="c" data-content-theme="d"><h3>Code</h3><pre><code class="javascript">$(function () {
+    $('#color4').chromoselector({
         str2color: function (str) {
             var num = parseInt(str, 10) || 0;
             return {
@@ -78,4 +78,4 @@
         }
      })
 });
-</code></pre></div></div></form></div><div class="content-secondary"><ul data-role="listview"  data-theme="c" data-dividertheme="d"><li data-role="list-divider">Demos</li><li><a href="../demos/display-modes.html">Display Modes</a></li><li><a href="../demos/animations.html">Animations</a></li><li data-theme="e"><a href="../demos/custom-color-format.html">Custom Color Formats</a></li><li><a href="../demos/previews.html">Previews</a></li><li><a href="../demos/icon.html">Icon</a></li></ul></div></div><div data-role="footer" class="footer-docs" data-theme="c"><p>v1.0.0</p><p style="float: right">&copy; 2012 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p></div></div></body></html>
+</code></pre></div><a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/unLGf/">jsFiddle</a></div></form></div><div class="content-secondary"><ul data-role="listview"  data-theme="c" data-dividertheme="d"><li data-role="list-divider">Demos</li><li><a href="../demos/display-modes.html">Display Modes</a></li><li><a href="../demos/animations.html">Animations</a></li><li data-theme="e"><a href="../demos/custom-color-format.html">Custom Color Formats</a></li><li><a href="../demos/previews.html">Previews</a></li><li><a href="../demos/icon.html">Icon</a></li></ul></div></div><div data-role="footer" class="footer-docs" data-theme="c"><p>v1.0.0</p><p style="float: right">&copy; 2012 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p></div></div></body></html>
