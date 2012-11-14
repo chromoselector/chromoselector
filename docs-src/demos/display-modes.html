@@ -19,7 +19,7 @@ $template .= '</div>';
 $template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $template .= '<h3>Code</h3>';
 $template .= '<pre><code class="html">%s</code></pre>';
-$template .= '</div>';
+$template .= '</div>%s';
 $template .= '</div>';
 
 $template2  = '<div data-role="collapsible" data-collapsed="false"';
@@ -32,7 +32,7 @@ $template2 .= '</div>';
 $template2 .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $template2 .= '<h3>Code</h3>';
 $template2 .= '<pre><code class="html">%s</code></pre>';
-$template2 .= '</div>';
+$template2 .= '</div>%s';
 $template2 .= '</div>';
 
 $demo1 =
@@ -40,6 +40,7 @@ $demo1 =
         'title' => 'Inline mode',
         'id' => 'basic1',
         'color' => '#000000',
+        'fiddle' => 'http://jsfiddle.net/roccivic/g6H3G/',
         'code' => htmlspecialchars(
 <<<HERE
 <!DOCTYPE html>
@@ -69,6 +70,7 @@ $demo2 =     array(
         'title' => 'Static mode',
         'id' => 'basic2',
         'color' => '#000000',
+        'fiddle' => 'http://jsfiddle.net/roccivic/RecjP/',
         'code' => htmlspecialchars(
 <<<HERE
 <!DOCTYPE html>
@@ -113,6 +115,11 @@ HERE
         )
 );
 
+    if (! empty($demo1['fiddle'])) {
+        $demo1['fiddle'] = '<a data-role="button" data-theme="c" href="' . $demo1['fiddle'] . '">jsFiddle</a>';
+    } else {
+        $value['fiddle'] = '';
+    }
     $html .= sprintf(
         $template,
         $demo1['title'],
@@ -120,16 +127,34 @@ HERE
         $demo1['id'],
         $demo1['id'],
         $demo1['color'],
-        $demo1['code']
+        $demo1['code'],
+        $demo1['fiddle']
     );
+
+    if (! empty($demo2['fiddle'])) {
+        $demo2['fiddle'] = '<a data-role="button" data-theme="c" href="' . $demo2['fiddle'] . '">jsFiddle</a>';
+    } else {
+        $value['fiddle'] = '';
+    }
     $html .= sprintf(
         $template2,
         $demo2['title'],
         $demo2['id'],
         $demo2['id'],
         $demo2['color'],
-        $demo2['code']
+        $demo2['code'],
+        $demo2['fiddle']
     );
+
+$html .= '<div data-role="collapsible" data-collapsed="false"';
+$html .= ' data-theme="b" data-content-theme="d"';
+$html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$html .= '<h3>jQuery UI dialog</h3>';
+$html .= '<p>Due to incompatibilities with jQuery mobile, which is what this documentation pages run on, ';
+$html .= 'no demo is available for jQuery UI integration. That said, there are some fiddles that you can play with:</p>';
+$html .= '<a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/42kW9/">jsFiddle: Single color picker</a>';
+$html .= '<a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/HQ78m/">jsFiddle: Multiple color pickers</a>';
+$html .= '</div>';
 
 $html .= '</form>';
 $html .= '</div>';

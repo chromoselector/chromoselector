@@ -18,13 +18,14 @@ $template .= '</div>';
 $template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $template .= '<h3>Code</h3>';
 $template .= '<pre><code class="javascript">%s</code></pre>';
-$template .= '</div>';
+$template .= '</div>%s';
 $template .= '</div>';
 
 $demos = array(
     array(
         'title' => 'Icon on right',
         'id' => 'color1',
+        'fiddle' => 'http://jsfiddle.net/roccivic/wm9Fj/',
         'code' => "$(function () {\n"
                 . "    $('#color1').chromoselector({\n"
                 . "        icon: '../libs/images/palette.png'\n"
@@ -34,6 +35,7 @@ $demos = array(
     array(
         'title' => 'Icon on left',
         'id' => 'color2',
+        'fiddle' => 'http://jsfiddle.net/roccivic/tcRfU/',
         'code' => "$(function () {\n"
                 . "    $('#color1').chromoselector({\n"
                 . "        icon: '../libs/images/palette.png',\n"
@@ -44,13 +46,19 @@ $demos = array(
 );
 
 foreach ($demos as $value) {
+    if (! empty($value['fiddle'])) {
+        $value['fiddle'] = '<a data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
+    } else {
+        $value['fiddle'] = '';
+    }
     $html .= sprintf(
         $template,
         $value['title'],
         $value['id'],
         $value['id'],
         $value['id'],
-        $value['code']
+        $value['code'],
+        $value['fiddle']
     );
 }
 

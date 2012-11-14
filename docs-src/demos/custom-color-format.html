@@ -19,7 +19,7 @@ $template .= '</div>';
 $template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $template .= '<h3>Code</h3>';
 $template .= '<pre><code class="javascript">%s</code></pre>';
-$template .= '</div>';
+$template .= '</div>%s';
 $template .= '</div>';
 
 $demos = array(
@@ -27,6 +27,7 @@ $demos = array(
         'title' => 'Hex RGB without "#"',
         'id' => 'color1',
         'value' => '000000',
+        'fiddle' => 'http://jsfiddle.net/roccivic/unLGf/',
         'code' => "$(function () {\n"
                 . "    $('#color1').chromoselector({\n"
                 . "        str2color: function (str) {\n"
@@ -35,13 +36,14 @@ $demos = array(
                 . "        color2str: function (color) {\n"
                 . "            return color.hex.substring(1);\n"
                 . "        }\n"
-                . "     })\n"
+                . "     });\n"
                 . "});\n"
     ),
     array(
         'title' => 'Comma separated HSL',
         'id' => 'color2',
         'value' => '0,0,0',
+        'fiddle' => 'http://jsfiddle.net/roccivic/85gw3/',
         'code' => "$(function () {\n"
                 . "    $('#color2').chromoselector({\n"
                 . "        str2color: function (str) {\n"
@@ -63,13 +65,14 @@ $demos = array(
                 . "                color.hsl.l * 100\n"
                 . "            );\n"
                 . "        }\n"
-                . "     })\n"
+                . "     });\n"
                 . "});\n"
     ),
     array(
         'title' => 'JSON encoded CMYK',
         'id' => 'color3',
         'value' => '{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}',
+        'fiddle' => 'http://jsfiddle.net/roccivic/5xv2W/',
         'code' => "$(function () {\n"
                 . "    $('#color3').chromoselector({\n"
                 . "        str2color: function (str) {\n"
@@ -97,15 +100,16 @@ $demos = array(
                 . "                ) +\n"
                 . "            '}';\n"
                 . "        }\n"
-                . "     })\n"
+                . "     });\n"
                 . "});\n"
     ),
     array(
         'title' => 'RGB as an integer',
         'id' => 'color4',
         'value' => '0',
+        'fiddle' => 'http://jsfiddle.net/roccivic/unLGf/',
         'code' => "$(function () {\n"
-                . "    $('#color3').chromoselector({\n"
+                . "    $('#color4').chromoselector({\n"
                 . "        str2color: function (str) {\n"
                 . "            var num = parseInt(str, 10) || 0;\n"
                 . "            return {\n"
@@ -127,6 +131,11 @@ $demos = array(
 
 
 foreach ($demos as $value) {
+    if (! empty($value['fiddle'])) {
+        $value['fiddle'] = '<a data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
+    } else {
+        $value['fiddle'] = '';
+    }
     $html .= sprintf(
         $template,
         $value['title'],
@@ -134,7 +143,8 @@ foreach ($demos as $value) {
         $value['id'],
         $value['id'],
         $value['value'],
-        $value['code']
+        $value['code'],
+        $value['fiddle']
     );
 }
 

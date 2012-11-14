@@ -19,7 +19,7 @@ $template .= '</div>';
 $template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $template .= '<h3>Code</h3>';
 $template .= '<pre><code class="javascript">%s</code></pre>';
-$template .= '</div>';
+$template .= '</div>%s';
 $template .= '</div>';
 
 $demos = array(
@@ -27,6 +27,7 @@ $demos = array(
         'title' => 'Inline Preview',
         'id' => 'inline',
         'color' => '#000000',
+        'fiddle' => 'http://jsfiddle.net/roccivic/g6H3G/',
         'code' => "$(function () {\n"
                 . "    $('#inline').chromoselector({\n"
                 . "        preview: true\n"
@@ -47,6 +48,7 @@ $demos = array(
         'title' => 'Preview in textfield',
         'id' => 'textfield',
         'color' => '#7bda1b',
+        'fiddle' => 'http://jsfiddle.net/roccivic/NFpCc/',
         'code' => "$(function () {\n"
                 . "    var updatePreview = function() {\n"
                 . "        var color = $(this).chromoselector('getColor');\n"
@@ -66,6 +68,11 @@ $demos = array(
 );
 
 foreach ($demos as $value) {
+    if (! empty($value['fiddle'])) {
+        $value['fiddle'] = '<a data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
+    } else {
+        $value['fiddle'] = '';
+    }
     $html .= sprintf(
         $template,
         $value['title'],
@@ -73,7 +80,8 @@ foreach ($demos as $value) {
         $value['id'],
         $value['id'],
         $value['color'],
-        $value['code']
+        $value['code'],
+        $value['fiddle']
     );
 }
 
