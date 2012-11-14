@@ -1,0 +1,35 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'requirements', 'Overview / System Requirements');
+$html .= '<div class="content-primary">';
+$html .= '<h2>System Requirements</h2>';
+
+$html .= '<h3>jQuery</h3>';
+$html .= '<ul data-role="listview" data-inset="true">';
+$html .= '<li>jQuery 1.3+</li>';
+$html .= '</ul>';
+
+$html .= '<h3>Browser</h3>';
+$html .= '<ul data-role="listview" data-inset="true">';
+$html .= '<li>Firefox 3.5+</li>';
+$html .= '<li>Chrome 4+</li>';
+$html .= '<li>Safari 4+</li>';
+$html .= '<li>Opera 12+</li>';
+$html .= '<li>Internet Explorer 9+</li>';
+$html .= '<li>Android Browser 2.2+</li>';
+$html .= '</ul>';
+
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getOverviewMenu('..', 'requirements');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo $html;
+
+?>
