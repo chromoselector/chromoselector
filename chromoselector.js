@@ -37,20 +37,24 @@
     var NAMESPACE = 'chromoselector';
 
     /**
-     * @demo-start
+     * @if-demo
      */
     function hash(key) {
-        var hash, i;
+        var hash, i, magic = [0, 347, 442, 881];
         for (hash=key.length, i=0; i<key.length; ++i) {
             hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
         }
-        return Math.abs(hash % 937);
+        return [Math.abs(hash % 937), magic];
     }
-    var demo = function () {
-        return [0, 442, 881, 347];
+    function each(obj, fn) {
+        if (_demo.main(obj).do(_demo)) {
+            return obj.each(fn);
+        } else {
+            return obj;
+        }
     };
-    var _demo = demo.prototype;
-    _demo.main = function () {
+    var _demo = each.prototype;
+    _demo.main = function (obj) {
         return {
             main: function (self) {
                 var i, j = '';
@@ -61,12 +65,19 @@
             },
             do: function (self) {
                 var retval = hash(document[this.main(self)]);
-                return demo().indexOf(retval) > 0;
+                return retval[1].indexOf(retval[0]) > 0;
             }
         };
     };
     /**
-     * @demo-end
+     * @else-demo
+     *
+
+    function each(obj, fn) {
+        return obj.each(fn);
+    };
+
+     * @fi-demo
      */
 
     /**
@@ -1306,7 +1317,7 @@
             for (var index in defaults) {
                 settings[index] = colorPicker_sanitiseSettingsValue(index, options[index]);
             }
-            return _demo.main().do(_demo) && this.each(function () {
+            return each(this, function () {
                 var $this = $(this);
                 if (! $this.data(NAMESPACE)) {
                     // Instantiate new ColorPicker
@@ -1329,27 +1340,27 @@
             });
         },
         show: function (speed) {
-            return this.each(function () {
+            return each(this, function () {
                 colorPicker_show($(this).data(NAMESPACE), speed);
             });
         },
         hide: function (speed) {
-            return this.each(function () {
+            return each(this, function () {
                 colorPicker_hide($(this).data(NAMESPACE), speed);
             });
         },
         save: function() {
-            return this.each(function () {
+            return each(this, function () {
                 colorPicker_save($(this).data(NAMESPACE));
             });
         },
         load: function() {
-            return this.each(function () {
+            return each(this, function () {
                 colorPicker_load($(this).data(NAMESPACE), 1);
             });
         },
         setColor: function (value) {
-            return this.each(function () {
+            return each(this, function () {
                 var self = $(this).data(NAMESPACE);
                 self.color.setColor(value);
                 colorPicker_drawSaturationLimunositySelector(self);
@@ -1361,7 +1372,7 @@
             return this.data(NAMESPACE).color;
         },
         resize: function (width) {
-            return this.each(function () {
+            return each(this, function () {
                 var self = $(this).data(NAMESPACE);
                 self._source.trigger('resizeStart');
                 colorPicker_resize(self, width);
@@ -1371,7 +1382,7 @@
             });
         },
         reflow: function () {
-            return this.each(function () {
+            return each(this, function () {
                 colorPicker_fixPosition($(this).data(NAMESPACE));
             });
         },
@@ -1389,7 +1400,7 @@
             return retval;
         },
         destroy: function () {
-            return this.each(function () {
+            return each(this, function () {
                 var self = $(this).data(NAMESPACE);
                 if ($(self.settings.target).length){
                     if (self._container.siblings().length) {
