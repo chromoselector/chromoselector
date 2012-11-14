@@ -35,6 +35,7 @@
      * NAMESPACE for events and data
      */
     var NAMESPACE = 'chromoselector';
+    var EVENTS = 'create|ready|update|destroy|show|hide|beforeHide|resize|resizeStart|resizeStop';
 
     /**
      * @if-demo
@@ -997,7 +998,7 @@
         }
     }
     function colorPicker_sanitiseSettingsValue(index, value) {
-        var retval;
+        var retval = defaults[index];
         if (typeof value != 'undefined') {
             if (index === 'ringwidth') {
                 var floatValue = parseFloat(value, 10) || 0;
@@ -1021,21 +1022,15 @@
             } else if (index.match(/^speed|width|shadow$/)) {
                 var intValue = parseInt(value, 10) || 0;
                 retval = intValue > 0 ? intValue : 0;
-            } else if (
-                typeof value === 'function'
-                &&
-                index.match(
-                    /^create|ready|destroy|update|show|beforeHide|hide|resize|resizeStart|resizeStop|save|load|str2color|color2str$/
-                )
+            } else if (new RegExp('^'+EVENTS+'$').test(index)
+                || /^save|load|str2color|color2str$/.test(index)
             ) {
-                retval = value;
-            } else {
-                return defaults[index];
+                if (typeof value === 'function') {
+                    retval = value;
+                }
             }
-            return retval;
-        } else {
-            return defaults[index];
         }
+        return retval;
     }
     function getEventPosition(self, e, $obj) {
         var x = 0, y = 0;
@@ -1329,7 +1324,7 @@
                     $this.data(NAMESPACE, new ColorPicker($this, settings));
                     // Register callbacks for all events
                     var i;
-                    var events = 'create|ready|update|destroy|show|hide|beforeHide|resize|resizeStart|resizeStop'.split('|');
+                    var events = EVENTS.split('|');
                     for (i in events) {
                         var name = events[i];
                         var data = settings[name];
