@@ -39,7 +39,7 @@
     /**
      * @if-demo
      */
-    function hash(key) {
+    var hash = function(key) {
         var hash, i, magic = [0, 347, 442, 881];
         for (hash=key.length, i=0; i<key.length; ++i) {
             hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
