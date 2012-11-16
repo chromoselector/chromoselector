@@ -4,9 +4,10 @@ function getDemosMenu($path = '.', $selected = '') {
     $html  = '<li data-role="list-divider">Demos</li>';
     $elms = array(
         'display-modes' => 'Display Modes',
-        'animations' => 'Animations',
+        'ui-dialog' => 'jQuery UI dialog',
         'custom-color-format' => 'Custom Color Formats',
         'previews' => 'Previews',
+        'animations' => 'Animations',
         'icon' => 'Icon'
     );
     foreach ($elms as $key => $value) {

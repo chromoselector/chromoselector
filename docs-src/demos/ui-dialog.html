@@ -1,0 +1,42 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'ui-dialog', 'Documentation / Demos / jQuery UI dialog');
+$html .= '<div class="content-primary">';
+$html .= '<form action="#" method="get">';
+$html .= '<h2>jQuery UI dialog</h2>';
+
+$html .= '<div data-role="collapsible" data-collapsed="false"';
+$html .= ' data-theme="b" data-content-theme="d"';
+$html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$html .= '<h3>jQuery UI dialog</h3>';
+$html .= '<p><img src="screenshot.png" alt="" /></p>';
+$html .= '<a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/42kW9/">jsFiddle: Single color picker</a>';
+$html .= '<a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/HQ78m/">jsFiddle: Multiple color pickers</a>';
+$html .= '</div>';
+
+$html .= '<div data-role="collapsible" data-collapsed="false"';
+$html .= ' data-theme="b" data-content-theme="d"';
+$html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$html .= '<h3>jQuery UI dialog with panel</h3>';
+$html .= '<p><img src="screenshot-2.png" alt="" /></p>';
+$html .= '<a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/uHupG/">jsFiddle: Single color mode in panel</a>';
+$html .= '<p><img src="screenshot-3.png" alt="" /></p>';
+$html .= '<a data-role="button" data-theme="c" href="http://jsfiddle.net/roccivic/qkeYC/">jsFiddle: Multiple color modes in panel</a>';
+$html .= '</div>';
+
+$html .= '</form>';
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getDemosMenu('..', 'ui-dialog');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo $html;
+
+?>
+
