@@ -928,6 +928,7 @@
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
         colorPicker_resizeContainer(self, newDiameter);
+        self._source.trigger('resize');
     }
     function colorPicker_resizeContainer(self, width) {
         self._container.width(width).height(
