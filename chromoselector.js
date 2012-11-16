@@ -1068,6 +1068,14 @@
         self.resizingRenderer = throttle(colorPicker_handleResizeDrag);
         self.valueRenderer = throttle(colorPicker_update, 100);
 
+        self.setColorRenderer = throttle(function (self, value) {
+            self.color.setColor(value);
+            colorPicker_drawSaturationLimunositySelector(self);
+            colorPicker_drawIndicators(self);
+            self.valueRenderer(self);
+        });
+
+
         self.hiding = 0;
 
         self._source = $this;
@@ -1361,10 +1369,7 @@
         setColor: function (value) {
             return each(this, function () {
                 var self = $(this).data(NAMESPACE);
-                self.color.setColor(value);
-                colorPicker_drawSaturationLimunositySelector(self);
-                colorPicker_drawIndicators(self);
-                self.valueRenderer(self);
+                self.setColorRenderer(self, value);
             });
         },
         getColor: function () {
