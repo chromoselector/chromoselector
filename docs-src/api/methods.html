@@ -165,7 +165,7 @@ $properties = array(
             )
         ),
         'return' => '<i>self</i> (Can be chained)',
-        'description' => 'Changes the currently selected color in the color picker.',
+        'description' => 'Changes the currently selected color in the color picker. This method is serviced asynchronously, so the color change may not occur immediately.',
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    var \$pickers = $('input.color').chromoselector();\n"

@@ -8,7 +8,8 @@ function getDemosMenu($path = '.', $selected = '') {
         'custom-color-format' => 'Custom Color Formats',
         'previews' => 'Previews',
         'animations' => 'Animations',
-        'icon' => 'Icon'
+        'icon' => 'Icon',
+        'mobile-dialog' => 'jQuery Mobile dialog'
     );
     foreach ($elms as $key => $value) {
         if ($key == $selected) {
