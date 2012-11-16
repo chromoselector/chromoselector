@@ -70,6 +70,32 @@ $properties = array(
                 ."});\n"
         )
     ),
+    'getHeight()' => array(
+        'params' => array(),
+        'return' => 'Integer',
+        'description' => 'Retrieves the current height of the picker in pixels.',
+        'samples' => array(
+            "$(document).ready(function () {\n"
+                ."    // Create the color picker\n"
+                ."    $('#myColorPicker').chromoselector();\n"
+                ."    // Prints the current height\n"
+                ."    console.log($('#myColorPicker').chromoselector('getHeight'));\n"
+                ."});\n"
+        )
+    ),
+    'getWidth()' => array(
+        'params' => array(),
+        'return' => 'Integer',
+        'description' => 'Retrieves the current width of the picker in pixels.',
+        'samples' => array(
+            "$(document).ready(function () {\n"
+                ."    // Create the color picker\n"
+                ."    $('#myColorPicker').chromoselector();\n"
+                ."    // Prints the current width\n"
+                ."    console.log($('#myColorPicker').chromoselector('getWidth'));\n"
+                ."});\n"
+        )
+    ),
     'hide()' => array(
         'params' => array(
             array(

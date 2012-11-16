@@ -1049,6 +1049,12 @@
         }
         return [x, y];
     }
+    function colorPicker_getWidth(self) {
+        return self._container.width();
+    }
+    function colorPicker_getHeight(self) {
+        return self._container.height();
+    }
 
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
@@ -1376,6 +1382,12 @@
         getColor: function () {
             return this.data(NAMESPACE).color;
         },
+        getWidth: function () {
+            return colorPicker_getWidth($(this).data(NAMESPACE));
+        },
+        getHeight: function () {
+            return colorPicker_getHeight($(this).data(NAMESPACE));
+        },
         resize: function (width) {
             return each(this, function () {
                 var self = $(this).data(NAMESPACE);
@@ -1392,16 +1404,18 @@
             });
         },
         api: function () {
-            var retval = {}, that = this;
-            retval.show     = function (speed) { methods.show.apply(that, [speed]); return this; };
-            retval.hide     = function (speed) { methods.hide.apply(that, [speed]); return this; };
-            retval.save     = function ()      { methods.save.call(that); return this; };
-            retval.load     = function ()      { methods.load.call(that); return this; };
-            retval.getColor = function ()      { return methods.getColor.call(that); };
-            retval.setColor = function (color) { methods.setColor.apply(that, [color]); return this; };
-            retval.destroy  = function ()      { methods.destroy.call(that); };
-            retval.resize   = function (size)  { methods.resize.apply(that, [size]); return this; };
-            retval.reflow   = function ()      { methods.reflow.call(that); return this; };
+            var retval = {}, $obj = this;
+            retval.show      = function (speed) { methods.show.apply($obj, [speed]); return this; };
+            retval.hide      = function (speed) { methods.hide.apply($obj, [speed]); return this; };
+            retval.save      = function ()      { methods.save.call($obj); return this; };
+            retval.load      = function ()      { methods.load.call($obj); return this; };
+            retval.getColor  = function ()      { return methods.getColor.call($obj); };
+            retval.getWidth  = function ()      { return methods.getWidth.call($obj); };
+            retval.getHeight = function ()      { return methods.getHeight.call($obj); };
+            retval.setColor  = function (color) { methods.setColor.apply($obj, [color]); return this; };
+            retval.destroy   = function ()      { methods.destroy.call($obj); };
+            retval.resize    = function (size)  { methods.resize.apply($obj, [size]); return this; };
+            retval.reflow    = function ()      { methods.reflow.call($obj); return this; };
             return retval;
         },
         destroy: function () {
