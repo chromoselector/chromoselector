@@ -131,10 +131,12 @@ $properties = array(
         'description' => 'Resizes the color-picker to the specified width.',
         'samples' => array(
             "$(document).ready(function () {\n"
-                ."    // Create the color picker and set its width to 300px\n"
-                ."    $('#myColorPicker').chromoselector().chromoselector('resize', 300);\n"
+                ."    // Create the color picker\n"
+                ."    $('#myColorPicker').chromoselector();\n"
+                ."    // Set its width to 300px\n"
+                ."    $('#myColorPicker').chromoselector('resize', 300);\n"
                 ."    // The above is the same as:\n"
-                ."    // $('#myColorPicker').chromoselector({ diameter:300 });\n"
+                ."    // $('#myColorPicker').chromoselector({ width:300 });\n"
                 ."});\n"
         )
     ),
@@ -172,11 +174,11 @@ $properties = array(
                 ."    // Set color to orange\n"
                 ."    \$pickers.chromoselector('setColor', '#ff8000');\n"
                 ."    // Set color to blue\n"
-                ."    \$pickers.chromoselector('setColor', { r: 0, g: 0, b: 1});\n"
+                ."    \$pickers.chromoselector('setColor', { r:0, g:0, b:1 });\n"
                 ."    // Set color to aqua\n"
-                ."    \$pickers.chromoselector('setColor', { h: 0.5, s: 1, l: 0.5});\n"
+                ."    \$pickers.chromoselector('setColor', { h:0.5, s:1, l:0.5 });\n"
                 ."    // Set color to red\n"
-                ."    \$pickers.chromoselector('setColor', { c: 0, m: 1, y: 1, k: 0}\n"
+                ."    \$pickers.chromoselector('setColor', { c:0, m:1, y: 1, k:0 });\n"
                 ."});\n"
         )
     ),
