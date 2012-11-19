@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <title>Chromoselector hello world demo page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="chromoselector.css" />
@@ -8,7 +9,7 @@
     <script src="chromoselector.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(document).ready(function () {
-        $('input').chromoselector()
+        $('#color').chromoselector()
     });
     </script>
     <style type="text/css">
@@ -19,7 +20,8 @@
 </head>
 <body>
     <form action="#">
-        <input name="color" type="text" value="#ff0000" />
+        <label for="color">Pick a color:</label>
+        <input id="color" name="my-color" type="text" value="#ff0000" />
     </form>
 </body>
 </html>
