@@ -792,7 +792,12 @@
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
         }
-        if (! speed) {
+        if (typeof speed !== 'undefined') {
+            speed = parseInt(speed, 10);
+            if (speed < 0 || isNaN(speed)) {
+                speed = self.settings.speed;
+            }
+        } else {
             speed = self.settings.speed;
         }
         colorPicker_fixPosition(self);
@@ -811,7 +816,12 @@
     function colorPicker_hide(self, speed) {
         self.hiding = setTimeout(function () {
             self.hiding = 0;
-            if (! speed) {
+            if (typeof speed !== 'undefined') {
+                speed = parseInt(speed, 10);
+                if (speed < 0 || isNaN(speed)) {
+                    speed = self.settings.speed;
+                }
+            } else {
                 speed = self.settings.speed;
             }
             var retval = self._source.triggerHandler('beforeHide');
