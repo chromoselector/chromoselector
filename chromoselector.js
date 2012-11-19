@@ -14,6 +14,7 @@
      *
      * v 1.0.1:
      *   Better slide animation
+     *   Unit tests
      *
      * v 1.1.0:
      *   Alpha selection
@@ -34,7 +35,7 @@
      * NAMESPACE for events and data
      */
     var NAMESPACE = 'chromoselector';
-    var EVENTS = 'create|ready|update|destroy|show|hide|beforeHide|resize|resizeStart|resizeStop';
+    var EVENTS = 'create|ready|update|destroy|show|beforeShow|hide|beforeHide|resize|resizeStart|resizeStop';
 
     /**
      * @if-demo
@@ -800,18 +801,21 @@
         } else {
             speed = self.settings.speed;
         }
-        colorPicker_fixPosition(self);
-        var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
-        self._container[effect].apply(
-            self._container,
-            [
-                speed,
-                function () {
-                    colorPicker_fixPosition(self);
-                    self._source.trigger('show');
-                }
-            ]
-        );
+        var retval = self._source.triggerHandler('beforeShow');
+        if (typeof retval == 'undefined' || retval) {
+            colorPicker_fixPosition(self);
+            var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
+            self._container[effect].apply(
+                self._container,
+                [
+                    speed,
+                    function () {
+                        colorPicker_fixPosition(self);
+                        self._source.trigger('show');
+                    }
+                ]
+            );
+        }
     }
     function colorPicker_hide(self, speed) {
         self.hiding = setTimeout(function () {
@@ -1487,6 +1491,7 @@
     ready:       null,
     destroy:     null,
     update:      null,
+    beforeShow:  null,
     show:        null,
     beforeHide:  null, // if cancelled does not trigger
     hide:        null,

@@ -27,7 +27,7 @@ $template .= '</div>';
 $properties = array(
     'beforeHide' => array(
         'description' => 'This event is triggered when the color picker is about to be hidden. '
-                        . ' If cancelled, the event will be aborted and the color picker will stay open.',
+                        . ' If cancelled, the event will be aborted and the color picker will stay shown.',
         'samples' => array(
             "// Bind to the event before instantiating the plugin\n"
                 ."$(document).ready(function () {\n"
@@ -45,6 +45,30 @@ $properties = array(
                 ."        .bind('beforeHide', function () {\n"
                 ."            // Require confirmation to hide\n"
                 ."            return confirm('Are you sure you want to hide the color picker?');\n"
+                ."        })\n"
+                ."});\n",
+        )
+    ),
+    'beforeShow' => array(
+        'description' => 'This event is triggered when the color picker is about to be shown. '
+                        . ' If cancelled, the event will be aborted and the color picker will stay hidden.',
+        'samples' => array(
+            "// Bind to the event before instantiating the plugin\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        beforeShow: function () {\n"
+                ."            // Require confirmation to show\n"
+                ."            return confirm('Are you sure you want to show the color picker?');\n"
+                ."        }\n"
+                ."    });\n"
+                ."});\n",
+                "// Bind to the event after instantiating the plugin\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color')\n"
+                ."        .chromoselector()\n"
+                ."        .bind('beforeShow', function () {\n"
+                ."            // Require confirmation to show\n"
+                ."            return confirm('Are you sure you want to show the color picker?');\n"
                 ."        })\n"
                 ."});\n",
         )
