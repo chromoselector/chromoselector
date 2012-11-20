@@ -19,9 +19,9 @@ $template  = '<div data-role="collapsible"';
 $template .= ' data-theme="b" data-content-theme="d"';
 $template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $template .= '<h3>%s</h3>';
-$template .= '<p class="ui-li-aside"><strong>Default:</strong> %s</p>';
 $template .= '<p><strong>Description:</strong><br />%s</p>';
 $template .= '<p><strong>Values:</strong> %s</p>';
+$template .= '<p><strong>Default:</strong> %s</p>';
 $template .= '%s';
 $template .= '%s';
 $template .= '</div>';
@@ -131,6 +131,20 @@ $properties = array(
                 ."$(document).ready(function () {\n"
                 ."    $('input.color').chromoselector({\n"
                 ."        icon: '../images/favicon.png'\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'iconalt' => array(
+        'default' => '"Open Color Picker"',
+        'description' => 'The text to display instead of the icon if it fails to load.',
+        'values' => 'A non empty string.',
+        'samples' => array(
+            "// Shorter string \n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        icon: 'http://www.example.com/invalid.png',\n"
+                ."        iconalt: 'Picker'\n"
                 ."    });\n"
                 ."});\n"
         )
@@ -316,9 +330,9 @@ foreach ($properties as $key => $value) {
     $html .= sprintf(
         $template,
         $key,
-        $value['default'],
         $value['description'],
         $value['values'],
+        $value['default'],
         $samples,
         $links
     );

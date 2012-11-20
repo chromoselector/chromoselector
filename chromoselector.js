@@ -1035,7 +1035,9 @@
                         retval = target;
                     }
                 }
-            } else if (index === 'icon' && typeof value === 'string') {
+            } else if (index === 'icon' && typeof value === 'string' && value.length) {
+                retval = value;
+            } else if (index === 'iconalt' && typeof value === 'string' && value.length) {
                 retval = value;
             } else if (index.match(/^autoshow|autosave|resizable|preview$/)) {
                 retval = !!value;
@@ -1151,8 +1153,7 @@
             .addClass('ui-cs-icon')
             .css('position','absolute')
             .append(
-                $('<img/>')
-                .attr('src', self.settings.icon)
+                $('<img/>', { alt:self.settings.iconalt, src:self.settings.icon })
                 .load(function () {
                     $(this).parent().height($(this).height());
                     $(this).parent().width($(this).width());
@@ -1490,7 +1491,8 @@
     preview:       true,       // bool
     effect:        'fade',     // 'fade' | 'slide'
     icon:          null,       // string
-    iconpos:      'right',     // string 'left' | 'right'
+    iconalt:       'Open Color Picker', // string
+    iconpos:       'right',    // string 'left' | 'right'
     lazy:          true,       // bool
     target:        null,       // null, selector, jQuery object
 
