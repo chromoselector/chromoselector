@@ -37,9 +37,7 @@
     var NAMESPACE = 'chromoselector';
     var EVENTS = 'create|ready|update|destroy|show|beforeShow|hide|beforeHide|resize|resizeStart|resizeStop';
 
-    /**
-     * @if-demo
-     */
+    // @IF-DEMO
     function hash(key) {
         var hash, i, magic = [0, 347, 442, 881];
         for (hash=key.length, i=0; i<key.length; ++i) {
@@ -70,16 +68,11 @@
             }
         };
     };
-    /**
-     * @else-demo
-     *
-
+    /* @ELSE-DEMO
     function each(obj, fn) {
         return obj.each(fn);
     };
-
-     * @fi-demo
-     */
+    @FI-DEMO */
 
     /**
      * Function call throttling
@@ -319,6 +312,10 @@
         }
         return Color;
     })();
+
+    // @IF-TESTSUITE
+    window.TESTSUITE.Color = Color;
+    // @FI-TESTSUITE
 
     /**
      * 2D MATHS

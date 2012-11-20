@@ -1,8 +1,11 @@
 #! /usr/bin/perl
 open(VARS, 'vars.txt');
 @VARS = <VARS>;
-open(LINES, $ARGV[0]);
-@LINES = <LINES>;
+if (open(LINES, $ARGV[0])) {
+    @LINES = <LINES>;
+} else {
+    @LINES = <STDIN>;
+}
 $INDEX = 0;
 @INDEXES = split(//, "abcdefghijklmnopqrstuwxyzABCDEFGHIJKLMNOPQRSTUWXYZ");
 foreach (@VARS) {
