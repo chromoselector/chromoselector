@@ -6,7 +6,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
-    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jqm-docs.css" />';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/../chromoselector.min.css" />';
     $html .= '<link rel="stylesheet" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
