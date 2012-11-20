@@ -317,7 +317,7 @@
     })();
 
     // @IF-TESTSUITE
-    window.TESTSUITE.Color = Color;
+    // window.TESTSUITE.Color = Color;
     // @FI-TESTSUITE
 
     /**
