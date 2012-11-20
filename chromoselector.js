@@ -13,13 +13,12 @@
      *   Documentation
      *   converters code
      *
-     * v 1.0.1:
-     *   Better slide animation
-     *   Unit tests
-     *
      * v 1.1.0:
      *   Alpha selection
      *   HSV support
+     *   Better slide animation
+     *   Unit tests
+     *   Better Color.textColor() implementation
      *
      * v 1.2.0:
      *   Side panel
