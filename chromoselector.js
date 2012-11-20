@@ -990,7 +990,7 @@
     }
     function colorPicker_fixPosition(self) {
         var offset = self._source.offset();
-        if (! self.settings.target) {
+        if (! self.haveTarget) {
             self._target.css({
                 top: 0,
                 left: 0
@@ -1027,8 +1027,14 @@
                 retval = value === 'slide' ? 'slide' : 'fade';
             } else if (index === 'iconpos') {
                 retval = value === 'left' ? 'left' : 'right';
-            } else if (index === 'target' && (value === null || $(value).length)) {
-                retval = value;
+            } else if (index === 'target') {
+                retval = null;
+                if (typeof value === 'string' || typeof value === 'object') {
+                    var target = $(value);
+                    if (target && typeof target[0] === 'object') {
+                        retval = target;
+                    }
+                }
             } else if (index === 'icon' && typeof value === 'string') {
                 retval = value;
             } else if (index.match(/^autoshow|autosave|resizable|preview$/)) {
@@ -1106,11 +1112,14 @@
         self.shadowRatio = self.settings.shadow / self.width;
         self.triangleRadius = self.width / 2 - 10 - self.ringwidthRatio * self.width;
         var canvasString = '<canvas width="' + self.width + '" height="' + self.width + '"></canvas>';
-        if (self.settings.target) {
-            self._target = $(self.settings.target);
-        }
-        var staticClass = 'ui-cs-static';
-        if (! self._target || ! self._target.length) {
+
+        var staticClass = '';
+        if (self.settings.target && self.settings.target.length) {
+            self.haveTarget = 1;
+            self._target = self.settings.target;
+            staticClass = 'ui-cs-static';
+        } else {
+            self.haveTarget = 0;
             self._target = $('<div/>')
                 .prependTo('body')
                 .css({
@@ -1119,7 +1128,6 @@
                     position:'absolute',
                     overflow:'visible'
                 });
-            staticClass = '';
         }
         self._picker = $('<div/>')
             .addClass('ui-cs-widget')
@@ -1435,7 +1443,7 @@
         destroy: function () {
             return each(this, function () {
                 var self = $(this).data(NAMESPACE);
-                if ($(self.settings.target).length){
+                if (self.haveTarget){
                     if (self._container.siblings().length) {
                         self._container.remove();
                     } else {
