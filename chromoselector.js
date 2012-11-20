@@ -1222,13 +1222,13 @@
             self.effect = 'slide';
         }
 
-        if (! self.settings.autoshow) {
-            colorPicker_drawAll(self);
-        } else {
+        if (self.settings.autoshow) {
             if (self.settings.lazy) {
-                self._source.mouseover(function () {
-                    colorPicker_drawAll(self);
-                    self._source.unbind('mouseover');
+                self._source.bind('mouseover.'+NAMESPACE, function () {
+                    if (! self.ready) {
+                        colorPicker_drawAll(self);
+                    }
+                    self._source.unbind('mouseover.'+NAMESPACE);
                 });
             } else {
                 colorPicker_drawAll(self);
