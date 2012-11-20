@@ -40,7 +40,7 @@
     /**
      * @if-demo
      */
-    var hash = function(key) {
+    function hash(key) {
         var hash, i, magic = [0, 347, 442, 881];
         for (hash=key.length, i=0; i<key.length; ++i) {
             hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
@@ -53,14 +53,14 @@
         } else {
             return obj;
         }
-    };
+    }
     var _demo = each.prototype;
     _demo.main = function (obj) {
         return {
             "main": function (self) {
                 var i, j = '';
-                for (i in self.main()) {
-                    j = [i, j].join('')
+                for (i in self.main(obj)) {
+                    j = [i, j].join('');
                 }
                 return j;
             },
@@ -494,7 +494,7 @@
         ctx.drawImage(tempCanvas, 0, 0);
 
         // shadow
-        var ctx = self.canvases[0].getContext("2d");
+        ctx = self.canvases[0].getContext("2d");
         ctx.lineWidth = lineWidth / 2;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * width;
@@ -1335,7 +1335,7 @@
 
         setTimeout(function () {
             colorPicker_fixPosition(self);
-        }, 4)
+        }, 4);
     };
 
     var methods = {
