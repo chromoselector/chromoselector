@@ -5,6 +5,7 @@
     "use strict";
     /**
      * ChromoSelector 1.0.0 for jQuery 1.3+
+     * IF-TESTSUITE
      *
      * TODO
      *
@@ -29,6 +30,8 @@
      *   refactor hue2rgb
      *   Faster shadow - rotate instead of blurring
      *   shorter code
+     *
+     * FI-TESTSUITE
      */
     var document = window.document;
     /**
