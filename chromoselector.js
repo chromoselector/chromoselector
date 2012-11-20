@@ -40,7 +40,7 @@
     var NAMESPACE = 'chromoselector';
     var EVENTS = 'create|ready|update|destroy|show|beforeShow|hide|beforeHide|resize|resizeStart|resizeStop';
 
-    // @IF-DEMO
+    // IF-DEMO
     function hash(key) {
         var hash, i, magic = [0, 347, 442, 881];
         for (hash=key.length, i=0; i<key.length; ++i) {
@@ -71,11 +71,11 @@
             }
         };
     };
-    /* @ELSE-DEMO
+    /* ELSE-DEMO
     function each(obj, fn) {
         return obj.each(fn);
     };
-    @FI-DEMO */
+    FI-DEMO */
 
     /**
      * Function call throttling
@@ -316,9 +316,9 @@
         return Color;
     })();
 
-    // @IF-TESTSUITE
+    // IF-TESTSUITE
     // window.TESTSUITE.Color = Color;
-    // @FI-TESTSUITE
+    // FI-TESTSUITE
 
     /**
      * 2D MATHS
