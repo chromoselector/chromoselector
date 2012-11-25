@@ -75,12 +75,12 @@ $html .= '<pre class="instant"><code class="javascript">
 $("#textfield").chromoselector({
     preview: false,
     update: function() {
-    var color = $(this).chromoselector("getColor");
-    $(this).css({
-        "background-color": color.hex,
-        "color": color.getTextColor().hex
-    });
-}
+        var color = $(this).chromoselector("getColor");
+        $(this).css({
+            "background-color": color.hex,
+            "color": color.getTextColor().hex
+        });
+    }
 });
 </code></pre>';
 
