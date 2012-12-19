@@ -1465,7 +1465,23 @@
 
     /** Extend jQuery */
     $.fn[NAMESPACE] = function(method) {
-        if (methods[method]) {
+        var canvasSupport = 1;
+        try {
+            var canvas = document.createElement('canvas');
+            var context = canvas.getContext('2d');
+            context.createImageData(5,5);
+        } catch (e) {
+            canvasSupport = 0;
+        }
+        if (! canvasSupport) {
+            if (method === "getColor") {
+                return new Color();
+            } else if (method === "getWidth" || method === "getHeight") {
+                return 0;
+            } else {
+                return this;
+            }
+        } else if (methods[method]) {
             return methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
         } else if (typeof method === 'object' || ! method) {
             return methods.init.apply(this, arguments);
