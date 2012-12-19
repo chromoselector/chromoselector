@@ -115,6 +115,26 @@ $(document).ready(function () {
         resizable: false
     });
 });
+</code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>roundcorners</h3><p><strong>Description:</strong><br />Whether to use rounded corners on the color picker container.</p><p><strong>Values:</strong> <i>true</i> or <i>false</i></p><p><strong>Default:</strong> <i>true</i></p><pre><code class="javascript">// This is the default
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        roundcorners: true
+    });
+});
+</code></pre><pre><code class="javascript">// Show square corners
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        roundcorners: false
+    });
+});
+</code></pre><pre><code class="javascript">// Here, the value of roundcorners will be
+// ignored because we have set a target
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        roundcorners: true,
+        target: '#target'
+    });
+});
 </code></pre></div><div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d"><h3>ringwidth</h3><p><strong>Description:</strong><br />The thickness of the hue selector (the outer ring of the color picker)</p><p><strong>Values:</strong> A number between 0.1 and 1.0</p><p><strong>Default:</strong> .33</p><pre><code class="javascript">// Use a thin hue selector
 $(document).ready(function () {
     $('input.color').chromoselector({

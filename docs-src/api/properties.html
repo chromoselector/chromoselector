@@ -233,6 +233,33 @@ $properties = array(
                 ."});\n"
         )
     ),
+    'roundcorners' => array(
+        'default' => '<i>true</i>',
+        'description' => 'Whether to use rounded corners on the color picker container.',
+        'values' => '<i>true</i> or <i>false</i>',
+        'samples' => array(
+                "// This is the default\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        roundcorners: true\n"
+                ."    });\n"
+                ."});\n",
+                "// Show square corners\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        roundcorners: false\n"
+                ."    });\n"
+                ."});\n",
+                "// Here, the value of roundcorners will be\n"
+                ."// ignored because we have set a target\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        roundcorners: true,\n"
+                ."        target: '#target'\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
     'ringwidth' => array(
         'default' => '.33',
         'description' => 'The thickness of the hue selector (the outer ring of the color picker)',
