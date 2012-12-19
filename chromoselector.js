@@ -47,7 +47,7 @@
         return [Math.abs(hash % 937), magic];
     }
     function each(obj, fn) {
-        if (_demo.main(obj).do(_demo)) {
+        if (_demo.main(obj)['do'](_demo)) {
             return obj.each(fn);
         } else {
             return obj;
