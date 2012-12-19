@@ -389,7 +389,7 @@
      * to account for the mask always being
      * straight relative to the x-axis
      */
-    function getLuminosity(point1, point2, point3, inputPoint) {
+    function getLuminosityPixel(point1, point2, point3, inputPoint) {
         var lumIntersectionPoint1 = intersectLineLine(
             inputPoint,
             [inputPoint[0] + 20, inputPoint[1]],
@@ -532,7 +532,7 @@
                         maskImageData,
                         i,
                         j,
-                        getLuminosity(points[0], points[1], points[2], [i, j])
+                        getLuminosityPixel(points[0], points[1], points[2], [i, j])
                     );
                 }
             }
@@ -542,7 +542,7 @@
                         maskImageData,
                         i,
                         j,
-                        getLuminosity(points[0], points[1], points[2], [i, j])
+                        getLuminosityPixel(points[0], points[1], points[2], [i, j])
                     );
                 }
             }
