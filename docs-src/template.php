@@ -1,5 +1,22 @@
 <?php
 
+function tidy_up($html){
+    // Specify configuration
+    $config = array(
+       'indent'       => true,
+       'output-xhtml' => true,
+       'wrap'         => 200
+    );
+
+    // Tidy
+    $tidy = new tidy;
+    $tidy->parseString($html, $config, 'utf8');
+    $tidy->cleanRepair();
+
+    // Output
+    return $tidy . "";
+}
+
 function getHeader($path = '.', $type = 'interior', $title = '') {
     $html  = '<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : ' . $title . '</title>';
     $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
