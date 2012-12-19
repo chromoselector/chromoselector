@@ -947,14 +947,16 @@
             width + self.$preview.outerHeight()
         );
         self._picker.width(width).height(width);
-        var borderRadius = '0px 0px 0px ' + width/2 + 'px';
-        if (! self.settings.resizable) {
-            borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
+        if (self.settings.roundcorners) {
+            var borderRadius = '0px 0px 0px ' + width/2 + 'px';
+            if (! self.settings.resizable) {
+                borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
+            }
+            self._container.css({
+                '-webkit-border-radius': borderRadius,
+                'border-radius': borderRadius
+            });
         }
-        self._container.css({
-            '-webkit-border-radius': borderRadius,
-            'border-radius': borderRadius
-        });
     }
     function colorPicker_resize(self, width) {
         if (width !== self.width) {
@@ -1037,7 +1039,7 @@
                 retval = value;
             } else if (index === 'iconalt' && typeof value === 'string' && value.length) {
                 retval = value;
-            } else if (index.match(/^autoshow|autosave|resizable|preview$/)) {
+            } else if (index.match(/^autoshow|autosave|resizable|preview|roundcorners$/)) {
                 retval = !!value;
             } else if (index.match(/^speed|width|shadow$/)) {
                 var intValue = parseInt(value, 10) || 0;
@@ -1190,14 +1192,16 @@
             );
         }
 
-        var borderRadius = '0px 0px 0px ' + self.width/2 + 'px';
-        if (! self.settings.resizable) {
-            borderRadius = '0px 0px ' + self.width/2 + 'px ' + self.width/2 + 'px';
+        if (self.settings.roundcorners) {
+            var borderRadius = '0px 0px 0px ' + self.width/2 + 'px';
+            if (! self.settings.resizable) {
+                borderRadius = '0px 0px ' + self.width/2 + 'px ' + self.width/2 + 'px';
+            }
+            self._container.css({
+                '-webkit-border-radius': borderRadius,
+                'border-radius': borderRadius
+            });
         }
-        self._container.css({
-            '-webkit-border-radius': borderRadius,
-            'border-radius': borderRadius
-        });
 
         self._picker
             .height(self.width)
@@ -1487,6 +1491,7 @@
     resizable:     true,       // bool
     shadow:        8,          // pos int
     preview:       true,       // bool
+    roundcorners:  true,       // bool
     effect:        'fade',     // 'fade' | 'slide'
     icon:          null,       // string
     iconalt:       'Open Color Picker', // string
