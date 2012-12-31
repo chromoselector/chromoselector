@@ -11,13 +11,19 @@
      *
      * v 1.0.0:
      *   Documentation
-     *   converters code
+     *   Converters code
+     *   Better licence file
+     *   Test Opera v12-
+     *   Fix ringwidth - it's a percentage, but relative to what?
+     *   Remove unnecessary code from style.css
      *
      * v 1.0.1
      *   Better Color.textColor() implementation
      *   Better slide animation
+     *   Half pixel problem in indicators
      *
      * v 1.1.0:
+     *   Implement RequestAnimationFrame
      *   Alpha selection
      *   HSV support
      *   Unit tests
