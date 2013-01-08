@@ -15,7 +15,6 @@
      *   Better licence file
      *   Test Opera v12-
      *   Fix ringwidth - it's a percentage, but relative to what?
-     *   Remove unnecessary code from style.css
      *
      * v 1.0.1
      *   Better Color.textColor() implementation
