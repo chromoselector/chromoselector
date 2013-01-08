@@ -437,19 +437,19 @@ $(document).ready(function () {
             </h3>
             <p>
               <strong>Description:</strong><br />
-              The thickness of the hue selector (the outer ring of the color picker)
+              The thickness of the hue selector (the outer ring of the color picker), expressed as a percentage of the total width of the color picker.
             </p>
             <p>
-              <strong>Values:</strong> A number between 0.1 and 1.0
+              <strong>Values:</strong> A number between 0.1 and 0.5
             </p>
             <p>
-              <strong>Default:</strong> .33
+              <strong>Default:</strong> 0.22
             </p>
             <pre>
 <code class="javascript">// Use a thin hue selector
 $(document).ready(function () {
     $('input.color').chromoselector({
-        width: 0.2
+        width: 0.1
     });
 });
 </code>

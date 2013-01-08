@@ -68,7 +68,11 @@ var color = $("#myColorPicker").choromoselector("getColor");</code>
     rgb: { r: 0, g: 0, b: 0 },
     hex: "#000",
     cmyk: { c: 0, m: 0, y: 0, k: 1 },
-    setColor: function (color) { ... }
+    setColor: function (color) { ... },
+    getTextColor: function () {
+        ...
+        return ColorObject;
+    }
 }</code>
 </pre><strong>Note:</strong> that values for hsl, rgb and cmyk colors are all normalised between 0 and 1.
           <h3>
