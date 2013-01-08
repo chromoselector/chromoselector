@@ -1021,10 +1021,10 @@
         if (typeof value != 'undefined') {
             if (index === 'ringwidth') {
                 var floatValue = parseFloat(value, 10) || 0;
-                if (floatValue < .1) {
-                    retval = .1;
-                } else if (floatValue > 1) {
-                    retval = 1;
+                if (floatValue < 0.1) {
+                    retval = 0.1;
+                } else if (floatValue > 0.5) {
+                    retval = 0.5;
                 } else {
                     retval = floatValue;
                 }
@@ -1115,7 +1115,7 @@
         self._source = $this;
         colorPicker_load(self); // sets self.color
         self.width = colorPicker_fixDiameter(self.settings.width);
-        self.ringwidthRatio = self.settings.ringwidth / 3;
+        self.ringwidthRatio = self.settings.ringwidth / 2;
         self.shadowRatio = self.settings.shadow / self.width;
         self.triangleRadius = self.width / 2 - 10 - self.ringwidthRatio * self.width;
         var canvasString = '<canvas width="' + self.width + '" height="' + self.width + '"></canvas>';
@@ -1508,7 +1508,7 @@
     autosave:      true,       // bool
     speed:         400,        // pos int | 'fast' | 'slow' | 'medium'
     width:         180,        // pos int
-    ringwidth:     .33,        // float
+    ringwidth:     .22,        // float
     resizable:     true,       // bool
     shadow:        8,          // pos int
     preview:       true,       // bool
