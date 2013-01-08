@@ -11,15 +11,14 @@
      *
      * v 1.0.0:
      *   Documentation
-     *   Converters code
      *   Better licence file
-     *   Fix ringwidth - it's a percentage, but relative to what?
      *
      * v 1.0.1
      *   Better Color.textColor() implementation
      *   Better slide animation
      *   Half pixel problem in indicators
      *   Fix Opera v12- support
+     *   Fix clickable area of the ring
      *
      * v 1.1.0:
      *   Implement RequestAnimationFrame
