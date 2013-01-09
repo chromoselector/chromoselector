@@ -76,12 +76,16 @@ p.intro strong {
 .content-secondary .ui-listview {
     margin: 0;
 }
+.content-primary {
+    margin-top: 30px;
+}
 
 /* layout */
 @media all and (min-width: 650px){
 
     .type-home .ui-content {
         margin-top: 5px;
+        background: #f00;
     }
     .ui-mobile #jqm-homeheader {
         max-width: 340px;
