@@ -12,6 +12,8 @@
      * v 1.0.0:
      *   Documentation
      *   Better licence file
+     *   Proxy the jsfiddles
+     *   Comment and license jsfiddles
      *
      * v 1.0.1
      *   Better Color.textColor() implementation
