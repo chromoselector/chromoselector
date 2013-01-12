@@ -4,12 +4,12 @@ function getDemosMenu($path = '.', $selected = '') {
     $html  = '<li data-role="list-divider">Demos</li>';
     $elms = array(
         'display-modes' => 'Display Modes',
-        'ui-dialog' => 'jQuery UI dialog',
+        'ui-dialog' => 'jQuery UI dialog integration',
         'custom-color-format' => 'Custom Color Formats',
-        'previews' => 'Previews',
+        'previews' => 'Color Previews',
         'animations' => 'Animations',
-        'icon' => 'Icon',
-        'mobile-dialog' => 'jQuery Mobile dialog'
+        'icon' => 'Icon opener',
+        'mobile-dialog' => 'jQuery Mobile dialog integration'
     );
     foreach ($elms as $key => $value) {
         if ($key == $selected) {
