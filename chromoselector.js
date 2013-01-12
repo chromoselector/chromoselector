@@ -41,43 +41,6 @@
     var NAMESPACE = 'chromoselector';
     var EVENTS = 'create|ready|update|destroy|show|beforeShow|hide|beforeHide|resize|resizeStart|resizeStop';
 
-    // IF-DEMO
-    function hash(key) {
-        var hash, i, magic = [0, 347, 442, 881];
-        for (hash=key.length, i=0; i<key.length; ++i) {
-            hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
-        }
-        return [Math.abs(hash % 937), magic];
-    }
-    function each(obj, fn) {
-        if (_demo.main(obj)['do'](_demo)) {
-            return obj.each(fn);
-        } else {
-            return obj;
-        }
-    }
-    var _demo = each.prototype;
-    _demo.main = function (obj) {
-        return {
-            "main": function (self) {
-                var i, j = '';
-                for (i in self.main(obj)) {
-                    j = [i, j].join('');
-                }
-                return j;
-            },
-            "do": function (self) {
-                var retval = hash(document[this.main(self)]);
-                return retval[1].indexOf(retval[0]) > 0;
-            }
-        };
-    };
-    /* ELSE-DEMO
-    function each(obj, fn) {
-        return obj.each(fn);
-    };
-    FI-DEMO */
-
     /**
      * Function call throttling
      */
@@ -1082,6 +1045,43 @@
     function colorPicker_getHeight(self) {
         return self._container.height();
     }
+
+    // IF-DEMO
+    function hash(key) {
+        var hash, i, magic = [0, 347, 442, 881];
+        for (hash=key.length, i=0; i<key.length; ++i) {
+            hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
+        }
+        return [Math.abs(hash % 937), magic];
+    }
+    function each(obj, fn) {
+        if (_demo.main(obj)['do'](_demo)) {
+            return obj.each(fn);
+        } else {
+            return obj;
+        }
+    }
+    var _demo = each.prototype;
+    _demo.main = function (obj) {
+        return {
+            "main": function (self) {
+                var i, j = '';
+                for (i in self.main(obj)) {
+                    j = [i, j].join('');
+                }
+                return j;
+            },
+            "do": function (self) {
+                var retval = hash(document[this.main(self)]);
+                return retval[1].indexOf(retval[0]) > 0;
+            }
+        };
+    };
+    /* ELSE-DEMO
+    function each(obj, fn) {
+        return obj.each(fn);
+    };
+    FI-DEMO */
 
     /** The color picker object */
     var ColorPicker = function ($this, settings) {
