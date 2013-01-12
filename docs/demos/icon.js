@@ -1,4 +1,4 @@
-$(function () {
+$(document).ready(function () {
     $('#icon #color1').chromoselector({
         icon: '../libs/images/palette.png'
     });

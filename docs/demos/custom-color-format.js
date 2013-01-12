@@ -1,4 +1,4 @@
-$(function () {
+$(document).ready(function () {
     $('#custom-color-format #color2').chromoselector({
         str2color: function (str) {
             var arr = str.split(',');
