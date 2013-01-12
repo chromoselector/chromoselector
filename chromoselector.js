@@ -1,5 +1,5 @@
 /**
- * All code (c) 2012 - Copyright www.chromoselector.com - All Rights Reserved.
+ * All code (c) 2013 - Copyright www.chromoselector.com - All Rights Reserved.
  */
 (function ($, window, Math, defaults) {
     "use strict";
