@@ -32,9 +32,11 @@ release:
 	./replacecode.pl chromoselector.js DEMO 0 TESTSUITE 0 > release/chromoselector.js
 	cp jquery-1.8.3.min.js release
 	cp hello-world.html release
-	cp license-full.txt release/license.txt
+	cp license-full.txt release/LICENSE.txt
+	cp README.txt release/README.txt
 	rm release/chromoselector.js
 	rm release/chromoselector.demo.min.js
 	rm release/docs/overview/purchase.html
+	rm release/chromoselector.min.css
 
 .PHONY: test release

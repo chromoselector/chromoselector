@@ -24,7 +24,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
 
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
-    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/../chromoselector.min.css" />';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/../chromoselector.css" />';
     $html .= '<link rel="stylesheet" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
