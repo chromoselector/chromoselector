@@ -8,12 +8,14 @@ function getOverviewMenu($path = '.', $selected = '') {
             'purchase' => 'Purchase',
             'features' => 'Features',
             'requirements' => 'Requirements',
+            'getting-started' => 'Getting Started',
             'support' => 'Support'
         );
     } else {
         $elms = array(
             'features' => 'Features',
             'requirements' => 'Requirements',
+            'getting-started' => 'Getting Started',
             'support' => 'Support'
         );
     }
