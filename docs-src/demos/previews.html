@@ -28,7 +28,7 @@ $demos = array(
         'id' => 'inline',
         'color' => '#000000',
         'fiddle' => 'http://jsfiddle.net/roccivic/g6H3G/',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    $('#inline').chromoselector({\n"
                 . "        preview: true\n"
                 . "     })\n"
@@ -38,7 +38,7 @@ $demos = array(
         'title' => 'No Preview',
         'id' => 'no_preview',
         'color' => '#000000',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    $('#no_preview').chromoselector({\n"
                 . "        preview: false\n"
                 . "     })\n"
@@ -49,7 +49,7 @@ $demos = array(
         'id' => 'textfield',
         'color' => '#7bda1b',
         'fiddle' => 'http://jsfiddle.net/roccivic/NFpCc/',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    var updatePreview = function() {\n"
                 . "        var color = $(this).chromoselector('getColor');\n"
                 . "        $(this).css({\n"

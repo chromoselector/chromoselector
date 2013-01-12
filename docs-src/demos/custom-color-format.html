@@ -28,7 +28,7 @@ $demos = array(
         'id' => 'color1',
         'value' => '000000',
         'fiddle' => 'http://jsfiddle.net/roccivic/unLGf/',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    $('#color1').chromoselector({\n"
                 . "        str2color: function (str) {\n"
                 . "            return '#' + str;\n"
@@ -44,7 +44,7 @@ $demos = array(
         'id' => 'color2',
         'value' => '0,0,0',
         'fiddle' => 'http://jsfiddle.net/roccivic/85gw3/',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    $('#color2').chromoselector({\n"
                 . "        str2color: function (str) {\n"
                 . "            var arr = str.split(',');\n"
@@ -73,7 +73,7 @@ $demos = array(
         'id' => 'color3',
         'value' => '{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}',
         'fiddle' => 'http://jsfiddle.net/roccivic/5xv2W/',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    $('#color3').chromoselector({\n"
                 . "        str2color: function (str) {\n"
                 . "            try {\n"
@@ -108,7 +108,7 @@ $demos = array(
         'id' => 'color4',
         'value' => '0',
         'fiddle' => 'http://jsfiddle.net/roccivic/F75Px/',
-        'code' => "$(function () {\n"
+        'code' => "$(document).ready(function () {\n"
                 . "    $('#color4').chromoselector({\n"
                 . "        str2color: function (str) {\n"
                 . "            var num = parseInt(str, 10) || 0;\n"

@@ -1,4 +1,4 @@
-$(function () {
+$(document).ready(function () {
     $('#basic1').chromoselector();
 
     $('#basic2').chromoselector({

@@ -1,4 +1,4 @@
-$(function () {
+$(document).ready(function () {
 
     $('#inline').chromoselector({
         preview: true
