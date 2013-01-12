@@ -243,3 +243,7 @@ p.intro strong {
 #picker input {
     width: 100%;
 }
+
+.features li p {
+    white-space: normal;
+}
