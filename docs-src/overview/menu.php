@@ -2,12 +2,21 @@
 
 function getOverviewMenu($path = '.', $selected = '') {
     $html  = '<li data-role="list-divider">Overview</li>';
-    $elms = array(
-        'purchase' => 'Purchase',
-        'features' => 'Features',
-        'requirements' => 'Requirements',
-        'support' => 'Support'
-    );
+
+    if (empty($_GET['RELEASE'])) {
+        $elms = array(
+            'purchase' => 'Purchase',
+            'features' => 'Features',
+            'requirements' => 'Requirements',
+            'support' => 'Support'
+        );
+    } else {
+        $elms = array(
+            'features' => 'Features',
+            'requirements' => 'Requirements',
+            'support' => 'Support'
+        );
+    }
 
     foreach ($elms as $key => $value) {
         if ($key == $selected) {

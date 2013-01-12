@@ -73,7 +73,9 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
         $html .= '<div data-role="header" data-theme="a">';
         $html .= '<h1>' . $title . '</h1>';
         $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
-        $html .= '<a href="../overview/purchase.html">Buy now</a>';
+        if (empty($_GET['RELEASE'])) {
+            $html .= '<a href="../overview/purchase.html">Buy now</a>';
+        }
         $html .= '</div>';
         $html .= '<div data-role="content">';
     } else {
