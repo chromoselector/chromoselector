@@ -1,10 +1,6 @@
-/**
- * All code (c) 2013 - Copyright www.chromoselector.com - All Rights Reserved.
- */
 (function ($, window, Math, defaults) {
     "use strict";
     /**
-     * ChromoSelector 1.0.0 for jQuery 1.3+
      * IF-TESTSUITE
      *
      * TODO
