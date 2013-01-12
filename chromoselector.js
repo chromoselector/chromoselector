@@ -10,7 +10,7 @@
      * TODO
      *
      * v 1.0.0:
-     *   Comment and license jsfiddles
+     *   Comment jsfiddles
      *
      * v 1.0.1
      *   Better Color.textColor() implementation
