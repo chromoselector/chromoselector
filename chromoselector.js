@@ -5,10 +5,9 @@
      *
      * TODO
      *
-     * v 1.0.0:
-     *   Comment jsfiddles
-     *
      * v 1.0.1
+     *   Fix the built process for site/preview/release
+     *   Comment jsfiddles better
      *   Better Color.textColor() implementation
      *   Better slide animation
      *   Half pixel problem in indicators
