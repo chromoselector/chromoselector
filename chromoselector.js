@@ -7,6 +7,7 @@
      *
      * v 1.0.1
      *   Half pixel problem in indicators
+     *   Fix indicator position
      *   Fix clickable area of the ring
      *
      * v 1.0.2
