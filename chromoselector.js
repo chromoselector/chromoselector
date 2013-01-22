@@ -6,7 +6,6 @@
      * TODO
      *
      * v 1.0.1
-     *   Fix the built process for site/preview/release
      *   Better Color.textColor() implementation
      *   Half pixel problem in indicators
      *   Fix clickable area of the ring
