@@ -20,3 +20,5 @@ resizeOffset
 valueRenderer
 setColorRenderer
 haveTarget
+hueSelectorLineWidth
+hueSelectorCircleRadius

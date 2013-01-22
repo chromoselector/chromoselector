@@ -431,16 +431,15 @@
         var width = self.width;
         var ctx = self.canvases[1].getContext("2d");
         colorPicker_drawColorWheelBg(self.canvases[1], width);
-        var lineWidth = self.ringwidthRatio * width;
-        var circleRadius = (width / 2) - 5 - lineWidth / 2;
+
         var origin = [width / 2, width / 2];
         // cut out doughnut
         /** webkit bug prevents usage of "destination-in" */
         ctx.globalCompositeOperation = "destination-out";
         ctx.strokeStyle = 'rgba(0,0,0,1)';
-        ctx.lineWidth = lineWidth;
+        ctx.lineWidth = self.hueSelectorLineWidth;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - (self.ringwidthRatio * width / 2), 0, Math.PI*2, true);
+        ctx.arc(origin[0], origin[1], self.hueSelectorCircleRadius - (self.hueSelectorLineWidth / 2), 0, Math.PI*2, true);
         ctx.closePath();
         ctx.fill();
 
@@ -449,18 +448,18 @@
         tempCtx.fillRect(0,0,width,width);
         tempCtx.globalCompositeOperation = "destination-out";
         tempCtx.beginPath();
-        tempCtx.arc(origin[0], origin[1], circleRadius + (self.ringwidthRatio * width / 4), 0, Math.PI*2, true);
+        tempCtx.arc(origin[0], origin[1], self.hueSelectorCircleRadius + (self.hueSelectorLineWidth / 2), 0, Math.PI*2, true);
         tempCtx.closePath();
         tempCtx.fill();
         ctx.drawImage(tempCanvas, 0, 0);
 
         // shadow
         ctx = self.canvases[0].getContext("2d");
-        ctx.lineWidth = lineWidth / 2;
+        ctx.lineWidth = self.hueSelectorLineWidth * .7;
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * width;
         ctx.beginPath();
-        ctx.arc(origin[0], origin[1], circleRadius - lineWidth / 8, 0, Math.PI*2, true);
+        ctx.arc(origin[0], origin[1], self.hueSelectorCircleRadius, 0, Math.PI*2, true);
         ctx.closePath();
         ctx.stroke();
     }
@@ -566,6 +565,7 @@
         ctx.shadowColor = 'rgba(0,0,0,0.8)';
         ctx.shadowBlur = self.shadowRatio * self.width;
         ctx.fill();
+
         ctx.shadowColor = 'rgba(0,0,0,0)';
         ctx.shadowBlur = 0;
         ctx.globalCompositeOperation = "source-over";
@@ -578,8 +578,7 @@
         var degrees = (1 - self.color.hsl.h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
         /** get hue indicator position */
-        var circleRadius = (self.width / 2) - 5 - (self.ringwidthRatio * self.width * 2 / 3);
-        var indicator = getPointOnCircle(circleRadius, degrees, self.width / 2);
+        var indicator = getPointOnCircle(self.hueSelectorCircleRadius, degrees, self.width / 2);
 
         /** get draw sat/lum indicator position */
         var colorPoint = [
@@ -925,7 +924,9 @@
         if (width !== self.width) {
             self.ready = 0;
             self.width = width;
-            self.triangleRadius = width / 2 - 10 - self.ringwidthRatio * width;
+            self.triangleRadius = width / 2 - 15 - self.ringwidthRatio * (width/2);
+            self.hueSelectorLineWidth = self.ringwidthRatio * self.width / 2;
+            self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
             self.canvases
                 .each(function () {
                     this.width = width;
@@ -1110,9 +1111,11 @@
         self._source = $this;
         colorPicker_load(self); // sets self.color
         self.width = colorPicker_fixDiameter(self.settings.width);
-        self.ringwidthRatio = self.settings.ringwidth / 2;
+        self.ringwidthRatio = self.settings.ringwidth;
         self.shadowRatio = self.settings.shadow / self.width;
-        self.triangleRadius = self.width / 2 - 10 - self.ringwidthRatio * self.width;
+        self.hueSelectorLineWidth = self.ringwidthRatio * self.width / 2;
+        self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
+        self.triangleRadius = self.width / 2 - 15 - self.ringwidthRatio * (self.width/2);
         var canvasString = '<canvas width="' + self.width + '" height="' + self.width + '"></canvas>';
 
         var staticClass = '';
@@ -1266,8 +1269,6 @@
         });
         self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e);
-            var lineWidth = self.ringwidthRatio * self.width / 2;
-            var circleRadius = (self.width / 2) - (lineWidth/2) - lineWidth;
             var inputPoint = getEventPosition(self, e, self._picker);
             if (self.settings.resizable
                 && inputPoint[0] > self.width-20
@@ -1280,9 +1281,9 @@
                     self.width - inputPoint[1]
                 ];
             } else {
-                if (pointInCircle(inputPoint, self.width/2, circleRadius+lineWidth)
+                if (pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
                     &&
-                    ! pointInCircle(inputPoint, self.width/2, circleRadius-lineWidth)
+                    ! pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth)
                 ) {
                     self.draggingHue = 1;
                     self.draggingHueRenderer(self, e);
@@ -1297,11 +1298,9 @@
             }
         }).bind('mousemove touchmove', function (e) {
             var inputPoint = getEventPosition(self, e, self._picker);
-            var lineWidth = self.ringwidthRatio * self.width / 2;
-            var circleRadius = (self.width / 2) - (lineWidth/2) - lineWidth;
-            if (pointInCircle(inputPoint, self.width/2, circleRadius+lineWidth)
+            if (pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth/2)
                 &&
-                ! pointInCircle(inputPoint, self.width/2, circleRadius-lineWidth)
+                ! pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth/2)
             ) {
                 self._picker.css('cursor', 'crosshair');
             } else {
@@ -1503,7 +1502,7 @@
     autosave:      true,       // bool
     speed:         400,        // pos int | 'fast' | 'slow' | 'medium'
     width:         180,        // pos int
-    ringwidth:     .22,        // float
+    ringwidth:     .18,        // float
     resizable:     true,       // bool
     shadow:        8,          // pos int
     preview:       true,       // bool
