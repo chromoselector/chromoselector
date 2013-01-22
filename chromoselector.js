@@ -7,25 +7,28 @@
      *
      * v 1.0.1
      *   Fix the built process for site/preview/release
-     *   Comment jsfiddles better
      *   Better Color.textColor() implementation
-     *   Better slide animation
      *   Half pixel problem in indicators
-     *   Fix Opera v12- support
      *   Fix clickable area of the ring
      *
-     * v 1.1.0:
+     * v 1.0.2
+     *   Better slide animation
+     *   Fix Opera v12- support
+     *
+     * v 1.1.0
      *   Implement RequestAnimationFrame
      *   Alpha selection
      *   HSV support
      *   Unit tests
      *
-     * v 2.0.0:
+     * v 2.0.0
      *   Improved mobile support
-     *   Dialog mode
+     *   Dialog mode / built-in panel
      *   refactor hue2rgb
-     *   Faster shadow - rotate instead of blurring
      *   shorter code
+     *
+     * v 2.1.0
+     *   Faster shadow - rotate instead of blurring
      *
      * FI-TESTSUITE
      */
