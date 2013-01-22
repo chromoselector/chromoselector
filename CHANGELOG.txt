@@ -5,4 +5,4 @@ v 1.0.1 - (not yet released)
   * Documentation fixes
 
 v 1.0.0 - 17 Jan 2013
-  * initial release
+  * Initial release
