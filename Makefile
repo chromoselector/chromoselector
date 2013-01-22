@@ -1,15 +1,13 @@
-clean:
-	rm docs/api/*
-	rm docs/demos/*
-	rm docs/libs/*
-	rm docs/overview/*
-	rm docs/index.html
-
 all:
 	./replacevars.pl chromoselector.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
+clean:
+	rm docs/api/*
+	rm docs/demos/*
+	rm docs/overview/*
+	rm docs/index.html
 b:
 	./replacevars.pl chromoselector.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -b -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
