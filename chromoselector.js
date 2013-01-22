@@ -6,7 +6,6 @@
      * TODO
      *
      * v 1.0.1
-     *   Better Color.textColor() implementation
      *   Half pixel problem in indicators
      *   Fix clickable area of the ring
      *
@@ -116,11 +115,10 @@
             return self;
         };
         Color.prototype.getTextColor = function() {
-            var self = this, color = (self.rgb.r + self.rgb.g +  self.rgb.b) / 3;
-            if (self.hsl.h < .75 && self.hsl.h > .6) {
-                color *= .65;
-            }
-            return new Color(color < .3 ? '#fff' : '#000');
+            var rgb = this.rgb;
+            // See BT 709 color spec
+            var luma = rgb.r*0.2126 + rgb.g*0.7152 + rgb.b*0.0722;
+            return new Color(luma < 0.35 ? '#fff' : '#000');
         };
         function setRgb(self, value) {
             self.rgb = value;
