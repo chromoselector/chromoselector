@@ -9,6 +9,7 @@ function getApiMenu($path = '.', $selected = '') {
         'api-object' => 'Api Object',
         'overriding-defaults' => 'Overriding Defaults',
         'color-manipulation' => 'Color Manipulation',
+        'dimensions' => 'Dimensions',
         'theming' => 'Theming'
     );
     foreach ($elms as $key => $value) {

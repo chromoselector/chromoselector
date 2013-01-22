@@ -5,13 +5,11 @@
      *
      * TODO
      *
-     * v 1.0.1
-     *   Document position settings with picture
-     *
      * v 1.0.2
      *   Better slide animation
      *   Fix Opera v12- support
      *   Improve shadow ratio calculation / shadow rendering
+     *   Move the 10px fixed picker margin to CSS
      *
      * v 1.1.0
      *   Implement RequestAnimationFrame

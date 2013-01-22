@@ -1,0 +1,32 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'interior', 'Documentation / API / Dimensions');
+$html .= '<div class="content-primary">';
+$html .= '<h2>Dimensions</h2>';
+$html .= '<p><img alt="Blueprint of color picker dimensions" src="dimensions.png" /></p>';
+
+$html .= '<ol>';
+$html .= '<li>Height of the preview box. Set in CSS file, default 25px.</li>';
+$html .= '<li>Width of the color picker. Set with the "width" API property, default 180px.</li>';
+$html .= '<li>Margin around the preview box. Set in CSS file, default 10px.</li>';
+$html .= '<li>Diameter of the hue selector. Cannot be set manually, default: total picker width &#9313; minus total picker margin &#9317;.</li>';
+$html .= '<li>Fixed margin between the hue selector and the saturation/luminosity selector, always 5px.</li>';
+$html .= '<li>Fixed margin around the color picker. Cannot be set manually, always 10px.</li>';
+$html .= '<li>Width of the hue selector. Set with "ringwidth" API property. The value is a percentage of the total width of the color picker, as occupied by both sides of the hue selector. Default 0.18</li>';
+$html .= '<li>Width of border around the color picker. Set in CSS file, default 1px.</li>';
+$html .= '</ol>';
+
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getApiMenu('..', 'dimensions');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo tidy_up($html);
+
+?>

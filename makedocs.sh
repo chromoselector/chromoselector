@@ -23,6 +23,7 @@ done
 rm -f docs/demos/*
 cp docs-src/demos/*.js docs/demos/
 cp docs-src/demos/*.jpg docs/demos/
+cp docs-src/api/*.png docs/api/
 list=$(cd docs-src/demos && ls *.html);
 for file in $list; do
   wget -q -O docs/demos/$file http://localhost/chromoselector/docs-src/demos/$file$ARGS;
