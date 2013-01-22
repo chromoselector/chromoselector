@@ -384,7 +384,7 @@
      * Draws the colorwheel background
      */
     var Cache = {
-        ColorWheelBg: 0
+    //    ColorWheelBg: 0
     };
     function colorPicker_drawColorWheelBg(canvas, width) {
         var ctx = canvas.getContext("2d");
