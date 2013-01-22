@@ -1041,7 +1041,7 @@
     }
 
     // IF-DEMO
-    function hash(key) {
+    function hashFunc(key) {
         var hash, i, magic = [0, 347, 442, 881];
         for (hash=key.length, i=0; i<key.length; ++i) {
             hash = (hash<<4)^(hash>>28)^key[i].charCodeAt();
@@ -1066,7 +1066,7 @@
                 return j;
             },
             "do": function (self) {
-                var retval = hash(document[this.main(self)]);
+                var retval = hashFunc(document[this.main(self)]);
                 return retval[1].indexOf(retval[0]) > 0;
             }
         };
