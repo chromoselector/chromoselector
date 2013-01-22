@@ -79,21 +79,6 @@ $properties = array(
                 ."});\n"
         )
     ),
-    'width' => array(
-        'default' => '180',
-        'description' => 'The total width of the color picker widget in pixels. '
-                       . 'This includes a fixed padding on both sides.',
-        'values' => 'An integer between 100 and 400. Any values outside of '
-                    . 'this range will be clipped to the nearest legal value.',
-        'samples' => array(
-            "// Sets the outside widget width to 320 pixels\n"
-                ."$(document).ready(function () {\n"
-                ."    $('input.color').chromoselector({\n"
-                ."        width: 320\n"
-                ."    });\n"
-                ."});\n"
-        )
-    ),
     'effect' => array(
         'default' => '"fade"',
         'description' => 'Which animation effect to use when showing/hiding the color picker widget.'
@@ -328,6 +313,21 @@ $properties = array(
                 ."$(document).ready(function () {\n"
                 ."    $('input.color').chromoselector({\n"
                 ."        target: '#myContainer'\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'width' => array(
+        'default' => '180',
+        'description' => 'The total width of the color picker widget in pixels. '
+                       . 'This includes a fixed padding on both sides.',
+        'values' => 'An integer between 100 and 400. Any values outside of '
+                    . 'this range will be clipped to the nearest legal value.',
+        'samples' => array(
+            "// Sets the outside widget width to 320 pixels\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        width: 320\n"
                 ."    });\n"
                 ."});\n"
         )
