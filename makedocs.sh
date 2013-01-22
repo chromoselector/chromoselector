@@ -1,8 +1,10 @@
 #!/bin/bash
 
-ARGS="?RELEASE=0"
-if [ ! -z $1 ]; then
-  ARGS="?RELEASE=1"
+ARGS="?RELEASE=0&SITE=0"
+if [ "$1" == "RELEASE" ]; then
+  ARGS="?RELEASE=1&SITE=0"
+elif [ "$1" == "SITE" ]; then
+  ARGS="?RELEASE=0&SITE=1"
 fi
 
 rm -rf docs/libs/

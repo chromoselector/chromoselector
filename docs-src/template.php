@@ -18,17 +18,23 @@ function tidy_up($html){
 }
 
 function getHeader($path = '.', $type = 'interior', $title = '') {
+    if (empty($_GET['SITE'])) {
+        $libPath = $path . '/..';
+    } else {
+        $libPath = $path . '/libs';
+    }
+
     $html  = '<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : ' . $title . '</title>';
     $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
     $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
-    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/../chromoselector.css" />';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $libPath . '/chromoselector.css" />';
     $html .= '<link rel="stylesheet" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
-    $html .= '<script src="' . $path . '/../jquery-1.8.3.min.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $libPath . '/jquery-1.8.3.min.js" type="text/javascript"></script>';
 
     $html .= '<script type="text/javascript">';
     $html .= '$(document).live("mobileinit", function(){';
@@ -37,7 +43,11 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '</script>';
 
     $html .= '<script src="' . $path . '/libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>';
-    $html .= '<script src="' . $path . '/../chromoselector.min.js" type="text/javascript"></script>';
+    if (empty($_GET['SITE'])) {
+        $html .= '<script src="' . $libPath . '/chromoselector.min.js" type="text/javascript"></script>';
+    } else {
+        $html .= '<script src="' . $libPath . '/chromoselector.demo.min.js" type="text/javascript"></script>';
+    }
     $html .= '<script src="' . $path . '/demos/custom-color-format.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/icon.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/previews.js" type="text/javascript"></script>';

@@ -43,5 +43,17 @@ release:
 	rm release/chromoselector.demo.min.js
 	rm release/docs/overview/purchase.html
 	rm release/chromoselector.min.css
+site:
+	rm -rf site
+	make all
+	./makedocs.sh SITE #FIXME: this is being run twice, no biggie though
+	mkdir site
+	mkdir site/libs
+	cp -R docs/* site
+	cp -R jquery-ui site/libs
+	cp *.css site/libs
+	cp chromoselector.demo.min.js site/libs
+	cp copyright-notice.js site/libs
+	cp jquery-1.8.3.min.js site/libs
 
-.PHONY: test release
+.PHONY: test release site
