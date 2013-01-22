@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <title>
-      ChromoSelector - jQuery Color Picker plugin : Documentation / Demos / jQuery UI dialog integration
+      ChromoSelector - jQuery Color Picker plugin : Documentation / API / Dimensions
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -44,65 +44,67 @@
     </script>
   </head>
   <body>
-    <div data-role="page" class="type-interior" id="ui-dialog">
+    <div data-role="page" class="type-interior" id="interior">
       <div data-role="header" data-theme="a">
         <h1>
-          Documentation / Demos / jQuery UI dialog integration
+          Documentation / API / Dimensions
         </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a href="../overview/purchase.html">Buy now</a>
       </div>
       <div data-role="content">
         <div class="content-primary">
-          <form action="#" method="get">
-            <h2>
-              jQuery UI dialog integration
-            </h2>
-            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
-              <h3>
-                jQuery UI dialog integration
-              </h3>
-              <p>
-                <img src="screenshot.jpg" alt="" />
-              </p><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/42kW9/embedded/result,js,html,css/">jsFiddle: Single color picker</a><a data-role="button" data-theme=
-              "c" href="http://sandbox.chromoselector.com/9C2WT/embedded/result,js,html,css/">jsFiddle: Multiple color pickers</a><a data-role="button" data-theme="c" href=
-              "http://sandbox.chromoselector.com/5MrUy/embedded/result,js,html,css/">jsFiddle: Multiple resizable color pickers</a>
-            </div>
-            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
-              <h3>
-                jQuery UI dialog with panel
-              </h3>
-              <p>
-                <img src="screenshot-2.jpg" alt="" />
-              </p><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uHupG/embedded/result,js,html,css/">jsFiddle: Single color mode in panel</a>
-              <p>
-                <img src="screenshot-3.jpg" alt="" />
-              </p><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/qkeYC/embedded/result,js,html,css/">jsFiddle: Multiple color modes in panel</a>
-            </div>
-          </form>
+          <h2>
+            Dimensions
+          </h2>
+          <p>
+            <img alt="Blueprint of color picker dimensions" src="dimensions.png" />
+          </p>
+          <ol>
+            <li>Height of the preview box. Set in CSS file, default 25px.
+            </li>
+            <li>Width of the color picker. Set with the "width" API property, default 180px.
+            </li>
+            <li>Margin around the preview box. Set in CSS file, default 10px.
+            </li>
+            <li>Diameter of the hue selector. Cannot be set manually, default: total picker width ② minus total picker margin ⑥.
+            </li>
+            <li>Fixed margin between the hue selector and the saturation/luminosity selector, always 5px.
+            </li>
+            <li>Fixed margin around the color picker. Cannot be set manually, always 10px.
+            </li>
+            <li>Width of the hue selector. Set with "ringwidth" API property. The value is a percentage of the total width of the color picker, as occupied by both sides of the hue selector. Default
+            0.18
+            </li>
+            <li>Width of border around the color picker. Set in CSS file, default 1px.
+            </li>
+          </ol>
         </div>
         <div class="content-secondary">
           <ul data-role="listview" data-theme="c" data-dividertheme="d">
-            <li data-role="list-divider">Demos
+            <li data-role="list-divider">API
             </li>
             <li>
-              <a href="../demos/display-modes.html">Display Modes</a>
+              <a href="../api/properties.html">Properties</a>
+            </li>
+            <li>
+              <a href="../api/events.html">Events</a>
+            </li>
+            <li>
+              <a href="../api/methods.html">Methods</a>
+            </li>
+            <li>
+              <a href="../api/api-object.html">Api Object</a>
+            </li>
+            <li>
+              <a href="../api/overriding-defaults.html">Overriding Defaults</a>
+            </li>
+            <li>
+              <a href="../api/color-manipulation.html">Color Manipulation</a>
             </li>
             <li data-theme="e">
-              <a href="../demos/ui-dialog.html">jQuery UI dialog integration</a>
+              <a href="../api/dimensions.html">Dimensions</a>
             </li>
             <li>
-              <a href="../demos/custom-color-format.html">Custom Color Formats</a>
-            </li>
-            <li>
-              <a href="../demos/previews.html">Color Previews</a>
-            </li>
-            <li>
-              <a href="../demos/animations.html">Animations</a>
-            </li>
-            <li>
-              <a href="../demos/icon.html">Icon Opener</a>
-            </li>
-            <li>
-              <a href="../demos/mobile-dialog.html">jQuery Mobile dialog integration</a>
+              <a href="../api/theming.html">Theming</a>
             </li>
           </ul>
         </div>

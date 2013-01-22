@@ -140,30 +140,6 @@ $(document).ready(function () {
           </div>
           <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
-              width
-            </h3>
-            <p>
-              <strong>Description:</strong><br />
-              The total width of the color picker widget in pixels. This includes a fixed padding on both sides.
-            </p>
-            <p>
-              <strong>Values:</strong> An integer between 100 and 400. Any values outside of this range will be clipped to the nearest legal value.
-            </p>
-            <p>
-              <strong>Default:</strong> 180
-            </p>
-            <pre>
-<code class="javascript">// Sets the outside widget width to 320 pixels
-$(document).ready(function () {
-    $('input.color').chromoselector({
-        width: 320
-    });
-});
-</code>
-</pre>
-          </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
-            <h3>
               effect
             </h3>
             <p>
@@ -443,7 +419,7 @@ $(document).ready(function () {
               <strong>Values:</strong> A number between 0.1 and 0.5
             </p>
             <p>
-              <strong>Default:</strong> 0.22
+              <strong>Default:</strong> 0.18
             </p>
             <pre>
 <code class="javascript">// Use a thin hue selector
@@ -542,6 +518,30 @@ $(document).ready(function () {
 $(document).ready(function () {
     $('input.color').chromoselector({
         target: '#myContainer'
+    });
+});
+</code>
+</pre>
+          </div>
+          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <h3>
+              width
+            </h3>
+            <p>
+              <strong>Description:</strong><br />
+              The total width of the color picker widget in pixels. This includes a fixed padding on both sides.
+            </p>
+            <p>
+              <strong>Values:</strong> An integer between 100 and 400. Any values outside of this range will be clipped to the nearest legal value.
+            </p>
+            <p>
+              <strong>Default:</strong> 180
+            </p>
+            <pre>
+<code class="javascript">// Sets the outside widget width to 320 pixels
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        width: 320
     });
 });
 </code>
@@ -677,6 +677,9 @@ $(document).ready(function () {
               <a href="../api/color-manipulation.html">Color Manipulation</a>
             </li>
             <li>
+              <a href="../api/dimensions.html">Dimensions</a>
+            </li>
+            <li>
               <a href="../api/theming.html">Theming</a>
             </li>
           </ul>
@@ -684,7 +687,7 @@ $(document).ready(function () {
       </div>
       <div data-role="footer" class="footer-docs" data-theme="c">
         <p>
-          v1.0.0
+          v1.0.1
         </p>
         <p style="float: right">
           © 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a>
