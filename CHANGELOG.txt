@@ -1,0 +1,6 @@
+v 1.0.1 - (not yet released)
+  * Improved Color.getTextColor() implementation according to BT 709 spec
+  * Documentation fixes
+
+v 1.0.0 - 17 Jan 2013
+  * initial release

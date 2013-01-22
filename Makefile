@@ -39,6 +39,7 @@ release:
 	cp hello-world.html release
 	cp license-full.txt release/LICENSE.txt
 	cp README.txt release/README.txt
+	cp CHANGELOG.txt release/CHANGELOG.txt
 	rm release/chromoselector.js
 	rm release/chromoselector.demo.min.js
 	rm release/docs/overview/purchase.html
