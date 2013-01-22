@@ -6,12 +6,12 @@
      * TODO
      *
      * v 1.0.1
-     *   Fix indicator position
-     *   Fix clickable area of the ring
+     *   Document position settings with picture
      *
      * v 1.0.2
      *   Better slide animation
      *   Fix Opera v12- support
+     *   Improve shadow ratio calculation / shadow rendering
      *
      * v 1.1.0
      *   Implement RequestAnimationFrame
