@@ -2,6 +2,7 @@ v 1.0.1 - (not yet released)
   * Improved Color.getTextColor() implementation according to BT 709 spec
   * Fixed calculations of the width of the hue selector
   * Changed default value for "ringwidth" property from 0.22 to 0.18
+  * New documentation page explaining widget dimensions
   * Documentation fixes
 
 v 1.0.0 - 17 Jan 2013
