@@ -9,15 +9,16 @@
      *   Better slide animation
      *   Fix Opera v12- support
      *   Improve shadow ratio calculation / shadow rendering
-     *   Move the 10px fixed picker margin to CSS
      *
      * v 1.1.0
+     *   Update jquery and jquery-ui
+     *   Move the 10px fixed picker margin to CSS
      *   Implement RequestAnimationFrame
-     *   Alpha selection
      *   HSV support
      *   Unit tests
      *
      * v 2.0.0
+     *   Alpha selection
      *   Improved mobile support
      *   Dialog mode / built-in panel
      *   refactor hue2rgb
