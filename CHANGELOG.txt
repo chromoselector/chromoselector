@@ -1,4 +1,4 @@
-v 1.0.1 - (not yet released)
+v 1.0.1 - 24 Jan 2013
   * Improved Color.getTextColor() implementation according to BT 709 spec
   * Fixed calculations of the width of the hue selector
   * Changed default value for "ringwidth" property from 0.22 to 0.18
