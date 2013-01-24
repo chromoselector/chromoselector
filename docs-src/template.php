@@ -28,6 +28,14 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
     $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
+    if (! empty($_GET['SITE'])) {
+        $html .= '<script type="text/javascript">';
+        $html .= 'if (top.location != location) {';
+        $html .= 'top.location.href = document.location.href;';
+        $html .= '}';
+        $html .= '</script>';
+    }
+
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $libPath . '/chromoselector.css" />';
