@@ -5,9 +5,6 @@
      *
      * TODO
      *
-     * v 1.0.1
-     *   Screenshots
-     *
      * v 1.0.2
      *   Better slide animation
      *   Fix Opera v12- support

@@ -1,0 +1,49 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'screenshots', 'Overview / Screenshots');
+$html .= '<div class="content-primary">';
+$html .= '<h2>Color Picker Screenshots</h2>';
+
+$html .= '<ul data-role="listview" data-inset="true">';
+
+$html .= '<li>';
+$html .= '<h3>Basic color picker usage. Inline mode, with all default options.</h3><br/>';
+$html .= '<p><img style="border: 1px dotted #ccc;" alt="screenshot of color picker with default options" src="../screenshots/1.png" /></p>';
+$html .= '</li>';
+
+$html .= '<li>';
+$html .= '<h3>Inline mode, small, non-resizable.</h3><br/>';
+$html .= '<p><img style="border: 1px dotted #ccc;" alt="screenshot of non-resizable color picker" src="../screenshots/2.png" /></p>';
+$html .= '</li>';
+
+$html .= '<li>';
+$html .= '<h3>Static mode, color preview in input element.</h3><br/>';
+$html .= '<p><img style="border: 1px dotted #ccc;" alt="screenshot of color picker in static mode" src="../screenshots/3.png" /></p>';
+$html .= '</li>';
+
+$html .= '<li>';
+$html .= '<h3>Sample integration with jQuery-UI dialog.<br/>External controls in side panel with multiple color modes.</h3><br/>';
+$html .= '<p><img style="border: 1px dotted #ccc;" alt="screenshot of color picker in jquery-ui dialog" src="../screenshots/4.jpg" /></p>';
+$html .= '</li>';
+
+$html .= '<li>';
+$html .= '<h3>Sample integration with jQuery-mobile dialog.</h3><br/>';
+$html .= '<p><img style="border: 1px dotted #ccc;" alt="screenshot of color picker in jquery-mobile dialog" src="../screenshots/5.jpg" /></p>';
+$html .= '</li>';
+
+$html .= '</ul>';
+
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getOverviewMenu('..', 'screenshots');
+$html .= '</ul>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo tidy_up($html);
+
+?>

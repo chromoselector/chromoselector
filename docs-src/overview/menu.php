@@ -7,6 +7,7 @@ function getOverviewMenu($path = '.', $selected = '') {
         $elms = array(
             'purchase' => 'Purchase',
             'features' => 'Features',
+            'screenshots' => 'Screenshots',
             'requirements' => 'Requirements',
             'getting-started' => 'Getting Started',
             'support' => 'Support'
@@ -14,6 +15,7 @@ function getOverviewMenu($path = '.', $selected = '') {
     } else {
         $elms = array(
             'features' => 'Features',
+            'screenshots' => 'Screenshots',
             'requirements' => 'Requirements',
             'getting-started' => 'Getting Started',
             'support' => 'Support'
