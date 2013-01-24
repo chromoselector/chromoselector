@@ -5,6 +5,9 @@
      *
      * TODO
      *
+     * v 1.0.1
+     *   Screenshots
+     *
      * v 1.0.2
      *   Better slide animation
      *   Fix Opera v12- support
@@ -13,16 +16,16 @@
      * v 1.1.0
      *   Update jquery and jquery-ui
      *   Move the 10px fixed picker margin to CSS
-     *   Implement RequestAnimationFrame
      *   HSV support
-     *   Unit tests
      *
      * v 2.0.0
      *   Alpha selection
+     *   Implement RequestAnimationFrame
      *   Improved mobile support
      *   Dialog mode / built-in panel
      *   refactor hue2rgb
      *   shorter code
+     *   Unit tests
      *
      * v 2.1.0
      *   Faster shadow - rotate instead of blurring
