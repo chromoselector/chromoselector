@@ -129,6 +129,42 @@
 </pre>
               </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/NFpCc/">jsFiddle</a>
             </div>
+            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                Preview in textfield (static mode)
+              </h3>
+              <div data-role="fieldcontain">
+                <p>
+                  <img style="border: 1px dotted #ccc;" alt="screenshot of color picker in static mode" src="../screenshots/3.png" />
+                </p>
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function() {
+    var updatePreview = function() {
+        var color = $(this).chromoselector("getColor");
+        $(this).css({
+            "background-color": color.hex,
+            "color": color.getTextColor().hex,
+            "text-shadow": "0 1px 0 " + color.getTextColor().getTextColor().hex
+        });
+    };
+    // Initialise the color picker
+    $("#basic2").chromoselector({
+        target: "#picker",
+        autoshow: false,
+        width: 260,
+        preview: false,
+        create: updatePreview,
+        update: updatePreview
+    }).chromoselector("show", 0);
+});</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/BT6vF/">jsFiddle</a>
+            </div>
           </form>
         </div>
         <div class="content-secondary">
