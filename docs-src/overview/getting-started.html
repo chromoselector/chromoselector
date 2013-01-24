@@ -73,7 +73,7 @@ $html .= htmlspecialchars('<form action="process.php" method="post">
 </form>');
 $html .= '</code></pre></p>';
 
-$html .= '<p>The last step is to attach the color picker to the <strong>INPUT</strong> element. To accomplish this, we create a <strong>SCRIPT</strong> element in the <strong>HEAD</strong> of the page. Then we schedule the execution of our code upon the completion of the page load by using the <strong>$(document).ready()<strong> jQuery method. Inside the ready method, we find the desired element using a jQuery selector, and call the <strong>chromoselector</strong> method on it.';
+$html .= '<p>The last step is to attach the color picker to the <strong>INPUT</strong> element. To accomplish this, we create a <strong>SCRIPT</strong> element in the <strong>HEAD</strong> of the page. Then we schedule the execution of our code upon the completion of the page load by using the <strong>$(document).ready()</strong> jQuery method. Inside the ready method, we find the desired element using a jQuery selector, and call the <strong>chromoselector</strong> method on it.';
 $html .= '<pre class="instant" style="padding: 1em; border: 1px dotted #aaa;"><code class="html">';
 $html .= htmlspecialchars('$(document).ready(function (){
     $("#my_color").chromoselector();

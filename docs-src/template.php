@@ -3,23 +3,46 @@
 function tidy_up($html){
     // Specify configuration
     $config = array(
-       'indent'       => true,
-       'output-xhtml' => true,
-       'wrap'         => 200
+        'hide-comments'       => true,
+        'indent'              => true,
+        'indent-spaces'       => 2,
+        'new-blocklevel-tags' => 'article,header,footer,section,nav',
+        'new-inline-tags'     => 'video,audio,canvas,ruby,rt,rp',
+        'output-xhtml'        => true,
+        'wrap'                => 200
     );
 
     // Tidy
     $tidy = new tidy;
     $tidy->parseString($html, $config, 'utf8');
+
+    //echo $tidy->errorBuffer . "\n";
+
     $tidy->cleanRepair();
 
+    // Drop doctype
+    $output = str_replace(
+        '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">' . "\n",
+        '',
+        $tidy
+    );
+
     // Output
-    return $tidy . "";
+    return str_replace(
+        '<html xmlns="http://www.w3.org/1999/xhtml">',
+        "<!DOCTYPE html>\n<html>",
+        $output
+    );
 }
 
 function getHeader($path = '.', $type = 'interior', $title = '') {
     if (empty($_GET['SITE'])) {
-        $libPath = $path . '/..';
+        if ($path === '.') {
+            $libPath = '..';
+        } else {
+            $libPath = $path . '/..';
+        }
     } else {
         $libPath = $path . '/libs';
     }
@@ -39,7 +62,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $libPath . '/chromoselector.css" />';
-    $html .= '<link rel="stylesheet" href="' . $path . '/libs/default.min.css">';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
     $html .= '<script src="' . $libPath . '/jquery-1.8.3.min.js" type="text/javascript"></script>';
@@ -65,7 +88,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<script src="' . $path . '/libs/highlight.pack.js" type="text/javascript"></script>';
 
 
-    $html .= '<script>';
+    $html .= '<script type="text/javascript">';
     $html .= '$(document).bind("pageinit", function(){';
 
     $html .= '$("h3.ui-collapsible-heading").bind("click", function () {';
