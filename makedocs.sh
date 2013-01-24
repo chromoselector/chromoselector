@@ -10,6 +10,8 @@ fi
 rm -rf docs/libs/
 mkdir docs/libs
 cp -R docs-src/libs/* docs/libs/
+mkdir docs/screenshots
+cp -R docs-src/screenshots/* docs/screenshots/
 
 rm -f docs/*.html
 wget -q -O docs/index.html http://localhost/chromoselector/docs-src/index.html$ARGS
