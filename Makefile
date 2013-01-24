@@ -3,6 +3,11 @@ all:
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
+full:
+	make demo
+	make site
+	make release
+	make
 clean:
 	rm docs/api/*
 	rm docs/demos/*
