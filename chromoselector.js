@@ -698,7 +698,7 @@
             colorPicker_save(self);
         }
         if (self.settings.preview) {
-            self.$preview.find('div').css('background', self.color.hex);
+            self._preview.find('div').css('background', self.color.hex);
         }
         self._source.trigger('update');
     }
@@ -731,8 +731,8 @@
         } else {
             self.color = new Color(str);
         }
-        if (self.settings.preview && self.$preview) {
-            self.$preview.find('div').css('background', self.color.hex);
+        if (self.settings.preview && self._preview) {
+            self._preview.find('div').css('background', self.color.hex);
         }
         if (redraw) {
             colorPicker_drawSaturationLimunositySelector(self);
@@ -905,7 +905,7 @@
     }
     function colorPicker_resizeContainer(self, width) {
         self._container.width(width).height(
-            width + self.$preview.outerHeight()
+            width + self._preview.outerHeight()
         );
         self._picker.width(width).height(width);
         if (self.settings.roundcorners) {
@@ -1022,7 +1022,7 @@
         var oe = e.originalEvent;
         var touch = oe.touches || oe.changedTouches;
         var offset = $obj.parent().offset();
-        var previewHeight = self.$preview.outerHeight();
+        var previewHeight = self._preview.outerHeight();
         if (touch) {
             // touchscreen
             x = touch[0].pageX - offset.left;
@@ -1151,7 +1151,7 @@
             .addClass(staticClass);
 
         if (self.settings.icon) {
-            self._icon = $('<a />', {href: '#', tabindex:'999'})
+            self._icon = $('<a/>', {href: '#', tabindex:'999'})
             .addClass('ui-cs-icon')
             .css('position','absolute')
             .append(
@@ -1168,7 +1168,7 @@
         }
 
         if (self.settings.resizable) {
-            $('<span />')
+            $('<span/>')
                 .addClass('ui-cs-resizer')
                 .width(20)
                 .height(20)
@@ -1180,17 +1180,17 @@
                 .appendTo(self._container);
         }
 
-        self.$preview = $('<div />')
+        self._preview = $('<div/>')
             .addClass('ui-cs-preview-container')
             .append(
-                $('<div />')
+                $('<div/>')
                 .addClass('ui-cs-preview-widget')
                 .css('background', self.color.hex)
             );
 
         if (self.settings.preview) {
             self._container.prepend(
-                self.$preview
+                self._preview
             );
         }
 

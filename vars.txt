@@ -4,6 +4,7 @@ _target
 _picker
 _source
 _icon
+_preview
 ringwidthRatio
 shadowRatio
 triangleRadius
@@ -22,3 +23,4 @@ setColorRenderer
 haveTarget
 hueSelectorLineWidth
 hueSelectorCircleRadius
+hiding
