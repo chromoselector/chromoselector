@@ -14,6 +14,7 @@
      *   Update jquery and jquery-ui
      *   Move the 10px fixed picker margin to CSS
      *   HSV support
+     *   Better generation of new elements
      *
      * v 2.0.0
      *   Alpha selection
