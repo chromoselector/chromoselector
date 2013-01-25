@@ -1168,16 +1168,17 @@
         }
 
         if (self.settings.resizable) {
-            $('<span/>')
-                .addClass('ui-cs-resizer')
-                .width(20)
-                .height(20)
-                .css({
-                    position: 'absolute',
-                    bottom: '0px',
-                    right: '0px'
-                })
-                .appendTo(self._container);
+            $(self._container).append(
+                $('<span/>')
+                    .addClass('ui-cs-resizer')
+                    .width(20)
+                    .height(20)
+                    .css({
+                        position: 'absolute',
+                        bottom: '0px',
+                        right: '0px'
+                    })
+            );
         }
 
         self._preview = $('<div/>')
