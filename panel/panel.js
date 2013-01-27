@@ -239,6 +239,7 @@ var Panel = (function () {
                 currentColor[mode]
             );
             drawPanel();
+            $target.trigger('update');
         });
 
         // API
@@ -249,7 +250,7 @@ var Panel = (function () {
             //canvas.height = canvasHeight;
             drawPanel();
         };
-        self.setChannelWidth = function (newWidth) {
+        /*self.setChannelWidth = function (newWidth) {
             channelWidth = newWidth;
             $canvas.attr('width', getPanelWidth());
             //canvas.width = getPanelWidth();
@@ -260,17 +261,22 @@ var Panel = (function () {
             $canvas.attr('width', getPanelWidth());
             //canvas.width = getPanelWidth();
             drawPanel();
-        };
+        };*/
         self.setColor = function (newColor) { // Throttle?
             currentColor = new Color(newColor);
             drawPanel();
+        };
+        self.getColor = function () {
+            return currentColor;
         };
         self.setMode = function (newMode) {
             mode = $select.val(newMode).val();
             indexes = mode.split('');
             // Update panel width in case the number
             // of channels has changed
-            self.setChannelWidth(channelWidth);
+            //self.setChannelWidth(channelWidth);
+            $canvas.attr('width', getPanelWidth());
+            drawPanel();
         };
 
         // Initialise variables. step 1
