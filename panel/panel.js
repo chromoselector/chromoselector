@@ -7,13 +7,11 @@ var Panel = (function () {
         var self = this;
         // Declare functions
         var getPanelWidth = function(){
-            var retval;
             if (mode === 'cmyk') {
-                retval = channelWidth*4+channelMargin*3;
+                return channelWidth*4+channelMargin*3;
             } else {
-                retval = channelWidth*3+channelMargin*2;
+                return channelWidth*3+channelMargin*2;
             }
-            return retval;
         };
         var toggleColor = function(color, channel, value) {
             var retval = $.extend({}, color);
@@ -27,13 +25,19 @@ var Panel = (function () {
             );
         };
         var setSimpleGradient = function(color1, color2) {
-            var lingrad = createGradient();
+            lingrad = createGradient();
             lingrad[addColorStop](0, color1.hex);
             lingrad[addColorStop](1, color2.hex);
             ctx.fillStyle = lingrad;
         };
         var setHueGradient = function() {
-            var lingrad = createGradient();
+            lingrad = createGradient();
+            /* Shorter code, executes way slower though
+            for (var i=0;i<7;) {
+                lingrad[addColorStop](
+                    i/6, new Color({ h: ++i/6, s: 1, l: 0.5 }).hex
+                );
+            }*/
             lingrad[addColorStop](0/6, '#f00');
             lingrad[addColorStop](1/6, '#ff0');
             lingrad[addColorStop](2/6, '#0f0');
@@ -43,55 +47,46 @@ var Panel = (function () {
             lingrad[addColorStop](6/6, '#f00');
             ctx.fillStyle = lingrad;
         };
-        var setLightnessGradient = function(color){ 
-            var lingrad = createGradient();
+        var setLightnessGradient = function(color) {
+            lingrad = createGradient();
             lingrad[addColorStop](0,   '#000');
             lingrad[addColorStop](0.5, color.hex);
             lingrad[addColorStop](1,   '#fff');
             ctx.fillStyle = lingrad;
         };
         var setKeyGradient = function(color) {
-            var lingrad = createGradient();
+            lingrad = createGradient();
             lingrad[addColorStop](0, color.hex);
             lingrad[addColorStop](1, '#000');
             ctx.fillStyle = lingrad;
         };
+        var drawCircle = function (color, x, y) {
+            if (typeof color === 'object') {
+                color = color.hex;
+            }
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, y, channelWidth/2, 0, Math.PI*2, true);
+            ctx.closePath();
+            ctx.fill();
+        }
         var roundEdges = function(channel, color1, color2) {
-            if (typeof color1 === 'object') {
-                color1 = color1.hex;
-            }
-            if (typeof color2 === 'object') {
-                color2 = color2.hex;
-            }
-            ctx.fillStyle = color1;
-            ctx.beginPath();
-            ctx.arc(
-                channelWidth/2 + channel * (channelWidth+channelMargin),
-                canvasHeight-channelWidth/2,
-                channelWidth/2,
-                0,
-                Math.PI*2,
-                true
+            var x = channelWidth/2 + channel * (channelWidth+channelMargin);
+            drawCircle(
+                color1,
+                x,
+                canvasHeight-channelWidth/2
             );
-            ctx.closePath();
-            ctx.fill();
-            ctx.fillStyle = color2;
-            ctx.beginPath();
-            ctx.arc(
-                channelWidth/2 + channel * (channelWidth+channelMargin),
-                channelWidth/2,
-                channelWidth/2,
-                0,
-                Math.PI*2,
-                true
+            drawCircle(
+                color2,
+                x,
+                channelWidth/2
             );
-            ctx.closePath();
-            ctx.fill();
         };
         var drawPanel = function() {
             ctx.clearRect(0,0,(channelWidth+channelMargin)*4,canvasHeight);
 
-            var i, color1, color2, offset, channel;
+            var i, color1, color2, offset, channel, lighnessHsl, cmy;
             if (mode === 'rgb') {
                 offset = 0;
                 channel = 0;
@@ -154,7 +149,7 @@ var Panel = (function () {
                     '#000',
                     '#fff'
                 );
-                var lighnessHsl = $.extend({}, currentColor.hsl);
+                lighnessHsl = $.extend({}, currentColor.hsl);
                 lighnessHsl.l = 0.5;
                 setLightnessGradient(new Color(lighnessHsl));
                 ctx.fillRect(
@@ -168,7 +163,7 @@ var Panel = (function () {
             } else if (mode === 'cmyk') {
                 offset = 0;
                 channel = 0;
-                var cmy = 'cmy'.split('');
+                cmy = 'cmy'.split('');
                 for (i in cmy) {
                     color1 = toggleColor(currentColor.cmyk, cmy[i], 0);
                     color2 = toggleColor(currentColor.cmyk, cmy[i], 1);
@@ -206,26 +201,21 @@ var Panel = (function () {
             }
         };
         var drawIndicators = function(color) {
-            var offset = 0;
-            for (var channel in color) {
+            var offset = 0, channel;
+            for (channel in color) {
                 var x = offset + channelWidth/2;
                 var verticalSpace = canvasHeight - channelWidth;
                 var y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2;
-
-                ctx.strokeStyle = "#fff";
-                ctx.lineWidth = 1.5;
-                ctx.beginPath();
-                ctx.arc(x, y, 6, 0, Math.PI*2, true);
-                ctx.closePath();
-                ctx.stroke();
-
-                ctx.strokeStyle = "#000";
-                ctx.lineWidth = 2;
-                ctx.beginPath();
-                ctx.arc(x, y, 4.5, 0, Math.PI*2, true);
-                ctx.closePath();
-                ctx.stroke();
-
+                var indicator = function (color, lineWidth, diameter){
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = lineWidth;
+                    ctx.beginPath();
+                    ctx.arc(x, y, diameter, 0, Math.PI*2, true);
+                    ctx.closePath();
+                    ctx.stroke();
+                };
+                indicator("#fff", 1.5, 6);
+                indicator("#000", 2, 4.5);
                 offset += channelWidth + channelMargin;
             }
         };
@@ -239,28 +229,10 @@ var Panel = (function () {
                 position = fullScaleValue;
             }
             var value = position / fullScaleValue;
-            if (mode === 'rgb') {
-                if (draggingChannel === 3) {
-                    return;
-                }
-                currentColor.rgb[indexes[draggingChannel]] = value;
-                currentColor = new Color(
-                    currentColor.rgb
-                );
-            } else if (mode === 'hsl') {
-                if (draggingChannel === 3) {
-                    return;
-                }
-                currentColor.hsl[indexes[draggingChannel]] = value;
-                currentColor = new Color(
-                    currentColor.hsl
-                );
-            } else if (mode === 'cmyk') {
-                currentColor.cmyk[indexes[draggingChannel]] = value;
-                currentColor = new Color(
-                    currentColor.cmyk
-                );
-            }
+            currentColor[mode][indexes[draggingChannel]] = value;
+            currentColor = new Color(
+                currentColor[mode]
+            );
             drawPanel();
         };
         var draggingRenderer = throttle(dragHandler);
@@ -269,37 +241,35 @@ var Panel = (function () {
         self.setHeight = function (newHeight) {
             canvasHeight = newHeight - $select.outerHeight(true) - targetPadding;
             $canvas.attr('height', canvasHeight);
-            canvas.height = canvasHeight;
+            //canvas.height = canvasHeight;
             drawPanel();
         };
         self.setChannelWidth = function (newWidth) {
             channelWidth = newWidth;
             $canvas.attr('width', getPanelWidth());
-            canvas.width = getPanelWidth();
+            //canvas.width = getPanelWidth();
             drawPanel();
         };
         self.setChannelMargin = function (newMargin) {
             channelMargin = newMargin;
             $canvas.attr('width', getPanelWidth());
-            canvas.width = getPanelWidth();
+            //canvas.width = getPanelWidth();
             drawPanel();
         };
         self.setColor = function (newColor) { // Throttle?
-            currentColor = newColor;
+            currentColor = new Color(newColor);
             drawPanel();
         };
         self.setMode = function (newMode) {
-            $select.find('option').each(function () {
-                if ($(this).val() === newMode) {
-                    $(this).select();
-                    mode = newMode;
-                    indexes = mode.split('');
-                    self.setChannelWidth(channelWidth);
-                    // drawPanel();
-                }
-            });
+            mode = $select.val(newMode).val();
+            indexes = mode.split('');
+            // Update panel width in case the number
+            // of channels has changed
+            self.setChannelWidth(channelWidth);
         };
+
         // Initialise variables. step 1
+        var lingrad;
         var currentColor = new Color();
         var mode = 'rgb';
         var indexes = mode.split('');
@@ -307,7 +277,7 @@ var Panel = (function () {
         var draggingChannel = 0;
         var targetPadding = $target.outerHeight(true);
 
-        // Create layout elements
+        // Build layout
         var $select = $('<select/>').css(
             'display', 'block'
         ).append(
@@ -317,12 +287,10 @@ var Panel = (function () {
         ).append(
             $('<option/>').html('cmyk')
         );
-        // Build layout
         $target.append(
             $select
         );
         var canvasHeight = panelHeight - $select.outerHeight(true) - targetPadding;
-
         var $canvas = $('<canvas/>')
             .attr('width', getPanelWidth())
             .attr('height', canvasHeight)
@@ -334,19 +302,21 @@ var Panel = (function () {
         // Initialise variables. step 2
         var canvas = $canvas[0];
         var ctx = canvas.getContext("2d");
+
         // Initialise panel
         drawPanel();
+
         // Bind events
         $select.change(function () {
             self.setMode(
-                $(this).find(':selected').val()
+                $(':selected', this).val()
             );
         });
         $canvas.bind('mousedown touchstart', function (event) {
-            event.preventDefault();
+            preventDefault(event);
+            var channel = 0;
             var inputPoint = getEventPosition(false, event, $(this));
             if (inputPoint[1] > 0 && inputPoint[1] < canvasHeight) {
-                var channel = 0;
                 while (channel <= 3) {
                     var offset = (channelWidth+channelMargin)*channel;
                     if (inputPoint[0] > offset && inputPoint[0] < offset+channelWidth) {
@@ -361,12 +331,12 @@ var Panel = (function () {
         });
         $([window, document]).bind('mousemove touchmove', function (event) {
             if (dragging) {
-                event.preventDefault();
+                preventDefault(event);
                 draggingRenderer(event);
             }
         }).bind('mouseup touchend', function (event) {
             if (dragging) {
-                event.preventDefault();
+                preventDefault(event);
                 dragging = 0;
                 draggingRenderer(event);
             }
