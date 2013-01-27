@@ -22,7 +22,7 @@ var Panel = (function () {
         };
         var createGradient = function() {
             return ctx.createLinearGradient(
-                0, panelHeight-channelWidth/2,
+                0, canvasHeight-channelWidth/2,
                 0, channelWidth/2
             );
         };
@@ -67,7 +67,7 @@ var Panel = (function () {
             ctx.beginPath();
             ctx.arc(
                 channelWidth/2 + channel * (channelWidth+channelMargin),
-                panelHeight-channelWidth/2,
+                canvasHeight-channelWidth/2,
                 channelWidth/2,
                 0,
                 Math.PI*2,
@@ -89,7 +89,7 @@ var Panel = (function () {
             ctx.fill();
         };
         var drawPanel = function() {
-            ctx.clearRect(0,0,(channelWidth+channelMargin)*4,panelHeight);
+            ctx.clearRect(0,0,(channelWidth+channelMargin)*4,canvasHeight);
 
             var i, color1, color2, offset, channel;
             if (mode === 'rgb') {
@@ -111,7 +111,7 @@ var Panel = (function () {
                         offset,
                         channelWidth/2,
                         channelWidth,
-                        panelHeight-channelWidth
+                        canvasHeight-channelWidth
                     );
                     offset += channelWidth + channelMargin;
                     channel++;
@@ -128,7 +128,7 @@ var Panel = (function () {
                     0,
                     channelWidth/2,
                     channelWidth,
-                    panelHeight-channelWidth
+                    canvasHeight-channelWidth
                 );
 
                 color1 = toggleColor(currentColor.hsl, 's', 0);
@@ -146,7 +146,7 @@ var Panel = (function () {
                     channelWidth + channelMargin,
                     channelWidth/2,
                     channelWidth,
-                    panelHeight-channelWidth
+                    canvasHeight-channelWidth
                 );
 
                 roundEdges(
@@ -161,7 +161,7 @@ var Panel = (function () {
                     (channelWidth+channelMargin)*2,
                     channelWidth/2,
                     channelWidth,
-                    panelHeight-channelWidth
+                    canvasHeight-channelWidth
                 );
 
                 drawIndicators(currentColor.hsl);
@@ -185,7 +185,7 @@ var Panel = (function () {
                         offset,
                         channelWidth/2,
                         channelWidth,
-                        panelHeight-channelWidth
+                        canvasHeight-channelWidth
                     );
                     offset += channelWidth + channelMargin;
                     channel++;
@@ -200,7 +200,7 @@ var Panel = (function () {
                     (channelWidth+channelMargin)*3,
                     channelWidth/2,
                     channelWidth,
-                    panelHeight-channelWidth
+                    canvasHeight-channelWidth
                 );
                 drawIndicators(currentColor.cmyk);
             }
@@ -209,7 +209,7 @@ var Panel = (function () {
             var offset = 0;
             for (var channel in color) {
                 var x = offset + channelWidth/2;
-                var verticalSpace = panelHeight - channelWidth;
+                var verticalSpace = canvasHeight - channelWidth;
                 var y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2;
 
                 ctx.strokeStyle = "#fff";
@@ -231,7 +231,7 @@ var Panel = (function () {
         };
         var dragHandler = function(event) {
             var inputPoint = getEventPosition(false, event, $canvas);
-            var fullScaleValue = panelHeight - channelWidth;
+            var fullScaleValue = canvasHeight - channelWidth;
             var position = fullScaleValue - Math.round(inputPoint[1] - channelWidth/2);
             if (position < 0) {
                 position = 0;
@@ -266,10 +266,10 @@ var Panel = (function () {
         var draggingRenderer = throttle(dragHandler);
 
         // API
-        self.setPanelHeight = function (newHeight) {
-            panelHeight = newHeight;
-            $canvas.attr('height', newHeight);
-            canvas.height = newHeight;
+        self.setHeight = function (newHeight) {
+            canvasHeight = newHeight - $select.outerHeight(true) - targetPadding;
+            $canvas.attr('height', canvasHeight);
+            canvas.height = canvasHeight;
             drawPanel();
         };
         self.setChannelWidth = function (newWidth) {
@@ -305,6 +305,8 @@ var Panel = (function () {
         var indexes = mode.split('');
         var dragging = 0;
         var draggingChannel = 0;
+        var targetPadding = $target.outerHeight(true);
+
         // Create layout elements
         var $select = $('<select/>').css(
             'display', 'block'
@@ -315,15 +317,20 @@ var Panel = (function () {
         ).append(
             $('<option/>').html('cmyk')
         );
-        var $canvas = $('<canvas/>')
-            .attr('width', getPanelWidth())
-            .attr('height', panelHeight);
         // Build layout
         $target.append(
             $select
-        ).append(
+        );
+        var canvasHeight = panelHeight - $select.outerHeight(true) - targetPadding;
+
+        var $canvas = $('<canvas/>')
+            .attr('width', getPanelWidth())
+            .attr('height', canvasHeight)
+            .css('display', 'block');
+        $target.append(
             $canvas
         );
+
         // Initialise variables. step 2
         var canvas = $canvas[0];
         var ctx = canvas.getContext("2d");
@@ -338,7 +345,7 @@ var Panel = (function () {
         $canvas.bind('mousedown touchstart', function (event) {
             event.preventDefault();
             var inputPoint = getEventPosition(false, event, $(this));
-            if (inputPoint[1] > 0 && inputPoint[1] < panelHeight) {
+            if (inputPoint[1] > 0 && inputPoint[1] < canvasHeight) {
                 var channel = 0;
                 while (channel <= 3) {
                     var offset = (channelWidth+channelMargin)*channel;
