@@ -84,7 +84,7 @@ var Panel = (function () {
             );
         };
         var drawPanel = function() {
-            ctx.clearRect(0,0,(channelWidth+channelMargin)*4,canvasHeight);
+            ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
 
             var i, color1, color2, offset, channel, lighnessHsl, keyCmyk, cmy;
             if (mode === 'rgb') {
@@ -242,6 +242,7 @@ var Panel = (function () {
 
         // API
         self.setHeight = function (newHeight) {
+            ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
             canvasHeight = newHeight - $select.outerHeight(true) - targetPadding;
             $canvas.attr('height', canvasHeight);
             //canvas.height = canvasHeight;
