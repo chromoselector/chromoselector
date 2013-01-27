@@ -280,10 +280,20 @@
     $(document).ready(function () {
         panel = new Panel(
             $('#panel'),
-            255,
+            200,
             20,
             10
         );
+
+        $('#setHeight').keyup(function (){
+            panel.setHeight($(this).val());
+        });
+        $('#setChannelWidth').keyup(function (){
+            panel.setChannelWidth(parseInt($(this).val()));
+        });
+        $('#setChannelMargin').keyup(function (){
+            panel.setChannelMargin(parseInt($(this).val()));
+        });
     });
 
     </script>
@@ -292,17 +302,42 @@
         margin: 2em;
     }
     #panel select {
+        border: 1px solid gray;
         margin-bottom: 10px;
         width: 100%;
     }
     #panel {
         float: left;
         padding: 10px;
-        border: 1px dotted gray;
+        background-color: #ddd;
+    }
+
+    #api {
+        width: 250px;
+        clear: both;
+        padding-top: 2em;
+    }
+    #api input {
+        float: right;
+        width: 50px;
+    }
+    #api label {
+        float: left;
+        clear: both;
+        display: block;
     }
     </style>
 </head>
 <body>
     <div id="panel"></div>
+
+    <div id="api">
+        <label for="setHeight">setHeight</label>
+        <input id="setHeight" value="200"/>
+        <label for="setChannelWidth">setChannelWidth</label>
+        <input id="setChannelWidth" value="20"/>
+        <label for="setChannelMargin">setChannelMargin</label>
+        <input id="setChannelMargin" value="10"/>
+    </div>
 </body>
 </html>
