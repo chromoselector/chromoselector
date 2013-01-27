@@ -86,7 +86,7 @@ var Panel = (function () {
         var drawPanel = function() {
             ctx.clearRect(0,0,(channelWidth+channelMargin)*4,canvasHeight);
 
-            var i, color1, color2, offset, channel, lighnessHsl, cmy;
+            var i, color1, color2, offset, channel, lighnessHsl, keyCmyk, cmy;
             if (mode === 'rgb') {
                 offset = 0;
                 channel = 0;
@@ -185,12 +185,15 @@ var Panel = (function () {
                     offset += channelWidth + channelMargin;
                     channel++;
                 }
+                keyCmyk = $.extend({}, currentColor.cmyk);
+                keyCmyk.k = 0;
+                keyCmyk = new Color(keyCmyk);
                 roundEdges(
                     channel,
-                    currentColor,
+                    keyCmyk,
                     '#000'
                 );
-                setKeyGradient(currentColor);
+                setKeyGradient(keyCmyk);
                 ctx.fillRect(
                     (channelWidth+channelMargin)*3,
                     channelWidth/2,
