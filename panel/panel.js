@@ -2,6 +2,8 @@
 var Panel = (function () {
     // Shortens code below
     var addColorStop = 'addColorStop';
+    var fillRect = 'fillRect';
+    var fillStyle = 'fillStyle';
     // return constructor
     return function($target, panelHeight, channelWidth, channelMargin) {
         var self = this;
@@ -28,7 +30,7 @@ var Panel = (function () {
             lingrad = createGradient();
             lingrad[addColorStop](0, color1.hex);
             lingrad[addColorStop](1, color2.hex);
-            ctx.fillStyle = lingrad;
+            ctx[fillStyle] = lingrad;
         };
         var setHueGradient = function() {
             lingrad = createGradient();
@@ -45,26 +47,26 @@ var Panel = (function () {
             lingrad[addColorStop](4/6, '#00f');
             lingrad[addColorStop](5/6, '#f0f');
             lingrad[addColorStop](6/6, '#f00');
-            ctx.fillStyle = lingrad;
+            ctx[fillStyle] = lingrad;
         };
         var setLightnessGradient = function(color) {
             lingrad = createGradient();
             lingrad[addColorStop](0,   '#000');
             lingrad[addColorStop](0.5, color.hex);
             lingrad[addColorStop](1,   '#fff');
-            ctx.fillStyle = lingrad;
+            ctx[fillStyle] = lingrad;
         };
         var setKeyGradient = function(color) {
             lingrad = createGradient();
             lingrad[addColorStop](0, color.hex);
             lingrad[addColorStop](1, '#000');
-            ctx.fillStyle = lingrad;
+            ctx[fillStyle] = lingrad;
         };
         var drawCircle = function (color, x, y) {
             if (typeof color === 'object') {
                 color = color.hex;
             }
-            ctx.fillStyle = color;
+            ctx[fillStyle] = color;
             ctx.beginPath();
             ctx.arc(x, y, channelWidth/2, 0, Math.PI*2, true);
             ctx.closePath();
@@ -102,7 +104,7 @@ var Panel = (function () {
                         color1,
                         color2
                     );
-                    ctx.fillRect(
+                    ctx[fillRect](
                         offset,
                         channelWidth/2,
                         channelWidth,
@@ -119,7 +121,7 @@ var Panel = (function () {
                     'red'
                 );
                 setHueGradient();
-                ctx.fillRect(
+                ctx[fillRect](
                     0,
                     channelWidth/2,
                     channelWidth,
@@ -137,7 +139,7 @@ var Panel = (function () {
                     color1,
                     color2
                 );
-                ctx.fillRect(
+                ctx[fillRect](
                     channelWidth + channelMargin,
                     channelWidth/2,
                     channelWidth,
@@ -152,7 +154,7 @@ var Panel = (function () {
                 lighnessHsl = $.extend({}, currentColor.hsl);
                 lighnessHsl.l = 0.5;
                 setLightnessGradient(new Color(lighnessHsl));
-                ctx.fillRect(
+                ctx[fillRect](
                     (channelWidth+channelMargin)*2,
                     channelWidth/2,
                     channelWidth,
@@ -176,7 +178,7 @@ var Panel = (function () {
                         color1,
                         color2
                     );
-                    ctx.fillRect(
+                    ctx[fillRect](
                         offset,
                         channelWidth/2,
                         channelWidth,
@@ -194,7 +196,7 @@ var Panel = (function () {
                     '#000'
                 );
                 setKeyGradient(keyCmyk);
-                ctx.fillRect(
+                ctx[fillRect](
                     (channelWidth+channelMargin)*3,
                     channelWidth/2,
                     channelWidth,
@@ -222,7 +224,7 @@ var Panel = (function () {
                 offset += channelWidth + channelMargin;
             }
         };
-        var dragHandler = function(event) {
+        var draggingRenderer = throttle(function(event) {
             var inputPoint = getEventPosition(false, event, $canvas);
             var fullScaleValue = canvasHeight - channelWidth;
             var position = fullScaleValue - Math.round(inputPoint[1] - channelWidth/2);
@@ -237,8 +239,7 @@ var Panel = (function () {
                 currentColor[mode]
             );
             drawPanel();
-        };
-        var draggingRenderer = throttle(dragHandler);
+        });
 
         // API
         self.setHeight = function (newHeight) {
@@ -282,14 +283,15 @@ var Panel = (function () {
         var targetPadding = $target.outerHeight(true);
 
         // Build layout
-        var $select = $('<select/>').css(
+        var option = '<option/>';
+        var $select = $('<select/>')/*.css(
             'display', 'block'
+        )*/.append(
+            $(option).html('rgb')
         ).append(
-            $('<option/>').html('rgb')
+            $(option).html('hsl')
         ).append(
-            $('<option/>').html('hsl')
-        ).append(
-            $('<option/>').html('cmyk')
+            $(option).html('cmyk')
         );
         $target.append(
             $select
@@ -321,15 +323,15 @@ var Panel = (function () {
             var channel = 0;
             var inputPoint = getEventPosition(false, event, $(this));
             if (inputPoint[1] > 0 && inputPoint[1] < canvasHeight) {
-                while (channel <= 3) {
+                while (channel < 4 && ! dragging) {
                     var offset = (channelWidth+channelMargin)*channel;
                     if (inputPoint[0] > offset && inputPoint[0] < offset+channelWidth) {
                         dragging = 1;
                         draggingChannel = channel;
                         draggingRenderer(event);
-                        break;
+                    } else {
+                        channel++;
                     }
-                    channel++;
                 }
             }
         });
