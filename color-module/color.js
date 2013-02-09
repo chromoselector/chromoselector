@@ -21,7 +21,7 @@ var Color = (function () {
             if (isHsl) {
                 return currentHslColor;
             } else {
-                return getHsla(currentColor);
+                return getHslaFromRgb(currentColor);
             }
         };
         self.getHsl = function () {
@@ -95,7 +95,7 @@ var Color = (function () {
         retval.l = color.l;
         return retval;
     }
-    function getHsla(color) {
+    function getHslaFromRgb(color) {
         return rgb2hsl(color);
     }
     function getCmyk(color) {
