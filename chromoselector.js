@@ -8,15 +8,18 @@
      * v 1.0.2
      *   Better slide animation
      *   Fix Opera v12- support
-     *   Improve shadow ratio calculation / shadow rendering
      *
      * v 1.1.0
      *   Update jquery and jquery-ui
      *   Move the 10px fixed picker margin to CSS
-     *   HSV support
-     *   Better generation of new elements
+     *   Shrink more vars with replacevars.pl
+     *   Shadow color
+     *   Improve shadow ratio calculation / shadow rendering
      *
      * v 2.0.0
+     *   New color management module
+     *   HSV support?
+     *   Better generation of new elements
      *   Alpha selection
      *   Implement RequestAnimationFrame
      *   Improved mobile support
