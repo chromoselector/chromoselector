@@ -167,9 +167,7 @@ var Color = (function () {
                 if (/^\s*#([0-9a-f]{3}){1,2}\s*$/i.test(value)) {
                     value = value.replace(/\s*/, '');
                     if (value.length === 4) {
-                        value = value.replace(/[0-9a-f]/gi, function(match) {
-                            return match + match;
-                        });
+                        value = value.replace(/[0-9a-f]/gi, replaceCallback);
                     }
                     currentColor = hex2rgb(value);
                     currentColor.a = 1;
@@ -177,9 +175,7 @@ var Color = (function () {
                 } else if (/^\s*#([0-9a-f]{4}){1,2}\s*$/i.test(value)) {
                     value = value.replace(/\s*/, '');
                     if (value.length === 5) {
-                        value = value.replace(/[0-9a-f]/gi, function(match) {
-                            return match + match;
-                        });
+                        value = value.replace(/[0-9a-f]/gi, replaceCallback);
                     }
                     currentColor = hexa2rgb(value);
                     isHsl = false;
@@ -364,6 +360,11 @@ var Color = (function () {
                 isHsl: false
             };
         }
+    }
+
+    // Used to expand shorthand hex strings
+    function replaceCallback(match) {
+        return match + match;
     }
 
     // Channel validity checker
