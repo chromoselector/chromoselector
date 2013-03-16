@@ -131,7 +131,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
 function getFooter() {
     $html  = '</div>';
     $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
-    $html .= '<p>v1.0.1</p>';
+    $html .= '<p>v1.1.0</p>';
     $html .= '<p style="float: right">&copy; 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p>';
     $html .= '</div>';
     $html .= '</div>';
