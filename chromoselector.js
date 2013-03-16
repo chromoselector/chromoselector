@@ -459,7 +459,7 @@
         // shadow
         ctx = self.canvases[0].getContext("2d");
         ctx.lineWidth = self.hueSelectorLineWidth * .7;
-        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowColor = self.settings.shadowColor;
         ctx.shadowBlur = self.shadowRatio * width;
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], self.hueSelectorCircleRadius, 0, Math.PI*2, true);
@@ -565,7 +565,7 @@
         ctx.lineTo(shadowPoint(2, 0), shadowPoint(2, 1));
         ctx.closePath();
         ctx.fillStyle = 'rgba(0,0,0,1)';
-        ctx.shadowColor = 'rgba(0,0,0,0.8)';
+        ctx.shadowColor = self.settings.shadowColor;
         ctx.shadowBlur = self.shadowRatio * self.width;
         ctx.fill();
 
@@ -990,6 +990,8 @@
                 } else {
                     retval = floatValue;
                 }
+            } else if (index === 'shadowColor' && typeof value === 'string' && value.length) {
+                retval = value;
             } else if (index === 'effect') {
                 retval = value === 'slide' ? 'slide' : 'fade';
             } else if (index === 'iconpos') {
@@ -1509,6 +1511,7 @@
     ringwidth:     .18,        // float
     resizable:     true,       // bool
     shadow:        8,          // pos int
+    shadowColor:   'rgba(0,0,0,0.8)', // string
     preview:       true,       // bool
     roundcorners:  true,       // bool
     effect:        'fade',     // 'fade' | 'slide'

@@ -279,6 +279,25 @@ $properties = array(
                 ."});\n"
         )
     ),
+    'shadowColor' => array(
+        'default' => 'rgba(0,0,0,0.8)',
+        'description' => 'The color of the shadow dropped under the color picker. ',
+        'values' => 'A string representing a color in HEX (<code>#fff</code> or <code>#ffffff</code>), RGB <code>rgb(255,255,255)</code> and RGBA <code>rgba(255,255,255,1)</code>',
+        'samples' => array(
+            "// White shadow\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        shadowColor: '#ffffff' \n"
+                ."    });\n"
+                ."});\n",
+            "// A half-transparent, yellow shadow\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        shadowColor: 'rgba(255,255,0,0.5)'\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
     'speed' => array(
         'default' => '400',
         'description' => 'The duration of the show/hide animations.',
