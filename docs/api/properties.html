@@ -465,6 +465,40 @@ $(document).ready(function () {
           </div>
           <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
+              shadowColor
+            </h3>
+            <p>
+              <strong>Description:</strong><br />
+              The color of the shadow dropped under the color picker.<br />
+              <small>Available since version 1.1.0</small>
+            </p>
+            <p>
+              <strong>Values:</strong> A string representing a color in HEX (<code>#fff</code> or <code>#ffffff</code>), RGB <code>rgb(255,255,255)</code> and RGBA <code>rgba(255,255,255,1)</code>
+            </p>
+            <p>
+              <strong>Default:</strong> rgba(0,0,0,0.8)
+            </p>
+            <pre>
+<code class="javascript">// White shadow
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        shadowColor: '#ffffff' 
+    });
+});
+</code>
+</pre>
+            <pre>
+<code class="javascript">// A half-transparent, yellow shadow
+$(document).ready(function () {
+    $('input.color').chromoselector({
+        shadowColor: 'rgba(255,255,0,0.5)'
+    });
+});
+</code>
+</pre>
+          </div>
+          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <h3>
               speed
             </h3>
             <p>
