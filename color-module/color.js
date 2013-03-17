@@ -68,6 +68,14 @@ var Color = (function () {
             isHsl           = retval.isHsl;
             return self;
         };
+        self.setAlpha = function (value) {
+            value = parseFloat(value);
+            if (! isNaN(value) && value >= 0 && value <= 1) {
+                currentColor.a = value;
+                currentHslColor.a = value;
+            }
+            return self;
+        };
         // Set to input color
         self.setColor(value);
     }

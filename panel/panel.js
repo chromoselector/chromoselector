@@ -32,18 +32,12 @@ var Panel = (function () {
         };
         var setSimpleGradient = function(color1, color2) {
             lingrad = createGradient();
-            lingrad[addColorStop](0, color1.hex);
-            lingrad[addColorStop](1, color2.hex);
+            lingrad[addColorStop](0, color1.getHexString());
+            lingrad[addColorStop](1, color2.getHexString());
             ctx[fillStyle] = lingrad;
         };
         var setHueGradient = function() {
             lingrad = createGradient();
-            /* Shorter code, executes way slower though
-            for (var i=0;i<7;) {
-                lingrad[addColorStop](
-                    i/6, new Color({ h: ++i/6, s: 1, l: 0.5 }).hex
-                );
-            }*/
             lingrad[addColorStop](0/6, '#f00');
             lingrad[addColorStop](1/6, '#ff0');
             lingrad[addColorStop](2/6, '#0f0');
@@ -56,19 +50,19 @@ var Panel = (function () {
         var setLightnessGradient = function(color) {
             lingrad = createGradient();
             lingrad[addColorStop](0,   '#000');
-            lingrad[addColorStop](0.5, color.hex);
+            lingrad[addColorStop](0.5, color.getHexString());
             lingrad[addColorStop](1,   '#fff');
             ctx[fillStyle] = lingrad;
         };
         var setKeyGradient = function(color) {
             lingrad = createGradient();
-            lingrad[addColorStop](0, color.hex);
+            lingrad[addColorStop](0, color.getHexString());
             lingrad[addColorStop](1, '#000');
             ctx[fillStyle] = lingrad;
         };
         var drawCircle = function (color, x, y, noFill) {
             if (typeof color === 'object') {
-                color = color.hex;
+                color = color.getHexString();
             }
             if (! noFill) {
                 ctx[fillStyle] = color;
@@ -122,7 +116,7 @@ var Panel = (function () {
 
                 // Alpha overlay
                 x = channelWidth/2;
-                ctx[fillStyle] = currentColor.hex;
+                ctx[fillStyle] = currentColor.getHexString();
                 ctx.beginPath();
                 ctx.arc(
                     x,
@@ -135,13 +129,9 @@ var Panel = (function () {
                 ctx.closePath();
                 ctx.fill();
 
-                var rgb = currentColor.rgb;
-                var r = Math.round(rgb.r*255);
-                var g = Math.round(rgb.g*255);
-                var b = Math.round(rgb.b*255);
                 lingrad = createGradient();
-                lingrad[addColorStop](0, 'rgba('+r+','+g+','+b+',0)');
-                lingrad[addColorStop](1, currentColor.hex);
+                lingrad[addColorStop](0, new Color(currentColor).setAlpha(0).getRgbaString());
+                lingrad[addColorStop](1, currentColor.getHexString());
                 ctx[fillStyle] = lingrad;
                 ctx[fillRect](
                     0,
@@ -154,8 +144,8 @@ var Panel = (function () {
             }
             if (mode === 'rgb') {
                 for (i in indexes) {
-                    color1 = toggleColor(currentColor.rgb, indexes[i], 0);
-                    color2 = toggleColor(currentColor.rgb, indexes[i], 1);
+                    color1 = toggleColor(currentColor.getRgb(), indexes[i], 0);
+                    color2 = toggleColor(currentColor.getRgb(), indexes[i], 1);
                     roundEdges(
                         channel,
                         color1,
@@ -174,7 +164,7 @@ var Panel = (function () {
                     offset += channelWidth + channelMargin;
                     channel++;
                 }
-                drawIndicators(currentColor.rgb);
+                drawIndicators(currentColor.getRgb());
             } else if (mode === 'hsl') {
                 roundEdges(
                     channel,
@@ -191,8 +181,8 @@ var Panel = (function () {
 
                 channel++;
                 offset += channelWidth + channelMargin;
-                color1 = toggleColor(currentColor.hsl, 's', 0);
-                color2 = toggleColor(currentColor.hsl, 's', 1);
+                color1 = toggleColor(currentColor.getHsl(), 's', 0);
+                color2 = toggleColor(currentColor.getHsl(), 's', 1);
                 roundEdges(
                     channel,
                     color1,
@@ -216,7 +206,7 @@ var Panel = (function () {
                     '#000',
                     '#fff'
                 );
-                lighnessHsl = $.extend({}, currentColor.hsl);
+                lighnessHsl = $.extend({}, currentColor.getHsl());
                 lighnessHsl.l = 0.5;
                 setLightnessGradient(new Color(lighnessHsl));
                 ctx[fillRect](
@@ -226,12 +216,12 @@ var Panel = (function () {
                     canvasHeight-channelWidth
                 );
 
-                drawIndicators(currentColor.hsl);
+                drawIndicators(currentColor.getHsl());
             } else if (mode === 'cmyk') {
                 cmy = 'cmy'.split('');
                 for (i in cmy) {
-                    color1 = toggleColor(currentColor.cmyk, cmy[i], 0);
-                    color2 = toggleColor(currentColor.cmyk, cmy[i], 1);
+                    color1 = toggleColor(currentColor.getCmyk(), cmy[i], 0);
+                    color2 = toggleColor(currentColor.getCmyk(), cmy[i], 1);
                     roundEdges(
                         channel,
                         color1,
@@ -250,7 +240,7 @@ var Panel = (function () {
                     offset += channelWidth + channelMargin;
                     channel++;
                 }
-                keyCmyk = $.extend({}, currentColor.cmyk);
+                keyCmyk = $.extend({}, currentColor.getCmyk());
                 keyCmyk.k = 0;
                 keyCmyk = new Color(keyCmyk);
                 roundEdges(
@@ -265,7 +255,7 @@ var Panel = (function () {
                     channelWidth,
                     canvasHeight-channelWidth
                 );
-                drawIndicators(currentColor.cmyk);
+                drawIndicators(currentColor.getCmyk());
             }
         };
         var drawIndicators = function(color) {
@@ -281,7 +271,7 @@ var Panel = (function () {
             if (alphaSupport) {
                 var x = offset + channelWidth/2;
                 var verticalSpace = canvasHeight - channelWidth;
-                var y = verticalSpace - (verticalSpace * currentAlpha) + channelWidth/2;
+                var y = verticalSpace - (verticalSpace * currentColor.getRgba().a) + channelWidth/2;
                 offset += channelWidth + channelMargin;
                 indicator("#fff", 1.5, 6);
                 indicator("#000", 2, 4.5);
@@ -306,17 +296,20 @@ var Panel = (function () {
             }
             var value = position / fullScaleValue;
             if (alphaSupport && draggingChannel == 0) {
-                currentAlpha = value;
+                currentColor.setAlpha(value);
             } else {
                 var index = draggingChannel;
                 if (alphaSupport) {
                     index--;
                 }
-                currentColor[mode][indexes[index]] = value;
+                var functionToCall = 'get' + mode.charAt(0).toUpperCase() + mode.slice(1)
+                var tempColor = currentColor[functionToCall]();
+                tempColor[indexes[index]] = value;
                 currentColor = new Color(
-                    currentColor[mode]
-                );
+                    tempColor
+                ).setAlpha(currentColor.getRgba().a);
             }
+
             drawPanel();
             $target.trigger('update');
         });
@@ -329,31 +322,12 @@ var Panel = (function () {
             //canvas.height = canvasHeight;
             drawPanel();
         };
-        /*self.setChannelWidth = function (newWidth) {
-            channelWidth = newWidth;
-            $canvas.attr('width', getPanelWidth());
-            //canvas.width = getPanelWidth();
-            drawPanel();
-        };
-        self.setChannelMargin = function (newMargin) {
-            channelMargin = newMargin;
-            $canvas.attr('width', getPanelWidth());
-            //canvas.width = getPanelWidth();
-            drawPanel();
-        };*/
         self.setColor = function (newColor) { // Throttle?
             currentColor = new Color(newColor);
-            currentAlpha = new AlphaColor(newColor).rgb.a;
             drawPanel();
         };
         self.getColor = function () {
-            if (alphaSupport) {
-                var retval = $.extend({}, currentColor).rgb;
-                retval.a = currentAlpha;
-                return new AlphaColor(retval);
-            } else {
-                return currentColor;
-            }
+            return currentColor;
         };
         self.setMode = function (newMode) {
             mode = $select.val(newMode).val();
@@ -368,7 +342,6 @@ var Panel = (function () {
         // Initialise variables. step 1
         var lingrad;
         var currentColor = new Color();
-        var currentAlpha = 1;
         var mode = 'rgb';
         var indexes = mode.split('');
         var dragging = 0;
