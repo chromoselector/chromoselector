@@ -5,31 +5,27 @@
      *
      * TODO
      *
-     * v 1.0.2
-     *   Better slide animation
+     * v 1.1.1
      *   Fix Opera v12- support
      *
-     * v 1.1.0
-     *   Update jquery and jquery-ui
-     *   Move the 10px fixed picker margin to CSS
-     *   Shrink more vars with replacevars.pl
-     *   Shadow color
+     * v 1.2.0
      *   Improve shadow ratio calculation / shadow rendering
      *
      * v 2.0.0
-     *   New color management module
-     *   HSV support?
+     *   Move the 10px fixed picker margin to CSS
+     *   Update jquery and jquery-ui
+     *   Better slide animation
      *   Better generation of new elements
-     *   Alpha selection
      *   Implement RequestAnimationFrame
-     *   Improved mobile support
-     *   Dialog mode / built-in panel
-     *   refactor hue2rgb
-     *   shorter code
+     *   New color management module
+     *   Dialog mode / built-in panel / alpha support
+     *   Shrink more vars with replacevars.pl
      *   Unit tests
      *
      * v 2.1.0
      *   Faster shadow - rotate instead of blurring
+     *   refactor hue2rgb
+     *   Improved mobile support
      *
      * FI-TESTSUITE
      */
