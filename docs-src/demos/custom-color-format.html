@@ -8,13 +8,13 @@ $html .= '<div class="content-primary">';
 $html .= '<form action="#" method="get">';
 $html .= '<h2>Custom Color Formats</h2>';
 
-$template  = '<div data-role="collapsible" data-collapsed="false"';
+$template  = '<div data-role="collapsible"';
 $template .= ' data-theme="b" data-content-theme="d"';
 $template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $template .= '<h3>%s</h3>';
 $template .= '<div data-role="fieldcontain">';
 $template .= '<label for="%s">Pick a color:</label>';
-$template .= '<input type="text" name="%s" id="%s" value="%s" />';
+$template .= '<input id="%s" type="text" name="%s" value="%s" />';
 $template .= '</div>';
 $template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $template .= '<h3>Code</h3>';
@@ -24,108 +24,119 @@ $template .= '</div>';
 
 $demos = array(
     array(
-        'title' => 'Hex RGB without "#"',
+        'title' => 'Comma separated RGB',
         'id' => 'color1',
-        'value' => '000000',
-        'fiddle' => 'http://sandbox.chromoselector.com/unLGf/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#color1').chromoselector({\n"
-                . "        str2color: function (str) {\n"
-                . "            return '#' + str;\n"
-                . "        },\n"
-                . "        color2str: function (color) {\n"
-                . "            return color.hex.substring(1);\n"
-                . "        }\n"
-                . "     });\n"
-                . "});\n"
+        'value' => 'rgb(41,160,126)',
+        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'code' => "$(document).ready(function () {
+    $('#color1').chromoselector({
+        color2str: function (color) {
+            return color.getRgbString();
+        }
+     });
+});"
+    ),
+    array(
+        'title' => 'Comma separated RGBA',
+        'id' => 'color2',
+        'value' => 'rgba(41,160,126,1)',
+        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'code' => "$(document).ready(function () {
+    $('#color2').chromoselector({
+        color2str: function (color) {
+            return color.getRgbaString();
+        }
+     });
+});"
     ),
     array(
         'title' => 'Comma separated HSL',
-        'id' => 'color2',
-        'value' => '0,0,0',
+        'id' => 'color3',
+        'value' => 'hsl(338,36%,22%)',
         'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#color2').chromoselector({\n"
-                . "        str2color: function (str) {\n"
-                . "            var arr = str.split(',');\n"
-                . "            return {\n"
-                . "                h: parseInt(arr[0], 10) / 360,\n"
-                . "                s: parseInt(arr[1], 10) / 100,\n"
-                . "                l: parseInt(arr[2], 10) / 100\n"
-                . "            };\n"
-                . "        },\n"
-                . "        color2str: function (color) {\n"
-                . "            return Math.round(\n"
-                . "                color.hsl.h * 360\n"
-                . "            ) + ',' +\n"
-                . "            Math.round(\n"
-                . "                color.hsl.s * 100\n"
-                . "            ) + ',' +\n"
-                . "            Math.round(\n"
-                . "                color.hsl.l * 100\n"
-                . "            );\n"
-                . "        }\n"
-                . "     });\n"
-                . "});\n"
+        'code' => "$(document).ready(function () {
+    $('#color3').chromoselector({
+        color2str: function (color) {
+            return color.getHslString();
+        }
+    });
+});"
+    ),
+    array(
+        'title' => 'Comma separated HSLA',
+        'id' => 'color4',
+        'value' => 'hsla(338,36%,22%,1)',
+        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'code' => "$(document).ready(function () {
+    $('#color4').chromoselector({
+        color2str: function (color) {
+            return color.getHslaString();
+        }
+    });
+});"
+    ),
+    array(
+        'title' => 'Hex RGB without "#"',
+        'id' => 'color5',
+        'value' => 'c9db99',
+        'fiddle' => 'http://sandbox.chromoselector.com/unLGf/',
+        'code' => "$(document).ready(function () {
+    $('#color5').chromoselector({
+        str2color: function (str) {
+            return '#' + str;
+        },
+        color2str: function (color) {
+            return color.getHexString().substring(1);
+        }
+    });
+});"
     ),
     array(
         'title' => 'JSON encoded CMYK',
-        'id' => 'color3',
-        'value' => '{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}',
+        'id' => 'color6',
+        'value' => '{&quot;c&quot;:0.54,&quot;m&quot;:0.23,&quot;y&quot;:0,&quot;k&quot;:0.31}',
         'fiddle' => 'http://sandbox.chromoselector.com/5xv2W/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#color3').chromoselector({\n"
-                . "        str2color: function (str) {\n"
-                . "            try {\n"
-                . "                var color = $.parseJSON(str);\n"
-                . "                for (var i in color) {\n"
-                . "                    color[i] /= 100;\n"
-                . "                }\n"
-                . "                return color;\n"
-                . "            } catch (e) {}\n"
-                . "        },\n"
-                . "        color2str: function (color) {\n"
-                . "            return '{' +\n"
-                . "                '\"c\":' + Math.round(\n"
-                . "                    color.cmyk.c * 100\n"
-                . "                ) + ',' +\n"
-                . "                '\"m\":' + Math.round(\n"
-                . "                    color.cmyk.m * 100\n"
-                . "                ) + ',' +\n"
-                . "                '\"y\":' + Math.round(\n"
-                . "                    color.cmyk.y * 100\n"
-                . "                ) + ',' +\n"
-                . "                '\"k\":' + Math.round(\n"
-                . "                    color.cmyk.k * 100\n"
-                . "                ) +\n"
-                . "            '}';\n"
-                . "        }\n"
-                . "     });\n"
-                . "});\n"
+        'code' => "$(document).ready(function () {
+    $('#color6').chromoselector({
+        str2color: function (str) {
+            try {
+                return $.parseJSON(str);
+            } catch (e) {}
+        },
+        color2str: function (color) {
+            var cmyk = color.getCmyk();
+            for (var i in cmyk) {
+                cmyk[i] = Math.round(cmyk[i] * 100) / 100;
+            }
+            return JSON.stringify(cmyk);
+        }
+    });
+});"
     ),
     array(
         'title' => 'RGB as an integer',
-        'id' => 'color4',
-        'value' => '0',
+        'id' => 'color7',
+        'value' => '9087362',
         'fiddle' => 'http://sandbox.chromoselector.com/F75Px/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#color4').chromoselector({\n"
-                . "        str2color: function (str) {\n"
-                . "            var num = parseInt(str, 10) || 0;\n"
-                . "            return {\n"
-                . "                r: ((num &amp; (255 * 255 * 255)) &gt;&gt; 16) / 255,\n"
-                . "                g: ((num &amp; (255 * 255)) &gt;&gt; 8) / 255,\n"
-                . "                b: ((num &amp; 255)) / 255\n"
-                . "            };\n"
-                . "        },\n"
-                . "        color2str: function (color) {\n"
-                . "            var num = (Math.round(color.rgb.r * 255) &lt;&lt; 16)\n"
-                . "                + (Math.round(color.rgb.g * 255) &lt;&lt; 8)\n"
-                . "                + Math.round(color.rgb.b * 255)\n"
-                . "            return num;\n"
-                . "        }\n"
-                . "     })\n"
-                . "});\n"
+        'code' => "$(document).ready(function () {
+    $('#color7').chromoselector({
+        str2color: function (str) {
+            var num = parseInt(str, 10) || 0;
+            return {
+                r: ((num & (255*255*255)) >> 16) / 255,
+                g: ((num & (255*255)) >> 8) / 255,
+                b: ((num & (255))) / 255
+            };
+        },
+        color2str: function (color) {
+            var rgb = color.getRgb();
+            var num = (Math.round(rgb.r * 255) << 16)
+                + (Math.round(rgb.g * 255) << 8)
+                + Math.round(rgb.b * 255)
+            return num;
+        }
+    });
+});"
     ),
 );
 
