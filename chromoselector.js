@@ -1706,6 +1706,7 @@
                 'border-radius': borderRadius
             });
         }
+        colorPicker_updatePreview(self);
     }
     function colorPicker_resize(self, width) {
         if (width !== self.width) {
@@ -1838,6 +1839,32 @@
     }
     function colorPicker_getHeight(self) {
         return self._supercontainer.height();
+    }
+
+    function colorPicker_updatePreview(self) {
+        var previewHeight = self._preview.find('>div').height();
+        var ctx = self._previewCanvas[0].getContext('2d');
+        self._previewCanvas[0].height = previewHeight;
+        self._previewCanvas[0].width = 1000;
+        self._previewCanvas.css('width', '1000px');
+        // Draw checkboard background
+        var tempCanvas = document.createElement('canvas');
+        tempCanvas.height = 10;
+        tempCanvas.width = 10;
+        var tempCtx = tempCanvas.getContext('2d');
+        tempCtx.fillStyle = '#ccc';
+        tempCtx.fillRect(0, 0, 10, 10);
+        tempCtx.fillStyle = '#888';
+        tempCtx.fillRect(0, 0, 5, 5);
+        tempCtx.fillRect(5, 5, 5, 5);
+        var pattern = ctx.createPattern(tempCanvas, 'repeat');
+        ctx.fillStyle = pattern;
+        ctx.fillRect(
+            0,
+            0,
+            self.width,
+            previewHeight
+        );
     }
 
     // IF-DEMO
@@ -2018,12 +2045,19 @@
             );
         }
 
+        var $preview = $('<div/>').addClass('ui-cs-preview-widget')
+            .css('overflow', 'hidden')
+            .css('background', self.color.getRgbaString());
+
+
         self._preview = $('<div/>')
             .addClass('ui-cs-preview-container')
             .append(
-                $('<div/>')
-                .addClass('ui-cs-preview-widget')
-                .css('background', self.color.getRgbaString())
+                $preview
+                .append(
+                    $('<canvas/>')
+                    .css({ display:'block' })
+                )
             );
 
         if (self.settings.preview) {
@@ -2031,6 +2065,20 @@
                 self._preview
             );
         }
+
+        self._previewColor = $('<div/>')
+            .addClass('ui-cs-preview-color')
+            .css('width','100%')
+            .css('background-color', self.color.getRgbaString())
+            .css('position', 'relative')
+            .css('top', '-' + $preview.height() + 'px')
+            .height($preview.height());
+        $preview.append(self._previewColor);
+
+        self._previewCanvas = $preview.find('canvas');
+        self._previewCanvas.height($preview.height());
+
+        colorPicker_updatePreview(self);
 
         if (self.settings.roundcorners) {
             var borderRadius = '0px 0px 0px ' + self.width/2 + 'px';
