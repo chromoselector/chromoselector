@@ -1440,10 +1440,12 @@
             coords[0] - self.width / 2,
             coords[1] - self.width / 2
         ) * (180/Math.PI) + 270;
+        var hsla = self.color.getHsla();
         self.color.setColor({
             h: angle / 360,
-            s: self.color.getHsl().s,
-            l: self.color.getHsl().l
+            s: hsla.s,
+            l: hsla.l,
+            a: hsla.a
         });
         colorPicker_drawSaturationLimunositySelector(
             self
@@ -1454,10 +1456,12 @@
         self.valueRenderer(self);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
+        var hsla = self.color.getHsla();
         self.color.setColor({
-            h: self.color.getHsl().h,
+            h: hsla.h,
             s: s,
-            l: l
+            l: l,
+            a: hsla.a,
         });
         colorPicker_drawIndicators(
             self
