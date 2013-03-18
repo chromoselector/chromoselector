@@ -338,6 +338,9 @@ var Panel = (function () {
         self.getColor = function () {
             return currentColor;
         };
+        self.getWidth = function () {
+            return getPanelWidth() + targetPadding;
+        };
         self.setAlpha = function (value) {
             currentColor.setAlpha(value);
             return self;
