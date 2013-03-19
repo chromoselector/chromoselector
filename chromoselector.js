@@ -32,6 +32,12 @@
     var NAMESPACE = 'chromoselector';
     var EVENTS = 'create|ready|update|destroy|show|beforeShow|hide|beforeHide|resize|resizeStart|resizeStop';
 
+    // Shortens code below
+    var addColorStop = 'addColorStop';
+    var fillRect = 'fillRect';
+    var fillStyle = 'fillStyle';
+    var globalCompositeOperation = 'globalCompositeOperation';
+
     /**
      * Function call throttling
      */
@@ -589,10 +595,6 @@
     })();
 
     var Panel = (function () {
-        // Shortens code below
-        var addColorStop = 'addColorStop';
-        var fillRect = 'fillRect';
-        var fillStyle = 'fillStyle';
         // return constructor
         return function(
             $target,
@@ -1268,7 +1270,7 @@
         var origin = [width / 2, width / 2];
         // cut out doughnut
         /** webkit bug prevents usage of "destination-in" */
-        ctx.globalCompositeOperation = "destination-out";
+        ctx[globalCompositeOperation] = "destination-out";
         ctx.strokeStyle = 'rgba(0,0,0,1)';
         ctx.lineWidth = self.hueSelectorLineWidth;
         ctx.beginPath();
@@ -1278,8 +1280,8 @@
 
         var tempCanvas = $('<canvas/>').attr('width', width).attr('height', width)[0];
         var tempCtx = tempCanvas.getContext('2d');
-        tempCtx.fillRect(0,0,width,width);
-        tempCtx.globalCompositeOperation = "destination-out";
+        tempCtx[fillRect](0,0,width,width);
+        tempCtx[globalCompositeOperation] = "destination-out";
         tempCtx.beginPath();
         tempCtx.arc(origin[0], origin[1], self.hueSelectorCircleRadius + (self.hueSelectorLineWidth / 2), 0, Math.PI*2, true);
         tempCtx.closePath();
@@ -1346,21 +1348,21 @@
             tempCtx.putImageData(maskImageData, 0, 0);
 
             var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
-            lingrad.addColorStop(1, 'rgba(0,0,0,0)');
-            lingrad.addColorStop(0, 'rgba(0,0,0,1)');
-            tempCtx.fillStyle = lingrad;
-            tempCtx.globalCompositeOperation = "destination-out";
-            tempCtx.fillRect(limitX.start,limitY.start,limitX.end,limitY.end);
-            tempCtx.globalCompositeOperation = "source-over";
+            lingrad[addColorStop](1, 'rgba(0,0,0,0)');
+            lingrad[addColorStop](0, 'rgba(0,0,0,1)');
+            tempCtx[fillStyle] = lingrad;
+            tempCtx[globalCompositeOperation] = "destination-out";
+            tempCtx[fillRect](limitX.start,limitY.start,limitX.end,limitY.end);
+            tempCtx[globalCompositeOperation] = "source-over";
         }
 
         degrees = (1 - hue) * Math.PI * 2;
         points = colorPicker_getPoints(self, degrees);
         // Fill background
-        ctx.fillStyle = new Color({
+        ctx[fillStyle] = new Color({
             h:hue, s:1, l:0.5
         }).getHexString();
-        ctx.fillRect(0,0,self.width,self.width);
+        ctx[fillRect](0,0,self.width,self.width);
         // Copy rotated mask
         ctx.save();
         ctx.translate(self.width/2, self.width/2);
@@ -1381,27 +1383,27 @@
         ctx.lineTo(self.width, 0);
         ctx.lineTo(0, 0);
         ctx.closePath();
-        ctx.globalCompositeOperation = "destination-out";
-        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx[globalCompositeOperation] = "destination-out";
+        ctx[fillStyle] = 'rgba(0,0,0,1)';
         ctx.fill();
         // shadow
         var shadowPoint = function (index, axis) {
             return self.width / 2 * 0.05 + points[index][axis] * 0.95;
         };
-        ctx.globalCompositeOperation = "destination-over";
+        ctx[globalCompositeOperation] = "destination-over";
         ctx.beginPath();
         ctx.moveTo(shadowPoint(0, 0), shadowPoint(0, 1));
         ctx.lineTo(shadowPoint(1, 0), shadowPoint(1, 1));
         ctx.lineTo(shadowPoint(2, 0), shadowPoint(2, 1));
         ctx.closePath();
-        ctx.fillStyle = 'rgba(0,0,0,1)';
+        ctx[fillStyle] = 'rgba(0,0,0,1)';
         ctx.shadowColor = self.settings.shadowColor;
         ctx.shadowBlur = self.shadowRatio * self.width;
         ctx.fill();
 
         ctx.shadowColor = 'rgba(0,0,0,0)';
         ctx.shadowBlur = 0;
-        ctx.globalCompositeOperation = "source-over";
+        ctx[globalCompositeOperation] = "source-over";
     }
 
     function colorPicker_drawIndicators(self) {
@@ -1944,14 +1946,14 @@
         tempCanvas.height = 10;
         tempCanvas.width = 10;
         var tempCtx = tempCanvas.getContext('2d');
-        tempCtx.fillStyle = '#ccc';
-        tempCtx.fillRect(0, 0, 10, 10);
-        tempCtx.fillStyle = '#888';
-        tempCtx.fillRect(0, 0, 5, 5);
-        tempCtx.fillRect(5, 5, 5, 5);
+        tempCtx[fillStyle] = '#ccc';
+        tempCtx[fillRect](0, 0, 10, 10);
+        tempCtx[fillStyle] = '#888';
+        tempCtx[fillRect](0, 0, 5, 5);
+        tempCtx[fillRect](5, 5, 5, 5);
         var pattern = ctx.createPattern(tempCanvas, 'repeat');
-        ctx.fillStyle = pattern;
-        ctx.fillRect(
+        ctx[fillStyle] = pattern;
+        ctx[fillRect](
             0,
             0,
             self.width,
