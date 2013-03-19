@@ -41,6 +41,18 @@
     margin-bottom: 10px;
     width: 100%;
 }
+.ui-cs-chromoselector .ui-cs-panel .ui-panel-labels {
+    width: 100%;
+    font-size: 12px;
+    font-family: sans, sans-serif, verdana, arial;
+    text-align: center;
+    overflow: hidden;
+    cursor: default;
+}
+.ui-cs-chromoselector .ui-cs-panel .ui-panel-labels div {
+    margin-top: 5px;
+    float: left;
+}
 .ui-cs-chromoselector.ui-cs-static {
     position: relative;
     background: none;

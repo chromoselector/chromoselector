@@ -7,10 +7,8 @@
      *
      * v 2.0.0
      *   Create v2.0 fiddles
-     *   Move the 10px fixed picker margin to CSS
      *   Update jquery and jquery-ui
      *   Better slide animation
-     *   Dialog mode / built-in panel / alpha support
      *   Shrink more vars with replacevars.pl
      *
      * v 2.0.1
@@ -604,7 +602,8 @@
             onlyAlpha,
             panelHeight,
             channelWidth,
-            channelMargin
+            channelMargin,
+            panelLabels
         ) {
             var self = this;
             // Declare functions
@@ -893,6 +892,24 @@
                     }
                 }
             };
+            var drawLabels = function() {
+                var j=0;
+                if (alphaSupport || onlyAlpha) {
+                    $labels.append(
+                        $('<div />').text('A').width(channelWidth)
+                    );
+                } else {
+                    $labels.append(
+                        $('<div />').text(indexes[0].toUpperCase()).width(channelWidth)
+                    );
+                    j++;
+                }
+                for (;j<indexes.length;j++) {
+                    $labels.append(
+                        $('<div />').text(indexes[j].toUpperCase()).width(channelWidth).css({'padding-left':channelMargin})
+                    );
+                }
+            };
             var draggingRenderer = throttle(function(event) {
                 var inputPoint = getEventPosition(false, event, $canvas);
                 var fullScaleValue = canvasHeight - channelWidth;
@@ -943,7 +960,8 @@
             };
             self.setHeight = function (newHeight) {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
-                canvasHeight = newHeight - $select.outerHeight(true) - targetPadding;
+                labelsHeight = $labels.height();
+                canvasHeight = newHeight - $select.outerHeight(true) - targetPadding - labelsHeight;
                 $canvas.attr('height', canvasHeight);
                 //canvas.height = canvasHeight;
                 drawPanel();
@@ -956,6 +974,10 @@
                     indexes = newMode.split('');
                     $canvas.attr('width', getPanelWidth());
                     drawPanel();
+                    if (panelLabels) {
+                        $labels.children().remove();
+                        drawLabels();
+                    }
                 }
                 return self;
             };
@@ -994,6 +1016,13 @@
                 $canvas
             );
 
+            var labelsHeight = 0;
+            if (panelLabels) {
+                var $labels = $('<div />').addClass('ui-panel-labels');
+                drawLabels();
+                $target.append($labels);
+            }
+
             // Initialise variables. step 2
             var canvas = $canvas[0];
             var ctx = canvas.getContext("2d");
@@ -1009,7 +1038,7 @@
                     );
                 });
             }
-            $target.bind('mousedown touchstart', function (event) {
+            $target.add($labels.find('div')).bind('mousedown touchstart', function (event) {
                 if ($(this).is(event.target)) {
                     preventDefault(event);
                 }
@@ -1781,7 +1810,7 @@
                 retval = value;
             } else if (index === 'panelChannelWidth') {
                 intVal = parseInt(value) || 0;
-                if (intVal > 10 && intVal < 50) {
+                if (intVal > 10 && intVal < 40) {
                     retval = intVal + intVal % 2;
                 }
             } else if (index === 'panelChannelMargin') {
@@ -2018,7 +2047,8 @@
                 ! self.settings.panel,
                 100,
                 self.settings.panelChannelWidth,
-                self.settings.panelChannelMargin
+                self.settings.panelChannelMargin,
+                true
             );
             self.panelApi.setColor(self.color.getRgba());
             self._panel.bind('update', function () {
