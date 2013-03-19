@@ -1553,7 +1553,7 @@
     }
     function colorPicker_hide(self, speed) {
         self.hiding = setTimeout(function () {
-            if (self._panel.find('select').is(':focus')) {
+            if (self._panel && self._panel.find('select:focus').length) {
                 return;
             }
             self.hiding = 0;
@@ -1685,7 +1685,7 @@
         self._container.width(width).height(
             width + self._preview.outerHeight()
         );
-        if (self.settings.panel) {
+        if (self.settings.panel || self.settings.panelAlpha) {
             self._supercontainer.width(
                 self.panelApi.getWidth() + self._container.width()
             );
@@ -1698,7 +1698,7 @@
         self._picker.width(width).height(width);
         if (self.settings.roundcorners) {
             var borderRadius = '0px 0px 0px ' + width/2 + 'px';
-            if (! self.settings.resizable && ! self.settings.panel) {
+            if (! self.settings.resizable && ! self.settings.panel &&  ! self.settings.panelAlpha) {
                 borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
             }
             self._supercontainer.css({
@@ -1765,8 +1765,31 @@
     }
     function colorPicker_sanitiseSettingsValue(index, value) {
         var retval = defaults[index];
+        var intVal;
+        var allModes = ['rgb', 'hsl', 'cmyk'];
         if (typeof value != 'undefined') {
-            if (index === 'panel') {
+            if (index === 'panelMode') {
+                if ($.inArray(value, allModes)) {
+                    retval = value;
+                }
+            } else if (index === 'panelModes') {
+                for (var i in value) {
+                    if (! $.inArray(value[i], allModes)) {
+                        delete value[i];
+                    }
+                }
+                retval = value;
+            } else if (index === 'panelChannelWidth') {
+                intVal = parseInt(value) || 0;
+                if (intVal > 10 && intVal < 50) {
+                    retval = intVal + intVal % 2;
+                }
+            } else if (index === 'panelChannelMargin') {
+                intVal = parseInt(value) || 0;
+                if (intVal >= 0  && intVal < 50) {
+                    retval = intVal + intVal % 2;
+                }
+            } else if (index === 'panel' || index === 'panelAlpha') {
                 retval = !!value;
             } else if (index === 'ringwidth') {
                 var floatValue = parseFloat(value, 10) || 0;
@@ -1798,8 +1821,8 @@
             } else if (index.match(/^autoshow|autosave|resizable|preview|roundcorners$/)) {
                 retval = !!value;
             } else if (index.match(/^speed|width|shadow$/)) {
-                var intValue = parseInt(value, 10) || 0;
-                retval = intValue > 0 ? intValue : 0;
+                intVal = parseInt(value, 10) || 0;
+                retval = intVal > 0 ? intVal : 0;
             } else if (new RegExp('^'+EVENTS+'$').test(index)
                 || /^save|load|str2color|color2str$/.test(index)
             ) {
@@ -1984,19 +2007,18 @@
             .addClass(staticClass)
             .append(self._container);
 
-        if (self.settings.panel) {
+        if (self.settings.panel || self.settings.panelAlpha) {
             self._panel = $('<div/>').addClass('ui-cs-panel');
             self._supercontainer.append(self._panel);
-
             self.panelApi = new Panel(
                 self._panel,
-                'rgb',
-                ['rgb', 'hsl', 'cmyk'],
-                true,
-                false,
-                200,
-                20,
-                10
+                self.settings.panelMode,
+                self.settings.panelModes,
+                self.settings.panelAlpha,
+                ! self.settings.panel,
+                100,
+                self.settings.panelChannelWidth,
+                self.settings.panelChannelMargin
             );
             self.panelApi.setColor(self.color.getRgba());
             self._panel.bind('update', function () {
@@ -2082,7 +2104,7 @@
 
         if (self.settings.roundcorners) {
             var borderRadius = '0px 0px 0px ' + self.width/2 + 'px';
-            if (! self.settings.resizable && ! self.settings.panel) {
+            if (! self.settings.resizable && ! self.settings.panel && ! self.settings.panelAlpha) {
                 borderRadius = '0px 0px ' + self.width/2 + 'px ' + self.width/2 + 'px';
             }
             self._supercontainer.css({
@@ -2095,7 +2117,7 @@
             .height(self.width)
             .add(self._container)
             .width(self.width);
-        if (self.settings.panel) {
+        if (self.settings.panel || self.settings.panelAlpha) {
             self._supercontainer
                 .width(self.panelApi.getWidth() + self._container.width());
         } else {
@@ -2139,6 +2161,9 @@
                     colorPicker_drawAll(self);
                 }
                 colorPicker_show(self);
+                if (self.panelApi) {
+                    self.panelApi.setHeight(self._container.height());
+                }
             }).blur(function () {
                 colorPicker_hide(self);
             });
@@ -2397,9 +2422,10 @@
     shadow:                8,          // pos int
     shadowColor:           'rgba(0,0,0,0.8)', // string
     preview:               true,       // bool
-    panel:                 true,
-    panelChannelWidth:     20,
-    panelChannelMargin:    5,
+    panel:                 false,
+    panelAlpha:            false,
+    panelChannelWidth:     18,
+    panelChannelMargin:    12,
     panelMode:             'rgb',
     panelModes:            ['rgb', 'hsl', 'cmyk'],
     roundcorners:          true,       // bool
