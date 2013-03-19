@@ -603,7 +603,8 @@
             panelHeight,
             channelWidth,
             channelMargin,
-            panelLabels
+            panelLabels,
+            shadowColor
         ) {
             var self = this;
             // Declare functions
@@ -690,6 +691,9 @@
             };
             var drawPanel = function() {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
+
+                drawShadows();
+
                 var i, x, color1, color2, lighnessHsl, keyCmyk, cmy;
                 var offset = 10;
                 var yoffset = 10;
@@ -889,6 +893,33 @@
                         var y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2 + 10;
                         indicator("#fff", 1.5, 6);
                         indicator("#000", 2, 4.5);
+                        offset += channelWidth + channelMargin;
+                    }
+                }
+            };
+            var drawShadow = function (x) {
+                ctx.shadowColor = shadowColor;
+                ctx.shadowBlur = 8;
+                ctx.beginPath();
+                ctx.moveTo(x, channelWidth/2+10);
+                ctx.lineTo(x, canvasHeight-channelWidth);
+                ctx.lineWidth = channelWidth - 4;
+                ctx.strokeStyle = 'rgba(0,0,0,1)';
+                ctx.lineCap = 'round';
+                ctx.stroke();
+                ctx.shadowBlur = 0;
+            };
+            var drawShadows = function () {
+                var x, offset = 10, channel;
+                if (alphaSupport) {
+                    x = offset + channelWidth/2;
+                    drawShadow(x);
+                    offset += channelWidth + channelMargin;
+                }
+                if (! onlyAlpha) {
+                    for (channel in indexes) {
+                        x = offset + channelWidth/2;
+                        drawShadow(x);
                         offset += channelWidth + channelMargin;
                     }
                 }
@@ -2052,7 +2083,8 @@
                 100,
                 self.settings.panelChannelWidth,
                 self.settings.panelChannelMargin,
-                true
+                true,
+                self.settings.shadowColor
             );
             self.panelApi.setColor(self.color.getRgba());
             self._panel.bind('update', function () {
