@@ -1602,6 +1602,7 @@
         var retval = self._source.triggerHandler('beforeShow');
         if (typeof retval == 'undefined' || retval) {
             colorPicker_fixPosition(self);
+            colorPicker_updatePreview(self);
             var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
             self._supercontainer[effect].apply(
                 self._supercontainer,
@@ -1929,7 +1930,11 @@
     }
 
     function colorPicker_updatePreview(self) {
-        var previewHeight = self._preview.find('>div').height();
+        var previewHeight = self._previewWidget.height();
+        self._previewCanvas.height(previewHeight);
+        self._previewColor
+            .css('top', '-' + previewHeight + 'px')
+            .height(previewHeight);
         var ctx = self._previewCanvas[0].getContext('2d');
         self._previewCanvas[0].height = previewHeight;
         self._previewCanvas[0].width = 1000;
@@ -2144,7 +2149,7 @@
             }
         }
 
-        var $preview = $('<div/>').addClass('ui-cs-preview-widget')
+        self._previewWidget = $('<div/>').addClass('ui-cs-preview-widget')
             .css('overflow', 'hidden')
             .css('background', self.color.getRgbaString());
 
@@ -2152,7 +2157,7 @@
         self._preview = $('<div/>')
             .addClass('ui-cs-preview-container')
             .append(
-                $preview
+                self._previewWidget
                 .append(
                     $('<canvas/>')
                     .css({ display:'block' })
@@ -2169,13 +2174,10 @@
             .addClass('ui-cs-preview-color')
             .css('width','100%')
             .css('background-color', self.color.getRgbaString())
-            .css('position', 'relative')
-            .css('top', '-' + $preview.height() + 'px')
-            .height($preview.height());
-        $preview.append(self._previewColor);
+            .css('position', 'relative');
+        self._previewWidget.append(self._previewColor);
 
-        self._previewCanvas = $preview.find('canvas');
-        self._previewCanvas.height($preview.height());
+        self._previewCanvas = self._previewWidget.find('canvas');
 
         colorPicker_updatePreview(self);
 
