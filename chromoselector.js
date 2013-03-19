@@ -2000,10 +2000,10 @@
             );
             self.panelApi.setColor(self.color.getRgba());
             self._panel.bind('update', function () {
-                self.setColorRenderer(self, self.panelApi.getColor().getRgba());
+                self.setColorRenderer(self, self.panelApi.getColor().getHsla());
             });
             self._source.bind('update', function () {
-                self.panelApi.setColor(self.color.getRgba());
+                self.panelApi.setColor(self.color.getHsla());
             });
             self._panel.find('select').blur(function () {
                 colorPicker_hide(self);
