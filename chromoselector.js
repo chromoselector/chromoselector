@@ -1428,26 +1428,27 @@
             ctx.closePath();
             ctx.stroke();
         }
+    }
 
+    function drawResizer(self, canvas) {
+        var ctx = canvas.getContext("2d");
         /** draw resizer */
-        if (self.settings.resizable) {
-            if (self._supercontainer.css('border-bottom-color')) {
-                ctx.strokeStyle = self._supercontainer.css('border-bottom-color');
-            } else {
-                ctx.strokeStyle = '#444';
-            }
-            ctx.lineWidth = 1;
-            ctx.lineCap="round";
-            ctx.beginPath();
-            ctx.moveTo(self.width-20, self.width-2);
-            ctx.lineTo(self.width-2, self.width-20);
-            ctx.moveTo(self.width-13, self.width-2);
-            ctx.lineTo(self.width-2, self.width-13);
-            ctx.moveTo(self.width-7, self.width-2);
-            ctx.lineTo(self.width-2, self.width-7);
-            ctx.closePath();
-            ctx.stroke();
+        if (self._supercontainer.css('border-bottom-color')) {
+            ctx.strokeStyle = self._supercontainer.css('border-bottom-color');
+        } else {
+            ctx.strokeStyle = '#444';
         }
+        ctx.lineWidth = 1;
+        ctx.lineCap="round";
+        ctx.beginPath();
+        ctx.moveTo(0, 18);
+        ctx.lineTo(18, 0);
+        ctx.moveTo(7, 18);
+        ctx.lineTo(18, 7);
+        ctx.moveTo(13, 18);
+        ctx.lineTo(18, 13);
+        ctx.closePath();
+        ctx.stroke();
     }
 
     /** The color picker functions */
@@ -2084,17 +2085,28 @@
         }
 
         if (self.settings.resizable) {
-            $(self._container).append(
-                $('<span/>')
-                    .addClass('ui-cs-resizer')
-                    .width(20)
-                    .height(20)
-                    .css({
-                        position: 'absolute',
-                        bottom: '0px',
-                        right: '0px'
-                    })
-            );
+            self._resizer = $('<canvas />')
+                .height(20)
+                .width(20)
+                .attr('height', 20)
+                .attr('width', 20)
+                .addClass('ui-cs-resizer')
+                .css({
+                    position: 'absolute',
+                    bottom: '0px',
+                    right: '0px'
+                });
+
+            drawResizer(self, self._resizer[0]);
+            if (self.settings.panel || self.settings.panelAlpha) {
+                $(self._panel).append(
+                    self._resizer
+                );
+            } else {
+                $(self._container).append(
+                    self._resizer
+                );
+            }
         }
 
         var $preview = $('<div/>').addClass('ui-cs-preview-widget')
@@ -2212,33 +2224,37 @@
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
         });
-        self._container.bind('mousedown touchstart', function (e) {
+        self._resizer.bind('mousedown touchstart', function (e) {
             preventDefault(e);
             var inputPoint = getEventPosition(self, e, self._picker);
-            if (self.settings.resizable
-                && inputPoint[0] > self.width-20
-                && inputPoint[1] > self.width-20
-            ) {
+            if (self.settings.resizable) {
                 self._source.trigger('resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
                     self.width - inputPoint[0],
                     self.width - inputPoint[1]
                 ];
+                if (self.settings.panel || self.settings.panelAlpha) {
+                    self.resizeOffset[0] -= 20;
+                    self.resizeOffset[1] -= (self._panel.width() + 20);
+                }
+            }
+        });
+        self._container.bind('mousedown touchstart', function (e) {
+            preventDefault(e);
+            var inputPoint = getEventPosition(self, e, self._picker);
+            if (pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
+                &&
+                ! pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth)
+            ) {
+                self.draggingHue = 1;
+                self.draggingHueRenderer(self, e);
             } else {
-                if (pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
-                    &&
-                    ! pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth)
-                ) {
-                    self.draggingHue = 1;
-                    self.draggingHueRenderer(self, e);
-                } else {
-                    var degrees = (1 - self.color.getHsl().h) * Math.PI * 2;
-                    var points = colorPicker_getPoints(self, degrees);
-                    if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
-                        self.draggingSatLum = 1;
-                        self.draggingSatLumRenderer(self, e);
-                    }
+                var degrees = (1 - self.color.getHsl().h) * Math.PI * 2;
+                var points = colorPicker_getPoints(self, degrees);
+                if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
+                    self.draggingSatLum = 1;
+                    self.draggingSatLumRenderer(self, e);
                 }
             }
         }).bind('mousemove touchmove', function (e) {
