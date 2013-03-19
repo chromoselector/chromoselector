@@ -898,16 +898,18 @@
                     $labels.append(
                         $('<div />').text('A').width(channelWidth)
                     );
-                } else {
+                } else if (! onlyAlpha) {
                     $labels.append(
                         $('<div />').text(indexes[0].toUpperCase()).width(channelWidth)
                     );
                     j++;
                 }
-                for (;j<indexes.length;j++) {
-                    $labels.append(
-                        $('<div />').text(indexes[j].toUpperCase()).width(channelWidth).css({'padding-left':channelMargin})
-                    );
+                if (! onlyAlpha) {
+                    for (;j<indexes.length;j++) {
+                        $labels.append(
+                            $('<div />').text(indexes[j].toUpperCase()).width(channelWidth).css({'padding-left':channelMargin})
+                        );
+                    }
                 }
             };
             var draggingRenderer = throttle(function(event) {
