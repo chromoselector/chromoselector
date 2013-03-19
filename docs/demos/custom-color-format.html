@@ -55,12 +55,12 @@
             <h2>
               Custom Color Formats
             </h2>
-            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
-                Hex RGB without "#"
+                Comma separated RGB
               </h3>
               <div data-role="fieldcontain">
-                <label for="color1">Pick a color:</label><input type="text" name="color1" id="color1" value="000000" />
+                <label for="color1">Pick a color:</label><input id="color1" type="text" name="color1" value="rgb(41,160,126)" />
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -69,24 +69,20 @@
                 <pre>
 <code class="javascript">$(document).ready(function () {
     $('#color1').chromoselector({
-        str2color: function (str) {
-            return '#' + str;
-        },
         color2str: function (color) {
-            return color.hex.substring(1);
+            return color.getRgbString();
         }
      });
-});
-</code>
+});</code>
 </pre>
-              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/unLGf/">jsFiddle</a>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/85gw3/">jsFiddle</a>
             </div>
-            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
-                Comma separated HSL
+                Comma separated RGBA
               </h3>
               <div data-role="fieldcontain">
-                <label for="color2">Pick a color:</label><input type="text" name="color2" id="color2" value="0,0,0" />
+                <label for="color2">Pick a color:</label><input id="color2" type="text" name="color2" value="rgba(41,160,126,1)" />
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -95,37 +91,20 @@
                 <pre>
 <code class="javascript">$(document).ready(function () {
     $('#color2').chromoselector({
-        str2color: function (str) {
-            var arr = str.split(',');
-            return {
-                h: parseInt(arr[0], 10) / 360,
-                s: parseInt(arr[1], 10) / 100,
-                l: parseInt(arr[2], 10) / 100
-            };
-        },
         color2str: function (color) {
-            return Math.round(
-                color.hsl.h * 360
-            ) + ',' +
-            Math.round(
-                color.hsl.s * 100
-            ) + ',' +
-            Math.round(
-                color.hsl.l * 100
-            );
+            return color.getRgbaString();
         }
      });
-});
-</code>
+});</code>
 </pre>
               </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/85gw3/">jsFiddle</a>
             </div>
-            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
-                JSON encoded CMYK
+                Comma separated HSL
               </h3>
               <div data-role="fieldcontain">
-                <label for="color3">Pick a color:</label><input type="text" name="color3" id="color3" value="{&quot;c&quot;:0,&quot;m&quot;:0,&quot;y&quot;:0,&quot;k&quot;:100}" />
+                <label for="color3">Pick a color:</label><input id="color3" type="text" name="color3" value="hsl(338,36%,22%)" />
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -134,43 +113,20 @@
                 <pre>
 <code class="javascript">$(document).ready(function () {
     $('#color3').chromoselector({
-        str2color: function (str) {
-            try {
-                var color = $.parseJSON(str);
-                for (var i in color) {
-                    color[i] /= 100;
-                }
-                return color;
-            } catch (e) {}
-        },
         color2str: function (color) {
-            return '{' +
-                '"c":' + Math.round(
-                    color.cmyk.c * 100
-                ) + ',' +
-                '"m":' + Math.round(
-                    color.cmyk.m * 100
-                ) + ',' +
-                '"y":' + Math.round(
-                    color.cmyk.y * 100
-                ) + ',' +
-                '"k":' + Math.round(
-                    color.cmyk.k * 100
-                ) +
-            '}';
+            return color.getHslString();
         }
-     });
-});
-</code>
+    });
+});</code>
 </pre>
-              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/5xv2W/">jsFiddle</a>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/85gw3/">jsFiddle</a>
             </div>
-            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
-                RGB as an integer
+                Comma separated HSLA
               </h3>
               <div data-role="fieldcontain">
-                <label for="color4">Pick a color:</label><input type="text" name="color4" id="color4" value="0" />
+                <label for="color4">Pick a color:</label><input id="color4" type="text" name="color4" value="hsla(338,36%,22%,1)" />
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -179,23 +135,101 @@
                 <pre>
 <code class="javascript">$(document).ready(function () {
     $('#color4').chromoselector({
+        color2str: function (color) {
+            return color.getHslaString();
+        }
+    });
+});</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/85gw3/">jsFiddle</a>
+            </div>
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                Hex RGB without "#"
+              </h3>
+              <div data-role="fieldcontain">
+                <label for="color5">Pick a color:</label><input id="color5" type="text" name="color5" value="c9db99" />
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function () {
+    $('#color5').chromoselector({
+        str2color: function (str) {
+            return '#' + str;
+        },
+        color2str: function (color) {
+            return color.getHexString().substring(1);
+        }
+    });
+});</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/unLGf/">jsFiddle</a>
+            </div>
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                JSON encoded CMYK
+              </h3>
+              <div data-role="fieldcontain">
+                <label for="color6">Pick a color:</label><input id="color6" type="text" name="color6" value="{&quot;c&quot;:0.54,&quot;m&quot;:0.23,&quot;y&quot;:0,&quot;k&quot;:0.31}" />
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function () {
+    $('#color6').chromoselector({
+        str2color: function (str) {
+            try {
+                return $.parseJSON(str);
+            } catch (e) {}
+        },
+        color2str: function (color) {
+            var cmyk = color.getCmyk();
+            for (var i in cmyk) {
+                cmyk[i] = Math.round(cmyk[i] * 100) / 100;
+            }
+            return JSON.stringify(cmyk);
+        }
+    });
+});</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/5xv2W/">jsFiddle</a>
+            </div>
+            <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                RGB as an integer
+              </h3>
+              <div data-role="fieldcontain">
+                <label for="color7">Pick a color:</label><input id="color7" type="text" name="color7" value="9087362" />
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function () {
+    $('#color7').chromoselector({
         str2color: function (str) {
             var num = parseInt(str, 10) || 0;
             return {
-                r: ((num &amp; (255 * 255 * 255)) &gt;&gt; 16) / 255,
-                g: ((num &amp; (255 * 255)) &gt;&gt; 8) / 255,
-                b: ((num &amp; 255)) / 255
+                r: ((num &amp; (255*255*255)) &gt;&gt; 16) / 255,
+                g: ((num &amp; (255*255)) &gt;&gt; 8) / 255,
+                b: ((num &amp; (255))) / 255
             };
         },
         color2str: function (color) {
-            var num = (Math.round(color.rgb.r * 255) &lt;&lt; 16)
-                + (Math.round(color.rgb.g * 255) &lt;&lt; 8)
-                + Math.round(color.rgb.b * 255)
+            var rgb = color.getRgb();
+            var num = (Math.round(rgb.r * 255) &lt;&lt; 16)
+                + (Math.round(rgb.g * 255) &lt;&lt; 8)
+                + Math.round(rgb.b * 255)
             return num;
         }
-     })
-});
-</code>
+    });
+});</code>
 </pre>
               </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/F75Px/">jsFiddle</a>
             </div>
