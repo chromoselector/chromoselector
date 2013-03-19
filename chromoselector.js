@@ -2497,6 +2497,8 @@
         }
         return this;
     };
+
+    $.fn[NAMESPACE].Color = Color;
 })(jQuery, window, Math, {
     autoshow:              true,       // bool
     autosave:              true,       // bool
