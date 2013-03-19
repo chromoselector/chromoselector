@@ -4,7 +4,14 @@ _target
 _picker
 _source
 _icon
+_previewCanvas
+_previewColor
+_previewWidget
 _preview
+_panel
+_resizer
+_supercontainer
+panelApi
 ringwidthRatio
 shadowRatio
 triangleRadius
