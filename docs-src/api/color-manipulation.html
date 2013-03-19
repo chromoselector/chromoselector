@@ -6,90 +6,231 @@ require 'menu.php';
 $html  = getHeader('..', 'interior', 'Documentation / API / Color Manipulation');
 $html .= '<div class="content-primary">';
 $html .= '<h2>Color Manipulation</h2>';
-$html .= 'ChoromoSelector provides an easy way to manipulate colors in various formats.';
-$html .= '<h3>Getting a color:</h3> ';
-$html .= '<pre class="instant"><code class="javascript">// Assuming that the plugin has already been instanciated before
-var color = $("#myColorPicker").choromoselector("getColor");</code></pre>';
-$html .= 'You can expect to receive an object like the following:';
-$html .= '<pre class="instant"><code class="javascript">{
-    hsl: { h: 0, s: 0, l: 0 },
-    rgb: { r: 0, g: 0, b: 0 },
-    hex: "#000",
-    cmyk: { c: 0, m: 0, y: 0, k: 1 },
-    setColor: function (color) { ... },
-    getTextColor: function () {
-        ...
-        return ColorObject;
-    }
-}</code></pre>';
-$html .= '<strong>Note:</strong> that values for hsl, rgb and cmyk colors are all normalised between 0 and 1.';
-$html .= '<h3>Setting a color:</h3> ';
-$html .= '<pre class="instant"><code class="javascript">// Hex strings, Objects of type Color
-// and those representing colors in various
-// formats are all acceptable input
-$("#myColorPicker").choromoselector("setColor", { h: 0, s: 0, l: 0 });
-$("#myColorPicker").choromoselector("setColor", { r: 0, g: 0, b: 0 });
-$("#myColorPicker").choromoselector("setColor", "#000");
-$("#myColorPicker").choromoselector("setColor", { c: 0, m: 0, y: 0, k: 1 });
-
-// A previously obtained Color object can be reused
-var color = $("#myColorPicker").choromoselector("getColor");
-// Do something else here ...
-...
-// Restore the old color
-$("#myColorPicker").choromoselector("setColor", color);
-// The color can also be reassigned
-color.setColor("#a8d");
-$("#myColorPicker").choromoselector("setColor", color);
-// These are also all valid ways to set a color:
-$("#myColorPicker").choromoselector("setColor", color.hsl);
-$("#myColorPicker").choromoselector("setColor", color.rgb);
-$("#myColorPicker").choromoselector("setColor", color.hex);
-$("#myColorPicker").choromoselector("setColor", color.cmyk);
-</code></pre>';
-$html .= '<h3>Converting colors:</h3>';
-$html .= '<p>Note that in these examples the color value of the picker does not change, ';
-$html .= 'but we are only using the obtained object for the conversions.</p>';
-$html .= '<pre class="instant"><code class="javascript">// Converting from Hex
-var color = $("#myColorPicker").choromoselector("getColor");
-color.setColor("#ff0000"); // red
-console.log(color.hsl)  // prints: { h: 0, s: 1, l: 0.5 }
-console.log(color.rgb)  // prints: { r: 1, g: 0, b: 0 }
-console.log(color.cmyk) // prints: { c: 0, m: 1, y: 1, k: 0 }
-</code></pre>';
-
-$html .= '<pre class="instant"><code class="javascript">// Converting from Hsl
-var color = $("#myColorPicker").choromoselector("getColor");
-color.setColor({ h: 0, s: 1, l: 0.5 }); // red
-console.log(color.hex)  // prints: "#ff0000"
-console.log(color.rgb)  // prints: { r: 1, g: 0, b: 0 }
-console.log(color.cmyk) // prints: { c: 0, m: 1, y: 1, k: 0 }
-</code></pre>';
-
-$html .= '<h3>Getting a contrasting color:</h3>';
-$html .= '<p>You may need a contrasting color if you need to print text on the background of the selected color. Here\'s how to obtain one:</p>';
-$html .= '<pre class="instant"><code class="javascript">$("#textfield").chromoselector("setColor", "#0f0"); // green
-var color = $("#textfield").chromoselector("getColor");
-color.hex // #0f0
-color.getTextColor().hex // #000 (black)
-color.getTextColor().getTextColor().hex // #fff (white)
-</code></pre>';
+$html .= '<h3>Getting a color:</h3>
+<p>
+Assuming that the plugin has already been instanciated, getting it\'s current color is a simple API call:
+</p>';
+$html .= '<pre class="instant"><code class="javascript">var color = $("#myColorPicker").chromoselector("getColor");</code></pre>';
+$html .= '<h3>Setting a color:</h3>
+<p>
+See the <i>setColor()</i> method in the API below for valid formats. The
+method may delay execution under load, so consider this a request to
+change the color, the actual color change may happen a little later.
+</p>
+';
 $html .= '<pre class="instant"><code class="javascript">
-// Change the input textfield colors on update
+$("#myColorPicker").choromoselector("setColor", aNewColor);
+</code></pre>';
+$html .= '<h3>Color API:</h3>
+<p>
+Below is an overview of the <i>Color</i> class. Colors are internally stored
+in the color picker using objects of this class, and are also passed around the
+color picker API in a few methods.
+</p>
+<p>
+If necessary, it is possible to access the Color object, 
+through <i>$.fn.chromoselector.Color</i>:
+<pre class="instant"><code class="javascript">// Black
+var color1 = new $.fn.chromoselector.Color();
+// Red, see the setColor method for valid formats
+var color2 = new $.fn.chromoselector.Color(\'#f00\');
+</code></pre>
+
+A color object has the following public methods:
+<ul data-role="listview" data-inset="true">
+    <li>
+        <h3>getHexString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in hexadecimal format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"#ff8800"</code></pre>
+    </li>
+    <li>
+        <h3>getHexaString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in hexadecimal format, including the alpha channel
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"#ff8800ff"</code></pre>
+    </li>
+    <li>
+        <h3>getRgbString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in RGB format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"rgb(255,0,186)"</code></pre>
+    </li>
+    <li>
+        <h3>getRgbaString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in RGBA format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"rgba(255,0,186,0.5)"</code></pre>
+    </li>
+    <li>
+        <h3>getHslString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in HSL format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"hsl(282,100%,37%)"</code></pre>
+    </li>
+    <li>
+        <h3>getHslaString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in HSLA format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"hsla(282,100%,37%,0.5)"</code></pre>
+    </li>
+
+    <li>
+        <h3>getCmykString()</h3>
+        <p style="white-space: normal">
+            Returns the color as a string in CMYK format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">"device-cmyk(0.3,1,0,0.27)"</code></pre>
+    </li>
+    <li>
+        <h3>getRgb()</h3>
+        <p style="white-space: normal">
+            Returns the color an object in RGB format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">{
+    r: 0.27,
+    g: 0.12,
+    b: 0
+}</code></pre>
+    </li>
+    <li>
+        <h3>getRgba()</h3>
+        <p style="white-space: normal">
+            Returns the color an object in RGBA format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">{
+    r: 0.27,
+    g: 0.12,
+    b: 0,
+    a: 0.5
+}</code></pre>
+    </li>
+    <li>
+        <h3>getHsl()</h3>
+        <p style="white-space: normal">
+            Returns the color an object in HSL format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">{
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+}</code></pre>
+    </li>
+    <li>
+        <h3>getHsla()</h3>
+        <p style="white-space: normal">
+            Returns the color an object in HSLA format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">{
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+    a: 0.5
+}</code></pre>
+    </li>
+    <li>
+        <h3>getCmyk()</h3>
+        <p style="white-space: normal">
+            Returns the color as JS object in CMYK format
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">{
+    c: 0.3,
+    m: 1,
+    y: 0,
+    k: 0.27
+}</code></pre>
+    </li>
+    <li>
+        <h3>getTextColor()</h3>
+        <p style="white-space: normal">
+Returns a contrasting color if you need to print text on the background of the current color</p>
+<pre class="instant"><code class="javascript">$("#textfield").chromoselector("setColor", "#0f0"); // green
+var color = new $.fn.chromoselector.Color(); // defaults to black
+color.getTextColor().getHexString(); // #fff (white)
+color.getTextColor().getTextColor().getHexString(); // #000 (black)
+</code></pre>
+<pre class="instant"><code class="javascript">// Change the input textfield colors on update
 $("#textfield").chromoselector({
     preview: false,
     update: function() {
         var color = $(this).chromoselector("getColor");
         $(this).css({
-            "background-color": color.hex,
-            "color": color.getTextColor().hex
+            "background-color": color.getHexString(),
+            "color": color.getTextColor().getHexString()
         });
     }
 });
-</code></pre>';
+</code></pre>
 
-$html .= '<strong>See also:</strong><p><a href="../demos/custom-color-format.html">Demo - Custom Color Format</a></p>';
-$html .= '<p><a href="../demos/previews.html">Demo - Previews</a></p>';
+    <strong>See also:</strong><p><a href="../demos/custom-color-format.html">Demo - Custom Color Format</a></p>
+    <p><a href="../demos/previews.html">Demo - Previews</a></p>
+    </li>
+    <li>
+        <h3>setAlpha(value)</h3>
+        <p style="white-space: normal">
+            Sets the value of the alpha channel to a given value. Valid values are
+            numbers between 0 and 1. If the value is not valid, no change
+            is performed.
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">var color = new $.fn.chromoselector.Color();
+color.setAlpha(0.5);
+</code></pre>
+    </li>
+    <li>
+        <h3>setColor(color)</h3>
+        <p style="white-space: normal">
+            Sets the current color to a given value.If the value is not valid,
+            no change is performed. The color can be supplied in a range of formats:
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">
+color.setColor("#ff8800");
+color.setColor("#ff8800ff");
+color.setColor("rgb(255,0,186)");
+color.setColor("rgba(255,0,186,0.5)");
+color.setColor("rgb(100%,0%,20%)");      // alternative format
+color.setColor("rgba(100%,0%,20%,0.5)"); // alternative format
+color.setColor("hsl(282,100%,37%)");
+color.setColor("hsla(282,100%,37%,0.5)");
+color.setColor("device-cmyk(0.3,1,0,0.27)");
+color.setColor({
+    r: 0.27,
+    g: 0.12,
+    b: 0
+});
+color.setColor({
+    r: 0.27,
+    g: 0.12,
+    b: 0,
+    a: 0.5
+});
+color.setColor({
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+});
+color.setColor({
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+    a: 0.5
+});
+color.setColor({
+    c: 0.3,
+    m: 1,
+    y: 0,
+    k: 0.27
+});
+</code></pre>
+    </li>
+</ul>
+</p>';
+
 $html .= '</div>';
 $html .= '<div class="content-secondary">';
 $html .= '<nav>';
