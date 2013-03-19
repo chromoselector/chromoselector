@@ -608,12 +608,12 @@
             var self = this;
             // Declare functions
             var getPanelWidth = function(){
-                var offset = 0;
+                var offset = canvasPadding;
                 if (alphaSupport) {
-                    offset = channelWidth+channelMargin;
+                    offset += channelWidth+channelMargin;
                 }
                 if (onlyAlpha) {
-                    return channelWidth;
+                    return offset+channelWidth;
                 } else if (mode === 'cmyk') {
                     return offset+channelWidth*4+channelMargin*3;
                 } else {
@@ -627,8 +627,8 @@
             };
             var createGradient = function() {
                 return ctx.createLinearGradient(
-                    0, canvasHeight-channelWidth/2,
-                    0, channelWidth/2
+                    0, canvasHeight-channelWidth/2-20,
+                    0, channelWidth/2+10
                 );
             };
             var setSimpleGradient = function(color1, color2) {
@@ -674,24 +674,25 @@
                 ctx.fill();
             }
             var roundEdges = function(channel, color1, color2, noFill) {
-                var x = channelWidth/2 + channel * (channelWidth+channelMargin);
+                var x = channelWidth/2 + channel * (channelWidth+channelMargin) + 10;
                 drawCircle(
                     color1,
                     x,
-                    canvasHeight-channelWidth/2,
+                    canvasHeight-channelWidth/2 - 10,
                     noFill
                 );
                 drawCircle(
                     color2,
                     x,
-                    channelWidth/2,
+                    channelWidth/2 + 10,
                     noFill
                 );
             };
             var drawPanel = function() {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
                 var i, x, color1, color2, lighnessHsl, keyCmyk, cmy;
-                var offset = 0;
+                var offset = 10;
+                var yoffset = 10;
                 var channel = 0;
 
                 if (alphaSupport) {
@@ -708,20 +709,20 @@
                     var pattern = ctx.createPattern(tempCanvas, 'repeat');
                     ctx.fillStyle = pattern;
                     ctx[fillRect](
-                        0,
-                        channelWidth/2,
+                        offset,
+                        channelWidth/2 + yoffset,
                         channelWidth,
-                        canvasHeight-channelWidth
+                        canvasHeight-channelWidth-(yoffset*2)
                     );
                     roundEdges(0, 0, 0, 1); // draw edges without setting a fill
 
                     // Alpha overlay
-                    x = channelWidth/2;
+                    x = channelWidth/2 + offset;
                     ctx[fillStyle] = currentColor.getHexString();
                     ctx.beginPath();
                     ctx.arc(
                         x,
-                        channelWidth/2,
+                        channelWidth/2 + yoffset,
                         channelWidth/2,
                         0,
                         Math.PI,
@@ -735,12 +736,12 @@
                     lingrad[addColorStop](1, currentColor.getHexString());
                     ctx[fillStyle] = lingrad;
                     ctx[fillRect](
-                        0,
-                        channelWidth/2,
+                        offset,
+                        channelWidth/2 + yoffset,
                         channelWidth,
-                        canvasHeight-channelWidth
+                        canvasHeight-channelWidth-(yoffset*2)
                     );
-                    offset = channelWidth + channelMargin;
+                    offset += channelWidth + channelMargin;
                     channel = 1;
                 }
                 if (onlyAlpha) {
@@ -761,9 +762,9 @@
                             );
                             ctx[fillRect](
                                 offset,
-                                channelWidth/2,
+                                channelWidth/2+yoffset,
                                 channelWidth,
-                                canvasHeight-channelWidth
+                                canvasHeight-channelWidth-(yoffset*2)
                             );
                             offset += channelWidth + channelMargin;
                             channel++;
@@ -778,9 +779,9 @@
                         setHueGradient();
                         ctx[fillRect](
                             offset,
-                            channelWidth/2,
+                            channelWidth/2+yoffset,
                             channelWidth,
-                            canvasHeight-channelWidth
+                            canvasHeight-channelWidth-(yoffset*2)
                         );
 
                         channel++;
@@ -798,9 +799,9 @@
                         );
                         ctx[fillRect](
                             offset,
-                            channelWidth/2,
+                            channelWidth/2+yoffset,
                             channelWidth,
-                            canvasHeight-channelWidth
+                            canvasHeight-channelWidth-(yoffset*2)
                         );
 
                         channel++;
@@ -815,9 +816,9 @@
                         setLightnessGradient(new Color(lighnessHsl));
                         ctx[fillRect](
                             offset,
-                            channelWidth/2,
+                            channelWidth/2+yoffset,
                             channelWidth,
-                            canvasHeight-channelWidth
+                            canvasHeight-channelWidth-(yoffset*2)
                         );
 
                         drawIndicators(currentColor.getHsl());
@@ -837,9 +838,9 @@
                             );
                             ctx[fillRect](
                                 offset,
-                                channelWidth/2,
+                                channelWidth/2+yoffset,
                                 channelWidth,
-                                canvasHeight-channelWidth
+                                canvasHeight-channelWidth-(yoffset*2)
                             );
                             offset += channelWidth + channelMargin;
                             channel++;
@@ -855,16 +856,16 @@
                         setKeyGradient(keyCmyk);
                         ctx[fillRect](
                             offset,
-                            channelWidth/2,
+                            channelWidth/2+yoffset,
                             channelWidth,
-                            canvasHeight-channelWidth
+                            canvasHeight-channelWidth-(yoffset*2)
                         );
                         drawIndicators(currentColor.getCmyk());
                     }
                 }
             };
             var drawIndicators = function(color) {
-                var offset = 0, channel;
+                var offset = 10, channel;
                 var indicator = function (color, lineWidth, diameter){
                     ctx.strokeStyle = color;
                     ctx.lineWidth = lineWidth;
@@ -875,8 +876,8 @@
                 };
                 if (alphaSupport) {
                     var x = offset + channelWidth/2;
-                    var verticalSpace = canvasHeight - channelWidth;
-                    var y = verticalSpace - (verticalSpace * currentColor.getRgba().a) + channelWidth/2;
+                    var verticalSpace = canvasHeight - channelWidth - 20;
+                    var y = verticalSpace - (verticalSpace * currentColor.getRgba().a) + channelWidth/2 + 10;
                     offset += channelWidth + channelMargin;
                     indicator("#fff", 1.5, 6);
                     indicator("#000", 2, 4.5);
@@ -884,8 +885,8 @@
                 if (! onlyAlpha) {
                     for (channel in color) {
                         var x = offset + channelWidth/2;
-                        var verticalSpace = canvasHeight - channelWidth;
-                        var y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2;
+                        var verticalSpace = canvasHeight - channelWidth - 20;
+                        var y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2 + 10;
                         indicator("#fff", 1.5, 6);
                         indicator("#000", 2, 4.5);
                         offset += channelWidth + channelMargin;
@@ -896,11 +897,11 @@
                 var j=0;
                 if (alphaSupport || onlyAlpha) {
                     $labels.append(
-                        $('<div />').text('A').width(channelWidth)
+                        $('<div />').text('A').width(channelWidth).css({'padding-left':10})
                     );
                 } else if (! onlyAlpha) {
                     $labels.append(
-                        $('<div />').text(indexes[0].toUpperCase()).width(channelWidth)
+                        $('<div />').text(indexes[0].toUpperCase()).width(channelWidth).css({'padding-left':10})
                     );
                     j++;
                 }
@@ -949,7 +950,7 @@
                 return currentColor;
             };
             self.getWidth = function () {
-                return getPanelWidth() + targetPadding;
+                return getPanelWidth();
             };
             self.setAlpha = function (value) {
                 currentColor.setAlpha(value);
@@ -963,7 +964,7 @@
             self.setHeight = function (newHeight) {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
                 labelsHeight = $labels.height();
-                canvasHeight = newHeight - $select.outerHeight(true) - targetPadding - labelsHeight;
+                canvasHeight = newHeight - $select.outerHeight(true) - labelsHeight;
                 $canvas.attr('height', canvasHeight);
                 //canvas.height = canvasHeight;
                 drawPanel();
@@ -985,13 +986,13 @@
             };
 
             // Initialise variables. step 1
+            var canvasPadding = 20;
             var lingrad;
             var currentColor = new Color();
             var mode = 'rgb';
             var indexes = mode.split('');
             var dragging = 0;
             var draggingChannel = 0;
-            var targetPadding = $target.outerHeight(true);
             var selectHeight = 0;
             var allModes = ['rgb', 'hsl', 'cmyk'];
             var $select = $('<select/>');
@@ -1009,7 +1010,7 @@
                 selectHeight = $select.outerHeight(true);
             }
 
-            var canvasHeight = panelHeight - selectHeight - targetPadding;
+            var canvasHeight = panelHeight - selectHeight;
             var $canvas = $('<canvas/>')
                 .attr('width', getPanelWidth())
                 .attr('height', canvasHeight)
@@ -1048,7 +1049,7 @@
             $canvas.bind('mousedown touchstart', function (event) {
                 preventDefault(event);
                 draggingChannel = 0;
-                var offset = 0;
+                var offset = 10;
                 var inputPoint = getEventPosition(false, event, $(this));
                 while (draggingChannel < 5 && ! dragging) {
                     if (inputPoint[0] > offset && inputPoint[0] < offset+channelWidth) {
