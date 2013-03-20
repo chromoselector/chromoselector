@@ -33,24 +33,24 @@
 }
 .ui-cs-chromoselector .ui-cs-panel {
     float: left;
+    text-align: center;
 }
 .ui-cs-chromoselector .ui-cs-panel select {
     border: 1px solid #521;
     border-color: rgba(82, 37, 18, 0.5);
-    margin-bottom: 10px;
-    width: 100%;
+    margin-top: 10px;
 }
 .ui-cs-chromoselector .ui-cs-panel .ui-panel-labels {
     width: 100%;
     font-size: 12px;
     font-family: sans, sans-serif, verdana, arial;
-    text-align: center;
     overflow: hidden;
     cursor: default;
     padding-bottom: 10px;
 }
 .ui-cs-chromoselector .ui-cs-panel .ui-panel-labels div {
     float: left;
+    color: #521;
 }
 .ui-cs-chromoselector.ui-cs-static {
     position: relative;

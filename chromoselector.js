@@ -616,7 +616,7 @@
                     offset += channelWidth+channelMargin;
                 }
                 if (onlyAlpha) {
-                    return offset+channelWidth;
+                    return canvasPadding+channelWidth;
                 } else if (mode === 'cmyk') {
                     return offset+channelWidth*4+channelMargin*3;
                 } else {
@@ -997,6 +997,7 @@
             self.setHeight = function (newHeight) {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
                 labelsHeight = $labels.height();
+                $select.width(getPanelWidth() - 20);
                 canvasHeight = newHeight - $select.outerHeight(true) - labelsHeight;
                 $canvas.attr('height', canvasHeight);
                 //canvas.height = canvasHeight;
@@ -1014,6 +1015,7 @@
                         $labels.children().remove();
                         drawLabels();
                     }
+                    $select.width(getPanelWidth() - 20);
                 }
                 return self;
             };
@@ -1848,12 +1850,12 @@
                 retval = value;
             } else if (index === 'panelChannelWidth') {
                 intVal = parseInt(value) || 0;
-                if (intVal > 10 && intVal < 40) {
+                if (intVal >= 10 && intVal <= 40) {
                     retval = intVal + intVal % 2;
                 }
             } else if (index === 'panelChannelMargin') {
                 intVal = parseInt(value) || 0;
-                if (intVal >= 0  && intVal < 50) {
+                if (intVal >= 0  && intVal <= 50) {
                     retval = intVal + intVal % 2;
                 }
             } else if (index === 'panel' || index === 'panelAlpha') {
