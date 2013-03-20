@@ -37,6 +37,7 @@
     var fillRect = 'fillRect';
     var fillStyle = 'fillStyle';
     var globalCompositeOperation = 'globalCompositeOperation';
+    var strokeStyle = 'strokeStyle';
 
     /**
      * Function call throttling
@@ -638,7 +639,7 @@
                 lingrad = createGradient();
                 lingrad[addColorStop](0, color1.getHexString());
                 lingrad[addColorStop](1, color2.getHexString());
-                ctx[fillStyle] = lingrad;
+                ctx[strokeStyle] = lingrad;
             };
             var setHueGradient = function() {
                 lingrad = createGradient();
@@ -649,48 +650,22 @@
                 lingrad[addColorStop](4/6, '#00f');
                 lingrad[addColorStop](5/6, '#f0f');
                 lingrad[addColorStop](6/6, '#f00');
-                ctx[fillStyle] = lingrad;
+                ctx[strokeStyle] = lingrad;
             };
             var setLightnessGradient = function(color) {
                 lingrad = createGradient();
                 lingrad[addColorStop](0,   '#000');
                 lingrad[addColorStop](0.5, color.getHexString());
                 lingrad[addColorStop](1,   '#fff');
-                ctx[fillStyle] = lingrad;
+                ctx[strokeStyle] = lingrad;
             };
             var setKeyGradient = function(color) {
                 lingrad = createGradient();
                 lingrad[addColorStop](0, color.getHexString());
                 lingrad[addColorStop](1, '#000');
-                ctx[fillStyle] = lingrad;
+                ctx[strokeStyle] = lingrad;
             };
-            var drawCircle = function (color, x, y, noFill) {
-                if (typeof color === 'object') {
-                    color = color.getHexString();
-                }
-                if (! noFill) {
-                    ctx[fillStyle] = color;
-                }
-                ctx.beginPath();
-                ctx.arc(x, y, channelWidth/2, 0, Math.PI*2, true);
-                ctx.closePath();
-                ctx.fill();
-            }
-            var roundEdges = function(channel, color1, color2, noFill) {
-                var x = channelWidth/2 + channel * (channelWidth+channelMargin) + 10;
-                drawCircle(
-                    color1,
-                    x,
-                    canvasHeight-channelWidth/2 - 10,
-                    noFill
-                );
-                drawCircle(
-                    color2,
-                    x,
-                    channelWidth/2 + 10,
-                    noFill
-                );
-            };
+
             var drawPanel = function() {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
 
@@ -700,6 +675,15 @@
                 var offset = 10;
                 var yoffset = 10;
                 var channel = 0;
+
+                var drawChannel = function() {
+                    ctx.beginPath();
+                    ctx.moveTo(offset+channelWidth/2, channelWidth/2+10);
+                    ctx.lineTo(offset+channelWidth/2, canvasHeight-channelWidth/2-10);
+                    ctx.lineWidth = channelWidth;
+                    ctx.lineCap = 'round';
+                    ctx.stroke();
+                };
 
                 if (alphaSupport) {
                     // Draw checkboard background
@@ -713,167 +697,78 @@
                     tempCtx[fillRect](0, 0, 5, 5);
                     tempCtx[fillRect](5, 5, 5, 5);
                     var pattern = ctx.createPattern(tempCanvas, 'repeat');
-                    ctx.fillStyle = pattern;
-                    ctx[fillRect](
-                        offset,
-                        channelWidth/2 + yoffset,
-                        channelWidth,
-                        canvasHeight-channelWidth-(yoffset*2)
-                    );
-                    roundEdges(0, 0, 0, 1); // draw edges without setting a fill
-
-                    // Alpha overlay
-                    x = channelWidth/2 + offset;
-                    ctx[fillStyle] = currentColor.getHexString();
-                    ctx.beginPath();
-                    ctx.arc(
-                        x,
-                        channelWidth/2 + yoffset,
-                        channelWidth/2,
-                        0,
-                        Math.PI,
-                        true
-                    );
-                    ctx.closePath();
-                    ctx.fill();
-
+                    ctx[strokeStyle] = pattern;
+                    drawChannel();
                     lingrad = createGradient();
                     lingrad[addColorStop](0, new Color(currentColor).setAlpha(0).getRgbaString());
                     lingrad[addColorStop](1, currentColor.getHexString());
-                    ctx[fillStyle] = lingrad;
-                    ctx[fillRect](
-                        offset,
-                        channelWidth/2 + yoffset,
-                        channelWidth,
-                        canvasHeight-channelWidth-(yoffset*2)
-                    );
+                    ctx[strokeStyle] = lingrad;
+                    drawChannel();
                     offset += channelWidth + channelMargin;
                     channel = 1;
                 }
                 if (onlyAlpha) {
                     drawIndicators();
-                } else {
-                    if (mode === 'rgb') {
-                        for (i in indexes) {
-                            color1 = toggleColor(currentColor.getRgb(), indexes[i], 0);
-                            color2 = toggleColor(currentColor.getRgb(), indexes[i], 1);
-                            roundEdges(
-                                channel,
-                                color1,
-                                color2
-                            );
-                            setSimpleGradient(
-                                color1,
-                                color2
-                            );
-                            ctx[fillRect](
-                                offset,
-                                channelWidth/2+yoffset,
-                                channelWidth,
-                                canvasHeight-channelWidth-(yoffset*2)
-                            );
-                            offset += channelWidth + channelMargin;
-                            channel++;
-                        }
-                        drawIndicators(currentColor.getRgb());
-                    } else if (mode === 'hsl') {
-                        roundEdges(
-                            channel,
-                            'red',
-                            'red'
-                        );
-                        setHueGradient();
-                        ctx[fillRect](
-                            offset,
-                            channelWidth/2+yoffset,
-                            channelWidth,
-                            canvasHeight-channelWidth-(yoffset*2)
-                        );
-
-                        channel++;
-                        offset += channelWidth + channelMargin;
-                        color1 = toggleColor(currentColor.getHsl(), 's', 0);
-                        color2 = toggleColor(currentColor.getHsl(), 's', 1);
-                        roundEdges(
-                            channel,
-                            color1,
-                            color2
-                        );
+                } else if (mode === 'rgb') {
+                    for (i in indexes) {
+                        color1 = toggleColor(currentColor.getRgb(), indexes[i], 0);
+                        color2 = toggleColor(currentColor.getRgb(), indexes[i], 1);
                         setSimpleGradient(
                             color1,
                             color2
                         );
-                        ctx[fillRect](
-                            offset,
-                            channelWidth/2+yoffset,
-                            channelWidth,
-                            canvasHeight-channelWidth-(yoffset*2)
-                        );
-
-                        channel++;
+                        drawChannel();
                         offset += channelWidth + channelMargin;
-                        roundEdges(
-                            channel,
-                            '#000',
-                            '#fff'
-                        );
-                        lighnessHsl = $.extend({}, currentColor.getHsl());
-                        lighnessHsl.l = 0.5;
-                        setLightnessGradient(new Color(lighnessHsl));
-                        ctx[fillRect](
-                            offset,
-                            channelWidth/2+yoffset,
-                            channelWidth,
-                            canvasHeight-channelWidth-(yoffset*2)
-                        );
-
-                        drawIndicators(currentColor.getHsl());
-                    } else if (mode === 'cmyk') {
-                        cmy = 'cmy'.split('');
-                        for (i in cmy) {
-                            color1 = toggleColor(currentColor.getCmyk(), cmy[i], 0);
-                            color2 = toggleColor(currentColor.getCmyk(), cmy[i], 1);
-                            roundEdges(
-                                channel,
-                                color1,
-                                color2
-                            );
-                            setSimpleGradient(
-                                color1,
-                                color2
-                            );
-                            ctx[fillRect](
-                                offset,
-                                channelWidth/2+yoffset,
-                                channelWidth,
-                                canvasHeight-channelWidth-(yoffset*2)
-                            );
-                            offset += channelWidth + channelMargin;
-                            channel++;
-                        }
-                        keyCmyk = $.extend({}, currentColor.getCmyk());
-                        keyCmyk.k = 0;
-                        keyCmyk = new Color(keyCmyk);
-                        roundEdges(
-                            channel,
-                            keyCmyk,
-                            '#000'
-                        );
-                        setKeyGradient(keyCmyk);
-                        ctx[fillRect](
-                            offset,
-                            channelWidth/2+yoffset,
-                            channelWidth,
-                            canvasHeight-channelWidth-(yoffset*2)
-                        );
-                        drawIndicators(currentColor.getCmyk());
+                        channel++;
                     }
+                    drawIndicators(currentColor.getRgb());
+                } else if (mode === 'hsl') {
+                    setHueGradient();
+                    drawChannel();
+
+                    channel++;
+                    offset += channelWidth + channelMargin;
+                    color1 = toggleColor(currentColor.getHsl(), 's', 0);
+                    color2 = toggleColor(currentColor.getHsl(), 's', 1);
+                    setSimpleGradient(
+                        color1,
+                        color2
+                    );
+                    drawChannel();
+
+                    channel++;
+                    offset += channelWidth + channelMargin;
+                    lighnessHsl = $.extend({}, currentColor.getHsl());
+                    lighnessHsl.l = 0.5;
+                    setLightnessGradient(new Color(lighnessHsl));
+                    drawChannel();
+
+                    drawIndicators(currentColor.getHsl());
+                } else if (mode === 'cmyk') {
+                    cmy = 'cmy'.split('');
+                    for (i in cmy) {
+                        color1 = toggleColor(currentColor.getCmyk(), cmy[i], 0);
+                        color2 = toggleColor(currentColor.getCmyk(), cmy[i], 1);
+                        setSimpleGradient(
+                            color1,
+                            color2
+                        );
+                        drawChannel();
+                        offset += channelWidth + channelMargin;
+                        channel++;
+                    }
+                    keyCmyk = $.extend({}, currentColor.getCmyk());
+                    keyCmyk.k = 0;
+                    keyCmyk = new Color(keyCmyk);
+                    setKeyGradient(keyCmyk);
+                    drawChannel();
+                    drawIndicators(currentColor.getCmyk());
                 }
             };
             var drawIndicators = function(color) {
                 var offset = 10, channel;
                 var indicator = function (color, lineWidth, diameter){
-                    ctx.strokeStyle = color;
+                    ctx[strokeStyle] = color;
                     ctx.lineWidth = lineWidth;
                     ctx.beginPath();
                     ctx.arc(x, y, diameter, 0, Math.PI*2, true);
@@ -906,7 +801,7 @@
                 ctx.moveTo(x, channelWidth/2+10);
                 ctx.lineTo(x, canvasHeight-channelWidth/2-10);
                 ctx.lineWidth = channelWidth - 2;
-                ctx.strokeStyle = 'rgba(0,0,0,1)';
+                ctx[strokeStyle] = 'rgba(0,0,0,1)';
                 ctx.lineCap = 'round';
                 ctx.stroke();
                 ctx.shadowBlur = 0;
@@ -1273,7 +1168,7 @@
         // cut out doughnut
         /** webkit bug prevents usage of "destination-in" */
         ctx[globalCompositeOperation] = "destination-out";
-        ctx.strokeStyle = 'rgba(0,0,0,1)';
+        ctx[strokeStyle] = 'rgba(0,0,0,1)';
         ctx.lineWidth = self.hueSelectorLineWidth;
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], self.hueSelectorCircleRadius - (self.hueSelectorLineWidth / 2), 0, Math.PI*2, true);
@@ -1453,14 +1348,14 @@
             colorPoint
         ];
         for (var i in indicators) {
-            ctx.strokeStyle = "#fff";
+            ctx[strokeStyle] = "#fff";
             ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.arc(indicators[i][0], indicators[i][1], 6, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.stroke();
             ctx.lineWidth = 2;
-            ctx.strokeStyle = 'rgba(0,0,0,1)';
+            ctx[strokeStyle] = 'rgba(0,0,0,1)';
             ctx.beginPath();
             ctx.arc(indicators[i][0], indicators[i][1], 4.5, 0, Math.PI*2, true);
             ctx.closePath();
@@ -1472,9 +1367,9 @@
         var ctx = canvas.getContext("2d");
         /** draw resizer */
         if (self._supercontainer.css('border-bottom-color')) {
-            ctx.strokeStyle = self._supercontainer.css('border-bottom-color');
+            ctx[strokeStyle] = self._supercontainer.css('border-bottom-color');
         } else {
-            ctx.strokeStyle = '#444';
+            ctx[strokeStyle] = '#444';
         }
         ctx.lineWidth = 1;
         ctx.lineCap="round";
