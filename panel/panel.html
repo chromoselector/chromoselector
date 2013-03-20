@@ -8,6 +8,12 @@
     <script src="../jquery-1.8.3.min.js" type="text/javascript"></script>
     <script src="../jquery-ui/jquery-ui-1.9.1.custom.min.js" type="text/javascript"></script>
     <script type="text/javascript">
+    // Shortens code below
+    var addColorStop = 'addColorStop';
+    var fillRect = 'fillRect';
+    var fillStyle = 'fillStyle';
+    var globalCompositeOperation = 'globalCompositeOperation';
+
     function preventDefault(e) {
         e.preventDefault();
     }
@@ -77,7 +83,9 @@
             false,
             200,
             24,
-            5
+            5,
+            true,
+            '#000'
         );
 
         $('#setHeight').keyup(function (){
