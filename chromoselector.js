@@ -904,7 +904,7 @@
                 ctx.shadowBlur = 4;
                 ctx.beginPath();
                 ctx.moveTo(x, channelWidth/2+10);
-                ctx.lineTo(x, canvasHeight-channelWidth);
+                ctx.lineTo(x, canvasHeight-channelWidth/2-10);
                 ctx.lineWidth = channelWidth - 2;
                 ctx.strokeStyle = 'rgba(0,0,0,1)';
                 ctx.lineCap = 'round';
