@@ -2263,10 +2263,10 @@
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
         });
-        self._resizer.bind('mousedown touchstart', function (e) {
-            preventDefault(e);
-            var inputPoint = getEventPosition(self, e, self._picker);
-            if (self.settings.resizable) {
+        if (self.settings.resizable) {
+            self._resizer.bind('mousedown touchstart', function (e) {
+                preventDefault(e);
+                var inputPoint = getEventPosition(self, e, self._picker);
                 self._source.trigger('resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
@@ -2277,8 +2277,8 @@
                     self.resizeOffset[0] -= 20;
                     self.resizeOffset[1] -= (self._panel.width() + 20);
                 }
-            }
-        });
+            });
+        }
         self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e);
             var inputPoint = getEventPosition(self, e, self._picker);
