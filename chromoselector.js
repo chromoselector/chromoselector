@@ -1191,9 +1191,9 @@
 
         // shadow
         ctx = self.canvases[0].getContext("2d");
-        ctx.lineWidth = self.hueSelectorLineWidth * .7;
+        ctx.lineWidth = self.hueSelectorLineWidth - 2;
         ctx.shadowColor = self.settings.shadowColor;
-        ctx.shadowBlur = self.shadowRatio * width;
+        ctx.shadowBlur = self.settings.shadow;
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], self.hueSelectorCircleRadius, 0, Math.PI*2, true);
         ctx.closePath();
@@ -1289,7 +1289,8 @@
         ctx.fill();
         // shadow
         var shadowPoint = function (index, axis) {
-            return self.width / 2 * 0.05 + points[index][axis] * 0.95;
+            var pixel = (1 / (self.width / 2)) * 2;
+            return self.width / 2 * pixel + points[index][axis] * (1-pixel);
         };
         ctx[globalCompositeOperation] = "destination-over";
         ctx.beginPath();
@@ -1299,7 +1300,7 @@
         ctx.closePath();
         ctx[fillStyle] = 'rgba(0,0,0,1)';
         ctx.shadowColor = self.settings.shadowColor;
-        ctx.shadowBlur = self.shadowRatio * self.width;
+        ctx.shadowBlur = self.settings.shadow;
         ctx.fill();
 
         ctx.shadowColor = 'rgba(0,0,0,0)';
@@ -1769,7 +1770,7 @@
                     retval = floatValue;
                 }
             } else if (index === 'shadowColor' && typeof value === 'string' && value.length) {
-                retval = value;
+                retval = new Color(value).getRgbaString();
             } else if (index === 'effect') {
                 retval = value === 'slide' ? 'slide' : 'fade';
             } else if (index === 'iconpos') {
@@ -1932,7 +1933,6 @@
         colorPicker_load(self); // sets self.color
         self.width = colorPicker_fixDiameter(self.settings.width);
         self.ringwidthRatio = self.settings.ringwidth;
-        self.shadowRatio = self.settings.shadow / self.width;
         self.hueSelectorLineWidth = self.ringwidthRatio * self.width / 2;
         self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
         self.triangleRadius = self.width / 2 - 15 - self.ringwidthRatio * (self.width/2);
@@ -2057,7 +2057,9 @@
             .css('overflow', 'hidden')
             .css('background', self.color.getRgbaString());
 
-
+        var shadowCssColor = new Color(self.settings.shadowColor);
+        shadowCssColor.setAlpha(shadowCssColor.getAlpha() - 0.1);
+        var shadowCss = '0 0 ' + self.settings.shadow + 'px 0 ' + shadowCssColor.getRgbaString();
         self._preview = $('<div/>')
             .addClass('ui-cs-preview-container')
             .append(
@@ -2065,7 +2067,8 @@
                 .append(
                     $('<canvas/>')
                     .css({ display:'block' })
-                )
+                ).css('box-shadow', shadowCss)
+                .css('-webkit-box-shadow', shadowCss)
             );
 
         if (self.settings.preview) {
@@ -2409,7 +2412,7 @@
     ringwidth:             .18,        // float
     resizable:             true,       // bool
     shadow:                8,          // pos int
-    shadowColor:           'rgba(0,0,0,0.8)', // string
+    shadowColor:           'rgba(0,0,0,0.6)', // string
     preview:               true,       // bool
     panel:                 false,
     panelAlpha:            false,
