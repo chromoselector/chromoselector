@@ -607,6 +607,7 @@
             channelWidth,
             channelMargin,
             panelLabels,
+            shadowBlur,
             shadowColor
         ) {
             var self = this;
@@ -796,7 +797,7 @@
             };
             var drawShadow = function (x) {
                 ctx.shadowColor = shadowColor;
-                ctx.shadowBlur = 4;
+                ctx.shadowBlur = shadowBlur;
                 ctx.beginPath();
                 ctx.moveTo(x, channelWidth/2+10);
                 ctx.lineTo(x, canvasHeight-channelWidth/2-10);
@@ -807,17 +808,19 @@
                 ctx.shadowBlur = 0;
             };
             var drawShadows = function () {
-                var x, offset = 10, channel;
-                if (alphaSupport) {
-                    x = offset + channelWidth/2;
-                    drawShadow(x);
-                    offset += channelWidth + channelMargin;
-                }
-                if (! onlyAlpha) {
-                    for (channel in indexes) {
+                if (shadowBlur > 0) {
+                    var x, offset = 10, channel;
+                    if (alphaSupport) {
                         x = offset + channelWidth/2;
                         drawShadow(x);
                         offset += channelWidth + channelMargin;
+                    }
+                    if (! onlyAlpha) {
+                        for (channel in indexes) {
+                            x = offset + channelWidth/2;
+                            drawShadow(x);
+                            offset += channelWidth + channelMargin;
+                        }
                     }
                 }
             };
@@ -1988,6 +1991,7 @@
                 self.settings.panelChannelWidth,
                 self.settings.panelChannelMargin,
                 true,
+                self.settings.shadow,
                 self.settings.shadowColor
             );
             self.panelApi.setColor(self.color.getRgba());
