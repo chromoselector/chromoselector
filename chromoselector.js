@@ -142,6 +142,9 @@
                 }
                 return self;
             };
+            self.getAlpha = function (value) {
+                return currentColor.a;
+            };
             // Set to input color
             self.setColor(value);
         }
@@ -779,7 +782,7 @@
                 if (alphaSupport) {
                     var x = offset + channelWidth/2;
                     var verticalSpace = canvasHeight - channelWidth - 20;
-                    var y = verticalSpace - (verticalSpace * currentColor.getRgba().a) + channelWidth/2 + 10;
+                    var y = verticalSpace - (verticalSpace * currentColor.getAlpha()) + channelWidth/2 + 10;
                     offset += channelWidth + channelMargin;
                     indicator("#fff", 1.5, 6);
                     indicator("#000", 2, 4.5);
@@ -864,9 +867,10 @@
                     var functionToCall = 'get' + mode.charAt(0).toUpperCase() + mode.slice(1)
                     var tempColor = currentColor[functionToCall]();
                     tempColor[indexes[index]] = value;
+                    tempColor.a = currentColor.getAlpha();
                     currentColor = new Color(
                         tempColor
-                    ).setAlpha(currentColor.getRgba().a);
+                    );
                 }
 
                 drawPanel();
@@ -874,9 +878,6 @@
             });
 
             // API
-            self.getAlpha = function () {
-                return currentColor.getRgba().a;
-            };
             self.getColor = function () {
                 return currentColor;
             };

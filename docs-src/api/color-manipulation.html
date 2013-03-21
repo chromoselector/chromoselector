@@ -172,7 +172,16 @@ $("#textfield").chromoselector({
     <p><a href="../demos/previews.html">Demo - Previews</a></p>
     </li>
     <li>
-        <h3>setAlpha(value)</h3>
+        <h3>Color.getAlpha()</h3>
+        <p style="white-space: normal">
+            Returns the value of the alpha channel.
+        </p>
+        <pre style="margin-bottom: 0" class="instant"><code class="javascript">var color = new $.fn.chromoselector.Color(someInputColor);
+color.setAlpha(color.getAlpha() - 0.1); // lower alpha by 10 %
+</code></pre>
+    </li>
+    <li>
+        <h3>Color.setAlpha(value)</h3>
         <p style="white-space: normal">
             Sets the value of the alpha channel to a given value. Valid values are
             numbers between 0 and 1. If the value is not valid, no change
