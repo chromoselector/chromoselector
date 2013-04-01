@@ -1681,8 +1681,8 @@
         if (width !== self.width) {
             self.ready = 0;
             self.width = width;
-            self.triangleRadius = width / 2 - 15 - self.ringwidthRatio * (width/2);
-            self.hueSelectorLineWidth = self.ringwidthRatio * self.width / 2;
+            self.triangleRadius = width / 2 - 15 - self.settings.ringwidth;
+            self.hueSelectorLineWidth = self.settings.ringwidth;
             self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
             self.canvases
                 .each(function () {
@@ -1760,15 +1760,6 @@
                 }
             } else if (index === 'panel' || index === 'panelAlpha') {
                 retval = !!value;
-            } else if (index === 'ringwidth') {
-                var floatValue = parseFloat(value, 10) || 0;
-                if (floatValue < 0.1) {
-                    retval = 0.1;
-                } else if (floatValue > 0.5) {
-                    retval = 0.5;
-                } else {
-                    retval = floatValue;
-                }
             } else if (index === 'shadowColor' && typeof value === 'string' && value.length) {
                 retval = new Color(value).getRgbaString();
             } else if (index === 'effect') {
@@ -1789,7 +1780,7 @@
                 retval = value;
             } else if (index.match(/^autoshow|autosave|resizable|preview|roundcorners$/)) {
                 retval = !!value;
-            } else if (index.match(/^speed|width|shadow$/)) {
+            } else if (index.match(/^speed|width|shadow|ringwidth$/)) {
                 intVal = parseInt(value, 10) || 0;
                 retval = intVal > 0 ? intVal : 0;
             } else if (new RegExp('^'+EVENTS+'$').test(index)
@@ -1931,11 +1922,10 @@
 
         self._source = $this;
         colorPicker_load(self); // sets self.color
-        self.width = colorPicker_fixDiameter(self.settings.width);
-        self.ringwidthRatio = self.settings.ringwidth;
-        self.hueSelectorLineWidth = self.ringwidthRatio * self.width / 2;
+        self.width = colorPicker_fixDiameter(self, self.settings.width);
+        self.hueSelectorLineWidth = self.settings.ringwidth;
         self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
-        self.triangleRadius = self.width / 2 - 15 - self.ringwidthRatio * (self.width/2);
+        self.triangleRadius = self.width / 2 - 15 - self.settings.ringwidth;
         var canvasString = '<canvas width="' + self.width + '" height="' + self.width + '"></canvas>';
 
         var staticClass = '';
@@ -2409,7 +2399,7 @@
     autosave:              true,       // bool
     speed:                 400,        // pos int | 'fast' | 'slow' | 'medium'
     width:                 180,        // pos int
-    ringwidth:             .18,        // float
+    ringwidth:             15,         // float
     resizable:             true,       // bool
     shadow:                8,          // pos int
     shadowColor:           'rgba(0,0,0,0.6)', // string

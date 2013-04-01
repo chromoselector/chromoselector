@@ -246,14 +246,15 @@ $properties = array(
         )
     ),
     'ringwidth' => array(
-        'default' => '0.18',
-        'description' => 'The thickness of the hue selector (the outer ring of the color picker), expressed as a percentage of the total width of the color picker.',
-        'values' => 'A number between 0.1 and 0.5',
+        'default' => '15',
+        'description' => 'The thickness of the hue selector (the outer ring of the color picker), in pixels. Must be less than 25% of <i>minWidth</i>.',
+        'values' => 'A positive integer',
         'samples' => array(
-            "// Use a thin hue selector\n"
+            "// Use a wider hue selector for a big picker\n"
                 ."$(document).ready(function () {\n"
                 ."    $('input.color').chromoselector({\n"
-                ."        width: 0.1\n"
+                ."        ringwidth: 25,\n"
+                ."        width: 300\n"
                 ."    });\n"
                 ."});\n"
         )
