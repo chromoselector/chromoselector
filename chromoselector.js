@@ -1644,6 +1644,7 @@
     function colorPicker_handleResizeDrag(self, e) {
         var inputPoint = getEventPosition(self, e, self._picker);
         var newDiameter = colorPicker_fixDiameter(
+            self,
             Math.max(inputPoint[0], inputPoint[1])
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
@@ -1699,14 +1700,17 @@
     function preventDefault(e) {
         e.preventDefault();
     }
-    function colorPicker_fixDiameter(width) {
+    function colorPicker_fixDiameter(self, width) {
         width = width | 0;
-        width = width + width % 2;
-        if (width > 400) {
-            width = 400;
-        } else if (width < 100) {
-            width = 100;
+        if (self.settings.maxWidth < self.settings.minWidth) {
+            self.settings.maxWidth = self.settings.minWidth;
         }
+        if (width > self.settings.maxWidth) {
+            width = self.settings.maxWidth;
+        } else if (width < self.settings.minWidth) {
+            width = self.settings.minWidth;
+        }
+        width = width + width % 2;
         return width;
     }
     function colorPicker_fixPosition(self) {
@@ -1780,6 +1784,9 @@
                 retval = value;
             } else if (index.match(/^autoshow|autosave|resizable|preview|roundcorners$/)) {
                 retval = !!value;
+            } else if (index.match(/^minWidth|maxWidth$/)) {
+                intVal = parseInt(value, 10) || 0;
+                retval = intVal > 100 ? intVal : 100;
             } else if (index.match(/^speed|width|shadow|ringwidth$/)) {
                 intVal = parseInt(value, 10) || 0;
                 retval = intVal > 0 ? intVal : 0;
@@ -1917,6 +1924,9 @@
             self.valueRenderer(self);
         });
 
+        if (self.settings.ringwidth > self.settings.minWidth / 4) {
+            self.settings.ringwidth = Math.floor(self.settings.minWidth / 4);
+        }
 
         self.hiding = 0;
 
@@ -2398,6 +2408,8 @@
     autoshow:              true,       // bool
     autosave:              true,       // bool
     speed:                 400,        // pos int | 'fast' | 'slow' | 'medium'
+    minWidth:              120,
+    maxWidth:              400,
     width:                 180,        // pos int
     ringwidth:             15,         // float
     resizable:             true,       // bool
