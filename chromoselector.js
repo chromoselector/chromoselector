@@ -2059,7 +2059,7 @@
 
         var shadowCssColor = new Color(self.settings.shadowColor);
         shadowCssColor.setAlpha(shadowCssColor.getAlpha() - 0.1);
-        var shadowCss = '0 0 ' + self.settings.shadow + 'px 0 ' + shadowCssColor.getRgbaString();
+        var shadowCss = '0 0 ' + Math.max(0, self.settings.shadow - 2) + 'px 0 ' + shadowCssColor.getRgbaString();
         self._preview = $('<div/>')
             .addClass('ui-cs-preview-container')
             .append(
@@ -2413,7 +2413,7 @@
     width:                 180,        // pos int
     ringwidth:             15,         // float
     resizable:             true,       // bool
-    shadow:                8,          // pos int
+    shadow:                6,          // pos int
     shadowColor:           'rgba(0,0,0,0.6)', // string
     preview:               true,       // bool
     panel:                 false,

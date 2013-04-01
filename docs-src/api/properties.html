@@ -286,22 +286,20 @@ $properties = array(
         )
     ),
     'shadow' => array(
-        'default' => '8',
-        'description' => 'The amount of shadow to drop under the color picker in pixels. '
-                        . 'The shadow will be scaled in proporting to the color picker '
-                        . 'during resize operations.',
+        'default' => '6',
+        'description' => 'The amount of shadow to drop under the color picker in pixels. A value of 10 or less is recommended to avoid cropping the shadow.',
         'values' => 'A positive integer or 0',
         'samples' => array(
-            "// No shadow\n"
+            "// No Shadow\n"
                 ."$(document).ready(function () {\n"
                 ."    $('input.color').chromoselector({\n"
                 ."        shadow: 0\n"
                 ."    });\n"
                 ."});\n",
-            "// A big shadow\n"
+            "// Extra wide shadow\n"
                 ."$(document).ready(function () {\n"
                 ."    $('input.color').chromoselector({\n"
-                ."        shadow: 16\n"
+                ."        shadow: 10\n"
                 ."    });\n"
                 ."});\n"
         )
