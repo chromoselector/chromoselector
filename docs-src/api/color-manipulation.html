@@ -39,42 +39,42 @@ var color2 = new $.fn.chromoselector.Color(\'#f00\');
 A color object has the following public methods:
 <ul data-role="listview" data-inset="true">
     <li>
-        <h3>getHexString()</h3>
+        <h3>Color.getHexString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in hexadecimal format
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">"#ff8800"</code></pre>
     </li>
     <li>
-        <h3>getHexaString()</h3>
+        <h3>Color.getHexaString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in hexadecimal format, including the alpha channel
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">"#ff8800ff"</code></pre>
     </li>
     <li>
-        <h3>getRgbString()</h3>
+        <h3>Color.getRgbString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in RGB format
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">"rgb(255,0,186)"</code></pre>
     </li>
     <li>
-        <h3>getRgbaString()</h3>
+        <h3>Color.getRgbaString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in RGBA format
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">"rgba(255,0,186,0.5)"</code></pre>
     </li>
     <li>
-        <h3>getHslString()</h3>
+        <h3>Color.getHslString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in HSL format
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">"hsl(282,100%,37%)"</code></pre>
     </li>
     <li>
-        <h3>getHslaString()</h3>
+        <h3>Color.getHslaString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in HSLA format
         </p>
@@ -82,14 +82,14 @@ A color object has the following public methods:
     </li>
 
     <li>
-        <h3>getCmykString()</h3>
+        <h3>Color.getCmykString()</h3>
         <p style="white-space: normal">
             Returns the color as a string in CMYK format
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">"device-cmyk(0.3,1,0,0.27)"</code></pre>
     </li>
     <li>
-        <h3>getRgb()</h3>
+        <h3>Color.getRgb()</h3>
         <p style="white-space: normal">
             Returns the color an object in RGB format
         </p>
@@ -100,7 +100,7 @@ A color object has the following public methods:
 }</code></pre>
     </li>
     <li>
-        <h3>getRgba()</h3>
+        <h3>Color.getRgba()</h3>
         <p style="white-space: normal">
             Returns the color an object in RGBA format
         </p>
@@ -112,7 +112,7 @@ A color object has the following public methods:
 }</code></pre>
     </li>
     <li>
-        <h3>getHsl()</h3>
+        <h3>Color.getHsl()</h3>
         <p style="white-space: normal">
             Returns the color an object in HSL format
         </p>
@@ -123,7 +123,7 @@ A color object has the following public methods:
 }</code></pre>
     </li>
     <li>
-        <h3>getHsla()</h3>
+        <h3>Color.getHsla()</h3>
         <p style="white-space: normal">
             Returns the color an object in HSLA format
         </p>
@@ -135,7 +135,7 @@ A color object has the following public methods:
 }</code></pre>
     </li>
     <li>
-        <h3>getCmyk()</h3>
+        <h3>Color.getCmyk()</h3>
         <p style="white-space: normal">
             Returns the color as JS object in CMYK format
         </p>
@@ -147,15 +147,16 @@ A color object has the following public methods:
 }</code></pre>
     </li>
     <li>
-        <h3>getTextColor()</h3>
+        <h3>Color.getTextColor()</h3>
         <p style="white-space: normal">
 Returns a contrasting color if you need to print text on the background of the current color</p>
-<pre class="instant"><code class="javascript">$("#textfield").chromoselector("setColor", "#0f0"); // green
-var color = new $.fn.chromoselector.Color(); // defaults to black
+<pre class="instant"><code class="javascript">$("#textfield").chromoselector("setColor", "#000"); // black
+var color = $("#textfield").chromoselector("getColor");
 color.getTextColor().getHexString(); // #fff (white)
 color.getTextColor().getTextColor().getHexString(); // #000 (black)
 </code></pre>
-<pre class="instant"><code class="javascript">// Change the input textfield colors on update
+<p>Change the input textfield colors on update</p>
+<pre class="instant"><code class="javascript">
 $("#textfield").chromoselector({
     preview: false,
     update: function() {
@@ -192,10 +193,10 @@ color.setAlpha(0.5);
 </code></pre>
     </li>
     <li>
-        <h3>setColor(color)</h3>
+        <h3>Color.setColor(color)</h3>
         <p style="white-space: normal">
-            Sets the current color to a given value.If the value is not valid,
-            no change is performed. The color can be supplied in a range of formats:
+            Sets the current color to a given value. If the value is not valid,
+            no change is performed. White space characters inside strings are ignored. The color can be supplied in a range of formats:
         </p>
         <pre style="margin-bottom: 0" class="instant"><code class="javascript">
 color.setColor("#ff8800");
