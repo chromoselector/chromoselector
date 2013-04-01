@@ -1,5 +1,8 @@
 v 2.0.0 - Not yet released
+  * Alpha support
+  * Built-in side panel
   * New color management module
+  * Improved shadow rendering
 
 v 1.1.0 - 16 Mar 2013
   * Configurable shadow color
