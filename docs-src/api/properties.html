@@ -192,6 +192,111 @@ $properties = array(
                 ."});\n"
         )
     ),
+    'panel' => array(
+        'default' => '<i>false</i>',
+        'description' => 'When set to <i>true</i>, the color picker
+                        will have show a side panel with sliders for
+                        manipulation of individual color channels',
+        'values' => '<i>true</i> or <i>false</i>',
+        'samples' => array(
+            "// Show the panel\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'panelAlpha' => array(
+        'default' => '<i>false</i>',
+        'description' => 'When set to <i>true</i>, the color picker
+                        will have show a side panel with a slider for
+                        manipulating the alpha channel',
+        'values' => '<i>true</i> or <i>false</i>',
+        'samples' => array(
+            "// Show the alpha selector\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panelAlpha: true\n"
+                ."    });\n"
+                ."});\n",
+            "// Show the panel and the alpha selector\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true,\n"
+                ."        panelAlpha: true\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'panelChannelWidth' => array(
+        'default' => '<i>18</i>',
+        'description' => 'The width of each slider in the panel',
+        'values' => 'An integer value between 10 and 40, inclusive',
+        'samples' => array(
+            "// Wide sliders in the panel \n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true,\n"
+                ."        panelChannelWidth: 30\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'panelChannelMargin' => array(
+        'default' => '<i>12</i>',
+        'description' => 'The amount of empty space, in pixels,
+                    to leave between sliders in the panel',
+        'values' => 'An integer value between 0 and 50, inclusive',
+        'samples' => array(
+            "// No space between sliders in the panel \n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true,\n"
+                ."        panelChannelMargin: 0\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'panelMode' => array(
+        'default' => '"rgb"',
+        'description' => 'The default mode for the panel',
+        'values' => '"rgb", "hsl" or "cmyk"',
+        'samples' => array(
+            "// Show the HSL selector in panel first\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true,\n"
+                ."        panelMode: 'hsl'\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
+    'panelModes' => array(
+        'default' => '<i>[\'rgb\', \'hsl\', \'cmyk\']</i>',
+        'description' => 'The available modes for the panel.
+                    If an empty array is passed, the mode selector will
+                    be hidden and the panel will stay in the mode defined by
+                    the "panelMode" property.',
+        'values' => '<i>Array</i>',
+        'samples' => array(
+            "// Show only the HSL selector in panel\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true,\n"
+                ."        panelMode: 'hsl',\n"
+                ."        panelModes: []\n"
+                ."    });\n"
+                ."});\n",
+            "// Show only the RGB and HSL selectors in panel\n"
+                ."$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        panel: true,\n"
+                ."        panelModes: ['rgb', 'hsl']\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
     'preview' => array(
         'default' => '<i>true</i>',
         'description' => 'Whether to show a preview box of the currently selected color '
