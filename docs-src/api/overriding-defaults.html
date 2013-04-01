@@ -34,31 +34,31 @@ $html .= '<pre class="instant"><code class="javascript">$(document).ready(functi
     // Instanciate 3 similar pickers the simple way,
     // by specifying all the properties each time
     $("#myPicker1").chromoselector({
-        shadow: 12,
+        shadow: 10,
         resizable: false,
-        diameter: 200
+        width: 200
     });
     $("#myPicker2").chromoselector({
-        shadow: 12,
+        shadow: 10,
         resizable: false,
-        diameter: 250
+        width: 250
     });
     $("#myPicker3").chromoselector({
-        shadow: 12,
+        shadow: 10,
         resizable: false,
-        diameter: 300
+        width: 300
     });
 });</code></pre>';
 $html .= '<p>By altering the default values we can reduce the above code to:</p>';
 $html .= '<pre class="instant"><code class="javascript">$(document).ready(function () {
     // Change the defaults
     $.fn.chromoselector
-        .defaults("shadow", 12)
+        .defaults("shadow", 10)
         .defaults("resizable", false);
     // Here we only pass the properties that differ to the new defaults
-    $("#myPicker1").chromoselector({ diameter: 200 });
-    $("#myPicker2").chromoselector({ diameter: 250 });
-    $("#myPicker3").chromoselector({ diameter: 300 });
+    $("#myPicker1").chromoselector({ width: 200 });
+    $("#myPicker2").chromoselector({ width: 250 });
+    $("#myPicker3").chromoselector({ width: 300 });
 });</code></pre>';
 $html .= '</div>';
 $html .= '<div class="content-secondary">';
