@@ -635,7 +635,7 @@
             };
             var createGradient = function() {
                 return ctx.createLinearGradient(
-                    0, canvasHeight-channelWidth/2-20,
+                    0, canvasHeight-channelWidth/2-10,
                     0, channelWidth/2+10
                 );
             };
@@ -895,7 +895,7 @@
             };
             self.setHeight = function (newHeight) {
                 ctx.clearRect(0,0,getPanelWidth(),canvasHeight);
-                labelsHeight = $labels.height();
+                labelsHeight = $labels.outerHeight(true);
                 $select.width(getPanelWidth() - 20);
                 canvasHeight = newHeight - $select.outerHeight(true) - labelsHeight;
                 $canvas.attr('height', canvasHeight);

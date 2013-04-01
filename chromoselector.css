@@ -44,11 +44,11 @@
     font-family: sans, sans-serif, verdana, arial;
     overflow: hidden;
     cursor: default;
-    padding-bottom: 10px;
 }
 .ui-cs-chromoselector .ui-cs-panel .ui-panel-labels div {
     float: left;
     color: #521;
+    padding-bottom: 10px;
 }
 .ui-cs-chromoselector.ui-cs-static {
     position: relative;
