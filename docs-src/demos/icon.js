@@ -1,8 +1,8 @@
 $(document).ready(function () {
-    $('#icon #color1').chromoselector({
+    $('#icon #icon1').chromoselector({
         icon: '../libs/images/palette.png'
     });
-    $('#icon #color2').chromoselector({
+    $('#icon #icon2').chromoselector({
         icon: '../libs/images/palette.png',
         iconpos: 'left'
     });
