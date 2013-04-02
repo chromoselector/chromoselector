@@ -28,6 +28,7 @@
 }
 .ui-cs-icon {
     z-index: 4000;
+    padding: 0 0.1em;
 }
 .ui-cs-chromoselector .ui-cs-panel {
     float: left;

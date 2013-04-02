@@ -1728,7 +1728,7 @@
         if (self._source.is(':visible')) {
             self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
             if (self.settings.iconpos === 'left') {
-                self._icon.css('left', offset.left - self._icon.height());
+                self._icon.css('left', offset.left - self._icon.outerWidth() - 2);
             } else {
                 self._icon.css('left', offset.left + self._source.outerWidth() + 2);
             }
