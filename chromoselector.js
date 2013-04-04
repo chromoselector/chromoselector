@@ -2046,15 +2046,9 @@
                 });
 
             drawResizer(self, self._resizer[0]);
-            if (self.settings.panel || self.settings.panelAlpha) {
-                $(self._panel).append(
-                    self._resizer
-                );
-            } else {
-                $(self._container).append(
-                    self._resizer
-                );
-            }
+            $(self._container).append(
+                self._resizer
+            );
         }
 
         self._previewWidget = $('<div/>').addClass('ui-cs-preview-widget')
