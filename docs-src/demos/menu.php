@@ -3,6 +3,7 @@
 function getDemosMenu($path = '.', $selected = '') {
     $html  = '<li data-role="list-divider">Demos</li>';
     $elms = array(
+        'showcase' => 'Showcase',
         'display-modes' => 'Display Modes',
         'ui-dialog' => 'jQuery UI dialog integration',
         'custom-color-format' => 'Custom Color Formats',

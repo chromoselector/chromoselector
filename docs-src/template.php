@@ -100,6 +100,7 @@ $(window).load(function () {
     }
     $html .= '<script src="' . $path . '/demos/custom-color-format.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/icon.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $path . '/demos/showcase.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/previews.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/animations.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/display-modes.js" type="text/javascript"></script>';

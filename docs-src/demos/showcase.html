@@ -1,0 +1,146 @@
+<?php
+
+require '../template.php';
+require 'menu.php';
+
+$html  = getHeader('..', 'showcase', 'Documentation / Demos / Showcase');
+$html .= '<div class="content-primary">';
+$html .= '<form action="#" method="get">';
+$html .= '<h2>Showcase</h2>';
+$template  = '<div data-role="collapsible" data-collapsed="false"';
+$template .= ' data-theme="b" data-content-theme="d"';
+$template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$template .= '<h3>%s</h3>';
+$template .= '<div data-role="fieldcontain">';
+$template .= '%s';
+$template .= '</div><hr/>';
+$template .= '<div data-role="fieldcontain">';
+$template .= '<label for="%s">Pick a color:</label>';
+$template .= '<input type="text" name="%s" id="%s" value="%s" />';
+$template .= '</div>';
+$template .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
+$template .= '<h3>Code</h3>';
+$template .= '<pre><code class="javascript">%s</code></pre>';
+$template .= '</div>%s';
+$template .= '</div>';
+
+$demos = array(
+    array(
+        'title' => 'Demo 1',
+        'desc' => '<ul>
+        <li>All default options</li>
+        </ul>',
+        'id' => 'showcase1',
+        'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
+        'code' => "$(document).ready(function () {\n"
+                . "    $('#showcase1').chromoselector({\n"
+                . "        icon: '../libs/images/palette.png'\n"
+                . "     })\n"
+                . "});\n",
+        'value' => '#ab9226'
+    ),
+    array(
+        'title' => 'Demo 2',
+        'desc' => '<ul>
+        <li>Output: RGBA string</li>
+        <li>Alpha selection: true</li>
+        <li>Resizable: false</li>
+        <li>Width: 130px</li>
+        </ul>',
+        'id' => 'showcase2',
+        'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
+        'code' => "$(document).ready(function () {\n"
+                . "    $('#showcase1').chromoselector({\n"
+                . "        icon: '../libs/images/palette.png'\n"
+                . "     })\n"
+                . "});\n",
+        'value' => 'rgba(79,107,36,0.82)'
+    ),
+    array(
+        'title' => 'Demo 3',
+        'desc' => '<ul>
+        <li>Output: HSLA string</li>
+        <li>Alpha selection: true</li>
+        <li>Side panel: true</li>
+        <li></li>
+        </ul>',
+        'id' => 'showcase3',
+        'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
+        'code' => "$(document).ready(function () {\n"
+                . "    $('#showcase1').chromoselector({\n"
+                . "        icon: '../libs/images/palette.png'\n"
+                . "     })\n"
+                . "});\n",
+        'value' => 'hsla(223,72%,40%,0.95)'
+    ),
+    array(
+        'title' => 'Demo 4',
+        'desc' => '<ul>
+        <li>Preview in INPUT element</li>
+        <li>Width: 260px</li>
+        <li>Resizable: false</li>
+        <li>Side panel: true</li>
+        <li>Side panel mode: CMYK only</li>
+        </ul>',
+        'id' => 'showcase4',
+        'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
+        'code' => "$(document).ready(function () {\n"
+                . "    $('#showcase1').chromoselector({\n"
+                . "        icon: '../libs/images/palette.png'\n"
+                . "     })\n"
+                . "});\n",
+        'value' => 'device-cmyk(0,0.71,0.33,0.65)'
+    ),
+    array(
+        'title' => 'Demo 5',
+        'desc' => '<ul>
+        <li>Preview in INPUT element</li>
+        <li>Dark theme</li>
+        <li>Resizable: false</li>
+        <li>Width: 130px</li>
+        </ul>',
+        'id' => 'showcase5',
+        'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
+        'code' => "$(document).ready(function () {\n"
+                . "    $('#showcase1').chromoselector({\n"
+                . "        icon: '../libs/images/palette.png'\n"
+                . "     })\n"
+                . "});\n",
+        'value' => '#8888dd'
+    )
+);
+
+foreach ($demos as $value) {
+    if (! empty($value['fiddle'])) {
+        $value['fiddle'] = '<a data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
+    } else {
+        $value['fiddle'] = '';
+    }
+    $html .= sprintf(
+        $template,
+        $value['title'],
+        $value['desc'],
+        $value['id'],
+        $value['id'],
+        $value['id'],
+        $value['value'],
+        $value['code'],
+        $value['fiddle']
+    );
+}
+
+$html .= '</form>';
+$html .= '</div>';
+$html .= '<div class="content-secondary">';
+$html .= '<nav>';
+$html .= '<ul data-role="listview"  data-theme="c" data-dividertheme="d">';
+$html .= getDemosMenu('..', 'showcase');
+$html .= '</ul>';
+$html .= '</nav>';
+$html .= '</div>';
+$html .= getFooter();
+
+echo tidy_up($html);
+
+?>
+

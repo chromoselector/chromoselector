@@ -28,6 +28,7 @@ body, input, textarea, select, button { font-family: Helvetica, Arial, sans-seri
     }
 }
 
+hr { border-width: 1px 0 0; border-style: solid none none; border-color: #ccc; }
 pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
 strong { font-weight: bold; }
 
