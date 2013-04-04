@@ -24,6 +24,15 @@ $template .= '</div>';
 
 $demos = array(
     array(
+        'title' => 'HEX (default)',
+        'id' => 'color0',
+        'value' => '#445566',
+        'fiddle' => 'http://sandbox.chromoselector.com/g6H3G/',
+        'code' => "$(document).ready(function () {
+    $('#color0').chromoselector();
+});"
+    ),
+    array(
         'title' => 'Comma separated RGB',
         'id' => 'color1',
         'value' => 'rgb(41,160,126)',

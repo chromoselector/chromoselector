@@ -1,4 +1,6 @@
 $(document).ready(function () {
+    $('#color0').chromoselector();
+
     $('#color1').chromoselector({
         color2str: function (color) {
             return color.getRgbString();
@@ -6,6 +8,7 @@ $(document).ready(function () {
      });
 
     $('#color2').chromoselector({
+        panelAlpha: true,
         color2str: function (color) {
             return color.getRgbaString();
         }
@@ -18,6 +21,7 @@ $(document).ready(function () {
     });
 
     $('#color4').chromoselector({
+        panelAlpha: true,
         color2str: function (color) {
             return color.getHslaString();
         }
