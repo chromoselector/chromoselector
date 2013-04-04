@@ -7,8 +7,8 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" />
-    <link rel="stylesheet" type="text/css" href="../libs/style.css" />
     <link rel="stylesheet" type="text/css" href="../../chromoselector.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/style.css" />
     <link rel="stylesheet" type="text/css" href="../libs/default.min.css" />
     <link href="../libs/images/favicon.png" rel="shortcut icon" />
     <script src="../../jquery-1.8.3.min.js" type="text/javascript">
@@ -16,6 +16,23 @@
     <script type="text/javascript">
 //<![CDATA[
     $(document).live("mobileinit", function(){$.mobile.ajaxEnabled = false;});
+    $(window).load(function () {
+    var url = location.href;
+    var target = "";
+    var index = url.lastIndexOf("?target=");
+    if (index !== -1) {
+        target = url.substr(index + 8);
+    }
+    if (target) {
+        var $target = $("#" + target);
+        if ($target.length) {
+            $target.find("h3").click();
+            $("html, body").animate({
+                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+            }, 400);
+        }
+    }
+    });
     //]]>
     </script>
     <script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript">
@@ -25,6 +42,8 @@
     <script src="../demos/custom-color-format.js" type="text/javascript">
 </script>
     <script src="../demos/icon.js" type="text/javascript">
+</script>
+    <script src="../demos/showcase.js" type="text/javascript">
 </script>
     <script src="../demos/previews.js" type="text/javascript">
 </script>
@@ -44,7 +63,7 @@
   </head>
   <body>
     <div data-role="page" class="type-interior" id="interior">
-      <div data-role="header" data-theme="a">
+      <div data-position="fixed" data-role="header" data-theme="a">
         <h1>
           Documentation / API / Color Manipulation
         </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a href="../overview/purchase.html">Buy now</a>
@@ -95,7 +114,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
           <ul data-role="listview" data-inset="true">
             <li>
               <h3>
-                getHexString()
+                Color.getHexString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in hexadecimal format
@@ -106,7 +125,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getHexaString()
+                Color.getHexaString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in hexadecimal format, including the alpha channel
@@ -117,7 +136,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getRgbString()
+                Color.getRgbString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in RGB format
@@ -128,7 +147,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getRgbaString()
+                Color.getRgbaString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in RGBA format
@@ -139,7 +158,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getHslString()
+                Color.getHslString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in HSL format
@@ -150,7 +169,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getHslaString()
+                Color.getHslaString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in HSLA format
@@ -161,7 +180,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getCmykString()
+                Color.getCmykString()
               </h3>
               <p style="white-space: normal">
                 Returns the color as a string in CMYK format
@@ -172,7 +191,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getRgb()
+                Color.getRgb()
               </h3>
               <p style="white-space: normal">
                 Returns the color an object in RGB format
@@ -187,7 +206,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getRgba()
+                Color.getRgba()
               </h3>
               <p style="white-space: normal">
                 Returns the color an object in RGBA format
@@ -203,7 +222,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getHsl()
+                Color.getHsl()
               </h3>
               <p style="white-space: normal">
                 Returns the color an object in HSL format
@@ -218,7 +237,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getHsla()
+                Color.getHsla()
               </h3>
               <p style="white-space: normal">
                 Returns the color an object in HSLA format
@@ -234,7 +253,7 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getCmyk()
+                Color.getCmyk()
               </h3>
               <p style="white-space: normal">
                 Returns the color as JS object in CMYK format
@@ -250,20 +269,23 @@ var color2 = new $.fn.chromoselector.Color('#f00');
             </li>
             <li>
               <h3>
-                getTextColor()
+                Color.getTextColor()
               </h3>
               <p style="white-space: normal">
                 Returns a contrasting color if you need to print text on the background of the current color
               </p>
               <pre class="instant">
-<code class="javascript">$("#textfield").chromoselector("setColor", "#0f0"); // green
-var color = new $.fn.chromoselector.Color(); // defaults to black
+<code class="javascript">$("#textfield").chromoselector("setColor", "#000"); // black
+var color = $("#textfield").chromoselector("getColor");
 color.getTextColor().getHexString(); // #fff (white)
 color.getTextColor().getTextColor().getHexString(); // #000 (black)
 </code>
 </pre>
+              <p>
+                Change the input textfield colors on update
+              </p>
               <pre class="instant">
-<code class="javascript">// Change the input textfield colors on update
+<code class="javascript">
 $("#textfield").chromoselector({
     preview: false,
     update: function() {
@@ -285,7 +307,20 @@ $("#textfield").chromoselector({
             </li>
             <li>
               <h3>
-                setAlpha(value)
+                Color.getAlpha()
+              </h3>
+              <p style="white-space: normal">
+                Returns the value of the alpha channel.
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">var color = new $.fn.chromoselector.Color(someInputColor);
+color.setAlpha(color.getAlpha() - 0.1); // lower alpha by 10 %
+</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.setAlpha(value)
               </h3>
               <p style="white-space: normal">
                 Sets the value of the alpha channel to a given value. Valid values are numbers between 0 and 1. If the value is not valid, no change is performed.
@@ -298,10 +333,11 @@ color.setAlpha(0.5);
             </li>
             <li>
               <h3>
-                setColor(color)
+                Color.setColor(color)
               </h3>
               <p style="white-space: normal">
-                Sets the current color to a given value.If the value is not valid, no change is performed. The color can be supplied in a range of formats:
+                Sets the current color to a given value. If the value is not valid, no change is performed. White space characters inside strings are ignored. The color can be supplied in a range of
+                formats:
               </p>
               <pre style="margin-bottom: 0" class="instant">
 <code class="javascript">

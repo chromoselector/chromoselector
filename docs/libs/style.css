@@ -28,6 +28,7 @@ body, input, textarea, select, button { font-family: Helvetica, Arial, sans-seri
     }
 }
 
+hr { border-width: 1px 0 0; border-style: solid none none; border-color: #ccc; }
 pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
 strong { font-weight: bold; }
 
@@ -246,4 +247,10 @@ p.intro strong {
 
 .features li p {
     white-space: normal;
+}
+
+.dark.ui-cs-chromoselector {
+    background: #222233;
+    background: rgba(34,34,41,0.95);
+    border: 1px solid black;
 }

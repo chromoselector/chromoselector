@@ -2,7 +2,7 @@
 <html>
   <head>
     <title>
-      ChromoSelector - jQuery Color Picker plugin : Documentation / Demos / Icon Opener
+      ChromoSelector - jQuery Color Picker plugin : Documentation / Demos / Showcase
     </title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -62,24 +62,31 @@
     </script>
   </head>
   <body>
-    <div data-role="page" class="type-interior" id="icon">
+    <div data-role="page" class="type-interior" id="showcase">
       <div data-position="fixed" data-role="header" data-theme="a">
         <h1>
-          Documentation / Demos / Icon Opener
+          Documentation / Demos / Showcase
         </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a href="../overview/purchase.html">Buy now</a>
       </div>
       <div data-role="content">
         <div class="content-primary">
           <form action="#" method="get">
             <h2>
-              Icon Opener
+              Showcase
             </h2>
             <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
-                Icon on right
+                Demo 1
               </h3>
               <div data-role="fieldcontain">
-                <label for="icon1">Pick a color:</label><input type="text" name="icon1" id="icon1" value="#000000" />
+                <ul>
+                  <li>All default options
+                  </li>
+                </ul>
+              </div>
+              <hr />
+              <div data-role="fieldcontain">
+                <label for="showcase1">Pick a color:</label><input type="text" name="showcase1" id="showcase1" value="#ab9226" />
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -87,7 +94,7 @@
                 </h3>
                 <pre>
 <code class="javascript">$(document).ready(function () {
-    $('#color1').chromoselector({
+    $('#showcase1').chromoselector({
         icon: '../libs/images/palette.png'
      })
 });
@@ -97,10 +104,23 @@
             </div>
             <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
-                Icon on left
+                Demo 2
               </h3>
               <div data-role="fieldcontain">
-                <label for="icon2">Pick a color:</label><input type="text" name="icon2" id="icon2" value="#000000" />
+                <ul>
+                  <li>Output: RGBA string
+                  </li>
+                  <li>Alpha selection: true
+                  </li>
+                  <li>Resizable: false
+                  </li>
+                  <li>Width: 130px
+                  </li>
+                </ul>
+              </div>
+              <hr />
+              <div data-role="fieldcontain">
+                <label for="showcase2">Pick a color:</label><input type="text" name="showcase2" id="showcase2" value="rgba(79,107,36,0.82)" />
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -108,14 +128,115 @@
                 </h3>
                 <pre>
 <code class="javascript">$(document).ready(function () {
-    $('#color1').chromoselector({
-        icon: '../libs/images/palette.png',
-        iconpos: 'left'
+    $('#showcase1').chromoselector({
+        icon: '../libs/images/palette.png'
      })
 });
 </code>
 </pre>
-              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/tcRfU/">jsFiddle</a>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/wm9Fj/">jsFiddle</a>
+            </div>
+            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                Demo 3
+              </h3>
+              <div data-role="fieldcontain">
+                <ul>
+                  <li>Output: HSLA string
+                  </li>
+                  <li>Alpha selection: true
+                  </li>
+                  <li>Side panel: true
+                  </li>
+                </ul>
+              </div>
+              <hr />
+              <div data-role="fieldcontain">
+                <label for="showcase3">Pick a color:</label><input type="text" name="showcase3" id="showcase3" value="hsla(223,72%,40%,0.95)" />
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function () {
+    $('#showcase1').chromoselector({
+        icon: '../libs/images/palette.png'
+     })
+});
+</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/wm9Fj/">jsFiddle</a>
+            </div>
+            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                Demo 4
+              </h3>
+              <div data-role="fieldcontain">
+                <ul>
+                  <li>Preview in INPUT element
+                  </li>
+                  <li>Width: 260px
+                  </li>
+                  <li>Resizable: false
+                  </li>
+                  <li>Side panel: true
+                  </li>
+                  <li>Side panel mode: CMYK only
+                  </li>
+                </ul>
+              </div>
+              <hr />
+              <div data-role="fieldcontain">
+                <label for="showcase4">Pick a color:</label><input type="text" name="showcase4" id="showcase4" value="device-cmyk(0,0.71,0.33,0.65)" />
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function () {
+    $('#showcase1').chromoselector({
+        icon: '../libs/images/palette.png'
+     })
+});
+</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/wm9Fj/">jsFiddle</a>
+            </div>
+            <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+              <h3>
+                Demo 5
+              </h3>
+              <div data-role="fieldcontain">
+                <ul>
+                  <li>Preview in INPUT element
+                  </li>
+                  <li>Dark theme
+                  </li>
+                  <li>Resizable: false
+                  </li>
+                  <li>Width: 130px
+                  </li>
+                </ul>
+              </div>
+              <hr />
+              <div data-role="fieldcontain">
+                <label for="showcase5">Pick a color:</label><input type="text" name="showcase5" id="showcase5" value="#8888dd" />
+              </div>
+              <div data-role="collapsible" data-theme="c" data-content-theme="d">
+                <h3>
+                  Code
+                </h3>
+                <pre>
+<code class="javascript">$(document).ready(function () {
+    $('#showcase1').chromoselector({
+        icon: '../libs/images/palette.png'
+     })
+});
+</code>
+</pre>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/wm9Fj/">jsFiddle</a>
             </div>
           </form>
         </div>
@@ -124,7 +245,7 @@
             <ul data-role="listview" data-theme="c" data-dividertheme="d">
               <li data-role="list-divider">Demos
               </li>
-              <li>
+              <li data-theme="e">
                 <a href="../demos/showcase.html">Showcase</a>
               </li>
               <li>
@@ -142,7 +263,7 @@
               <li>
                 <a href="../demos/animations.html">Animations</a>
               </li>
-              <li data-theme="e">
+              <li>
                 <a href="../demos/icon.html">Icon Opener</a>
               </li>
               <li>
