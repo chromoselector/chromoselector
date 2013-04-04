@@ -12,7 +12,7 @@ $html .= htmlspecialchars('<!--
 The outermost container is the target element, it is generated
 automatically, unless you have manually specified a target.
  -->
-<div>
+<div class="ui-cs-chromoselector">
     <!-- The optional icon, used to open the color picker -->
     <a class="ui-cs-icon" style="position: absolute;">
         <img />
@@ -21,14 +21,23 @@ automatically, unless you have manually specified a target.
     <div class="ui-cs-container" style="position: absolute;">
         <!-- Color picker preview -->
         <div class="ui-cs-preview-container">
-            <div class="ui-cs-preview-widget"></div>
+            <div class="ui-cs-preview-widget">
+                ...
+            </div>
         </div>
         <!-- This element contains the canvases on which the color picker is rendered -->
         <div class="ui-cs-widget" style="position: relative;">
             ...
         </div>
-        <!-- This is what you drag to resize the color picker -->
-        <span class="ui-cs-resizer" style="position: absolute;"></span>
+        <!-- This element contains the canvas on which the side panel is rendered -->
+        <div class="ui-cs-panel" style="position: absolute;">
+            ...
+        </div>
+        <!--
+        This element is what you drag to resize the color picker.
+        It may or may not exist.
+        -->
+        <canvas class="ui-cs-resizer" style="position: absolute;"></canvas>
     </div>
 </div>');
 $html .= '</code></pre>';
