@@ -10,6 +10,7 @@
      *   Update jquery and jquery-ui
      *   Better slide animation
      *   Shrink more vars with replacevars.pl
+     *   Update docs: showcase, dimensions, theming
      *
      * v 2.0.1
      *   Fix Opera v12- support
@@ -1782,6 +1783,8 @@
                 retval = value;
             } else if (index === 'iconalt' && typeof value === 'string' && value.length) {
                 retval = value;
+            } else if (index === 'pickerClass' && typeof value === 'string' && value.length) {
+                retval = value;
             } else if (index.match(/^autoshow|autosave|resizable|preview|roundcorners$/)) {
                 retval = !!value;
             } else if (index.match(/^minWidth|maxWidth$/)) {
@@ -1976,6 +1979,7 @@
 
         self._supercontainer = $('<div/>')
             .addClass('ui-cs-chromoselector')
+            .addClass(self.settings.pickerClass)
             .addClass(staticClass)
             .append(self._container);
 
@@ -2407,6 +2411,7 @@
 })(jQuery, window, Math, {
     autoshow:              true,       // bool
     autosave:              true,       // bool
+    pickerClass:           '',         // string
     speed:                 400,        // pos int | 'fast' | 'slow' | 'medium'
     minWidth:              120,
     maxWidth:              400,

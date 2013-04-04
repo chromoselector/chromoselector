@@ -15,13 +15,14 @@ $html .= '</fieldset>';
 
 $html .= '<h2>General Properties</h2>';
 
-$template  = '<div data-role="collapsible"';
+$template  = '<div id="%s" data-role="collapsible"';
 $template .= ' data-theme="b" data-content-theme="d"';
 $template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $template .= '<h3>%s</h3>';
 $template .= '<p><strong>Description:</strong><br />%s</p>';
 $template .= '<p><strong>Values:</strong> %s</p>';
 $template .= '<p><strong>Default:</strong> %s</p>';
+$template .= '%s';
 $template .= '%s';
 $template .= '%s';
 $template .= '</div>';
@@ -297,6 +298,29 @@ $properties = array(
                 ."});\n"
         )
     ),
+    'pickerClass' => array(
+        'default' => '<i>An empty string</i>',
+        'description' => 'This property allows you to add an extra class to the DOM element
+            containing the color picker (which already has the the "ui-cs-chromoselector" class). By doing so, it is possible to over-ride the
+            styling of a color picker (useful when displaying multiple color pickers
+            that have different style on the same page).',
+        'values' => '<i>A string containing a valid reference to a CSS class</i>',
+        'css' => '.dark.ui-cs-chromoselector {
+    background: #222233;
+    background: rgba(34,34,41,0.95);
+    border: 1px solid black;
+}',
+        'samples' => array(
+                 "$(document).ready(function () {\n"
+                ."    // Display some pickers with default style\n"
+                ."    $('input.color').chromoselector();\n"
+                ."    // Display some other pickers with dark style\n"
+                ."    $('input.dark').chromoselector({\n"
+                ."        pickerClass: 'dark'\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
     'preview' => array(
         'default' => '<i>true</i>',
         'description' => 'Whether to show a preview box of the currently selected color '
@@ -502,13 +526,23 @@ foreach ($properties as $key => $value) {
         }
         $links .= '</ul>';
     }
+    $css = '';
+    if (! empty($value['css'])) {
+        $css  = '<h4>CSS code:</h4>';
+        $css .= '<pre><code class="css">';
+        $css .= htmlspecialchars($value['css']);
+        $css .= '</code></pre>';
+        $css .= '<h4>JS code:</h4>';
+    }
 
     $html .= sprintf(
         $template,
         $key,
+        $key,
         $value['description'],
         $value['values'],
         $value['default'],
+        $css,
         $samples,
         $links
     );
@@ -604,10 +638,12 @@ foreach ($properties as $key => $value) {
 
     $html .= sprintf(
         $template,
+        str_replace(array("(", ")"), "", $key),
         $key,
         $value['default'],
         $value['description'],
         $value['values'],
+        $css,
         $samples,
         $links
     );

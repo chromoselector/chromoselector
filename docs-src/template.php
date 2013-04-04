@@ -60,8 +60,8 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     }
 
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
-    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $libPath . '/chromoselector.css" />';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
@@ -71,6 +71,25 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '$(document).live("mobileinit", function(){';
     $html .= '$.mobile.ajaxEnabled = false;';
     $html .= '});';
+    $html .= '
+$(window).load(function () {
+    var url = location.href;
+    var target = "";
+    var index = url.lastIndexOf("?target=");
+    if (index !== -1) {
+        target = url.substr(index + 8);
+    }
+    if (target) {
+        var $target = $("#" + target);
+        if ($target.length) {
+            $target.find("h3").click();
+            $("html, body").animate({
+                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+            }, 400);
+        }
+    }
+});
+    ';
     $html .= '</script>';
 
     $html .= '<script src="' . $path . '/libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>';
@@ -111,7 +130,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     if ($type != 'home') {
         $html .= '<body>';
         $html .= '<div data-role="page" class="type-interior" id="' . $type . '">';
-        $html .= '<div data-role="header" data-theme="a">';
+        $html .= '<div data-position="fixed" data-role="header" data-theme="a">';
         $html .= '<h1>' . $title . '</h1>';
         $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
         if (empty($_GET['RELEASE'])) {

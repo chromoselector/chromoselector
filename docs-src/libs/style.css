@@ -247,3 +247,9 @@ p.intro strong {
 .features li p {
     white-space: normal;
 }
+
+.dark.ui-cs-chromoselector {
+    background: #222233;
+    background: rgba(34,34,41,0.95);
+    border: 1px solid black;
+}
