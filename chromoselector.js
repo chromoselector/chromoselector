@@ -1519,6 +1519,9 @@
                     }
                 ]
             );
+            if (self.panelApi) {
+                self.panelApi.setHeight(self._container.height());
+            }
         }
     }
     function colorPicker_hide(self, speed) {
@@ -2145,9 +2148,6 @@
                     colorPicker_drawAll(self);
                 }
                 colorPicker_show(self);
-                if (self.panelApi) {
-                    self.panelApi.setHeight(self._container.height());
-                }
             }).blur(function () {
                 colorPicker_hide(self);
             });
