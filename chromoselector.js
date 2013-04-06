@@ -1377,8 +1377,8 @@
     function drawResizer(self, canvas) {
         var ctx = canvas.getContext("2d");
         /** draw resizer */
-        if (self._supercontainer.css('border-bottom-color')) {
-            ctx[strokeStyle] = self._supercontainer.css('border-bottom-color');
+        if (self._root.css('border-bottom-color')) {
+            ctx[strokeStyle] = self._root.css('border-bottom-color');
         } else {
             ctx[strokeStyle] = '#444';
         }
@@ -1514,8 +1514,8 @@
             colorPicker_fixPosition(self);
             colorPicker_updatePreview(self);
             var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
-            self._supercontainer[effect].apply(
-                self._supercontainer,
+            self._root[effect].apply(
+                self._root,
                 [
                     speed,
                     function () {
@@ -1546,8 +1546,8 @@
             var retval = self._source.triggerHandler('beforeHide');
             if (typeof retval == 'undefined' || retval) {
                 var effect = self.effect === 'fade' ? 'fadeOut' : 'slideUp';
-                self._supercontainer[effect].apply(
-                    self._supercontainer,
+                self._root[effect].apply(
+                    self._root,
                     [
                         speed,
                         function () {
@@ -1665,12 +1665,12 @@
             width + self._preview.outerHeight()
         );
         if (self.settings.panel || self.settings.panelAlpha) {
-            self._supercontainer.width(
+            self._root.width(
                 self.panelApi.getWidth() + self._container.width()
             );
             self.panelApi.setHeight(self._container.height());
         } else {
-            self._supercontainer.width(
+            self._root.width(
                 self._container.width()
             );
         }
@@ -1680,7 +1680,7 @@
             if (! self.settings.resizable && ! self.settings.panel &&  ! self.settings.panelAlpha) {
                 borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
             }
-            self._supercontainer.css({
+            self._root.css({
                 '-webkit-border-radius': borderRadius,
                 'border-radius': borderRadius
             });
@@ -1730,7 +1730,7 @@
                 top: 0,
                 left: 0
             });
-            self._supercontainer.css({
+            self._root.css({
                 top: offset.top + self._source.outerHeight(),
                 left: offset.left
             });
@@ -1837,10 +1837,10 @@
         return [x, y];
     }
     function colorPicker_getWidth(self) {
-        return self._supercontainer.width();
+        return self._root.width();
     }
     function colorPicker_getHeight(self) {
-        return self._supercontainer.height();
+        return self._root.height();
     }
 
     function colorPicker_updatePreview(self) {
@@ -1982,7 +1982,7 @@
             .width(self.width)
             .addClass('ui-cs-container');
 
-        self._supercontainer = $('<div/>')
+        self._root = $('<div/>')
             .addClass('ui-cs-chromoselector')
             .addClass(self.settings.pickerClass)
             .addClass(staticClass)
@@ -1990,7 +1990,7 @@
 
         if (self.settings.panel || self.settings.panelAlpha) {
             self._panel = $('<div/>').addClass('ui-cs-panel');
-            self._supercontainer.append(self._panel);
+            self._root.append(self._panel);
             self.panelApi = new Panel(
                 self._panel,
                 self.settings.panelMode,
@@ -2014,7 +2014,7 @@
             self._panel.find('select').blur(function () {
                 colorPicker_hide(self);
             }).change(function () {
-                self._supercontainer.width(
+                self._root.width(
                     self.panelApi.getWidth() + self._container.width()
                 );
             });
@@ -2096,7 +2096,7 @@
             if (! self.settings.resizable && ! self.settings.panel && ! self.settings.panelAlpha) {
                 borderRadius = '0px 0px ' + self.width/2 + 'px ' + self.width/2 + 'px';
             }
-            self._supercontainer.css({
+            self._root.css({
                 '-webkit-border-radius': borderRadius,
                 'border-radius': borderRadius
             });
@@ -2107,14 +2107,14 @@
             .add(self._container)
             .width(self.width);
         if (self.settings.panel || self.settings.panelAlpha) {
-            self._supercontainer
+            self._root
                 .width(self.panelApi.getWidth() + self._container.width());
         } else {
-            self._supercontainer
+            self._root
                 .width(self._container.width());
         }
         self._target.append(
-            self._supercontainer.hide()
+            self._root.hide()
         );
         self.canvases = self._picker.find('canvas')
             .css({
