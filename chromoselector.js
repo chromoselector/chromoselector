@@ -1977,14 +1977,10 @@
                 canvasString + canvasString + canvasString + canvasString
             );
 
-
         self._container = $('<div/>')
             .append(self._picker)
             .width(self.width)
-            .addClass('ui-cs-container')
-            .addClass(staticClass);
-
-
+            .addClass('ui-cs-container');
 
         self._supercontainer = $('<div/>')
             .addClass('ui-cs-chromoselector')
