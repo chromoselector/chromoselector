@@ -7,7 +7,6 @@
      *
      * v 2.0.0
      *   Fix resize functionality when panel is on
-     *   Fix resizer positioning in static mode
      *   Fix multiple pickers in static mode demo
      *   Fix slide animation
      *
@@ -1982,15 +1981,19 @@
             .width(self.width)
             .addClass('ui-cs-container');
 
+        self._supercontainer = $('<div/>')
+            .addClass('ui-cs-supercontainer')
+            .append(self._container);
+
         self._root = $('<div/>')
             .addClass('ui-cs-chromoselector')
             .addClass(self.settings.pickerClass)
             .addClass(staticClass)
-            .append(self._container);
+            .append(self._supercontainer);
 
         if (self.settings.panel || self.settings.panelAlpha) {
             self._panel = $('<div/>').addClass('ui-cs-panel');
-            self._root.append(self._panel);
+            self._supercontainer.append(self._panel);
             self.panelApi = new Panel(
                 self._panel,
                 self.settings.panelMode,
@@ -2051,10 +2054,14 @@
                 });
 
             drawResizer(self, self._resizer[0]);
-            $(self._container).append(
+            self._supercontainer.append(
                 self._resizer
             );
         }
+
+        self._supercontainer.append(
+            $('<div/>').css('clear', 'both')
+        );
 
         self._previewWidget = $('<div/>').addClass('ui-cs-preview-widget')
             .css('overflow', 'hidden')
