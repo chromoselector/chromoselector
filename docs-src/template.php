@@ -131,7 +131,7 @@ $(window).load(function () {
     if ($type != 'home') {
         $html .= '<body>';
         $html .= '<div data-role="page" class="type-interior" id="' . $type . '">';
-        $html .= '<div data-position="fixed" data-role="header" data-theme="a">';
+        $html .= '<div data-role="header" data-theme="a">';
         $html .= '<h1>' . $title . '</h1>';
         $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
         if (empty($_GET['RELEASE'])) {
