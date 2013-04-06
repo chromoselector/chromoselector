@@ -6,11 +6,17 @@
      * TODO
      *
      * v 2.0.0
+     *   Fix resize functionality when panel is on
+     *   Fix resizer positioning in static mode
+     *   Fix icon in static mode
+     *   Fix multiple pickers in static mode demo
+     *   Fix slide animation
+     *
      *   Create v2.0 fiddles
-     *   Update jquery and jquery-ui
-     *   Better slide animation
-     *   Shrink more vars with replacevars.pl
      *   Update docs: showcase, dimensions, theming
+     *
+     *   Update jquery and jquery-ui
+     *   Shrink more vars with replacevars.pl
      *
      * v 2.0.1
      *   Fix Opera v12- support
