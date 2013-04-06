@@ -8,7 +8,6 @@
      * v 2.0.0
      *   Fix resize functionality when panel is on
      *   Fix resizer positioning in static mode
-     *   Fix icon in static mode
      *   Fix multiple pickers in static mode demo
      *   Fix slide animation
      *
@@ -1725,6 +1724,7 @@
     }
     function colorPicker_fixPosition(self) {
         var offset = self._source.offset();
+        var targetOffset = self._target.offset();
         if (! self.haveTarget) {
             self._target.css({
                 top: 0,
@@ -1736,11 +1736,11 @@
             });
         }
         if (self._source.is(':visible')) {
-            self._icon.show().css('top', offset.top + (self._source.outerHeight() - self._icon.height()) / 2);
+            self._icon.show().css('top', offset.top - targetOffset.top + (self._source.outerHeight() - self._icon.height()) / 2);
             if (self.settings.iconpos === 'left') {
-                self._icon.css('left', offset.left - self._icon.outerWidth() - 2);
+                self._icon.css('left', offset.left - targetOffset.left - self._icon.outerWidth() - 2);
             } else {
-                self._icon.css('left', offset.left + self._source.outerWidth() + 2);
+                self._icon.css('left', offset.left - targetOffset.left + self._source.outerWidth() + 2);
             }
         } else {
             self._icon.hide();
