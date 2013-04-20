@@ -2420,15 +2420,15 @@
     minWidth:              120,                    // pos int
     maxWidth:              400,                    // pos int
     width:                 180,                    // pos int
-    ringwidth:             18,                     // float
+    ringwidth:             18,                     // pos int
     resizable:             true,                   // bool
     shadow:                6,                      // pos int
     shadowColor:           'rgba(0,0,0,0.6)',      // string
     preview:               true,                   // bool
     panel:                 false,                  // bool
     panelAlpha:            false,                  // bool
-    panelChannelWidth:     18,
-    panelChannelMargin:    12,
+    panelChannelWidth:     18,                     // pos int
+    panelChannelMargin:    12,                     // pos int
     panelMode:             'rgb',
     panelModes:            ['rgb', 'hsl', 'cmyk'], // array
     roundcorners:          true,                   // bool
@@ -2437,7 +2437,7 @@
     iconalt:               'Open Color Picker',    // string
     iconpos:               'right',                // string 'left' | 'right'
     lazy:                  true,                   // bool
-    target:                null,                   // null, selector, jQuery object
+    target:                null,                   // selector | jQuery object | DOM object
 
     create:                null,                   // function
     ready:                 null,                   // function
