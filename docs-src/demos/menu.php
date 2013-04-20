@@ -14,11 +14,16 @@ function getDemosMenu($path = '.', $selected = '') {
     );
     foreach ($elms as $key => $value) {
         if ($key == $selected) {
-            $html .= '<li data-theme="e">';
+            $html .= '<li data-theme="e"';
         } else {
             $html .= '<li>';
         }
-        $html .= '<a href="' . $path . '/demos/' . $key . '.html">' . $value . '</a>';
+        $html .= '<a href="' . $path . '/demos/' . $key . '.html">';
+        $html .= $value;
+        if ($key == 'showcase') {
+            $html .= '<span class="ui-li-count">&nbsp;New&nbsp;</span>';
+        }
+        $html .= '</a>';
         $html .= '</li>';
     }
     return $html;
