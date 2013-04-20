@@ -65,7 +65,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
 
-    $html .= '<script src="' . $libPath . '/jquery-1.8.3.min.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $libPath . '/jquery-1.9.1.min.js" type="text/javascript"></script>';
 
     $html .= '<script type="text/javascript">';
     $html .= '$(document).live("mobileinit", function(){';
