@@ -32,11 +32,9 @@ $demos = array(
         </ul>',
         'id' => 'showcase1',
         'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#showcase1').chromoselector({\n"
-                . "        icon: '../libs/images/palette.png'\n"
-                . "     })\n"
-                . "});\n",
+        'code' => "$(document).ready(function () {
+    $('#showcase1').chromoselector()
+});\n",
         'value' => '#ab9226'
     ),
     array(
@@ -49,11 +47,16 @@ $demos = array(
         </ul>',
         'id' => 'showcase2',
         'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#showcase1').chromoselector({\n"
-                . "        icon: '../libs/images/palette.png'\n"
-                . "     })\n"
-                . "});\n",
+        'code' => "$(document).ready(function () {
+    $('#showcase2').chromoselector({
+        width: 130,
+        panelAlpha: true,
+        resizable: false,
+        color2str: function (color) {
+            return color.getRgbaString();
+        }
+    })
+});\n",
         'value' => 'rgba(79,107,36,0.82)'
     ),
     array(
@@ -66,11 +69,15 @@ $demos = array(
         </ul>',
         'id' => 'showcase3',
         'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#showcase1').chromoselector({\n"
-                . "        icon: '../libs/images/palette.png'\n"
-                . "     })\n"
-                . "});\n",
+        'code' => "$(document).ready(function () {
+    $('#showcase3').chromoselector({
+        panelAlpha: true,
+        panel: true,
+        color2str: function (color) {
+            return color.getHslaString();
+        }
+    })
+});\n",
         'value' => 'hsla(223,72%,40%,0.95)'
     ),
     array(
@@ -84,29 +91,95 @@ $demos = array(
         </ul>',
         'id' => 'showcase4',
         'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#showcase1').chromoselector({\n"
-                . "        icon: '../libs/images/palette.png'\n"
-                . "     })\n"
-                . "});\n",
+        'code' => "$(document).ready(function () {
+    // This function will update the input element based
+    // on the currently selected color in the picker
+    var updatePreview = function() {
+        var color = $(this).chromoselector('getColor');
+        $(this).css({
+            'background-color': color.getHexString(),
+            'color': color.getTextColor().getHexString(),
+            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
+        });
+    };
+    // Initialise the picker
+    $('#showcase4').chromoselector({
+        width: 260,
+        resizable: false,
+        panel: true,
+        panelMode: 'cmyk',
+        panelModes: [],
+        preview: false,
+        create: updatePreview,
+        update: updatePreview,
+        color2str: function (color) {
+            return color.getCmykString();
+        }
+    })
+});\n",
         'value' => 'device-cmyk(0,0.71,0.33,0.65)'
     ),
     array(
         'title' => 'Demo 5',
         'desc' => '<ul>
-        <li>Preview in INPUT element</li>
         <li>Dark theme</li>
         <li>Resizable: false</li>
         <li>Width: 130px</li>
         </ul>',
         'id' => 'showcase5',
         'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
-        'code' => "$(document).ready(function () {\n"
-                . "    $('#showcase1').chromoselector({\n"
-                . "        icon: '../libs/images/palette.png'\n"
-                . "     })\n"
-                . "});\n",
+        'code' => "$(document).ready(function () {
+    $('#showcase5').chromoselector({
+        width: 130,
+        resizable: false,
+        pickerClass: 'dark',
+        shadowColor: 'rgba(255,255,255,0.8)'
+    })
+});\n",
         'value' => '#8888dd'
+    ),
+    array(
+        'title' => 'Demo 6',
+        'desc' => '<ul>
+        <li>Preview in INPUT element</li>
+        <li>Custom INPUT element styling</li>
+        <li>Square corners</li>
+        </ul>',
+        'id' => 'showcase6',
+        'fiddle' => 'http://sandbox.chromoselector.com/wm9Fj/',
+        'code' => "$(document).ready(function () {
+    // This function will update the input element based
+    // on the currently selected color in the picker
+    var updatePreview = function() {
+        var color = $(this).chromoselector('getColor');
+        $(this).css({
+            'background-color': color.getHexString(),
+            'color': color.getTextColor().getHexString(),
+            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
+        });
+    };
+    // The CSS is set here, so that even if
+    // a user has disabled javascript, it will
+    // still be possible to edit the color
+    $('#showcase6').css({
+        border: '5px ridge gray',
+        cursor: 'pointer',
+        height: '25px',
+        width: '25px',
+        'text-indent': '25px',
+        padding: 0,
+        // These last are needed,
+        // if you are using jQuery mobile
+        'box-shadow': 0,
+        'border-radius': 0
+    }).chromoselector({ // Initialise the picker
+        create: updatePreview,
+        update: updatePreview,
+        preview: false,
+        roundcorners: false
+    });
+});\n",
+        'value' => '#4abfff'
     )
 );
 
