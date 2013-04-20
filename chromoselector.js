@@ -6,7 +6,6 @@
      * TODO
      *
      * v 2.0.0
-     *   Fix resize functionality when panel is on
      *   Fix multiple pickers in static mode demo
      *   Fix slide animation
      *
@@ -1651,6 +1650,9 @@
     }
     function colorPicker_handleResizeDrag(self, e) {
         var inputPoint = getEventPosition(self, e, self._picker);
+        if (self.settings.panel || self.settings.panelAlpha) {
+            inputPoint[0] -= self.panelApi.getWidth();
+        }
         var newDiameter = colorPicker_fixDiameter(
             self,
             Math.max(inputPoint[0], inputPoint[1])
@@ -2185,10 +2187,6 @@
                     self.width - inputPoint[0],
                     self.width - inputPoint[1]
                 ];
-                if (self.settings.panel || self.settings.panelAlpha) {
-                    self.resizeOffset[0] -= 20;
-                    self.resizeOffset[1] -= (self._panel.width() + 20);
-                }
             });
         }
         self._container.bind('mousedown touchstart', function (e) {
