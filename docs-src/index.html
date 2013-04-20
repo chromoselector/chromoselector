@@ -20,9 +20,14 @@ $html .= '        </div>';
 $html .= '        <div class="content-primary">';
 $html .= '            <nav>';
 $html .= '            <img src="libs/images/jsfiddle.png" alt="jsFiddle hint" />';
-$html .= '                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="a">';
+$html .= '                <ul data-role="listview" data-inset="true" data-theme="c" data-dividertheme="a" data-count-theme="e">';
 $html .= '                    <li data-role="list-divider">Demos</li>';
-$html .= '                    <li data-theme="e"><a href="demos/showcase.html">Showcase</a></li>';
+$html .= '                    <li>
+							<a href="demos/showcase.html">
+							Showcase
+							<span class="ui-li-count">&nbsp;New&nbsp;</span>
+							</a>
+							</li>';
 $html .= '                    <li><a href="demos/display-modes.html">Display Modes</a></li>';
 $html .= '                    <li><a href="demos/ui-dialog.html">jQuery UI dialog integration</a></li>';
 $html .= '                    <li><a href="demos/custom-color-format.html">Custom Color Formats</a></li>';
