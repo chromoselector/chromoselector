@@ -2419,7 +2419,7 @@
     minWidth:              120,
     maxWidth:              400,
     width:                 180,        // pos int
-    ringwidth:             15,         // float
+    ringwidth:             18,         // float
     resizable:             true,       // bool
     shadow:                6,          // pos int
     shadowColor:           'rgba(0,0,0,0.6)', // string
