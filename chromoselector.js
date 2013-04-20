@@ -9,7 +9,6 @@
      *   Create v2.0 fiddles
      *   Update docs: showcase, dimensions, theming
      *
-     *   Update jquery and jquery-ui
      *   Shrink more vars with replacevars.pl
      *
      * v 2.0.1
