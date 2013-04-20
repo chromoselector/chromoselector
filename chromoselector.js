@@ -6,8 +6,6 @@
      * TODO
      *
      * v 2.0.0
-     *   Camel-case all properties
-     *
      *   Create v2.0 fiddles
      *   Update docs: showcase, dimensions, theming
      *
@@ -28,6 +26,9 @@
      *   refactor hue2rgb
      *   Improved mobile support
      *   Improve shadow ratio calculation / shadow rendering
+     *
+     * v 3.0.0
+     *   Camel-case all properties
      *
      * FI-TESTSUITE
      */
@@ -2412,47 +2413,46 @@
 
     $.fn[NAMESPACE].Color = Color;
 })(jQuery, window, Math, {
-    autoshow:              true,       // bool
-    autosave:              true,       // bool
-    pickerClass:           '',         // string
-    speed:                 400,        // pos int | 'fast' | 'slow' | 'medium'
-    minWidth:              120,
-    maxWidth:              400,
-    width:                 180,        // pos int
-    ringwidth:             18,         // float
-    resizable:             true,       // bool
-    shadow:                6,          // pos int
-    shadowColor:           'rgba(0,0,0,0.6)', // string
-    preview:               true,       // bool
-    panel:                 false,
-    panelAlpha:            false,
+    autoshow:              true,                   // bool
+    autosave:              true,                   // bool
+    pickerClass:           '',                     // string
+    speed:                 400,                    // pos int | 'fast' | 'slow' | 'medium'
+    minWidth:              120,                    // pos int
+    maxWidth:              400,                    // pos int
+    width:                 180,                    // pos int
+    ringwidth:             18,                     // float
+    resizable:             true,                   // bool
+    shadow:                6,                      // pos int
+    shadowColor:           'rgba(0,0,0,0.6)',      // string
+    preview:               true,                   // bool
+    panel:                 false,                  // bool
+    panelAlpha:            false,                  // bool
     panelChannelWidth:     18,
     panelChannelMargin:    12,
     panelMode:             'rgb',
-    panelModes:            ['rgb', 'hsl', 'cmyk'],
-    roundcorners:          true,       // bool
-    effect:                'fade',     // 'fade' | 'slide'
-    icon:                  null,       // string
-    iconalt:               'Open Color Picker', // string
-    iconpos:               'right',    // string 'left' | 'right'
-    lazy:                  true,       // bool
-    target:                null,       // null, selector, jQuery object
+    panelModes:            ['rgb', 'hsl', 'cmyk'], // array
+    roundcorners:          true,                   // bool
+    effect:                'fade',                 // 'fade' | 'slide'
+    icon:                  null,                   // string
+    iconalt:               'Open Color Picker',    // string
+    iconpos:               'right',                // string 'left' | 'right'
+    lazy:                  true,                   // bool
+    target:                null,                   // null, selector, jQuery object
 
-    // events registered with bind() will not be unbound on destroy API call
-    create:                null,
-    ready:                 null,
-    destroy:               null,
-    update:                null,
-    beforeShow:            null,
-    show:                  null,
-    beforeHide:            null, // if cancelled does not trigger
-    hide:                  null,
-    resize:                null,
-    resizeStart:           null,
-    resizeStop:            null,
+    create:                null,                   // function
+    ready:                 null,                   // function
+    destroy:               null,                   // function
+    update:                null,                   // function
+    beforeShow:            null,                   // function
+    show:                  null,                   // function
+    beforeHide:            null,                   // function
+    hide:                  null,                   // function
+    resize:                null,                   // function
+    resizeStart:           null,                   // function
+    resizeStop:            null,                   // function
 
-    save:                  null,
-    load:                  null,
-    str2color:             null,
-    color2str:             null
+    save:                  null,                   // function
+    load:                  null,                   // function
+    str2color:             null,                   // function
+    color2str:             null                    // function
 });
