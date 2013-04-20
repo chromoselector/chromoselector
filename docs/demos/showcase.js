@@ -42,13 +42,26 @@ $(document).ready(function () {
     });
 
     $('#showcase #showcase5').chromoselector({
-        preview: false,
         width: 130,
         resizable: false,
-        create: updatePreview,
-        update: updatePreview,
         pickerClass: 'dark',
         shadowColor: 'rgba(255,255,255,0.8)'
+    });
+
+    $('#showcase #showcase6').css({
+        border: '5px ridge gray',
+        cursor: 'pointer',
+        height: '25px',
+        width: '25px',
+        'text-indent': '25px',
+        padding: 0,
+        'box-shadow': 0,
+        'border-radius': 0
+    }).chromoselector({
+        create: updatePreview,
+        update: updatePreview,
+        preview: false,
+        roundcorners: false
     });
 
     $('#showcase').bind('updatelayout', function () {
