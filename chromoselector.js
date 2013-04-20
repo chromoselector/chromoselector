@@ -6,8 +6,7 @@
      * TODO
      *
      * v 2.0.0
-     *   Fix multiple pickers in static mode demo
-     *   Fix slide animation
+     *   Camel-case all properties
      *
      *   Create v2.0 fiddles
      *   Update docs: showcase, dimensions, theming
@@ -17,8 +16,11 @@
      *
      * v 2.0.1
      *   Fix Opera v12- support
+     *   Fix multiple pickers in static mode demo
      *
      * v 2.1.0
+     *   Fix slide animation
+     *   Improve positioning in small window (move right if necessary)
      *   Unit tests
      *   Implement RequestAnimationFrame
      *   Better generation of new elements
