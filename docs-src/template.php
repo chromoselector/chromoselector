@@ -64,7 +64,45 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/default.min.css">';
     $html .= '<link href="' . $path . '/libs/images/favicon.png" rel="shortcut icon" />';
+    $html .= '</head>';
 
+    if ($type != 'home') {
+        $html .= '<body>';
+        $html .= '<div data-role="page" class="type-interior" id="' . $type . '">';
+        $html .= '<div data-role="header" data-theme="a">';
+        $html .= '<h1>' . $title . '</h1>';
+        $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
+        if (empty($_GET['RELEASE'])) {
+            $html .= '<a data-theme="b" href="../overview/purchase.html">Buy now</a>';
+        }
+        $html .= '</div>';
+        $html .= '<div data-role="content">';
+    } else {
+        $html .= '<body>';
+        $html .= '<div data-role="page" class="type-home">';
+        $html .= '<div data-role="content">';
+    }
+
+    return $html;
+}
+
+function getFooter($path = '.') {
+    if (empty($_GET['SITE'])) {
+        if ($path === '.') {
+            $libPath = '..';
+        } else {
+            $libPath = $path . '/..';
+        }
+    } else {
+        $libPath = $path . '/libs';
+    }
+    $html  = '</div>';
+    $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
+    $html .= '<p>v2.0.0</p>';
+    $html .= '<p style="float: right">&copy; 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p>';
+    $html .= '<div style="clear:both"></div>';
+    $html .= '</div>';
+    $html .= '</div>';
     $html .= '<script src="' . $libPath . '/jquery-1.9.1.min.js" type="text/javascript"></script>';
 
     $html .= '<script type="text/javascript">';
@@ -125,36 +163,6 @@ $(window).load(function () {
 
     $html .= '});';
     $html .= '</script>';
-    $html .= '</head>';
-
-    if ($type != 'home') {
-        $html .= '<body>';
-        $html .= '<div data-role="page" class="type-interior" id="' . $type . '">';
-        $html .= '<div data-role="header" data-theme="a">';
-        $html .= '<h1>' . $title . '</h1>';
-        $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
-        if (empty($_GET['RELEASE'])) {
-            $html .= '<a data-theme="b" href="../overview/purchase.html">Buy now</a>';
-        }
-        $html .= '</div>';
-        $html .= '<div data-role="content">';
-    } else {
-        $html .= '<body>';
-        $html .= '<div data-role="page" class="type-home">';
-        $html .= '<div data-role="content">';
-    }
-
-    return $html;
-}
-
-function getFooter() {
-    $html  = '</div>';
-    $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
-    $html .= '<p>v2.0.0</p>';
-    $html .= '<p style="float: right">&copy; 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p>';
-    $html .= '<div style="clear:both"></div>';
-    $html .= '</div>';
-    $html .= '</div>';
     $html .= '</body></html>';
     return $html;
 }
