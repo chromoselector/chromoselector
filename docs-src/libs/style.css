@@ -14,18 +14,8 @@ body, input, textarea, select, button { font-family: Helvetica, Arial, sans-seri
 .footer-docs p {
     font-weight: normal;
     font-size: .9em;
-}
-.ui-mobile-viewport .footer-docs p {
-    margin: .5em 15px;
-}
-@media all and (min-width:650px) {
-    .ui-mobile-viewport .footer-docs {
-        overflow: hidden;
-    }
-    .ui-mobile-viewport .footer-docs p {
-        margin: 1em 15px;
-        float: left;
-    }
+    margin: 1em 15px;
+    float: left;
 }
 
 hr { border-width: 1px 0 0; border-style: solid none none; border-color: #ccc; }

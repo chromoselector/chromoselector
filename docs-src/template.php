@@ -59,7 +59,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
         $html .= '</script>';
     }
 
-    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.2.0.min.css" />';
+    $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.3.1.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $libPath . '/chromoselector.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/style.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/default.min.css">';
@@ -68,7 +68,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     $html .= '<script src="' . $libPath . '/jquery-1.9.1.min.js" type="text/javascript"></script>';
 
     $html .= '<script type="text/javascript">';
-    $html .= '$(document).live("mobileinit", function(){';
+    $html .= '$(document).on("mobileinit", function(){';
     $html .= '$.mobile.ajaxEnabled = false;';
     $html .= '});';
     $html .= '
@@ -92,7 +92,7 @@ $(window).load(function () {
     ';
     $html .= '</script>';
 
-    $html .= '<script src="' . $path . '/libs/jquery.mobile-1.2.0.min.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $path . '/libs/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>';
     if (empty($_GET['SITE'])) {
         $html .= '<script src="' . $libPath . '/chromoselector.min.js" type="text/javascript"></script>';
     } else {
@@ -104,7 +104,6 @@ $(window).load(function () {
     $html .= '<script src="' . $path . '/demos/previews.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/animations.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/display-modes.js" type="text/javascript"></script>';
-    $html .= '<script src="' . $path . '/demos/mobile-dialog.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/highlight.pack.js" type="text/javascript"></script>';
 
 
@@ -153,6 +152,7 @@ function getFooter() {
     $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
     $html .= '<p>v2.0.0</p>';
     $html .= '<p style="float: right">&copy; 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p>';
+    $html .= '<div style="clear:both"></div>';
     $html .= '</div>';
     $html .= '</div>';
     $html .= '</body></html>';
