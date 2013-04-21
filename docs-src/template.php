@@ -122,7 +122,7 @@ $(window).load(function () {
         if ($target.length) {
             $target.find("h3").click();
             $("html, body").animate({
-                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+                scrollTop: $("#" + target).find("h3").offset().top
             }, 400);
         }
     }
