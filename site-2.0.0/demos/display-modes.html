@@ -62,7 +62,7 @@
 &lt;/body&gt;
 &lt;/html&gt;</code>
 </pre>
-              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/g6H3G/">jsFiddle</a>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/bEt5W/">jsFiddle</a>
             </div>
             <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
@@ -86,38 +86,42 @@
     &lt;script src="chromoselector.min.js" type="text/javascript"&gt;&lt;/script&gt;
     &lt;script type="text/javascript"&gt;
     $(document).ready(function () {
-        $('#basic2').chromoselector({
+        $('#color').chromoselector({
             target: '#picker',
             autoshow: false,
             create: function () {
                 $(this).chromoselector('show', 0);
             },
-            width: 260
+            width: 250
         });
     });
     &lt;/script&gt;
     &lt;style type="text/css"&gt;
-        #picker {
-            border: 1px solid;
-            float: left;
-            padding: 1em;
-            background-color: #e4ccc1;
-        }
-        input {
-            width: 100%;
-        }
+    form {
+        margin: 1em;
+    }
+    input {
+        width: 30%;
+    }
+    #picker {
+        border: 1px solid;
+        float: left;
+        padding: 1em;
+        background-color: #e4ccc1;
+    }
     &lt;/style&gt;
 &lt;/head&gt;
 &lt;body style="margin: 2em;"&gt;
-    &lt;form action="#"&gt;
+    &lt;form&gt;
         &lt;div id="picker"&gt;
-            &lt;input id="basic2" name="basic2" type="text" value="#ff0000" /&gt;
+            &lt;label for="color"&gt;Pick a color:&lt;/label&gt;
+            &lt;input id="color" name="basic2" type="text" value="#ff0000" /&gt;
         &lt;/div&gt;
     &lt;/form&gt;
 &lt;/body&gt;
 &lt;/html&gt;</code>
 </pre>
-              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/RecjP/">jsFiddle</a>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/esuWS/">jsFiddle</a>
             </div>
           </form>
         </div>
