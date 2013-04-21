@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      ChromoSelector - jQuery Color Picker plugin : Overview / Features
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript">
+//<![CDATA[
+    if (top.location != location) {top.location.href = document.location.href;}
+    //]]>
+    </script>
+    <link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.3.1.min.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/chromoselector.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/style.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/default.min.css" />
+    <link href="../libs/images/favicon.png" rel="shortcut icon" />
+  </head>
+  <body>
+    <div data-role="page" class="type-interior" id="features">
+      <div data-role="header" data-theme="a">
+        <h1>
+          Overview / Features
+        </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a data-theme="b" href="../overview/purchase.html">Buy now</a>
+      </div>
+      <div data-role="content">
+        <div class="content-primary">
+          <h2>
+            Features
+          </h2>
+          <ul data-role="listview" class="features" data-inset="true">
+            <li>
+              <h3>
+                Stylish Design
+              </h3>
+              <p>
+                Chromoselector offers a stylish design for the color picker widget that will certainly impress. You won't find anything else like it for your website.
+              </p>
+            </li>
+            <li>
+              <h3>
+                Easy To Use
+              </h3>
+              <p>
+                The minimal configuration for Chromoselector only requires two lines of HTML code and one line of JavaScript code.
+              </p>
+            </li>
+            <li>
+              <h3>
+                Customizable
+              </h3>
+              <p>
+                Chromoselector has 19 properties, 11 events and 12 API methods. This allows for a wide range of customisations to be applied to the color picker in order to cater for your needs.
+                Among other things, you can integrate external controls, specify custom formatting for colors and use an icon as an openers for the picker.
+              </p>
+            </li>
+            <li>
+              <h3>
+                Compact
+              </h3>
+              <p>
+                Chromoselector only requires jQuery and two extra files to work: the color picker JavaScript file and a stylesheet, totalling less than 10kB when gzipped.
+              </p>
+            </li>
+          </ul>
+        </div>
+        <div class="content-secondary">
+          <ul data-role="listview" data-theme="c" data-dividertheme="d">
+            <li data-role="list-divider">Overview
+            </li>
+            <li>
+              <a href="../overview/purchase.html">Purchase</a>
+            </li>
+            <li data-theme="e">
+              <a href="../overview/features.html">Features</a>
+            </li>
+            <li>
+              <a href="../overview/screenshots.html">Screenshots</a>
+            </li>
+            <li>
+              <a href="../overview/requirements.html">Requirements</a>
+            </li>
+            <li>
+              <a href="../overview/getting-started.html">Getting Started</a>
+            </li>
+            <li>
+              <a href="../overview/support.html">Support</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div data-role="footer" class="footer-docs" data-theme="c">
+        <p>
+          v2.0.0
+        </p>
+        <p style="float: right">
+          © 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a>
+        </p>
+        <div style="clear:both"></div>
+      </div>
+    </div><script src="../libs/jquery-1.9.1.min.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    $(document).on("mobileinit", function(){$.mobile.ajaxEnabled = false;});
+    $(window).load(function () {
+    var url = location.href;
+    var target = "";
+    var index = url.lastIndexOf("?target=");
+    if (index !== -1) {
+        target = url.substr(index + 8);
+    }
+    if (target) {
+        var $target = $("#" + target);
+        if ($target.length) {
+            $target.find("h3").click();
+            $("html, body").animate({
+                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+            }, 400);
+        }
+    }
+    });
+    //]]>
+    </script><script src="../libs/jquery.mobile-1.3.1.min.js" type="text/javascript">
+</script><script src="../libs/chromoselector.demo.min.js" type="text/javascript">
+</script><script src="../demos/custom-color-format.js" type="text/javascript">
+</script><script src="../demos/icon.js" type="text/javascript">
+</script><script src="../demos/showcase.js" type="text/javascript">
+</script><script src="../demos/previews.js" type="text/javascript">
+</script><script src="../demos/animations.js" type="text/javascript">
+</script><script src="../demos/display-modes.js" type="text/javascript">
+</script><script src="../libs/highlight.pack.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    $(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});
+    //]]>
+    </script>
+  </body>
+</html>

@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      ChromoSelector - jQuery Color Picker plugin : Documentation / API / Color Manipulation
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript">
+//<![CDATA[
+    if (top.location != location) {top.location.href = document.location.href;}
+    //]]>
+    </script>
+    <link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.3.1.min.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/chromoselector.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/style.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/default.min.css" />
+    <link href="../libs/images/favicon.png" rel="shortcut icon" />
+  </head>
+  <body>
+    <div data-role="page" class="type-interior" id="interior">
+      <div data-role="header" data-theme="a">
+        <h1>
+          Documentation / API / Color Manipulation
+        </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a data-theme="b" href="../overview/purchase.html">Buy now</a>
+      </div>
+      <div data-role="content">
+        <div class="content-primary">
+          <h2>
+            Color Manipulation
+          </h2>
+          <h3>
+            Getting a color:
+          </h3>
+          <p>
+            Assuming that the plugin has already been instanciated, getting it's current color is a simple API call:
+          </p>
+          <pre class="instant">
+<code class="javascript">var color = $("#myColorPicker").chromoselector("getColor");</code>
+</pre>
+          <h3>
+            Setting a color:
+          </h3>
+          <p>
+            See the <i>setColor()</i> method in the API below for valid formats. The method may delay execution under load, so consider this a request to change the color, the actual color change may
+            happen a little later.
+          </p>
+          <pre class="instant">
+<code class="javascript">
+$("#myColorPicker").choromoselector("setColor", aNewColor);
+</code>
+</pre>
+          <h3>
+            Color API:
+          </h3>
+          <p>
+            Below is an overview of the <i>Color</i> class. Colors are internally stored in the color picker using objects of this class, and are also passed around the color picker API in a few
+            methods.
+          </p>
+          <p>
+            If necessary, it is possible to access the Color object, through <i>$.fn.chromoselector.Color</i>:
+          </p>
+          <pre class="instant">
+<code class="javascript">// Black
+var color1 = new $.fn.chromoselector.Color();
+// Red, see the setColor method for valid formats
+var color2 = new $.fn.chromoselector.Color('#f00');
+</code>
+</pre>A color object has the following public methods:
+          <ul data-role="listview" data-inset="true">
+            <li>
+              <h3>
+                Color.getHexString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in hexadecimal format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"#ff8800"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getHexaString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in hexadecimal format, including the alpha channel
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"#ff8800ff"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getRgbString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in RGB format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"rgb(255,0,186)"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getRgbaString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in RGBA format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"rgba(255,0,186,0.5)"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getHslString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in HSL format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"hsl(282,100%,37%)"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getHslaString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in HSLA format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"hsla(282,100%,37%,0.5)"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getCmykString()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as a string in CMYK format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">"device-cmyk(0.3,1,0,0.27)"</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getRgb()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color an object in RGB format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">{
+    r: 0.27,
+    g: 0.12,
+    b: 0
+}</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getRgba()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color an object in RGBA format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">{
+    r: 0.27,
+    g: 0.12,
+    b: 0,
+    a: 0.5
+}</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getHsl()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color an object in HSL format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">{
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+}</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getHsla()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color an object in HSLA format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">{
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+    a: 0.5
+}</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getCmyk()
+              </h3>
+              <p style="white-space: normal">
+                Returns the color as JS object in CMYK format
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">{
+    c: 0.3,
+    m: 1,
+    y: 0,
+    k: 0.27
+}</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.getTextColor()
+              </h3>
+              <p style="white-space: normal">
+                Returns a contrasting color if you need to print text on the background of the current color
+              </p>
+              <pre class="instant">
+<code class="javascript">$("#textfield").chromoselector("setColor", "#000"); // black
+var color = $("#textfield").chromoselector("getColor");
+color.getTextColor().getHexString(); // #fff (white)
+color.getTextColor().getTextColor().getHexString(); // #000 (black)
+</code>
+</pre>
+              <p>
+                Change the input textfield colors on update
+              </p>
+              <pre class="instant">
+<code class="javascript">
+$("#textfield").chromoselector({
+    preview: false,
+    update: function() {
+        var color = $(this).chromoselector("getColor");
+        $(this).css({
+            "background-color": color.getHexString(),
+            "color": color.getTextColor().getHexString()
+        });
+    }
+});
+</code>
+</pre><strong>See also:</strong>
+              <p>
+                <a href="../demos/custom-color-format.html">Demo - Custom Color Format</a>
+              </p>
+              <p>
+                <a href="../demos/previews.html">Demo - Previews</a>
+              </p>
+            </li>
+            <li>
+              <h3>
+                Color.getAlpha()
+              </h3>
+              <p style="white-space: normal">
+                Returns the value of the alpha channel.
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">var color = new $.fn.chromoselector.Color(someInputColor);
+color.setAlpha(color.getAlpha() - 0.1); // lower alpha by 10 %
+</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.setAlpha(value)
+              </h3>
+              <p style="white-space: normal">
+                Sets the value of the alpha channel to a given value. Valid values are numbers between 0 and 1. If the value is not valid, no change is performed.
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">var color = new $.fn.chromoselector.Color();
+color.setAlpha(0.5);
+</code>
+</pre>
+            </li>
+            <li>
+              <h3>
+                Color.setColor(color)
+              </h3>
+              <p style="white-space: normal">
+                Sets the current color to a given value. If the value is not valid, no change is performed. White space characters inside strings are ignored. The color can be supplied in a range of
+                formats:
+              </p>
+              <pre style="margin-bottom: 0" class="instant">
+<code class="javascript">
+color.setColor("#ff8800");
+color.setColor("#ff8800ff");
+color.setColor("rgb(255,0,186)");
+color.setColor("rgba(255,0,186,0.5)");
+color.setColor("rgb(100%,0%,20%)");      // alternative format
+color.setColor("rgba(100%,0%,20%,0.5)"); // alternative format
+color.setColor("hsl(282,100%,37%)");
+color.setColor("hsla(282,100%,37%,0.5)");
+color.setColor("device-cmyk(0.3,1,0,0.27)");
+color.setColor({
+    r: 0.27,
+    g: 0.12,
+    b: 0
+});
+color.setColor({
+    r: 0.27,
+    g: 0.12,
+    b: 0,
+    a: 0.5
+});
+color.setColor({
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+});
+color.setColor({
+    h: 0.54,
+    s: 0.15,
+    l: 0.33
+    a: 0.5
+});
+color.setColor({
+    c: 0.3,
+    m: 1,
+    y: 0,
+    k: 0.27
+});
+</code>
+</pre>
+            </li>
+          </ul>
+        </div>
+        <div class="content-secondary">
+          <nav>
+            <ul data-role="listview" data-theme="c" data-dividertheme="d">
+              <li data-role="list-divider">API
+              </li>
+              <li>
+                <a href="../api/properties.html">Properties</a>
+              </li>
+              <li>
+                <a href="../api/events.html">Events</a>
+              </li>
+              <li>
+                <a href="../api/methods.html">Methods</a>
+              </li>
+              <li>
+                <a href="../api/api-object.html">Api Object</a>
+              </li>
+              <li>
+                <a href="../api/overriding-defaults.html">Overriding Defaults</a>
+              </li>
+              <li data-theme="e">
+                <a href="../api/color-manipulation.html">Color Manipulation</a>
+              </li>
+              <li>
+                <a href="../api/dimensions.html">Dimensions</a>
+              </li>
+              <li>
+                <a href="../api/theming.html">Theming</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div data-role="footer" class="footer-docs" data-theme="c">
+        <p>
+          v2.0.0
+        </p>
+        <p style="float: right">
+          © 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a>
+        </p>
+        <div style="clear:both"></div>
+      </div>
+    </div><script src="../libs/jquery-1.9.1.min.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    $(document).on("mobileinit", function(){$.mobile.ajaxEnabled = false;});
+    $(window).load(function () {
+    var url = location.href;
+    var target = "";
+    var index = url.lastIndexOf("?target=");
+    if (index !== -1) {
+        target = url.substr(index + 8);
+    }
+    if (target) {
+        var $target = $("#" + target);
+        if ($target.length) {
+            $target.find("h3").click();
+            $("html, body").animate({
+                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+            }, 400);
+        }
+    }
+    });
+    //]]>
+    </script><script src="../libs/jquery.mobile-1.3.1.min.js" type="text/javascript">
+</script><script src="../libs/chromoselector.demo.min.js" type="text/javascript">
+</script><script src="../demos/custom-color-format.js" type="text/javascript">
+</script><script src="../demos/icon.js" type="text/javascript">
+</script><script src="../demos/showcase.js" type="text/javascript">
+</script><script src="../demos/previews.js" type="text/javascript">
+</script><script src="../demos/animations.js" type="text/javascript">
+</script><script src="../demos/display-modes.js" type="text/javascript">
+</script><script src="../libs/highlight.pack.js" type="text/javascript">
+</script><script type="text/javascript">
+//<![CDATA[
+    $(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});
+    //]]>
+    </script>
+  </body>
+</html>
