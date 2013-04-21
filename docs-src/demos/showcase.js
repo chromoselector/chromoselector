@@ -21,10 +21,9 @@ $(document).ready(function () {
     var updatePreview = function() {
         var color = $(this).chromoselector('getColor');
         $(this).css({
-            'background-color': color.getHexString(),
             'color': color.getTextColor().getHexString(),
             'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
-        });
+        }).parent().css('background-color', color.getHexString());
     };
 
     $('#showcase #showcase4').chromoselector({
@@ -48,6 +47,15 @@ $(document).ready(function () {
         shadowColor: 'rgba(255,255,255,0.8)'
     });
 
+    var updatePreview2 = function() {
+        var color = $(this).chromoselector('getColor');
+        $(this).css({
+            'background-color': color.getHexString(),
+            'color': color.getTextColor().getHexString(),
+            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
+        });
+    };
+
     $('#showcase #showcase6').css({
         border: '5px ridge gray',
         cursor: 'pointer',
@@ -57,9 +65,13 @@ $(document).ready(function () {
         padding: 0,
         'box-shadow': 0,
         'border-radius': 0
-    }).chromoselector({
-        create: updatePreview,
-        update: updatePreview,
+    }).parent().css({
+        'box-shadow':'0 0 0 transparent',
+        'border-radius':0,
+        'border':0
+    }).end().chromoselector({
+        create: updatePreview2,
+        update: updatePreview2,
         preview: false,
         roundcorners: false
     });
