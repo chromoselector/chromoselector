@@ -12,37 +12,55 @@ $html .= htmlspecialchars('<!--
 The outermost container is the target element, it is generated
 automatically, unless you have manually specified a target.
  -->
-<div class="ui-cs-chromoselector">
+<div>
     <!-- The optional icon, used to open the color picker -->
-    <a class="ui-cs-icon" style="position: absolute;">
+    <a class="ui-cs-icon">
         <img />
     </a>
-    <!-- This element contains the parts that make up a color picker -->
-    <div class="ui-cs-container" style="position: absolute;">
-        <!-- Color picker preview -->
-        <div class="ui-cs-preview-container">
-            <div class="ui-cs-preview-widget">
+    <div class="ui-cs-chromoselector">
+        <!-- This element contains the parts that make up a color picker -->
+        <div class="ui-cs-supercontainer">
+            <div class="ui-cs-container">
+                <!-- Color picker preview -->
+                <div class="ui-cs-preview-container">
+                    <div class="ui-cs-preview-widget">
+                        ...
+                    </div>
+                </div>
+                <!-- This element contains the canvases on which the color picker is rendered -->
+                <div class="ui-cs-widget">
+                    ...
+                </div>
+            </div>
+            <!-- This element contains the canvas on which the side panel is rendered -->
+            <div class="ui-cs-panel">
                 ...
             </div>
+            <!--
+            This element is what you drag to resize the color picker.
+            It may or may not exist.
+            -->
+            <canvas class="ui-cs-resizer"></canvas>
         </div>
-        <!-- This element contains the canvases on which the color picker is rendered -->
-        <div class="ui-cs-widget" style="position: relative;">
-            ...
-        </div>
-        <!-- This element contains the canvas on which the side panel is rendered -->
-        <div class="ui-cs-panel" style="position: absolute;">
-            ...
-        </div>
-        <!--
-        This element is what you drag to resize the color picker.
-        It may or may not exist.
-        -->
-        <canvas class="ui-cs-resizer" style="position: absolute;"></canvas>
     </div>
 </div>');
 $html .= '</code></pre>';
-$html .= '<p><strong>See also:</strong><p><a href="../demos/display-modes.html">Demo - Display Modes</a></p>
-<p><a href="../api/properties.html?target=pickerClass">API / Properties - pickerClass</a></p>';
+$html .= '<p>To change the style of the picker, you can either edit its CSS file directly, or you can assign a class to pickers via the <a href="../api/properties.html?target=pickerClass">pickerClass</a> property. Afterwards, you can override the styles as follows:
+<h3>JS code</h3>
+<pre class="instant"><code>$(document).ready(function () {
+    $("#input").chromoselector({
+        pickerClass: "dark",
+        shadowColor: "rgba(255,255,255,0.5)"
+    });
+});</code></pre>
+<h3>CSS code</h3>
+<pre class="instant"><code>.dark.ui-cs-chromoselector {
+    background: #222233;
+    background: rgba(34,34,41,0.95);
+    border: 1px solid black;
+}</code></pre>
+</p>';
+$html .= '<p><strong>See also:</strong><p><a href="../demos/display-modes.html">Demo - Display Modes</a></p>';
 $html .= '</div>';
 $html .= '<div class="content-secondary">';
 $html .= '<nav>';

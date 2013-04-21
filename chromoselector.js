@@ -7,7 +7,7 @@
      *
      * v 2.0.0
      *   Create v2.0 fiddles
-     *   Update docs: showcase, dimensions, theming
+     *   Update docs: screenshots, dimensions
      *
      * v 2.0.1
      *   Fix Opera v12- support
