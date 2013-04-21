@@ -5,12 +5,12 @@ function getDemosMenu($path = '.', $selected = '') {
     $elms = array(
         'showcase' => 'Showcase',
         'display-modes' => 'Display Modes',
-        'ui-dialog' => 'jQuery UI dialog integration',
         'custom-color-format' => 'Custom Color Formats',
         'previews' => 'Color Previews',
         'animations' => 'Animations',
         'icon' => 'Icon Opener',
-        'mobile-dialog' => 'jQuery Mobile dialog integration'
+        'mobile-dialog' => 'jQuery Mobile dialog integration',
+        'ui-dialog' => 'jQuery UI dialog integration'
     );
     foreach ($elms as $key => $value) {
         if ($key == $selected) {
