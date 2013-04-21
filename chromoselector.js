@@ -9,25 +9,24 @@
      *   Create v2.0 fiddles
      *   Update docs: showcase, dimensions, theming
      *
-     *   Shrink more vars with replacevars.pl
-     *
      * v 2.0.1
      *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
      *
      * v 2.1.0
-     *   Fix slide animation
      *   Improve positioning in small window (move right if necessary)
-     *   Unit tests
      *   Implement RequestAnimationFrame
      *   Better generation of new elements
-     *   Faster shadow - rotate instead of blurring
-     *   refactor hue2rgb
-     *   Improved mobile support
      *   Improve shadow ratio calculation / shadow rendering
+     *   Shrink more vars with replacevars.pl
      *
      * v 3.0.0
      *   Camel-case all properties
+     *   Fix slide animation
+     *   More unit tests
+     *   Faster shadow - rotate instead of blurring
+     *   refactor hue2rgb
+     *   Improved mobile support
      *
      * FI-TESTSUITE
      */
