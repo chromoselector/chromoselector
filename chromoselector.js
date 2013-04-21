@@ -6,8 +6,7 @@
      * TODO
      *
      * v 2.0.0
-     *   Create v2.0 fiddles
-     *   Update docs: screenshots, dimensions
+     *   Update docs: screenshots
      *
      * v 2.0.1
      *   Fix Opera v12- support

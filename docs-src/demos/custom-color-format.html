@@ -27,7 +27,7 @@ $demos = array(
         'title' => 'HEX (default)',
         'id' => 'color0',
         'value' => '#445566',
-        'fiddle' => 'http://sandbox.chromoselector.com/g6H3G/',
+        'fiddle' => 'http://sandbox.chromoselector.com/bEt5W/',
         'code' => "$(document).ready(function () {
     $('#color0').chromoselector();
 });"
@@ -36,7 +36,7 @@ $demos = array(
         'title' => 'Comma separated RGB',
         'id' => 'color1',
         'value' => 'rgb(41,160,126)',
-        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'fiddle' => 'http://sandbox.chromoselector.com/DPhNG/',
         'code' => "$(document).ready(function () {
     $('#color1').chromoselector({
         color2str: function (color) {
@@ -49,9 +49,10 @@ $demos = array(
         'title' => 'Comma separated RGBA',
         'id' => 'color2',
         'value' => 'rgba(41,160,126,1)',
-        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'fiddle' => 'http://sandbox.chromoselector.com/qHMZt/',
         'code' => "$(document).ready(function () {
     $('#color2').chromoselector({
+        panelAlpha: true,
         color2str: function (color) {
             return color.getRgbaString();
         }
@@ -62,7 +63,7 @@ $demos = array(
         'title' => 'Comma separated HSL',
         'id' => 'color3',
         'value' => 'hsl(338,36%,22%)',
-        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'fiddle' => 'http://sandbox.chromoselector.com/gwPXd/',
         'code' => "$(document).ready(function () {
     $('#color3').chromoselector({
         color2str: function (color) {
@@ -75,9 +76,10 @@ $demos = array(
         'title' => 'Comma separated HSLA',
         'id' => 'color4',
         'value' => 'hsla(338,36%,22%,1)',
-        'fiddle' => 'http://sandbox.chromoselector.com/85gw3/',
+        'fiddle' => 'http://sandbox.chromoselector.com/TgzXA/',
         'code' => "$(document).ready(function () {
     $('#color4').chromoselector({
+        panelAlpha: true,
         color2str: function (color) {
             return color.getHslaString();
         }
@@ -88,7 +90,7 @@ $demos = array(
         'title' => 'Hex RGB without "#"',
         'id' => 'color5',
         'value' => 'c9db99',
-        'fiddle' => 'http://sandbox.chromoselector.com/unLGf/',
+        'fiddle' => 'http://sandbox.chromoselector.com/7y5RW/',
         'code' => "$(document).ready(function () {
     $('#color5').chromoselector({
         str2color: function (str) {
@@ -104,7 +106,7 @@ $demos = array(
         'title' => 'JSON encoded CMYK',
         'id' => 'color6',
         'value' => '{&quot;c&quot;:0.54,&quot;m&quot;:0.23,&quot;y&quot;:0,&quot;k&quot;:0.31}',
-        'fiddle' => 'http://sandbox.chromoselector.com/5xv2W/',
+        'fiddle' => 'http://sandbox.chromoselector.com/tLVVg/',
         'code' => "$(document).ready(function () {
     $('#color6').chromoselector({
         str2color: function (str) {
@@ -126,7 +128,7 @@ $demos = array(
         'title' => 'RGB as an integer',
         'id' => 'color7',
         'value' => '9087362',
-        'fiddle' => 'http://sandbox.chromoselector.com/F75Px/',
+        'fiddle' => 'http://sandbox.chromoselector.com/E8V2C/',
         'code' => "$(document).ready(function () {
     $('#color7').chromoselector({
         str2color: function (str) {

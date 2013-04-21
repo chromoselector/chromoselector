@@ -40,7 +40,7 @@ $demo1 =
         'title' => 'Inline mode',
         'id' => 'basic1',
         'color' => '#000000',
-        'fiddle' => 'http://sandbox.chromoselector.com/g6H3G/',
+        'fiddle' => 'http://sandbox.chromoselector.com/bEt5W/',
         'code' => htmlspecialchars(
 <<<HERE
 <!DOCTYPE html>
@@ -70,7 +70,7 @@ $demo2 =     array(
         'title' => 'Static mode',
         'id' => 'basic2',
         'color' => '#000000',
-        'fiddle' => 'http://sandbox.chromoselector.com/RecjP/',
+        'fiddle' => 'http://sandbox.chromoselector.com/esuWS/',
         'code' => htmlspecialchars(
 <<<HERE
 <!DOCTYPE html>
@@ -81,32 +81,36 @@ $demo2 =     array(
     <script src="chromoselector.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(document).ready(function () {
-        $('#basic2').chromoselector({
+        $('#color').chromoselector({
             target: '#picker',
             autoshow: false,
             create: function () {
                 $(this).chromoselector('show', 0);
             },
-            width: 260
+            width: 250
         });
     });
     </script>
     <style type="text/css">
-        #picker {
-            border: 1px solid;
-            float: left;
-            padding: 1em;
-            background-color: #e4ccc1;
-        }
-        input {
-            width: 100%;
-        }
+    form {
+        margin: 1em;
+    }
+    input {
+        width: 30%;
+    }
+    #picker {
+        border: 1px solid;
+        float: left;
+        padding: 1em;
+        background-color: #e4ccc1;
+    }
     </style>
 </head>
 <body style="margin: 2em;">
-    <form action="#">
+    <form>
         <div id="picker">
-            <input id="basic2" name="basic2" type="text" value="#ff0000" />
+            <label for="color">Pick a color:</label>
+            <input id="color" name="basic2" type="text" value="#ff0000" />
         </div>
     </form>
 </body>
