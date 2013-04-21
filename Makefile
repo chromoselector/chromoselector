@@ -61,5 +61,6 @@ site:
 	cp chromoselector.demo.min.js site/libs
 	cp copyright-notice.js site/libs
 	cp jquery-1.9.1.min.js site/libs
+	cp .htaccess site
 
 .PHONY: test release site

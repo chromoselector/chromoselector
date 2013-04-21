@@ -1,0 +1,22 @@
+ErrorDocument 400 /400.shtml
+ErrorDocument 401 /401.shtml
+ErrorDocument 403 /403.shtml
+ErrorDocument 404 /404.shtml
+ErrorDocument 500 /500.shtml
+
+RewriteEngine on
+RewriteCond %{HTTP_HOST} ^www\.chromoselector\.com
+RewriteRule ^(.*)$ http://chromoselector.com/$1 [R=permanent,L]
+
+<IfModule mod_expires.c>
+	ExpiresActive On
+	<FilesMatch "\.(js|css|jpg|jpeg|png|gif)$">
+		ExpiresDefault "access plus 1 month"
+		Header unset ETag
+		FileETag None
+	</FilesMatch>
+</IfModule>
+
+<ifmodule mod_deflate.c>
+	AddOutputFilterByType DEFLATE text/html text/plain text/css application/javascript text/javascript
+</ifmodule>
