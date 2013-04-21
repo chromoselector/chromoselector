@@ -11,6 +11,7 @@ _preview
 _panel
 _resizer
 _supercontainer
+_root
 panelApi
 ringwidthRatio
 shadowRatio
@@ -22,6 +23,8 @@ draggingHueRenderer
 draggingHue
 draggingSatLumRenderer
 draggingSatLum
+effect
+ready
 resizingRenderer
 resizing
 resizeOffset
