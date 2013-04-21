@@ -1,8 +1,9 @@
 v 2.0.0 - Not yet released
+  * New color management module
   * Alpha support
   * Built-in side panel
-  * New color management module
   * Improved shadow rendering
+  * Updated to jquery 1.9.1
 
 v 1.1.0 - 16 Mar 2013
   * Configurable shadow color
@@ -10,7 +11,7 @@ v 1.1.0 - 16 Mar 2013
 v 1.0.1 - 24 Jan 2013
   * Improved Color.getTextColor() implementation according to BT 709 spec
   * Fixed calculations of the width of the hue selector
-  * Changed default value for "ringwidth" property from 0.22 to 0.18
+  * Changed default value for "ringwidth" property
   * New documentation page explaining widget dimensions
   * Documentation fixes
 
