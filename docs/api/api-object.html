@@ -38,7 +38,7 @@
     // Change color
     $("#myColorPicker").chromoselector("setColor", "#123456");
     // Log new color to console in HSL format
-    console.log($("#myColorPicker").chromoselector("getColor").hsl);
+    console.log($("#myColorPicker").chromoselector("getColor").getHsl());
 });</code>
 </pre><br />
           Same as above, but using the API object:
@@ -51,7 +51,7 @@
     // Now do everything else
     api.show();
     api.setColor("#123456");
-    console.log(api.getColor().hsl);
+    console.log(api.getColor().getHsl());
 });</code>
 </pre><br />
           Most API object function calls can be chained, so the above can be again reduced to the following:
@@ -61,7 +61,7 @@
     var api = $("#myColorPicker").chromoselector().chromoselector("api");
     // Now do everything else
     console.log(
-        api.show().setColor("#123456").getColor().hsl
+        api.show().setColor("#123456").getColor().getHsl()
     );
 });</code>
 </pre>
@@ -124,7 +124,7 @@
         if ($target.length) {
             $target.find("h3").click();
             $("html, body").animate({
-                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+                scrollTop: $("#" + target).find("h3").offset().top
             }, 400);
         }
     }
