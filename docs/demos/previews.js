@@ -11,10 +11,9 @@ $(document).ready(function () {
     var updatePreview = function() {
         var color = $(this).chromoselector('getColor');
         $(this).css({
-            'background-color': color.getHexString(),
             'color': color.getTextColor().getHexString(),
             'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
-        });
+        }).parent().css('background-color', color.getHexString());
     };
     $('#textfield').chromoselector({
         preview: false,
