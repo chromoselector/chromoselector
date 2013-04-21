@@ -18,7 +18,7 @@ $(document).ready(function () {
             )
         ).append(
             $('<p/>').append(
-                'Please visit <a href="http://www.chromoselector.com/" target="_blank">http://www.chromoselector.com/</a> to purchase a license.'
+                'Please visit <a href="http://chromoselector.com/" target="_blank">http://chromoselector.com/</a> to purchase a license.'
             )
         )
     );
