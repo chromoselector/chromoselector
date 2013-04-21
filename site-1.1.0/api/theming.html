@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      ChromoSelector - jQuery Color Picker plugin : Documentation / API / Theming
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript">
+//<![CDATA[
+    if (top.location != location) {top.location.href = document.location.href;}
+    //]]>
+    </script>
+    <link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/style.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/chromoselector.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/default.min.css" />
+    <link href="../libs/images/favicon.png" rel="shortcut icon" />
+    <script src="../libs/jquery-1.8.3.min.js" type="text/javascript">
+</script>
+    <script type="text/javascript">
+//<![CDATA[
+    $(document).live("mobileinit", function(){$.mobile.ajaxEnabled = false;});
+    //]]>
+    </script>
+    <script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript">
+</script>
+    <script src="../libs/chromoselector.demo.min.js" type="text/javascript">
+</script>
+    <script src="../demos/custom-color-format.js" type="text/javascript">
+</script>
+    <script src="../demos/icon.js" type="text/javascript">
+</script>
+    <script src="../demos/previews.js" type="text/javascript">
+</script>
+    <script src="../demos/animations.js" type="text/javascript">
+</script>
+    <script src="../demos/display-modes.js" type="text/javascript">
+</script>
+    <script src="../demos/mobile-dialog.js" type="text/javascript">
+</script>
+    <script src="../libs/highlight.pack.js" type="text/javascript">
+</script>
+    <script type="text/javascript">
+//<![CDATA[
+    $(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});
+    //]]>
+    </script>
+  </head>
+  <body>
+    <div data-role="page" class="type-interior" id="interior">
+      <div data-role="header" data-theme="a">
+        <h1>
+          Documentation / API / Theming
+        </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a href="../overview/purchase.html">Buy now</a>
+      </div>
+      <div data-role="content">
+        <div class="content-primary">
+          <h2>
+            Theming
+          </h2>
+          <p>
+            The color picker can be themed in the chromoselector.css file.<br />
+            Here is a sample structures of elements you might expect to see in a color picker and their classes:
+          </p>
+          <pre class="instant">
+<code>&lt;!--
+The outermost container is the target element, it is generated
+automatically, unless you have manually specified a target.
+ --&gt;
+&lt;div&gt;
+    &lt;!-- The optional icon, used to open the color picker --&gt;
+    &lt;a class="ui-cs-icon" style="position: absolute;"&gt;
+        &lt;img /&gt;
+    &lt;/a&gt;
+    &lt;!-- This element contains the parts that make up a color picker --&gt;
+    &lt;div class="ui-cs-container" style="position: absolute;"&gt;
+        &lt;!-- Color picker preview --&gt;
+        &lt;div class="ui-cs-preview-container"&gt;
+            &lt;div class="ui-cs-preview-widget"&gt;&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;!-- This element contains the canvases on which the color picker is rendered --&gt;
+        &lt;div class="ui-cs-widget" style="position: relative;"&gt;
+            ...
+        &lt;/div&gt;
+        &lt;!-- This is what you drag to resize the color picker --&gt;
+        &lt;span class="ui-cs-resizer" style="position: absolute;"&gt;&lt;/span&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</code>
+</pre>
+          <p>
+            <strong>See also:</strong>
+          </p>
+          <p>
+            <a href="../demos/display-modes.html">Demo - Display Modes</a>
+          </p>
+        </div>
+        <div class="content-secondary">
+          <nav>
+            <ul data-role="listview" data-theme="c" data-dividertheme="d">
+              <li data-role="list-divider">API
+              </li>
+              <li>
+                <a href="../api/properties.html">Properties</a>
+              </li>
+              <li>
+                <a href="../api/events.html">Events</a>
+              </li>
+              <li>
+                <a href="../api/methods.html">Methods</a>
+              </li>
+              <li>
+                <a href="../api/api-object.html">Api Object</a>
+              </li>
+              <li>
+                <a href="../api/overriding-defaults.html">Overriding Defaults</a>
+              </li>
+              <li>
+                <a href="../api/color-manipulation.html">Color Manipulation</a>
+              </li>
+              <li>
+                <a href="../api/dimensions.html">Dimensions</a>
+              </li>
+              <li data-theme="e">
+                <a href="../api/theming.html">Theming</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div data-role="footer" class="footer-docs" data-theme="c">
+        <p>
+          v1.1.0
+        </p>
+        <p style="float: right">
+          © 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

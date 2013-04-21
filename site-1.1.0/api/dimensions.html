@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      ChromoSelector - jQuery Color Picker plugin : Documentation / API / Dimensions
+    </title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript">
+//<![CDATA[
+    if (top.location != location) {top.location.href = document.location.href;}
+    //]]>
+    </script>
+    <link rel="stylesheet" type="text/css" href="../libs/jquery.mobile-1.2.0.min.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/style.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/chromoselector.css" />
+    <link rel="stylesheet" type="text/css" href="../libs/default.min.css" />
+    <link href="../libs/images/favicon.png" rel="shortcut icon" />
+    <script src="../libs/jquery-1.8.3.min.js" type="text/javascript">
+</script>
+    <script type="text/javascript">
+//<![CDATA[
+    $(document).live("mobileinit", function(){$.mobile.ajaxEnabled = false;});
+    //]]>
+    </script>
+    <script src="../libs/jquery.mobile-1.2.0.min.js" type="text/javascript">
+</script>
+    <script src="../libs/chromoselector.demo.min.js" type="text/javascript">
+</script>
+    <script src="../demos/custom-color-format.js" type="text/javascript">
+</script>
+    <script src="../demos/icon.js" type="text/javascript">
+</script>
+    <script src="../demos/previews.js" type="text/javascript">
+</script>
+    <script src="../demos/animations.js" type="text/javascript">
+</script>
+    <script src="../demos/display-modes.js" type="text/javascript">
+</script>
+    <script src="../demos/mobile-dialog.js" type="text/javascript">
+</script>
+    <script src="../libs/highlight.pack.js" type="text/javascript">
+</script>
+    <script type="text/javascript">
+//<![CDATA[
+    $(document).bind("pageinit", function(){$("h3.ui-collapsible-heading").bind("click", function () {$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});});$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});$(".collapse").bind("click", function(){$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();});$(".expand").bind("click", function(){$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();});});
+    //]]>
+    </script>
+  </head>
+  <body>
+    <div data-role="page" class="type-interior" id="interior">
+      <div data-role="header" data-theme="a">
+        <h1>
+          Documentation / API / Dimensions
+        </h1><a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a><a href="../overview/purchase.html">Buy now</a>
+      </div>
+      <div data-role="content">
+        <div class="content-primary">
+          <h2>
+            Dimensions
+          </h2>
+          <p>
+            <img alt="Blueprint of color picker dimensions" src="dimensions.png" />
+          </p>
+          <ol>
+            <li>Height of the preview box. Set in CSS file, default 25px.
+            </li>
+            <li>Width of the color picker. Set with the "width" API property, default 180px.
+            </li>
+            <li>Margin around the preview box. Set in CSS file, default 10px.
+            </li>
+            <li>Diameter of the hue selector. Cannot be set manually, default: total picker width ② minus total picker margin ⑥.
+            </li>
+            <li>Fixed margin between the hue selector and the saturation/luminosity selector, always 5px.
+            </li>
+            <li>Fixed margin around the color picker. Cannot be set manually, always 10px.
+            </li>
+            <li>Width of the hue selector. Set with "ringwidth" API property. The value is a percentage of the total width of the color picker, as occupied by both sides of the hue selector. Default
+            0.18
+            </li>
+            <li>Width of border around the color picker. Set in CSS file, default 1px.
+            </li>
+          </ol>
+        </div>
+        <div class="content-secondary">
+          <nav>
+            <ul data-role="listview" data-theme="c" data-dividertheme="d">
+              <li data-role="list-divider">API
+              </li>
+              <li>
+                <a href="../api/properties.html">Properties</a>
+              </li>
+              <li>
+                <a href="../api/events.html">Events</a>
+              </li>
+              <li>
+                <a href="../api/methods.html">Methods</a>
+              </li>
+              <li>
+                <a href="../api/api-object.html">Api Object</a>
+              </li>
+              <li>
+                <a href="../api/overriding-defaults.html">Overriding Defaults</a>
+              </li>
+              <li>
+                <a href="../api/color-manipulation.html">Color Manipulation</a>
+              </li>
+              <li data-theme="e">
+                <a href="../api/dimensions.html">Dimensions</a>
+              </li>
+              <li>
+                <a href="../api/theming.html">Theming</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      <div data-role="footer" class="footer-docs" data-theme="c">
+        <p>
+          v1.1.0
+        </p>
+        <p style="float: right">
+          © 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>
