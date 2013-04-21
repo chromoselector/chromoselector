@@ -33,24 +33,20 @@
             <img alt="Blueprint of color picker dimensions" src="dimensions.png" />
           </p>
           <ol>
-            <li>Height of the preview box. Set in CSS file, default 25px.
+            <li>Width of the color picker. Set with the <a href="../api/properties.html?target=width">width</a> API property.
             </li>
-            <li>Width of the color picker. Set with the "width" API property, default 180px.
+            <li>Height of the preview box. Set in the CSS file.
             </li>
-            <li>Margin around the preview box. Set in CSS file, default 10px.
+            <li>Width of the hue selector. Set with <a href="../api/properties.html?target=ringwidth">ringwidth</a> API property.
             </li>
-            <li>Diameter of the hue selector. Cannot be set manually, default: total picker width ② minus total picker margin ⑥.
+            <li>Width of a channel in the panel. Set with <a href="../api/properties.html?target=panelChannelWidth">panelChannelWidth</a> API property.
             </li>
-            <li>Fixed margin between the hue selector and the saturation/luminosity selector, always 5px.
-            </li>
-            <li>Fixed margin around the color picker. Cannot be set manually, always 10px.
-            </li>
-            <li>Width of the hue selector. Set with "ringwidth" API property. The value is a percentage of the total width of the color picker, as occupied by both sides of the hue selector. Default
-            0.18
-            </li>
-            <li>Width of border around the color picker. Set in CSS file, default 1px.
+            <li>Margin around a channel in the panel. Set with <a href="../api/properties.html?target=panelChannelMargin">panelChannelMargin</a> API property.
             </li>
           </ol>
+          <p>
+            Also, many other dimensions can be changed in the CSS file.
+          </p>
         </div>
         <div class="content-secondary">
           <nav>
@@ -110,7 +106,7 @@
         if ($target.length) {
             $target.find("h3").click();
             $("html, body").animate({
-                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+                scrollTop: $("#" + target).find("h3").offset().top
             }, 400);
         }
     }

@@ -38,43 +38,69 @@
 The outermost container is the target element, it is generated
 automatically, unless you have manually specified a target.
  --&gt;
-&lt;div class="ui-cs-chromoselector"&gt;
+&lt;div&gt;
     &lt;!-- The optional icon, used to open the color picker --&gt;
-    &lt;a class="ui-cs-icon" style="position: absolute;"&gt;
+    &lt;a class="ui-cs-icon"&gt;
         &lt;img /&gt;
     &lt;/a&gt;
-    &lt;!-- This element contains the parts that make up a color picker --&gt;
-    &lt;div class="ui-cs-container" style="position: absolute;"&gt;
-        &lt;!-- Color picker preview --&gt;
-        &lt;div class="ui-cs-preview-container"&gt;
-            &lt;div class="ui-cs-preview-widget"&gt;
+    &lt;div class="ui-cs-chromoselector"&gt;
+        &lt;!-- This element contains the parts that make up a color picker --&gt;
+        &lt;div class="ui-cs-supercontainer"&gt;
+            &lt;div class="ui-cs-container"&gt;
+                &lt;!-- Color picker preview --&gt;
+                &lt;div class="ui-cs-preview-container"&gt;
+                    &lt;div class="ui-cs-preview-widget"&gt;
+                        ...
+                    &lt;/div&gt;
+                &lt;/div&gt;
+                &lt;!-- This element contains the canvases on which the color picker is rendered --&gt;
+                &lt;div class="ui-cs-widget"&gt;
+                    ...
+                &lt;/div&gt;
+            &lt;/div&gt;
+            &lt;!-- This element contains the canvas on which the side panel is rendered --&gt;
+            &lt;div class="ui-cs-panel"&gt;
                 ...
             &lt;/div&gt;
+            &lt;!--
+            This element is what you drag to resize the color picker.
+            It may or may not exist.
+            --&gt;
+            &lt;canvas class="ui-cs-resizer"&gt;&lt;/canvas&gt;
         &lt;/div&gt;
-        &lt;!-- This element contains the canvases on which the color picker is rendered --&gt;
-        &lt;div class="ui-cs-widget" style="position: relative;"&gt;
-            ...
-        &lt;/div&gt;
-        &lt;!-- This element contains the canvas on which the side panel is rendered --&gt;
-        &lt;div class="ui-cs-panel" style="position: absolute;"&gt;
-            ...
-        &lt;/div&gt;
-        &lt;!--
-        This element is what you drag to resize the color picker.
-        It may or may not exist.
-        --&gt;
-        &lt;canvas class="ui-cs-resizer" style="position: absolute;"&gt;&lt;/canvas&gt;
     &lt;/div&gt;
 &lt;/div&gt;</code>
+</pre>
+          <p>
+            To change the style of the picker, you can either edit its CSS file directly, or you can assign a class to pickers via the <a href=
+            "../api/properties.html?target=pickerClass">pickerClass</a> property. Afterwards, you can override the styles as follows:
+          </p>
+          <h3>
+            JS code
+          </h3>
+          <pre class="instant">
+<code>$(document).ready(function () {
+    $("#input").chromoselector({
+        pickerClass: "dark",
+        shadowColor: "rgba(255,255,255,0.5)"
+    });
+});</code>
+</pre>
+          <h3>
+            CSS code
+          </h3>
+          <pre class="instant">
+<code>.dark.ui-cs-chromoselector {
+    background: #222233;
+    background: rgba(34,34,41,0.95);
+    border: 1px solid black;
+}</code>
 </pre>
           <p>
             <strong>See also:</strong>
           </p>
           <p>
             <a href="../demos/display-modes.html">Demo - Display Modes</a>
-          </p>
-          <p>
-            <a href="../api/properties.html?target=pickerClass">API / Properties - pickerClass</a>
           </p>
         </div>
         <div class="content-secondary">
@@ -135,7 +161,7 @@ automatically, unless you have manually specified a target.
         if ($target.length) {
             $target.find("h3").click();
             $("html, body").animate({
-                scrollTop: $("#" + target).find("h3").offset().top - $(".ui-header").outerHeight()
+                scrollTop: $("#" + target).find("h3").offset().top
             }, 400);
         }
     }
