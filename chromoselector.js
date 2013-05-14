@@ -6,26 +6,25 @@
      * TODO
      *
      * v 2.0.0
-     *   Update docs: screenshots
      *
      * v 2.0.1
      *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
      *
      * v 2.1.0
-     *   Improve positioning in small window (move right if necessary)
+     *   Improve positioning in small window (move right or up, if necessary)
      *   Implement RequestAnimationFrame
-     *   Better generation of new elements
      *   Improve shadow ratio calculation / shadow rendering
      *   Shrink more vars with replacevars.pl
      *
      * v 3.0.0
-     *   Camel-case all properties
      *   Fix slide animation
      *   More unit tests
-     *   Faster shadow - rotate instead of blurring
      *   refactor hue2rgb
      *   Improved mobile support
+     *   Better generation of new elements
+     *   Camel-case all properties
+     *   Faster shadow - rotate instead of blurring
      *
      * FI-TESTSUITE
      */
