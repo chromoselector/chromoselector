@@ -1,0 +1,15 @@
+Display modes
+ - Should they have different titles? inline to popup?
+
+Layer features\demos
+ - top much choice initially
+
+
+
+
+
+
+
+
+==== MAP ALTERNATIVE ====
+http://codecanyon.net/item/smooth-zoom-pan-jquery-image-viewer/511142
