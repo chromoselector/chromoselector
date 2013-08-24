@@ -1831,8 +1831,14 @@
             y = touch[0].pageY - offset.top - previewHeight;
         } else if (e.pageX) {
             // mouse
-            x = e.pageX - offset.left;
-            y = e.pageY - offset.top - previewHeight;
+            var pageX = oe.clientX + document.body.scrollLeft;
+            var pageY = oe.clientY + document.body.scrollTop;
+            if (document.documentElement) {
+                pageX += document.documentElement.scrollLeft;
+                pageY += document.documentElement.scrollTop;
+            }
+            x = pageX - offset.left;
+            y = pageY - offset.top - previewHeight;
         }
         return [x, y];
     }

@@ -2,6 +2,7 @@ v 2.0.0 - Not yet released
   * New color management module
   * Alpha support
   * Built-in side panel
+  * Fixed IE position bug
   * Improved shadow rendering
   * Updated to jquery 1.9.1
 
