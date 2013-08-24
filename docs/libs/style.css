@@ -22,7 +22,7 @@ hr { border-width: 1px 0 0; border-style: solid none none; border-color: #ccc; }
 pre { white-space: pre; white-space: pre-wrap; word-wrap: break-word; }
 strong { font-weight: bold; }
 
-#jqm-homeheader img { width: 275px; height: 100px; margin-top:-20px; }
+#jqm-homeheader img { width: 275px; height: 150px; margin-top:-20px; }
 img { max-width: 100%; }
 nav { margin: 0; }
 
