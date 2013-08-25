@@ -141,7 +141,7 @@
                 }
                 return self;
             };
-            self.getAlpha = function (value) {
+            self.getAlpha = function () {
                 return currentColor.a;
             };
             // Set to input color
@@ -674,9 +674,8 @@
 
                 drawShadows();
 
-                var i, x, color1, color2, lighnessHsl, keyCmyk, cmy;
+                var i, color1, color2, lighnessHsl, keyCmyk, cmy;
                 var offset = 10;
-                var yoffset = 10;
                 var channel = 0;
 
                 var drawChannel = function() {
@@ -769,7 +768,7 @@
                 }
             };
             var drawIndicators = function(color) {
-                var offset = 10, channel;
+                var offset = 10, channel, x, y, verticalSpace;
                 var indicator = function (color, lineWidth, diameter){
                     ctx[strokeStyle] = color;
                     ctx.lineWidth = lineWidth;
@@ -779,18 +778,18 @@
                     ctx.stroke();
                 };
                 if (alphaSupport) {
-                    var x = offset + channelWidth/2;
-                    var verticalSpace = canvasHeight - channelWidth - 20;
-                    var y = verticalSpace - (verticalSpace * currentColor.getAlpha()) + channelWidth/2 + 10;
+                    x = offset + channelWidth/2;
+                    verticalSpace = canvasHeight - channelWidth - 20;
+                    y = verticalSpace - (verticalSpace * currentColor.getAlpha()) + channelWidth/2 + 10;
                     offset += channelWidth + channelMargin;
                     indicator("#fff", 1.5, 6);
                     indicator("#000", 2, 4.5);
                 }
                 if (! onlyAlpha) {
                     for (channel in color) {
-                        var x = offset + channelWidth/2;
-                        var verticalSpace = canvasHeight - channelWidth - 20;
-                        var y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2 + 10;
+                        x = offset + channelWidth/2;
+                        verticalSpace = canvasHeight - channelWidth - 20;
+                        y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2 + 10;
                         indicator("#fff", 1.5, 6);
                         indicator("#000", 2, 4.5);
                         offset += channelWidth + channelMargin;
@@ -856,14 +855,14 @@
                     position = fullScaleValue;
                 }
                 var value = position / fullScaleValue;
-                if (alphaSupport && draggingChannel == 0) {
+                if (alphaSupport && draggingChannel === 0) {
                     currentColor.setAlpha(value);
                 } else if (! onlyAlpha) {
                     var index = draggingChannel;
                     if (alphaSupport) {
                         index--;
                     }
-                    var functionToCall = 'get' + mode.charAt(0).toUpperCase() + mode.slice(1)
+                    var functionToCall = 'get' + mode.charAt(0).toUpperCase() + mode.slice(1);
                     var tempColor = currentColor[functionToCall]();
                     tempColor[indexes[index]] = value;
                     tempColor.a = currentColor.getAlpha();
@@ -951,10 +950,10 @@
             $target.append(
                 $canvas
             );
-
+            var $labels = $();
             var labelsHeight = 0;
             if (panelLabels) {
-                var $labels = $('<div />').addClass('ui-panel-labels');
+                $labels = $('<div />').addClass('ui-panel-labels');
                 drawLabels();
                 $target.append($labels);
             }

@@ -76,7 +76,7 @@ var Color = (function () {
             }
             return self;
         };
-        self.getAlpha = function (value) {
+        self.getAlpha = function () {
             return currentColor.a;
         };
         // Set to input color
