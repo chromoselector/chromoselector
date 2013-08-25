@@ -30,6 +30,16 @@
             <h2>
               Custom Color Formats
             </h2>
+            <p>
+              If you would like to use the HEX format with a leading hash, you don't need to do anything as it's the default (example 1).
+            </p>
+            <p>
+              If you would like to use a format that is known to chromoselector, you just need to implement the "color2str" function (examples 2-5). For a full list of supported format, please see
+              the <a href="../api/color-manipulation.html">color manipulation page</a>
+            </p>
+            <p>
+              If you would like to use a custom format, you will need to implement both the "color2str" and "str2color" functions (examples 6-8).
+            </p>
             <div data-role="collapsible" data-collapsed="false" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
               <h3>
                 HEX (default)
