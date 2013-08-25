@@ -1451,12 +1451,12 @@
     function colorPicker_save(self) {
         var str = "";
         if (typeof self.settings.color2str == 'function') {
-            str = self.settings.color2str.apply(null, [self.color]);
+            str = self.settings.color2str.call(null, self.color);
         } else {
             str = self.color.getHexString();
         }
         if (typeof self.settings.save == 'function') {
-            self.settings.save.apply(self._source[0], [str]);
+            self.settings.save.call(self._source[0], str);
         } else {
             self._source.val(
                 str
@@ -1473,7 +1473,7 @@
             str = self._source.val() || self._source.html();
         }
         if (typeof self.settings.str2color == 'function') {
-            self.color = new Color(self.settings.str2color.apply(null, [str]));
+            self.color = new Color(self.settings.str2color.call(null, str));
         } else {
             self.color = new Color(str);
         }
@@ -1511,15 +1511,13 @@
             colorPicker_fixPosition(self);
             colorPicker_updatePreview(self);
             var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
-            self._root[effect].apply(
+            self._root[effect].call(
                 self._root,
-                [
-                    speed,
-                    function () {
-                        colorPicker_fixPosition(self);
-                        self._source.trigger('show');
-                    }
-                ]
+                speed,
+                function () {
+                    colorPicker_fixPosition(self);
+                    self._source.trigger('show');
+                }
             );
             if (self.panelApi) {
                 self.panelApi.setHeight(self._container.height());
@@ -1543,15 +1541,13 @@
             var retval = self._source.triggerHandler('beforeHide');
             if (typeof retval == 'undefined' || retval) {
                 var effect = self.effect === 'fade' ? 'fadeOut' : 'slideUp';
-                self._root[effect].apply(
+                self._root[effect].call(
                     self._root,
-                    [
-                        speed,
-                        function () {
-                            colorPicker_fixPosition(self);
-                            self._source.trigger('hide');
-                        }
-                    ]
+                    speed,
+                    function () {
+                        colorPicker_fixPosition(self);
+                        self._source.trigger('hide');
+                    }
                 );
             }
         }, 100);
@@ -2344,16 +2340,16 @@
         },
         api: function () {
             var retval = {}, $obj = this;
-            retval.show      = function (speed) { methods.show.apply($obj, [speed]); return this; };
-            retval.hide      = function (speed) { methods.hide.apply($obj, [speed]); return this; };
+            retval.show      = function (speed) { methods.show.call($obj, speed); return this; };
+            retval.hide      = function (speed) { methods.hide.call($obj, speed); return this; };
             retval.save      = function ()      { methods.save.call($obj); return this; };
             retval.load      = function ()      { methods.load.call($obj); return this; };
             retval.getColor  = function ()      { return methods.getColor.call($obj); };
             retval.getWidth  = function ()      { return methods.getWidth.call($obj); };
             retval.getHeight = function ()      { return methods.getHeight.call($obj); };
-            retval.setColor  = function (color) { methods.setColor.apply($obj, [color]); return this; };
+            retval.setColor  = function (color) { methods.setColor.call($obj, color); return this; };
             retval.destroy   = function ()      { methods.destroy.call($obj); };
-            retval.resize    = function (size)  { methods.resize.apply($obj, [size]); return this; };
+            retval.resize    = function (size)  { methods.resize.call($obj, size); return this; };
             retval.reflow    = function ()      { methods.reflow.call($obj); return this; };
             return retval;
         },
