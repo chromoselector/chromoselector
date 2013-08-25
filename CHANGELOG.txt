@@ -1,9 +1,9 @@
-v 2.0.0 - Not yet released
+v 2.0.0 - 25 Aug 2013
   * New color management module
   * Alpha support
   * Built-in side panel
-  * Fixed IE position bug
   * Improved shadow rendering
+  * Fixed IE mouse position bug
   * Updated to jquery 1.9.1
 
 v 1.1.0 - 16 Mar 2013

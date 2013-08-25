@@ -5,17 +5,13 @@
      *
      * TODO
      *
-     * v 2.0.0
-     *
-     * v 2.0.1
-     *   Fix Opera v12- support
-     *   Fix multiple pickers in static mode demo
-     *
      * v 2.1.0
      *   Improve positioning in small window (move right or up, if necessary)
+     *   Fix Opera v12- support
+     *   Fix multiple pickers in static mode demo
+     *   Shrink more vars with replacevars.pl
      *   Implement RequestAnimationFrame
      *   Improve shadow ratio calculation / shadow rendering
-     *   Shrink more vars with replacevars.pl
      *
      * v 3.0.0
      *   Fix slide animation
