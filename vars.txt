@@ -23,7 +23,6 @@ draggingHueRenderer
 draggingHue
 draggingSatLumRenderer
 draggingSatLum
-effect
 ready
 resizingRenderer
 resizing
