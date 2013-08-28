@@ -909,7 +909,7 @@
                     $canvas.attr('width', getPanelWidth());
                     drawPanel();
                     if (panelLabels) {
-                        $labels.children().remove();
+                        $labels.width(getPanelWidth()).children().remove();
                         drawLabels();
                     }
                     $select.width(getPanelWidth() - 20);
@@ -953,7 +953,7 @@
             var $labels = $();
             var labelsHeight = 0;
             if (panelLabels) {
-                $labels = $('<div />').addClass('ui-panel-labels');
+                $labels = $('<div />').addClass('ui-panel-labels').width(getPanelWidth());
                 drawLabels();
                 $target.append($labels);
             }
