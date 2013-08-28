@@ -992,6 +992,28 @@
                         offset += channelWidth+channelMargin;
                     }
                 }
+            }).bind('mousemove touchmove', function (event) {
+                var inputPoint = getEventPosition(false, event, $canvas);
+                var width = $canvas.width();
+                var padding = canvasPadding / 2;
+                if (   inputPoint[0] > padding
+                    && inputPoint[1] > padding
+                    && inputPoint[0] < width - padding
+                    && inputPoint[1] < $canvas.height() - padding
+                ) {
+                    var offset = padding;
+                    while (offset < width) {
+                        if (inputPoint[0] > offset && inputPoint[0] < channelWidth + offset) {
+                            $canvas.css('cursor', 'crosshair');
+                            break;
+                        } else {
+                            $canvas.css('cursor', '');
+                        }
+                        offset += channelWidth + channelMargin;
+                    }
+                } else {
+                    $canvas.css('cursor', '');
+                }
             });
             $([window, document]).bind('mousemove touchmove', function (event) {
                 if (dragging) {
