@@ -1,4 +1,4 @@
-v 2.0.0 - 25 Aug 2013
+v 2.0.0 - 28 Aug 2013
   * New color management module
   * Alpha support
   * Built-in side panel
