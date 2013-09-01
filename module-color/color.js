@@ -362,13 +362,13 @@ var Color = (function () {
             return {
                 rgba: hsl2rgb(currentHslColor),
                 hsla: currentHslColor,
-                isHsl: true
+                isHsl: isHsl
             };
         } else {
             return {
                 rgba: currentColor,
                 hsla: rgb2hsl(currentColor),
-                isHsl: false
+                isHsl: isHsl
             };
         }
     }
