@@ -5,9 +5,6 @@ test("Setting invalid color shouldn't corrupt previous value", function () {
 	color.setColor('foobar');
     equal(color.getHexString(), '#123456');
 
-	color.setColor('# 654987');
-	equal(color.getHexString(), '#123456');
-
 	color.setColor({ h: .2, s: .3, v: .4 });
     equal(color.getHexString(), '#123456');
 
@@ -33,8 +30,5 @@ test("Setting invalid color shouldn't corrupt previous value", function () {
     equal(color.getHexString(), '#123456');
 
     color.setColor('hsl(1,2,3)');
-    equal(color.getHexString(), '#123456');
-
-    color.setColor('rgb(7 9,22,33)');
     equal(color.getHexString(), '#123456');
 });
