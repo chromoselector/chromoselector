@@ -34,4 +34,7 @@ test("Setting invalid color shouldn't corrupt previous value", function () {
 
     color.setColor('hsl(1,2,3)');
     equal(color.getHexString(), '#123456');
+
+    color.setColor('rgb(7 9,22,33)');
+    equal(color.getHexString(), '#123456');
 });
