@@ -12,7 +12,6 @@
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl
      *   Implement RequestAnimationFrame
-     *   Automatic XML sitemap generation
      *
      * v 3.0.0
      *   Fix slide animation

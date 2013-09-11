@@ -62,5 +62,6 @@ site:
 	cp copyright-notice.js site/libs
 	cp jquery-1.9.1.min.js site/libs
 	cp .htaccess site
+	./sitemap.sh > site/sitemap.xml
 
 .PHONY: test release site
