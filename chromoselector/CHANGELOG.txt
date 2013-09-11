@@ -1,3 +1,6 @@
+v 2.1.0 - Not yet released
+  * Fixed incorrect panel value calculation
+
 v 2.0.0 - 28 Aug 2013
   * New color management module
   * Alpha support

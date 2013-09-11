@@ -6,7 +6,7 @@
      * TODO
      *
      * v 2.1.0
-     *   Panel incorrect value calculation (must remove some pixels from each end)
+     *   Update version numbers
      *   Improve horizontal positioning in small window (move right or up, if necessary)
      *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
@@ -848,8 +848,8 @@
             };
             var draggingRenderer = throttle(function(event) {
                 var inputPoint = getEventPosition(false, event, $canvas);
-                var fullScaleValue = canvasHeight - channelWidth;
-                var position = fullScaleValue - Math.round(inputPoint[1] - channelWidth/2);
+                var fullScaleValue = canvasHeight - channelWidth - canvasPadding;
+                var position = fullScaleValue - Math.round(inputPoint[1] - channelWidth/2 - canvasPadding/2);
                 if (position < 0) {
                     position = 0;
                 } else if (position > fullScaleValue) {
