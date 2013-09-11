@@ -6,12 +6,13 @@
      * TODO
      *
      * v 2.1.0
-     *   Improve positioning in small window (move right or up, if necessary)
+     *   Panel incorrect value calculation (must remove some pixels from each end)
+     *   Improve horizontal positioning in small window (move right or up, if necessary)
      *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl
      *   Implement RequestAnimationFrame
-     *   Improve shadow ratio calculation / shadow rendering
+     *   Automatic XML sitemap generation
      *
      * v 3.0.0
      *   Fix slide animation
@@ -20,6 +21,7 @@
      *   Improved mobile support
      *   Better generation of new elements
      *   Camel-case all properties
+     *   Improve shadow ratio calculation / shadow rendering
      *   Faster shadow - rotate instead of blurring
      *
      * FI-TESTSUITE
@@ -1688,16 +1690,7 @@
             );
         }
         self._picker.width(width).height(width);
-        if (self.settings.roundcorners) {
-            var borderRadius = '0px 0px 0px ' + width/2 + 'px';
-            if (! self.settings.resizable && ! self.settings.panel &&  ! self.settings.panelAlpha) {
-                borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
-            }
-            self._root.css({
-                '-webkit-border-radius': borderRadius,
-                'border-radius': borderRadius
-            });
-        }
+        colorPicker_fixCorners(self, width);
         colorPicker_updatePreview(self);
     }
     function colorPicker_resize(self, width) {
@@ -1722,6 +1715,19 @@
     function preventDefault(e) {
         e.preventDefault();
     }
+    function colorPicker_fixCorners(self, width) {
+        if (self.settings.roundcorners) {
+            width = width || self.width;
+            var borderRadius = '0px 0px 0px ' + width/2 + 'px';
+            if (! self.settings.resizable && ! self.settings.panel &&  ! self.settings.panelAlpha) {
+                borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
+            }
+            self._root.css({
+                '-webkit-border-radius': borderRadius,
+                'border-radius': borderRadius
+            });
+        }
+    }
     function colorPicker_fixDiameter(self, width) {
         width = width | 0;
         if (self.settings.maxWidth < self.settings.minWidth) {
@@ -1743,10 +1749,43 @@
                 top: 0,
                 left: 0
             });
-            self._root.css({
-                top: offset.top + self._source.outerHeight(),
-                left: offset.left
-            });
+            // Following is the feature that keeps the picker in
+            // the view by moving it around the input element
+            var scrollTop = $(document).scrollTop();
+            var outerHeight = self._root.height();
+            var availableTop = offset.top - scrollTop;
+            var availableBottom = scrollTop + $(window).height() - offset.top - self._source.outerHeight();
+            // do we need to flip the picker and if yes, will there be more space?
+            if (availableBottom < outerHeight && availableTop > availableBottom) {
+                self._root.css({
+                    top: offset.top - outerHeight
+                });
+                if (self._resizer) {
+                    self._resizer.hide();
+                }
+                self._root.css({
+                    '-webkit-border-radius': '',
+                    'border-radius': ''
+                });
+            } else  {
+                self._root.css({
+                    top: offset.top + self._source.outerHeight()
+                });
+                if (self._resizer) {
+                    self._resizer.show();
+                }
+                colorPicker_fixCorners(self);
+            }
+            // does the picker fit into the the viewport?
+            if (false) {
+                self._root.css({
+                    left: offset.left + self._source.outerWidth() - self._root.width()
+                });
+            } else  {
+                self._root.css({
+                    left: offset.left
+                });
+            }
         }
         if (self._source.is(':visible')) {
             self._icon.show().css('top', offset.top - targetOffset.top + (self._source.outerHeight() - self._icon.height()) / 2);
@@ -2118,16 +2157,7 @@
 
         colorPicker_updatePreview(self);
 
-        if (self.settings.roundcorners) {
-            var borderRadius = '0px 0px 0px ' + self.width/2 + 'px';
-            if (! self.settings.resizable && ! self.settings.panel && ! self.settings.panelAlpha) {
-                borderRadius = '0px 0px ' + self.width/2 + 'px ' + self.width/2 + 'px';
-            }
-            self._root.css({
-                '-webkit-border-radius': borderRadius,
-                'border-radius': borderRadius
-            });
-        }
+        colorPicker_fixCorners(self);
 
         self._picker
             .height(self.width)
@@ -2267,8 +2297,10 @@
                 colorPicker_resize(self, self._picker.width());
                 self._source.trigger('resizeStop');
             }
-        }).bind('resize', function () {
-            colorPicker_fixPosition(self);
+        }).bind('resize scroll', function (event) {
+            if (event.target === window || event.target === document) {
+                colorPicker_fixPosition(self);
+            }
         });
 
         setTimeout(function () {
