@@ -6,7 +6,6 @@
      * TODO
      *
      * v 2.1.0
-     *   Update version numbers
      *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl

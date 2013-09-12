@@ -98,7 +98,7 @@ function getFooter($path = '.') {
     }
     $html  = '</div>';
     $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
-    $html .= '<p>v2.0.0</p>';
+    $html .= '<p>v2.1.0</p>';
     $html .= '<p style="float: right">&copy; 2013 <a href="http://www.chromoselector.com/">www.chromoselector.com</a></p>';
     $html .= '<div style="clear:both"></div>';
     $html .= '</div>';
