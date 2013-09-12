@@ -239,25 +239,24 @@
         function setColor(value, currentColor, currentHslColor, isHsl) {
             var parts, i, alpha, hue;
             if (typeof value === 'string') {
-                if (/^\s*#/.test(value)) { // hex
-                    if (/^\s*#([0-9a-f]{3}){1,2}\s*$/i.test(value)) {
-                        value = value.replace(/\s*/, '');
+                value = value.replace(/\s+/g, '');
+                if (/^#/.test(value)) { // hex
+                    if (/^#([0-9a-f]{3}){1,2}$/i.test(value)) {
                         if (value.length === 4) {
                             value = value.replace(/[0-9a-f]/gi, replaceCallback);
                         }
                         currentColor = hex2rgb(value);
                         currentColor.a = 1;
                         isHsl = false;
-                    } else if (/^\s*#([0-9a-f]{4}){1,2}\s*$/i.test(value)) {
-                        value = value.replace(/\s*/, '');
+                    } else if (/^#([0-9a-f]{4}){1,2}$/i.test(value)) {
                         if (value.length === 5) {
                             value = value.replace(/[0-9a-f]/gi, replaceCallback);
                         }
                         currentColor = hexa2rgb(value);
                         isHsl = false;
                     }
-                } else if (/^\s*rgba/.test(value)) {
-                    parts = value.match(/^\s*rgba\s*\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\.\d+|\d+\.?\d*)\s*\)\s*$/);
+                } else if (/^rgba/.test(value)) {
+                    parts = value.match(/^rgba\((\d+%?),(\d+%?),(\d+%?),(\.\d+|\d+\.?\d*)\)$/);
                     if (parts && parts.length === 5) {
                         parts.shift();
                         alpha = parts.pop() / 1; // Divide by 1 to convert string to number
@@ -284,8 +283,8 @@
                         currentColor.a = alpha;
                         isHsl = false;
                     }
-                } else if (/^\s*rgb/.test(value)) {
-                    parts = value.match(/^\s*rgb\s*\(\s*(\d+%?)\s*,\s*(\d+%?)\s*,\s*(\d+%?)\s*\)\s*$/);
+                } else if (/^rgb/.test(value)) {
+                    parts = value.match(/^rgb\((\d+%?),(\d+%?),(\d+%?)\)$/);
                     if (parts && parts.length === 4) {
                         parts.shift();
                         for (i=0; i<parts.length; i++) {
@@ -306,8 +305,8 @@
                         currentColor.a = 1;
                         isHsl = false;
                     }
-                } else if (/^\s*hsla/.test(value)) {
-                    parts = value.match(/^\s*hsla\s*\(\s*(\d+)\s*,\s*(\d+%)\s*,\s*(\d+%)\s*,\s*(\.\d+|\d+\.?\d*)\s*\)\s*$/);
+                } else if (/^hsla/.test(value)) {
+                    parts = value.match(/^hsla\((\d+),(\d+%),(\d+%),(\.\d+|\d+\.?\d*)\)$/);
                     if (parts && parts.length === 5) {
                         parts.shift();
                         hue = parts.shift() / 360;
@@ -339,8 +338,8 @@
                             };
                         }
                     }
-                } else if (/^\s*hsl/.test(value)) {
-                    parts = value.match(/^\s*hsl\s*\(\s*(\d+)\s*,\s*(\d+%)\s*,\s*(\d+%)\s*\)\s*$/);
+                } else if (/^hsl/.test(value)) {
+                    parts = value.match(/^hsl\((\d+),(\d+%),(\d+%)\)$/);
                     if (parts && parts.length === 4) {
                         parts.shift();
                         hue = parts.shift() / 360;
@@ -364,8 +363,8 @@
                             a: 1
                         };
                     }
-                } else if (/^\s*device-cmyk/.test(value)) {
-                    parts = value.match(/^\s*device-cmyk\s*\(\s*(\.\d+|\d+\.?\d*)\s*,\s*(\.\d+|\d+\.?\d*)\s*,\s*(\.\d+|\d+\.?\d*)\s*,\s*(\.\d+|\d+\.?\d*)\s*\)\s*$/);
+                } else if (/^device-cmyk/.test(value)) {
+                    parts = value.match(/^device-cmyk\((\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*)\)$/);
                     if (parts && parts.length === 5) {
                         parts.shift();
                         for (i=0; i<parts.length; i++) {
@@ -427,13 +426,13 @@
                 return {
                     rgba: hsl2rgb(currentHslColor),
                     hsla: currentHslColor,
-                    isHsl: true
+                    isHsl: isHsl
                 };
             } else {
                 return {
                     rgba: currentColor,
                     hsla: rgb2hsl(currentColor),
-                    isHsl: false
+                    isHsl: isHsl
                 };
             }
         }
