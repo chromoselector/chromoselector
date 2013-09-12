@@ -1,5 +1,6 @@
 v 2.1.0 - Not yet released
   * Fixed incorrect panel value calculation
+  * Improve picker positioning in small window (moved left or up, if necessary)
 
 v 2.0.0 - 28 Aug 2013
   * New color management module
@@ -7,7 +8,7 @@ v 2.0.0 - 28 Aug 2013
   * Built-in side panel
   * Improved shadow rendering
   * Fixed IE mouse position bug
-  * Updated to jquery 1.9.1
+  * Updated to jQuery 1.9.1
 
 v 1.1.0 - 16 Mar 2013
   * Configurable shadow color

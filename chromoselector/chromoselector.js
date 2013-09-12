@@ -7,11 +7,11 @@
      *
      * v 2.1.0
      *   Update version numbers
-     *   Improve horizontal positioning in small window (move right or up, if necessary)
      *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl
      *   Implement RequestAnimationFrame
+     *   Update jQuery
      *
      * v 3.0.0
      *   Fix slide animation
@@ -1776,9 +1776,18 @@
                 colorPicker_fixCorners(self);
             }
             // does the picker fit into the the viewport?
-            if (false) {
+            var scrollLeft = $(document).scrollLeft();
+            var availableLeft = offset.left - scrollLeft - 2;
+            var outsideRight = (offset.left + self._root.width()) - (scrollLeft + $(window).width());
+            if (outsideRight > 0 && availableLeft > 0) {
+                var moveBy = 2;
+                if (availableLeft < outsideRight) {
+                    moveBy += availableLeft;
+                } else {
+                    moveBy += outsideRight;
+                }
                 self._root.css({
-                    left: offset.left + self._source.outerWidth() - self._root.width()
+                    left: offset.left - moveBy
                 });
             } else  {
                 self._root.css({
@@ -2294,6 +2303,7 @@
                 preventDefault(e);
                 self.resizing = 0;
                 colorPicker_resize(self, self._picker.width());
+                colorPicker_fixPosition(self);
                 self._source.trigger('resizeStop');
             }
         }).bind('resize scroll', function (event) {
@@ -2376,6 +2386,7 @@
                 var self = $(this).data(NAMESPACE);
                 self._source.trigger('resizeStart');
                 colorPicker_resize(self, width);
+                colorPicker_fixPosition(self);
                 self._source
                     .trigger('resize')
                     .trigger('resizeStop');
