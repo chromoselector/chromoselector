@@ -40,7 +40,7 @@ release:
 	cp -R docs release
 	cp chromoselector.* release
 	./replacecode.pl chromoselector.js DEMO 0 TESTSUITE 0 > release/chromoselector.js
-	cp jquery-1.9.1.min.js release
+	cp jquery-1.10.2.min.js release
 	cp hello-world.html release
 	cp license-full.txt release/LICENSE.txt
 	cp README.txt release/README.txt
@@ -60,7 +60,7 @@ site:
 	cp *.css site/libs
 	cp chromoselector.demo.min.js site/libs
 	cp copyright-notice.js site/libs
-	cp jquery-1.9.1.min.js site/libs
+	cp jquery-1.10.2.min.js site/libs
 	cp .htaccess site
 	./sitemap.sh > site/sitemap.xml
 

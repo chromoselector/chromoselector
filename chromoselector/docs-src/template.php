@@ -103,7 +103,7 @@ function getFooter($path = '.') {
     $html .= '<div style="clear:both"></div>';
     $html .= '</div>';
     $html .= '</div>';
-    $html .= '<script src="' . $libPath . '/jquery-1.9.1.min.js" type="text/javascript"></script>';
+    $html .= '<script src="' . $libPath . '/jquery-1.10.2.min.js" type="text/javascript"></script>';
 
     $html .= '<script type="text/javascript">';
     $html .= '$(document).on("mobileinit", function(){';

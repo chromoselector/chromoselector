@@ -10,7 +10,6 @@
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl
      *   Implement RequestAnimationFrame
-     *   Update jQuery
      *
      * v 3.0.0
      *   Fix slide animation
