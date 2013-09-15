@@ -8,9 +8,9 @@
      * v 2.1.0
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl
-     *   Implement RequestAnimationFrame
      *
      * v 3.0.0
+     *   Implement RequestAnimationFrame
      *   Fix slide animation
      *   More unit tests
      *   refactor hue2rgb
