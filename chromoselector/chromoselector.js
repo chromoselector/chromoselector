@@ -6,7 +6,6 @@
      * TODO
      *
      * v 2.1.0
-     *   Fix Opera v12- support
      *   Fix multiple pickers in static mode demo
      *   Shrink more vars with replacevars.pl
      *   Implement RequestAnimationFrame
@@ -1389,6 +1388,7 @@
     function drawResizer(self, canvas) {
         var ctx = canvas.getContext("2d");
         /** draw resizer */
+        ctx.clearRect(0,0,canvas.width,canvas.height);
         if (self._root.css('border-bottom-color')) {
             ctx[strokeStyle] = self._root.css('border-bottom-color');
         } else {
@@ -1531,6 +1531,9 @@
                 speed,
                 function () {
                     colorPicker_fixPosition(self);
+                    if (self.settings.resizable) {
+                        drawResizer(self, self._resizer[0]);
+                    }
                     self._source.trigger('show');
                 }
             );
