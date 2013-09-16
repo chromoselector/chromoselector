@@ -18,7 +18,6 @@ shadowRatio
 triangleRadius
 canvases
 tempCanvas
-ColorWheelBg
 draggingHueRenderer
 draggingHue
 draggingSatLumRenderer
@@ -33,3 +32,7 @@ haveTarget
 hueSelectorLineWidth
 hueSelectorCircleRadius
 hiding
+ColorWheelBg
+Color
+Effect
+Width

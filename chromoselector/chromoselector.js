@@ -7,7 +7,6 @@
      *
      * v 2.1.0
      *   Fix multiple pickers in static mode demo
-     *   Shrink more vars with replacevars.pl
      *
      * v 3.0.0
      *   Implement RequestAnimationFrame
@@ -1181,7 +1180,7 @@
      * Draws the rainbow wheel
      */
     function colorPicker_drawHueSelector(self) {
-        var width = self.width;
+        var width = self.Width;
         var ctx = self.canvases[1].getContext("2d");
         colorPicker_drawColorWheelBg(self.canvases[1], width);
 
@@ -1221,15 +1220,15 @@
      * Draws the triangular selector
      */
     function colorPicker_drawSaturationLimunositySelector(self) {
-        var hue = self.color.getHsl().h;
+        var hue = self.Color.getHsl().h;
         var canvas = self.canvases[2];
         var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,self.width, self.width);
+        ctx.clearRect(0,0,self.Width, self.Width);
         var degrees = -Math.PI / 2;
         var points = colorPicker_getPoints(self, degrees);
         var tempCtx;
         if (! self.ready) {
-            var maskImageData = ctx.createImageData(self.width, self.width);
+            var maskImageData = ctx.createImageData(self.Width, self.Width);
             // triangle limits
             var limits = function (points, axis) {
                 return {
@@ -1280,12 +1279,12 @@
         ctx[fillStyle] = new Color({
             h:hue, s:1, l:0.5
         }).getHexString();
-        ctx[fillRect](0,0,self.width,self.width);
+        ctx[fillRect](0,0,self.Width,self.Width);
         // Copy rotated mask
         ctx.save();
-        ctx.translate(self.width/2, self.width/2);
+        ctx.translate(self.Width/2, self.Width/2);
         ctx.rotate(degrees + Math.PI / 2);
-        ctx.translate(-self.width/2, -self.width/2);
+        ctx.translate(-self.Width/2, -self.Width/2);
         ctx.drawImage(self.tempCanvas, 0, 0);
         ctx.restore();
         // cut out triangle
@@ -1296,9 +1295,9 @@
         ctx.lineTo(points[2][0], points[2][1]);
         ctx.lineTo(points[1][0], points[1][1]);
         ctx.lineTo(0, 0);
-        ctx.lineTo(0, self.width);
-        ctx.lineTo(self.width, self.width);
-        ctx.lineTo(self.width, 0);
+        ctx.lineTo(0, self.Width);
+        ctx.lineTo(self.Width, self.Width);
+        ctx.lineTo(self.Width, 0);
         ctx.lineTo(0, 0);
         ctx.closePath();
         ctx[globalCompositeOperation] = "destination-out";
@@ -1306,8 +1305,8 @@
         ctx.fill();
         // shadow
         var shadowPoint = function (index, axis) {
-            var pixel = (1 / (self.width / 2)) * 2;
-            return self.width / 2 * pixel + points[index][axis] * (1-pixel);
+            var pixel = (1 / (self.Width / 2)) * 2;
+            return self.Width / 2 * pixel + points[index][axis] * (1-pixel);
         };
         ctx[globalCompositeOperation] = "destination-over";
         ctx.beginPath();
@@ -1328,16 +1327,16 @@
     function colorPicker_drawIndicators(self) {
         var canvas = self.canvases[3];
         var ctx = canvas.getContext("2d");
-        ctx.clearRect(0,0,self.width, self.width);
-        var degrees = (1 - self.color.getHsl().h) * Math.PI * 2;
+        ctx.clearRect(0,0,self.Width, self.Width);
+        var degrees = (1 - self.Color.getHsl().h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
         /** get hue indicator position */
-        var indicator = getPointOnCircle(self.hueSelectorCircleRadius, degrees, self.width / 2);
+        var indicator = getPointOnCircle(self.hueSelectorCircleRadius, degrees, self.Width / 2);
 
         /** get draw sat/lum indicator position */
         var colorPoint = [
-            (points[1][0] * self.color.getHsl().l + (1-self.color.getHsl().l) * points[2][0]),
-            (points[1][1] * self.color.getHsl().l + (1-self.color.getHsl().l) * points[2][1])
+            (points[1][0] * self.Color.getHsl().l + (1-self.Color.getHsl().l) * points[2][0]),
+            (points[1][1] * self.Color.getHsl().l + (1-self.Color.getHsl().l) * points[2][1])
         ];
         var m = getPerpedicularSlope(points[1], points[2]);
         var colorPoint2 = pointOnLine(colorPoint, m);
@@ -1360,8 +1359,8 @@
             slopePoint
         );
         colorPoint = [
-            (thePoint2[0] * self.color.getHsl().s + (1-self.color.getHsl().s) * thePoint1[0]),
-            (thePoint2[1] * self.color.getHsl().s + (1-self.color.getHsl().s) * thePoint1[1])
+            (thePoint2[0] * self.Color.getHsl().s + (1-self.Color.getHsl().s) * thePoint1[0]),
+            (thePoint2[1] * self.Color.getHsl().s + (1-self.Color.getHsl().s) * thePoint1[1])
         ];
 
         /** draw the indicators */
@@ -1414,7 +1413,7 @@
             points[i] = getPointOnCircle(
                 self.triangleRadius,
                 hue,
-                self.width / 2
+                self.Width / 2
             );
             hue -= Math.PI * 2 / 3;
         }
@@ -1423,11 +1422,11 @@
     function colorPicker_reDrawHue(self, e) {
         var coords = getEventPosition(self, e, self._picker);
         var angle = Math.atan2(
-            coords[0] - self.width / 2,
-            coords[1] - self.width / 2
+            coords[0] - self.Width / 2,
+            coords[1] - self.Width / 2
         ) * (180/Math.PI) + 270;
-        var hsla = self.color.getHsla();
-        self.color.setColor({
+        var hsla = self.Color.getHsla();
+        self.Color.setColor({
             h: angle / 360,
             s: hsla.s,
             l: hsla.l,
@@ -1442,8 +1441,8 @@
         self.valueRenderer(self);
     }
     function colorPicker_reDrawSatLum(self, s, l) {
-        var hsla = self.color.getHsla();
-        self.color.setColor({
+        var hsla = self.Color.getHsla();
+        self.Color.setColor({
             h: hsla.h,
             s: s,
             l: l,
@@ -1459,16 +1458,16 @@
             colorPicker_save(self);
         }
         if (self.settings.preview) {
-            self._preview.find('div').css('background', self.color.getRgbaString());
+            self._preview.find('div').css('background', self.Color.getRgbaString());
         }
         self._source.trigger('update');
     }
     function colorPicker_save(self) {
         var str = "";
         if (typeof self.settings.color2str == 'function') {
-            str = self.settings.color2str.call(null, self.color);
+            str = self.settings.color2str.call(null, self.Color);
         } else {
-            str = self.color.getHexString();
+            str = self.Color.getHexString();
         }
         if (typeof self.settings.save == 'function') {
             self.settings.save.call(self._source[0], str);
@@ -1488,12 +1487,12 @@
             str = self._source.val() || self._source.html();
         }
         if (typeof self.settings.str2color == 'function') {
-            self.color = new Color(self.settings.str2color.call(null, str));
+            self.Color = new Color(self.settings.str2color.call(null, str));
         } else {
-            self.color = new Color(str);
+            self.Color = new Color(str);
         }
         if (self.settings.preview && self._preview) {
-            self._preview.find('div').css('background', self.color.getRgbaString());
+            self._preview.find('div').css('background', self.Color.getRgbaString());
         }
         if (redraw) {
             colorPicker_drawSaturationLimunositySelector(self);
@@ -1525,7 +1524,7 @@
         if (typeof retval == 'undefined' || retval) {
             colorPicker_fixPosition(self);
             colorPicker_updatePreview(self);
-            var effect = self.effect === 'fade' ? 'fadeIn' : 'slideDown';
+            var effect = self.Effect === 'fade' ? 'fadeIn' : 'slideDown';
             self._root[effect].call(
                 self._root,
                 speed,
@@ -1558,7 +1557,7 @@
             }
             var retval = self._source.triggerHandler('beforeHide');
             if (typeof retval == 'undefined' || retval) {
-                var effect = self.effect === 'fade' ? 'fadeOut' : 'slideUp';
+                var effect = self.Effect === 'fade' ? 'fadeOut' : 'slideUp';
                 self._root[effect].call(
                     self._root,
                     speed,
@@ -1571,7 +1570,7 @@
         }, 100);
     }
     function colorPicker_handleSatLumDrag(self, e) {
-        var degrees = (1 - self.color.getHsl().h) * Math.PI * 2;
+        var degrees = (1 - self.Color.getHsl().h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
         var inputPoint = getEventPosition(self, e, self._picker);
         var sanitisedInputPoint = inputPoint;
@@ -1591,7 +1590,7 @@
                 }
             }
         }
-        var color = colorPicker_getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.color.getHsl().h);
+        var color = colorPicker_getSatLumColor(points[0], points[1], points[2], sanitisedInputPoint, self.Color.getHsl().h);
         colorPicker_reDrawSatLum(
             self,
             color.s,
@@ -1693,12 +1692,12 @@
         colorPicker_updatePreview(self);
     }
     function colorPicker_resize(self, width) {
-        if (width !== self.width) {
+        if (width !== self.Width) {
             self.ready = 0;
-            self.width = width;
+            self.Width = width;
             self.triangleRadius = width / 2 - 15 - self.settings.ringwidth;
             self.hueSelectorLineWidth = self.settings.ringwidth;
-            self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
+            self.hueSelectorCircleRadius = (self.Width / 2) - (self.hueSelectorLineWidth/2) - 10;
             self.canvases
                 .each(function () {
                     this.width = width;
@@ -1716,7 +1715,7 @@
     }
     function colorPicker_fixCorners(self, width) {
         if (self.settings.roundcorners) {
-            width = width || self.width;
+            width = width || self.Width;
             var borderRadius = '0px 0px 0px ' + width/2 + 'px';
             if (! self.settings.resizable && ! self.settings.panel &&  ! self.settings.panelAlpha) {
                 borderRadius = '0px 0px ' + width/2 + 'px ' + width/2 + 'px';
@@ -1917,8 +1916,8 @@
             .height(previewHeight);
         var ctx = self._previewCanvas[0].getContext('2d');
         self._previewCanvas[0].height = previewHeight;
-        self._previewCanvas[0].width = 1000;
-        self._previewCanvas.css('width', '1000px');
+        self._previewCanvas[0].width = 500;
+        self._previewCanvas.css('width', '500px');
         // Draw checkboard background
         var tempCanvas = document.createElement('canvas');
         tempCanvas.height = 10;
@@ -1934,7 +1933,7 @@
         ctx[fillRect](
             0,
             0,
-            self.width,
+            self.Width,
             previewHeight
         );
     }
@@ -1996,7 +1995,7 @@
         self.valueRenderer = throttle(colorPicker_update, 100);
 
         self.setColorRenderer = throttle(function (self, value) {
-            self.color.setColor(value);
+            self.Color.setColor(value);
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
             self.valueRenderer(self);
@@ -2009,12 +2008,12 @@
         self.hiding = 0;
 
         self._source = $this;
-        colorPicker_load(self); // sets self.color
-        self.width = colorPicker_fixDiameter(self, self.settings.width);
+        colorPicker_load(self); // sets self.Color
+        self.Width = colorPicker_fixDiameter(self, self.settings.width);
         self.hueSelectorLineWidth = self.settings.ringwidth;
-        self.hueSelectorCircleRadius = (self.width / 2) - (self.hueSelectorLineWidth/2) - 10;
-        self.triangleRadius = self.width / 2 - 15 - self.settings.ringwidth;
-        var canvasString = '<canvas width="' + self.width + '" height="' + self.width + '"></canvas>';
+        self.hueSelectorCircleRadius = (self.Width / 2) - (self.hueSelectorLineWidth/2) - 10;
+        self.triangleRadius = self.Width / 2 - 15 - self.settings.ringwidth;
+        var canvasString = '<canvas width="' + self.Width + '" height="' + self.Width + '"></canvas>';
 
         var staticClass = '';
         if (self.settings.target && self.settings.target.length) {
@@ -2037,15 +2036,15 @@
             .css({
                 position:'relative'
             })
-            .width(self.width)
-            .height(self.width)
+            .width(self.Width)
+            .height(self.Width)
             .html(
                 canvasString + canvasString + canvasString + canvasString
             );
 
         self._container = $('<div/>')
             .append(self._picker)
-            .width(self.width)
+            .width(self.Width)
             .addClass('ui-cs-container');
 
         self._supercontainer = $('<div/>')
@@ -2074,12 +2073,12 @@
                 self.settings.shadow,
                 self.settings.shadowColor
             );
-            self.panelApi.setColor(self.color.getRgba());
+            self.panelApi.setColor(self.Color.getRgba());
             self._panel.bind('update', function () {
                 self.setColorRenderer(self, self.panelApi.getColor().getHsla());
             });
             self._source.bind('update', function () {
-                self.panelApi.setColor(self.color.getHsla());
+                self.panelApi.setColor(self.Color.getHsla());
             });
             self._panel.find('select').blur(function () {
                 colorPicker_hide(self);
@@ -2132,7 +2131,7 @@
 
         self._previewWidget = $('<div/>').addClass('ui-cs-preview-widget')
             .css('overflow', 'hidden')
-            .css('background', self.color.getRgbaString());
+            .css('background', self.Color.getRgbaString());
 
         var shadowCssColor = new Color(self.settings.shadowColor);
         shadowCssColor.setAlpha(shadowCssColor.getAlpha() - 0.1);
@@ -2157,7 +2156,7 @@
         self._previewColor = $('<div/>')
             .addClass('ui-cs-preview-color')
             .css('width','100%')
-            .css('background-color', self.color.getRgbaString())
+            .css('background-color', self.Color.getRgbaString())
             .css('position', 'relative');
         self._previewWidget.append(self._previewColor);
 
@@ -2168,9 +2167,9 @@
         colorPicker_fixCorners(self);
 
         self._picker
-            .height(self.width)
+            .height(self.Width)
             .add(self._container)
-            .width(self.width);
+            .width(self.Width);
         if (self.settings.panel || self.settings.panelAlpha) {
             self._root
                 .width(self.panelApi.getWidth() + self._container.width());
@@ -2189,9 +2188,9 @@
             });
         self.tempCanvas = $(canvasString)[0];
 
-        self.effect = 'fade';
+        self.Effect = 'fade';
         if (self.settings.effect === 'slide') {
-            self.effect = 'slide';
+            self.Effect = 'slide';
         }
 
         if (self.settings.autoshow) {
@@ -2240,22 +2239,22 @@
                 self._source.trigger('resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
-                    self.width - inputPoint[0],
-                    self.width - inputPoint[1]
+                    self.Width - inputPoint[0],
+                    self.Width - inputPoint[1]
                 ];
             });
         }
         self._container.bind('mousedown touchstart', function (e) {
             preventDefault(e);
             var inputPoint = getEventPosition(self, e, self._picker);
-            if (pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
+            if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
                 &&
-                ! pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth)
+                ! pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth)
             ) {
                 self.draggingHue = 1;
                 self.draggingHueRenderer(self, e);
             } else {
-                var degrees = (1 - self.color.getHsl().h) * Math.PI * 2;
+                var degrees = (1 - self.Color.getHsl().h) * Math.PI * 2;
                 var points = colorPicker_getPoints(self, degrees);
                 if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
                     self.draggingSatLum = 1;
@@ -2264,13 +2263,13 @@
             }
         }).bind('mousemove touchmove', function (e) {
             var inputPoint = getEventPosition(self, e, self._picker);
-            if (pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth/2)
+            if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth/2)
                 &&
-                ! pointInCircle(inputPoint, self.width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth/2)
+                ! pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth/2)
             ) {
                 self._picker.css('cursor', 'crosshair');
             } else {
-                var degrees = (1 - self.color.getHsl().h) * Math.PI * 2;
+                var degrees = (1 - self.Color.getHsl().h) * Math.PI * 2;
                 var points = colorPicker_getPoints(self, degrees);
                 if (pointInTriangle(inputPoint, points[0], points[1], points[2])) {
                     self._picker.css('cursor', 'crosshair');
@@ -2373,7 +2372,7 @@
             });
         },
         getColor: function () {
-            return this.data(NAMESPACE).color;
+            return this.data(NAMESPACE).Color;
         },
         getWidth: function () {
             return colorPicker_getWidth($(this).data(NAMESPACE));
