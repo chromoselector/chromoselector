@@ -5,9 +5,6 @@
      *
      * TODO
      *
-     * v 2.1.0
-     *   Fix multiple pickers in static mode demo
-     *
      * v 3.0.0
      *   Implement RequestAnimationFrame
      *   Fix slide animation
