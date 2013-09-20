@@ -246,7 +246,7 @@ var Panel = (function () {
                 }
             }
         };
-        var draggingRenderer = throttle(function(event) {
+        var draggingRenderer = Throttle(function(event) {
             var inputPoint = getEventPosition(false, event, $canvas);
             var fullScaleValue = canvasHeight - channelWidth - canvasPadding;
             var position = fullScaleValue - Math.round(inputPoint[1] - channelWidth/2 - canvasPadding/2);

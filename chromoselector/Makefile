@@ -1,8 +1,11 @@
 all:
-	./replacevars.pl chromoselector.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
+	make js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
+js:
+	wget -q -O chromoselector.built.js http://localhost/chromoselector/chromoselector/chromoselector.js
 full:
 	make demo
 	make site
@@ -14,17 +17,20 @@ clean:
 	rm docs/overview/*
 	rm docs/index.html
 b:
-	./replacevars.pl chromoselector.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -b -nc > chromoselector.temp.js
+	make js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -b -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
 demo:
-	./replacevars.pl chromoselector.js | ./replacecode.pl DEMO 1 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
+	make js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 1 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.demo.min.js
 	make common
 	./makedocs.sh
 test:
-	./replacevars.pl chromoselector.js | ./replacecode.pl DEMO 0 TESTSUITE 1 | uglifyjs -nc > chromoselector.temp.js
+	make js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 0 TESTSUITE 1 | uglifyjs -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
@@ -32,6 +38,7 @@ common:
 	yui-compressor chromoselector.css > chromoselector.temp.css
 	cat ./license.txt ./chromoselector.temp.css > chromoselector.min.css
 	rm -f ./chromoselector.temp.*
+	rm -f ./chromoselector.built.js
 release:
 	rm -rf release
 	make all
@@ -39,7 +46,7 @@ release:
 	mkdir release
 	cp -R docs release
 	cp chromoselector.* release
-	./replacecode.pl chromoselector.js DEMO 0 TESTSUITE 0 > release/chromoselector.js
+	make js
 	cp jquery-1.10.2.min.js release
 	cp hello-world.html release
 	cp license-full.txt release/LICENSE.txt
