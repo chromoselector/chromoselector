@@ -244,3 +244,18 @@ p.intro strong {
     background: rgba(34,34,41,0.95);
     border: 1px solid black;
 }
+
+#static_preview_picker {
+    border: 1px solid;
+    float: left;
+    padding: 1em;
+    background-color: #e4ccc1;
+    margin: 1em;
+}
+#static_preview_picker div.ui-input-text {
+    width: 45%;
+}
+#static_preview_picker label {
+    width: 45%;
+    vertical-align: baseline;
+}

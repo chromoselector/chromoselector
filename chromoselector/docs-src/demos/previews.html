@@ -90,7 +90,11 @@ $html .= ' data-theme="b" data-content-theme="d"';
 $html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $html .= '<h3>Preview in textfield (static mode)</h3>';
 $html .= '<div data-role="fieldcontain">';
-$html .= '<p><img style="border: 1px dotted #ccc;" alt="screenshot of color picker in static mode" src="../screenshots/3.png" /></p>';
+$html .= '<div id="static_preview_picker">
+            <label for="static_preview">Pick a color:</label>
+            <input id="static_preview" type="text" value="#7bda1b"/>
+          </div>
+          <div style="clear:both"></div>';
 $html .= '</div>';
 $html .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
 $html .= '<h3>Code</h3>';
@@ -107,7 +111,7 @@ $html .= '<pre><code class="javascript">$(document).ready(function() {
     $("#basic2").chromoselector({
         target: "#picker",
         autoshow: false,
-        width: 260,
+        width: 285,
         preview: false,
         create: updatePreview,
         update: updatePreview

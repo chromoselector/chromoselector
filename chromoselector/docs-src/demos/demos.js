@@ -126,6 +126,13 @@ $(document).ready(function () {
 
 // previews
 $(document).ready(function () {
+    var updatePreview = function() {
+        var color = $(this).chromoselector('getColor');
+        $(this).css({
+            'color': color.getTextColor().getHexString(),
+            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
+        }).parent().css('background-color', color.getHexString());
+    };
 
     $('#inline').chromoselector({
         preview: true
@@ -135,13 +142,15 @@ $(document).ready(function () {
         preview: false
     });
 
-    var updatePreview = function() {
-        var color = $(this).chromoselector('getColor');
-        $(this).css({
-            'color': color.getTextColor().getHexString(),
-            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
-        }).parent().css('background-color', color.getHexString());
-    };
+    $("#static_preview").chromoselector({
+        target: "#static_preview_picker",
+        autoshow: false,
+        width: 285,
+        preview: false,
+        create: updatePreview,
+        update: updatePreview
+    }).chromoselector("show", 0);
+
     $('#textfield').chromoselector({
         preview: false,
         create: updatePreview,
