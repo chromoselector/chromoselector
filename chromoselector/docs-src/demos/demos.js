@@ -247,3 +247,34 @@ $(document).ready(function () {
         $(this).find('input').chromoselector('reflow');
     });
 });
+
+// jQuery mobile integration
+$(document).ready(function() {
+    $("#jqm-dialog-demo").chromoselector({
+        autoshow: false,
+        width: 200,
+        target: $("#jqm-picker"),
+        autosave: false,
+        resize: function () {
+            $("#jqm-dialog").children("div").width(
+                api.getWidth()
+            ).children("div").width(
+                api.getWidth()
+            );
+        }
+    });
+    var api = $("#jqm-dialog-demo").chromoselector("api").show();
+    $(".jqm-open").click(function () {
+        api.load();
+        $("#jqm-dialog").show();
+        $.mobile.changePage("#jqm-dialog",{transition:"none"});
+        $("#jqm-dialog-demo").trigger("resize");
+    });
+    $("#jqm-save").click(function () {
+        api.save();
+        $("#jqm-dialog").dialog("close").hide();
+    });
+    $("#jqm-close").click(function () {
+        $("#jqm-dialog").dialog("close").hide();
+    });
+});

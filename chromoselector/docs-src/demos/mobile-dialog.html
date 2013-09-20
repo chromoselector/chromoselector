@@ -12,8 +12,17 @@ $html .= '<div data-role="collapsible" data-collapsed="false"';
 $html .= ' data-theme="b" data-content-theme="d"';
 $html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $html .= '<h3>jQuery Mobile dialog</h3>';
-$html .= '<p><img src="../screenshots/8.png" alt="" /></p>';
-$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uAGgm/embedded/result,js,html,css/">jsFiddle: Resizable color picker in mobile dialog</a>';
+$html .= '<div data-role="fieldcontain" class="jqm-wrapper">';
+$html .= '<label for="jqm-dialog-demo">Pick a color</label>
+	<input type="text" id="jqm-dialog-demo" value="#3caadf"/>
+    <a class="jqm-open" href="#"
+       data-theme="e" data-role="button"
+       data-inline="true" data-iconpos="notext"
+       data-icon="edit">
+           Open Color Picker
+    </a>';
+$html .= '</div>';
+$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uZCdX/">jsFiddle: Resizable color picker in mobile dialog</a>';
 $html .= '</div>';
 $html .= '</form>';
 $html .= '</div>';
@@ -25,7 +34,7 @@ $html .= getDemosMenu('..', 'mobile-dialog');
 $html .= '</ul>';
 $html .= '</nav>';
 $html .= '</div>';
-$html .= getFooter('..');
+$html .= getFooter('..', true);
 
 echo tidy_up($html);
 

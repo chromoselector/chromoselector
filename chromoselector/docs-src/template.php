@@ -86,7 +86,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
     return $html;
 }
 
-function getFooter($path = '.') {
+function getFooter($path = '.', $needDialog = false) {
     if (empty($_GET['SITE'])) {
         if ($path === '.') {
             $libPath = '..';
@@ -103,6 +103,19 @@ function getFooter($path = '.') {
     $html .= '<div style="clear:both"></div>';
     $html .= '</div>';
     $html .= '</div>';
+
+    if ($needDialog) {
+        $html .= '<div id="jqm-dialog" data-role="dialog">
+            <div data-role="content">
+                <div id="jqm-picker"></div>
+                <a id="jqm-save" data-role="button"
+                   data-theme="b" href="#">OK</a>
+                <a id="jqm-close" data-role="button"
+                   href="#">Cancel</a>
+            </div>
+        </div>';
+    }
+
     $html .= '<script src="' . $libPath . '/jquery-1.10.2.min.js" type="text/javascript"></script>';
 
     $html .= '<script type="text/javascript">';

@@ -259,3 +259,12 @@ p.intro strong {
     width: 45%;
     vertical-align: baseline;
 }
+
+.jqm-wrapper {
+    position: relative;
+}
+.jqm-open {
+    position: absolute;
+    top: -2px;
+    right: 0;
+}
