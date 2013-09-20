@@ -32,7 +32,7 @@
           <h2>
             Methods
           </h2>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="api" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               api()
             </h3>
@@ -52,7 +52,7 @@
               </li>
             </ul>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="destroy" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               destroy()
             </h3>
@@ -87,7 +87,7 @@
               </li>
             </ul>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="getColor" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               getColor()
             </h3>
@@ -110,13 +110,18 @@
     $('#myColorPicker').chromoselector();
     // Get the current color
     var color = $('#myColorPicker').chromoselector('getColor');
-    // Print the color to the console in different formats
-    console.log(color.hex, color.rgb, color.hsl, color.cmyk);
+    // Print the color to the console in RGB formats
+    console.log(color.getRgbString());
 });
 </code>
-</pre>
+</pre><strong>See also:</strong>
+            <ul>
+              <li>
+                <a href="./color-manipulation.html">API - Color Manipulation</a>
+              </li>
+            </ul>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="getHeight" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               getHeight()
             </h3>
@@ -143,7 +148,7 @@
 </code>
 </pre>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="getWidth" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               getWidth()
             </h3>
@@ -170,7 +175,7 @@
 </code>
 </pre>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="hide" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               hide()
             </h3>
@@ -201,9 +206,14 @@
     });
 });
 </code>
-</pre>
+</pre><strong>See also:</strong>
+            <ul>
+              <li>
+                <a href="./events.html#beforeHide">Events - beforeHide</a>
+              </li>
+            </ul>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="load" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               load()
             </h3>
@@ -223,7 +233,7 @@
               </li>
             </ul>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="reflow" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               reflow()
             </h3>
@@ -255,7 +265,7 @@
 </code>
 </pre>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="resize" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               resize()
             </h3>
@@ -288,7 +298,7 @@
 </code>
 </pre>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="save" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               save()
             </h3>
@@ -318,7 +328,7 @@
 </code>
 </pre>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="setColor" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               setColor()
             </h3>
@@ -357,7 +367,7 @@
 </code>
 </pre>
           </div>
-          <div data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+          <div id="show" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               show()
             </h3>

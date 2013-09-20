@@ -16,7 +16,7 @@ $html .= '</fieldset>';
 $html .= '<h2>Methods</h2>';
 
 
-$template  = '<div data-role="collapsible"';
+$template  = '<div id="%s" data-role="collapsible"';
 $template .= ' data-theme="b" data-content-theme="d"';
 $template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $template .= '<h3>%s</h3>';
@@ -52,7 +52,7 @@ $properties = array(
                 ."});\n"
         ),
         'links' => array(
-            array('url' => './events.html#destroy', 'text' => 'Events - destroy')
+            array('url' => './events.html?target=destroy', 'text' => 'Events - destroy')
         )
     ),
     'getColor()' => array(
@@ -65,9 +65,12 @@ $properties = array(
                 ."    $('#myColorPicker').chromoselector();\n"
                 ."    // Get the current color\n"
                 ."    var color = $('#myColorPicker').chromoselector('getColor');\n"
-                ."    // Print the color to the console in different formats\n"
-                ."    console.log(color.hex, color.rgb, color.hsl, color.cmyk);\n"
+                ."    // Print the color to the console in RGB formats\n"
+                ."    console.log(color.getRgbString());\n"
                 ."});\n"
+        ),
+        'links' => array(
+            array('url' => './color-manipulation.html', 'text' => 'API - Color Manipulation')
         )
     ),
     'getHeight()' => array(
@@ -116,6 +119,9 @@ $properties = array(
                 ."        $('#myColorPicker').chromoselector('hide');\n"
                 ."    });\n"
                 ."});\n"
+        ),
+        'links' => array(
+            array('url' => './events.html?target=beforeHide', 'text' => 'Events - beforeHide')
         )
     ),
     'load()' => array(
@@ -266,6 +272,7 @@ foreach ($properties as $key => $value) {
 
     $html .= sprintf(
         $template,
+        substr($key, 0, -2),
         $key,
         $value['return'],
         $value['description'],

@@ -16,7 +16,7 @@ $html .= '</fieldset>';
 $html .= '<h2>Events</h2>';
 
 
-$template  = '<div data-role="collapsible"';
+$template  = '<div id="%s" data-role="collapsible"';
 $template .= ' data-theme="b" data-content-theme="d"';
 $template .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $template .= '<h3>%s</h3>';
@@ -279,6 +279,7 @@ foreach ($properties as $key => $value) {
 
     $html .= sprintf(
         $template,
+        $key,
         $key,
         $value['description'],
         $samples
