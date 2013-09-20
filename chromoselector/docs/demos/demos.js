@@ -126,6 +126,13 @@ $(document).ready(function () {
 
 // previews
 $(document).ready(function () {
+    var updatePreview = function() {
+        var color = $(this).chromoselector('getColor');
+        $(this).css({
+            'color': color.getTextColor().getHexString(),
+            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
+        }).parent().css('background-color', color.getHexString());
+    };
 
     $('#inline').chromoselector({
         preview: true
@@ -135,13 +142,15 @@ $(document).ready(function () {
         preview: false
     });
 
-    var updatePreview = function() {
-        var color = $(this).chromoselector('getColor');
-        $(this).css({
-            'color': color.getTextColor().getHexString(),
-            'text-shadow': '0 1px 0 ' + color.getTextColor().getTextColor().getHexString()
-        }).parent().css('background-color', color.getHexString());
-    };
+    $("#static_preview").chromoselector({
+        target: "#static_preview_picker",
+        autoshow: false,
+        width: 285,
+        preview: false,
+        create: updatePreview,
+        update: updatePreview
+    }).chromoselector("show", 0);
+
     $('#textfield').chromoselector({
         preview: false,
         create: updatePreview,
@@ -236,5 +245,36 @@ $(document).ready(function () {
 
     $('#showcase').bind('updatelayout', function () {
         $(this).find('input').chromoselector('reflow');
+    });
+});
+
+// jQuery mobile integration
+$(document).ready(function() {
+    $("#jqm-dialog-demo").chromoselector({
+        autoshow: false,
+        width: 200,
+        target: $("#jqm-picker"),
+        autosave: false,
+        resize: function () {
+            $("#jqm-dialog").children("div").width(
+                api.getWidth()
+            ).children("div").width(
+                api.getWidth()
+            );
+        }
+    });
+    var api = $("#jqm-dialog-demo").chromoselector("api").show();
+    $(".jqm-open").click(function () {
+        api.load();
+        $("#jqm-dialog").show();
+        $.mobile.changePage("#jqm-dialog",{transition:"none"});
+        $("#jqm-dialog-demo").trigger("resize");
+    });
+    $("#jqm-save").click(function () {
+        api.save();
+        $("#jqm-dialog").dialog("close").hide();
+    });
+    $("#jqm-close").click(function () {
+        $("#jqm-dialog").dialog("close").hide();
     });
 });

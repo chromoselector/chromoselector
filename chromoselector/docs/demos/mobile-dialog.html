@@ -29,9 +29,10 @@
               <h3>
                 jQuery Mobile dialog
               </h3>
-              <p>
-                <img src="../screenshots/8.png" alt="" />
-              </p><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uAGgm/embedded/result,js,html,css/">jsFiddle: Resizable color picker in mobile dialog</a>
+              <div data-role="fieldcontain" class="jqm-wrapper">
+                <label for="jqm-dialog-demo">Pick a color</label> <input type="text" id="jqm-dialog-demo" value="#3caadf" /> <a class="jqm-open" href="#" data-theme="e" data-role="button"
+                data-inline="true" data-iconpos="notext" data-icon="edit">Open Color Picker</a>
+              </div><a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uZCdX/">jsFiddle: Resizable color picker in mobile dialog</a>
             </div>
           </form>
         </div>
@@ -76,6 +77,11 @@
           © 2013 <a href="http://chromoselector.com/">chromoselector.com</a>
         </p>
         <div style="clear:both"></div>
+      </div>
+    </div>
+    <div id="jqm-dialog" data-role="dialog">
+      <div data-role="content">
+        <div id="jqm-picker"></div><a id="jqm-save" data-role="button" data-theme="b" href="#">OK</a> <a id="jqm-close" data-role="button" href="#">Cancel</a>
       </div>
     </div><script src="../../jquery-1.10.2.min.js" type="text/javascript">
 </script><script type="text/javascript">

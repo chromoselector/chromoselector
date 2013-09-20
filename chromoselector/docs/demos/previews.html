@@ -103,9 +103,10 @@
                 Preview in textfield (static mode)
               </h3>
               <div data-role="fieldcontain">
-                <p>
-                  <img style="border: 1px dotted #ccc;" alt="screenshot of color picker in static mode" src="../screenshots/3.png" />
-                </p>
+                <div id="static_preview_picker">
+                  <label for="static_preview">Pick a color:</label> <input id="static_preview" type="text" value="#7bda1b" />
+                </div>
+                <div style="clear:both"></div>
               </div>
               <div data-role="collapsible" data-theme="c" data-content-theme="d">
                 <h3>
@@ -125,7 +126,7 @@
     $("#basic2").chromoselector({
         target: "#picker",
         autoshow: false,
-        width: 260,
+        width: 285,
         preview: false,
         create: updatePreview,
         update: updatePreview
