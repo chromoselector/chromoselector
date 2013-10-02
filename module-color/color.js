@@ -327,7 +327,9 @@ var Color = (function () {
             }
         } else if (typeof value === 'object') {
             for (i in value) {
-                value[i] = parseFloat(value[i]);
+                if (value.hasOwnProperty(i)) {
+                    value[i] = parseFloat(value[i]);
+                }
             }
             if (haveFields(value, 'sl')
                 && ! isNaN(value.h)
@@ -379,14 +381,16 @@ var Color = (function () {
 
     // Channel validity checker
     function haveFields(value, fields) {
-        var i, temp;
-        for (i in fields.split('')) {
-            temp = parseFloat(value[fields[i]]);
-            if (isNaN(temp)
-                || temp < 0
-                || temp > 1
-            ) {
-                return 0;
+        var i, temp, arr = fields.split('');
+        for (i in arr) {
+            if (arr.hasOwnProperty(i)) {
+                temp = parseFloat(value[fields[i]]);
+                if (isNaN(temp)
+                    || temp < 0
+                    || temp > 1
+                ) {
+                    return 0;
+                }
             }
         }
         return 1;

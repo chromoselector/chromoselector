@@ -372,24 +372,23 @@
         ];
 
         /** draw the indicators */
-        var indicators = [
+        $.each([
             indicator,
             colorPoint
-        ];
-        for (var i in indicators) {
+        ], function (i, indicator) {
             ctx[strokeStyle] = "#fff";
             ctx.lineWidth = 1.5;
             ctx.beginPath();
-            ctx.arc(indicators[i][0], indicators[i][1], 6, 0, Math.PI*2, true);
+            ctx.arc(indicator[0], indicator[1], 6, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.stroke();
             ctx.lineWidth = 2;
             ctx[strokeStyle] = 'rgba(0,0,0,1)';
             ctx.beginPath();
-            ctx.arc(indicators[i][0], indicators[i][1], 4.5, 0, Math.PI*2, true);
+            ctx.arc(indicator[0], indicator[1], 4.5, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.stroke();
-        }
+        });
     }
 
     function drawResizer(self, canvas) {
@@ -823,11 +822,11 @@
                     retval = value;
                 }
             } else if (index === 'panelModes') {
-                for (var i in value) {
-                    if (! $.inArray(value[i], allModes)) {
+                $.each(value, function (i, mode) {
+                    if (! $.inArray(mode, allModes)) {
                         delete value[i];
                     }
-                }
+                });
                 retval = value;
             } else if (index === 'panelChannelWidth') {
                 intVal = parseInt(value) || 0;
@@ -965,10 +964,10 @@
     _demo.main = function (obj) {
         return {
             "main": function (self) {
-                var i, j = '';
-                for (i in self.main(obj)) {
+                var j;
+                $.each(self.main(obj), function(i) {
                     j = [i, j].join('');
-                }
+                });
                 return j;
             },
             "do": function (self) {
@@ -1328,18 +1327,19 @@
         init: function(options) {
             var settings = {};
             options = options ? options : {};
-            for (var index in defaults) {
+
+            $.each(defaults, function (index) {
                 settings[index] = colorPicker_sanitiseSettingsValue(index, options[index]);
-            }
+            });
+
             return each(this, function () {
                 var $this = $(this);
                 if (! $this.data(NAMESPACE)) {
                     // Instantiate new ColorPicker
                     $this.data(NAMESPACE, new ColorPicker($this, settings));
                     // Register callbacks for all events
-                    var i;
                     var events = EVENTS.split('|');
-                    for (i in events) {
+                    $.each(events, function (i) {
                         var name = events[i];
                         var data = settings[name];
                         if (typeof data === 'function') {
@@ -1348,7 +1348,7 @@
                                 data
                             );
                         }
-                    }
+                    });
                     $this.trigger('create');
                 }
             });

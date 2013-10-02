@@ -113,9 +113,9 @@ var Panel = (function () {
             if (onlyAlpha) {
                 drawIndicators();
             } else if (mode === 'rgb') {
-                for (i in indexes) {
-                    color1 = toggleColor(currentColor.getRgb(), indexes[i], 0);
-                    color2 = toggleColor(currentColor.getRgb(), indexes[i], 1);
+                $.each(indexes, function (i, index) {
+                    color1 = toggleColor(currentColor.getRgb(), index, 0);
+                    color2 = toggleColor(currentColor.getRgb(), index, 1);
                     setSimpleGradient(
                         color1,
                         color2
@@ -123,7 +123,7 @@ var Panel = (function () {
                     drawChannel();
                     offset += channelWidth + channelMargin;
                     channel++;
-                }
+                });
                 drawIndicators(currentColor.getRgb());
             } else if (mode === 'hsl') {
                 setHueGradient();
@@ -148,10 +148,9 @@ var Panel = (function () {
 
                 drawIndicators(currentColor.getHsl());
             } else if (mode === 'cmyk') {
-                cmy = 'cmy'.split('');
-                for (i in cmy) {
-                    color1 = toggleColor(currentColor.getCmyk(), cmy[i], 0);
-                    color2 = toggleColor(currentColor.getCmyk(), cmy[i], 1);
+                $.each('cmy'.split(''), function (i, index) {
+                    color1 = toggleColor(currentColor.getCmyk(), index, 0);
+                    color2 = toggleColor(currentColor.getCmyk(), index, 1);
                     setSimpleGradient(
                         color1,
                         color2
@@ -159,7 +158,7 @@ var Panel = (function () {
                     drawChannel();
                     offset += channelWidth + channelMargin;
                     channel++;
-                }
+                });
                 keyCmyk = $.extend({}, currentColor.getCmyk());
                 keyCmyk.k = 0;
                 keyCmyk = new Color(keyCmyk);
@@ -187,14 +186,14 @@ var Panel = (function () {
                 indicator("#000", 2, 4.5);
             }
             if (! onlyAlpha) {
-                for (channel in color) {
+                $.each(color, function (channel, value) {
                     x = offset + channelWidth/2;
                     verticalSpace = canvasHeight - channelWidth - 20;
-                    y = verticalSpace - (verticalSpace * color[channel]) + channelWidth/2 + 10;
+                    y = verticalSpace - (verticalSpace * value) + channelWidth/2 + 10;
                     indicator("#fff", 1.5, 6);
                     indicator("#000", 2, 4.5);
                     offset += channelWidth + channelMargin;
-                }
+                });
             }
         };
         var drawShadow = function (x) {
@@ -218,11 +217,11 @@ var Panel = (function () {
                     offset += channelWidth + channelMargin;
                 }
                 if (! onlyAlpha) {
-                    for (channel in indexes) {
+                    $.each(indexes, function () {
                         x = offset + channelWidth/2;
                         drawShadow(x);
                         offset += channelWidth + channelMargin;
-                    }
+                    });
                 }
             }
         };
@@ -332,11 +331,11 @@ var Panel = (function () {
         // Build layout
         if (! onlyAlpha && inputModes.length) {
             var option = '<option/>';
-            for (var idx in inputModes) {
+            $.each(inputModes, function (i, mode) {
                 $select.append(
-                    $(option).html(inputModes[idx])
+                    $(option).html(mode)
                 );
-            }
+            });
             $target.append(
                 $select
             );
