@@ -1081,7 +1081,7 @@
                 self.settings.shadowColor
             );
             self.panelApi.setColor(self.Color.getRgba());
-            self._panel.bind('update', function () {
+            self._panel.bind(NAMESPACE, function () {
                 self.setColorRenderer(self, self.panelApi.getColor().getHsla());
             });
             self._source.bind('update', function () {
