@@ -471,7 +471,7 @@
         if (self.settings.preview) {
             self._preview.find('div').css('background', self.Color.getRgbaString());
         }
-        self._source.trigger('update');
+        self._source.trigger(self.settings.eventPrefix + 'update');
     }
     function colorPicker_save(self) {
         var str = "";
@@ -531,7 +531,7 @@
         } else {
             speed = self.settings.speed;
         }
-        var retval = self._source.triggerHandler('beforeShow');
+        var retval = self._source.triggerHandler(self.settings.eventPrefix + 'beforeShow');
         if (typeof retval == 'undefined' || retval) {
             colorPicker_fixPosition(self);
             colorPicker_updatePreview(self);
@@ -544,7 +544,7 @@
                     if (self.settings.resizable) {
                         drawResizer(self, self._resizer[0]);
                     }
-                    self._source.trigger('show');
+                    self._source.trigger(self.settings.eventPrefix + 'show');
                 }
             );
             if (self.panelApi) {
@@ -566,7 +566,7 @@
             } else {
                 speed = self.settings.speed;
             }
-            var retval = self._source.triggerHandler('beforeHide');
+            var retval = self._source.triggerHandler(self.settings.eventPrefix + 'beforeHide');
             if (typeof retval == 'undefined' || retval) {
                 var effect = self.Effect === 'fade' ? 'fadeOut' : 'slideUp';
                 self._root[effect].call(
@@ -574,7 +574,7 @@
                     speed,
                     function () {
                         colorPicker_fixPosition(self);
-                        self._source.trigger('hide');
+                        self._source.trigger(self.settings.eventPrefix + 'hide');
                     }
                 );
             }
@@ -669,7 +669,7 @@
         colorPicker_drawSaturationLimunositySelector(self);
         colorPicker_drawIndicators(self);
         self.ready = 1;
-        self._source.trigger('ready');
+        self._source.trigger(self.settings.eventPrefix + 'ready');
     }
     function colorPicker_handleResizeDrag(self, e) {
         var inputPoint = getEventPosition(self, e, self._picker);
@@ -682,7 +682,7 @@
             + Math.max(self.resizeOffset[0], self.resizeOffset[1])
         );
         colorPicker_resizeContainer(self, newDiameter);
-        self._source.trigger('resize');
+        self._source.trigger(self.settings.eventPrefix + 'resize');
     }
     function colorPicker_resizeContainer(self, width) {
         self._container.width(width).height(
@@ -878,6 +878,8 @@
                 if (typeof value === 'function') {
                     retval = value;
                 }
+            } else if (index === 'eventPrefix' && typeof value=== 'string' && /^\w*$/.test(value)) {
+                retval = value;
             }
         }
         return retval;
@@ -1088,7 +1090,7 @@
             self._panel.bind(NAMESPACE, function () {
                 self.setColorRenderer(self, self.panelApi.getColor().getHsla());
             });
-            self._source.bind('update', function () {
+            self._source.bind(self.settings.eventPrefix + 'update', function () {
                 self.panelApi.setColor(self.Color.getHsla());
             });
             self._panel.find('select').blur(function () {
@@ -1238,7 +1240,7 @@
         * Register events
         */
         self._source.keyup(function () {
-            self._source.trigger('update');
+            self._source.trigger(self.settings.eventPrefix + 'update');
             colorPicker_load(self);
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
@@ -1247,7 +1249,7 @@
             self._resizer.bind('mousedown touchstart', function (e) {
                 preventDefault(e);
                 var inputPoint = getEventPosition(self, e, self._picker);
-                self._source.trigger('resizeStart');
+                self._source.trigger(self.settings.eventPrefix + 'resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
                     self.Width - inputPoint[0],
@@ -1314,7 +1316,7 @@
                 self.resizing = 0;
                 colorPicker_resize(self, self._picker.width());
                 colorPicker_fixPosition(self);
-                self._source.trigger('resizeStop');
+                self._source.trigger(self.settings.eventPrefix + 'resizeStop');
             }
         }).bind('resize scroll', function (event) {
             if (event.target === window || event.target === document) {
@@ -1348,12 +1350,12 @@
                         var data = settings[name];
                         if (typeof data === 'function') {
                             $this.bind(
-                                name + '.' + NAMESPACE,
+                                settings.eventPrefix + name + '.' + NAMESPACE,
                                 data
                             );
                         }
                     });
-                    $this.trigger('create');
+                    $this.trigger(settings.eventPrefix + 'create');
                 }
             });
         },
@@ -1395,12 +1397,12 @@
         resize: function (width) {
             return each(this, function () {
                 var self = $(this).data(NAMESPACE);
-                self._source.trigger('resizeStart');
+                self._source.trigger(self.settings.eventPrefix + 'resizeStart');
                 colorPicker_resize(self, width);
                 colorPicker_fixPosition(self);
                 self._source
-                    .trigger('resize')
-                    .trigger('resizeStop');
+                    .trigger(self.settings.eventPrefix + 'resize')
+                    .trigger(self.settings.eventPrefix + 'resizeStop');
             });
         },
         reflow: function () {
@@ -1437,7 +1439,7 @@
                 }
                 $(this)
                 .removeData(NAMESPACE)
-                .trigger('destroy')
+                .trigger(self.settings.eventPrefix + 'destroy')
                 .unbind('.' + NAMESPACE);
             });
         }
@@ -1506,6 +1508,7 @@
     iconpos:               'right',                // string 'left' | 'right'
     lazy:                  true,                   // bool
     target:                null,                   // selector | jQuery object | DOM object
+    eventPrefix:           '',                     // string that matches /^\w*$/
 
     create:                null,                   // function
     ready:                 null,                   // function

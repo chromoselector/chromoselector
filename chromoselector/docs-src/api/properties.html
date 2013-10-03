@@ -100,6 +100,26 @@ $properties = array(
                 ."});\n"
         )
     ),
+    'eventPrefix' => array(
+        'default' => '""',
+        'description' => 'Defines a prefix to apply to event names. This is useful for resolving conflicts with other js libraries, such as Prototype.js.',
+        'values' => 'An alphanumeric string, optionally contaning an underscore',
+        'samples' => array(
+                "$(document).ready(function () {\n"
+                ."    $('input.color').chromoselector({\n"
+                ."        eventPrefix: 'myPrefix_',\n"
+                ."        // No need to prefix when binding via the property\n"
+                ."        hide: function () {\n"
+                ."            doSomething();\n"
+                ."        }\n"
+                ."    });\n"
+                ."    // Must prefix when binding manually\n"
+                ."    $('input.color').bind('myPrefix_hide', function () {\n"
+                ."        doSomethingElse();\n"
+                ."    });\n"
+                ."});\n"
+        )
+    ),
     'icon' => array(
         'default' => '<i>undefined</i>',
         'description' => 'The URL to an image file. This is used to display an icon '
