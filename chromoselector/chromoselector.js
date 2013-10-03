@@ -8,6 +8,10 @@
      *
      * TODO
      *
+     * v 2.1.1
+     *   Fix shadow under preview at alpha=1
+     *   Show is triggered multiple times
+     *
      * v 3.0.0
      *   Implement RequestAnimationFrame
      *   Fix slide animation
