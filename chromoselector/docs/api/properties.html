@@ -140,6 +140,37 @@ $(document).ready(function () {
 </code>
 </pre>
           </div>
+          <div id="eventPrefix" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <h3>
+              eventPrefix
+            </h3>
+            <p>
+              <strong>Description:</strong><br />
+              Defines a prefix to apply to event names. This is useful for resolving conflicts with other js libraries, such as Prototype.js.
+            </p>
+            <p>
+              <strong>Values:</strong> An alphanumeric string, optionally contaning an underscore
+            </p>
+            <p>
+              <strong>Default:</strong> ""
+            </p>
+            <pre>
+<code class="javascript">$(document).ready(function () {
+    $('input.color').chromoselector({
+        eventPrefix: 'myPrefix_',
+        // No need to prefix when binding via the property
+        hide: function () {
+            doSomething();
+        }
+    });
+    // Must prefix when binding manually
+    $('input.color').bind('myPrefix_hide', function () {
+        doSomethingElse();
+    });
+});
+</code>
+</pre>
+          </div>
           <div id="icon" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
             <h3>
               icon
