@@ -580,6 +580,13 @@
             }
         }, 100);
     }
+    function colorPicker_toggle(self, speed) {
+        if (self._root.is(':visible')) {
+            colorPicker_hide(self, speed);
+        } else {
+            colorPicker_show(self, speed);
+        }
+    }
     function colorPicker_handleSatLumDrag(self, e) {
         var degrees = (1 - self.Color.getHsl().h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
@@ -1369,6 +1376,11 @@
                 colorPicker_hide($(this).data(NAMESPACE), speed);
             });
         },
+        toggle: function (speed) {
+            return each(this, function () {
+                colorPicker_toggle($(this).data(NAMESPACE), speed);
+            });
+        },
         save: function() {
             return each(this, function () {
                 colorPicker_save($(this).data(NAMESPACE));
@@ -1414,6 +1426,7 @@
             var retval = {}, $obj = this;
             retval.show      = function (speed) { methods.show.call($obj, speed); return this; };
             retval.hide      = function (speed) { methods.hide.call($obj, speed); return this; };
+            retval.toggle    = function (speed) { methods.toggle.call($obj, speed); return this; };
             retval.save      = function ()      { methods.save.call($obj); return this; };
             retval.load      = function ()      { methods.load.call($obj); return this; };
             retval.getColor  = function ()      { return methods.getColor.call($obj); };

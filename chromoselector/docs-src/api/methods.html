@@ -62,9 +62,9 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    // Get the current color\n"
-                ."    var color = $('#myColorPicker').chromoselector('getColor');\n"
+                ."    var color = $('#myColorInput').chromoselector('getColor');\n"
                 ."    // Print the color to the console in RGB formats\n"
                 ."    console.log(color.getRgbString());\n"
                 ."});\n"
@@ -80,9 +80,9 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    // Prints the current height\n"
-                ."    console.log($('#myColorPicker').chromoselector('getHeight'));\n"
+                ."    console.log($('#myColorInput').chromoselector('getHeight'));\n"
                 ."});\n"
         )
     ),
@@ -93,9 +93,9 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    // Prints the current width\n"
-                ."    console.log($('#myColorPicker').chromoselector('getWidth'));\n"
+                ."    console.log($('#myColorInput').chromoselector('getWidth'));\n"
                 ."});\n"
         )
     ),
@@ -113,10 +113,10 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    // Hide picker when the user clicks on an external close button\n"
                 ."    $('#closeButton').click(function () {\n"
-                ."        $('#myColorPicker').chromoselector('hide');\n"
+                ."        $('#myColorInput').chromoselector('hide');\n"
                 ."    });\n"
                 ."});\n"
         ),
@@ -140,12 +140,12 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    setTimeout(function () {\n"
                 ."        // Hide the message at the top of the page\n"
                 ."        $('#top_message').click(function () {\n"
                 ."            // Fix the position of the colorpicker since the page layout has changed\n"
-                ."            $('#myColorPicker').chromoselector('reflow');\n"
+                ."            $('#myColorInput').chromoselector('reflow');\n"
                 ."        });\n"
                 ."    }, 1000);\n"
                 ."});\n"
@@ -164,11 +164,11 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    // Set its width to 300px\n"
-                ."    $('#myColorPicker').chromoselector('resize', 300);\n"
+                ."    $('#myColorInput').chromoselector('resize', 300);\n"
                 ."    // The above is the same as:\n"
-                ."    // $('#myColorPicker').chromoselector({ width:300 });\n"
+                ."    // $('#myColorInput').chromoselector({ width:300 });\n"
                 ."});\n"
         )
     ),
@@ -227,12 +227,33 @@ $properties = array(
         'samples' => array(
             "$(document).ready(function () {\n"
                 ."    // Create the color picker\n"
-                ."    $('#myColorPicker').chromoselector();\n"
+                ."    $('#myColorInput').chromoselector();\n"
                 ."    // Show it immediately\n"
-                ."    $('#myColorPicker').chromoselector('show');\n"
+                ."    $('#myColorInput').chromoselector('show');\n"
                 ."});\n"
         )
     ),
+    'toggle()' => array(
+        'params' => array(
+            array(
+                'type' => 'int',
+                'name' => 'speed',
+                'comment' => 'Duration of the transition animation in milliseconds'
+            )
+        ),
+        'return' => '<i>self</i> (Can be chained)',
+        'description' => 'Shows the color picker if it is hidden and hides it if it is shown.',
+        'samples' => array(
+            "$(document).ready(function () {\n"
+                ."    // Create the color picker\n"
+                ."    $('#myColorInput').chromoselector();\n"
+                ."    // Show it\n"
+                ."    $('#myColorInput').chromoselector('toggle');\n"
+                ."    // Then hide it slowly\n"
+                ."    $('#myColorInput').chromoselector('toggle', 2500);\n"
+                ."});\n"
+        )
+    )
 );
 
 
