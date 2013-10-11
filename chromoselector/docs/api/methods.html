@@ -107,9 +107,9 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     // Get the current color
-    var color = $('#myColorPicker').chromoselector('getColor');
+    var color = $('#myColorInput').chromoselector('getColor');
     // Print the color to the console in RGB formats
     console.log(color.getRgbString());
 });
@@ -141,9 +141,9 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     // Prints the current height
-    console.log($('#myColorPicker').chromoselector('getHeight'));
+    console.log($('#myColorInput').chromoselector('getHeight'));
 });
 </code>
 </pre>
@@ -168,9 +168,9 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     // Prints the current width
-    console.log($('#myColorPicker').chromoselector('getWidth'));
+    console.log($('#myColorInput').chromoselector('getWidth'));
 });
 </code>
 </pre>
@@ -199,10 +199,10 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     // Hide picker when the user clicks on an external close button
     $('#closeButton').click(function () {
-        $('#myColorPicker').chromoselector('hide');
+        $('#myColorInput').chromoselector('hide');
     });
 });
 </code>
@@ -253,12 +253,12 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     setTimeout(function () {
         // Hide the message at the top of the page
         $('#top_message').click(function () {
             // Fix the position of the colorpicker since the page layout has changed
-            $('#myColorPicker').chromoselector('reflow');
+            $('#myColorInput').chromoselector('reflow');
         });
     }, 1000);
 });
@@ -289,11 +289,11 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     // Set its width to 300px
-    $('#myColorPicker').chromoselector('resize', 300);
+    $('#myColorInput').chromoselector('resize', 300);
     // The above is the same as:
-    // $('#myColorPicker').chromoselector({ width:300 });
+    // $('#myColorInput').chromoselector({ width:300 });
 });
 </code>
 </pre>
@@ -391,9 +391,42 @@
             <pre>
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
-    $('#myColorPicker').chromoselector();
+    $('#myColorInput').chromoselector();
     // Show it immediately
-    $('#myColorPicker').chromoselector('show');
+    $('#myColorInput').chromoselector('show');
+});
+</code>
+</pre>
+          </div>
+          <div id="toggle" data-role="collapsible" data-theme="b" data-content-theme="d" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">
+            <h3>
+              toggle()
+            </h3>
+            <p class="ui-li-aside">
+              <strong>Returns:</strong> <i>self</i> (Can be chained)
+            </p>
+            <p>
+              <strong>Description:</strong><br />
+              Shows the color picker if it is hidden and hides it if it is shown.
+            </p>
+            <p>
+              <strong>Parameters:</strong>
+            </p>
+            <ul>
+              <li>int <strong>speed</strong>: Duration of the transition animation in milliseconds
+              </li>
+            </ul>
+            <p>
+              <strong>Sample usage:</strong>
+            </p>
+            <pre>
+<code class="javascript">$(document).ready(function () {
+    // Create the color picker
+    $('#myColorInput').chromoselector();
+    // Show it
+    $('#myColorInput').chromoselector('toggle');
+    // Then hide it slowly
+    $('#myColorInput').chromoselector('toggle', 2500);
 });
 </code>
 </pre>

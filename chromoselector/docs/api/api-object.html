@@ -32,20 +32,20 @@
           <pre class="instant">
 <code class="javascript">$(document).ready(function () {
     // Instanciate the color picker
-    $("#myColorPicker").chromoselector();
+    $("#myColorInput").chromoselector();
     // Show it
-    $("#myColorPicker").chromoselector("show");
+    $("#myColorInput").chromoselector("show");
     // Change color
-    $("#myColorPicker").chromoselector("setColor", "#123456");
+    $("#myColorInput").chromoselector("setColor", "#123456");
     // Log new color to console in HSL format
-    console.log($("#myColorPicker").chromoselector("getColor").getHsl());
+    console.log($("#myColorInput").chromoselector("getColor").getHsl());
 });</code>
 </pre><br />
           Same as above, but using the API object:
           <pre class="instant">
 <code class="javascript">$(document).ready(function () {
     // Instanciate the color picker
-    var $picker = $("#myColorPicker").chromoselector();
+    var $picker = $("#myColorInput").chromoselector();
     // Get an instance of the API object
     var api = $picker.chromoselector("api");
     // Now do everything else
@@ -58,7 +58,7 @@
           <pre class="instant">
 <code class="javascript">$(document).ready(function () {
     // Instanciate the color picker and get the API object
-    var api = $("#myColorPicker").chromoselector().chromoselector("api");
+    var api = $("#myColorInput").chromoselector().chromoselector("api");
     // Now do everything else
     console.log(
         api.show().setColor("#123456").getColor().getHsl()
