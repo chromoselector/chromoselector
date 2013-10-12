@@ -9,8 +9,12 @@
      * TODO
      *
      * v 2.1.1
+     *   RSS feed
      *   Fix shadow under preview at alpha=1
      *   Show is triggered multiple times
+     *
+     * v 2.2.0
+     *   Update fiddles to point to new js file
      *
      * v 3.0.0
      *   Implement RequestAnimationFrame

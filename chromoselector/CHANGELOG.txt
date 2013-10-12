@@ -1,9 +1,9 @@
-v 2.1.0 - Not yet released
-  * Fixed incorrect panel value calculation
-  * Fixed crash when using Prototype.js with jQuery.noConflict
-  * Improve picker positioning in small window (moved left or up, if necessary)
+v 2.1.0 - 12 Oct 2013
+  * Improved picker positioning in small window (moved left or up, if necessary)
   * Added "eventPrefix" property
   * Added "toggle" method
+  * Fixed incorrect panel value calculation
+  * Fixed crash when using Prototype.js with jQuery.noConflict
   * Documentation fixes
   * Updated to jQuery 1.10.2
 
