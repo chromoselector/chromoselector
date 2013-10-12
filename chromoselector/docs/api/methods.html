@@ -423,10 +423,10 @@
 <code class="javascript">$(document).ready(function () {
     // Create the color picker
     $('#myColorInput').chromoselector();
-    // Show it
+    // Show it immediately
+    $('#myColorInput').chromoselector('toggle', 0);
+    // Then hide it
     $('#myColorInput').chromoselector('toggle');
-    // Then hide it slowly
-    $('#myColorInput').chromoselector('toggle', 2500);
 });
 </code>
 </pre>
