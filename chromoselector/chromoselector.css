@@ -32,6 +32,7 @@
 .ui-cs-icon {
     z-index: 4000;
     padding: 0 0.1em;
+    outline: none;
 }
 .ui-cs-chromoselector .ui-cs-panel {
     float: left;
