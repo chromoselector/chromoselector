@@ -10,7 +10,6 @@
      *
      * v 2.1.1
      *   RSS feed
-     *   Fix shadow under preview at alpha=1
      *   Show is triggered multiple times
      *
      * v 2.2.0
@@ -473,7 +472,7 @@
             colorPicker_save(self);
         }
         if (self.settings.preview) {
-            self._preview.find('div').css('background', self.Color.getRgbaString());
+            self._previewColor.css('background', self.Color.getRgbaString());
         }
         self._source.trigger(self.settings.eventPrefix + 'update');
     }
@@ -507,7 +506,7 @@
             self.Color = new Color(str);
         }
         if (self.settings.preview && self._preview) {
-            self._preview.find('div').css('background', self.Color.getRgbaString());
+            self._previewColor.css('background', self.Color.getRgbaString());
         }
         if (redraw) {
             colorPicker_drawSaturationLimunositySelector(self);
@@ -1154,8 +1153,7 @@
         );
 
         self._previewWidget = $('<div/>').addClass('ui-cs-preview-widget')
-            .css('overflow', 'hidden')
-            .css('background', self.Color.getRgbaString());
+            .css('overflow', 'hidden');
 
         var shadowCssColor = new Color(self.settings.shadowColor);
         shadowCssColor.setAlpha(shadowCssColor.getAlpha() - 0.1);
