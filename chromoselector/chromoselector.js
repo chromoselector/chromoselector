@@ -9,7 +9,6 @@
      * TODO
      *
      * v 2.1.1
-     *   RSS feed
      *   Show is triggered multiple times
      *
      * v 2.2.0
