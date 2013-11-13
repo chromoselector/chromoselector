@@ -206,6 +206,42 @@ foreach ($demos as $value) {
     );
 }
 
+$html .= '<div data-role="collapsible" data-collapsed="false"';
+$html .= ' data-theme="b" data-content-theme="d"';
+$html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$html .= '<h3>Demo 7</h3>';
+$html .= '<div data-role="fieldcontain">';
+$html .= '<div id="static_preview_picker">
+            <label for="static_preview">Pick a color:</label>
+            <input id="static_preview" type="text" value="#7bda1b"/>
+          </div>
+          <div style="clear:both"></div>';
+$html .= '</div>';
+$html .= '<div data-role="collapsible" data-theme="c" data-content-theme="d">';
+$html .= '<h3>Code</h3>';
+$html .= '<pre><code class="javascript">$(document).ready(function() {
+    var updatePreview = function() {
+        var color = $(this).chromoselector("getColor");
+        $(this).css({
+            "background-color": color.hex,
+            "color": color.getTextColor().hex,
+            "text-shadow": "0 1px 0 " + color.getTextColor().getTextColor().hex
+        });
+    };
+    // Initialise the color picker
+    $("#static_preview").chromoselector({
+        target: "#static_preview_picker",
+        autoshow: false,
+        width: 285,
+        preview: false,
+        create: updatePreview,
+        update: updatePreview
+    }).chromoselector("show", 0);
+});</code></pre>';
+$html .= '</div>';
+$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/ECryt/">jsFiddle</a>';
+$html .= '</div>';
+
 $html .= '</form>';
 $html .= '</div>';
 $html .= '<div class="content-secondary">';
