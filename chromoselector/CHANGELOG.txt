@@ -2,6 +2,7 @@ v 2.1.1 - 28 Dec 2013
   * Fixed missing shadow around the color preview for WebKit
   * Fixed memory leak
   * Added RSS feed for new releases
+  * Added event testing jsFiddle
 
 v 2.1.0 - 12 Oct 2013
   * Improved picker positioning in small window (moved left or up, if necessary)
