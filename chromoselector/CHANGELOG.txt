@@ -1,5 +1,6 @@
 v 2.1.1 - Not yet released
   * Fixed missing shadow around the color preview for WebKit
+  * Fixed memory leak
   * Added RSS feed for new releases
 
 v 2.1.0 - 12 Oct 2013

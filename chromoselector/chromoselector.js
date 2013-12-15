@@ -760,7 +760,13 @@
         return width;
     }
     function colorPicker_fixPosition(self) {
-        var offset = self._source.offset();
+        var offset;
+        try {
+            offset = self._source.offset();
+        } catch (e) {
+            // called for setTimeout, but the object is destroyed
+            return;
+        }
         var targetOffset = self._target.offset();
         if (! self.haveTarget) {
             self._target.css({
@@ -1229,16 +1235,16 @@
             if (self._icon.length) {
                 $initElement = self._icon;
             }
-            $initElement.bind('focus click', function (e) {
+            $initElement.bind('focus.'+NAMESPACE+' click.'+NAMESPACE, function (e) {
                 preventDefault(e);
                 if (! self.ready) {
                     colorPicker_drawAll(self);
                 }
                 colorPicker_show(self);
-            }).blur(function () {
+            }).bind('blur.'+NAMESPACE, function () {
                 colorPicker_hide(self);
             });
-            self._source.keydown(function (e) {
+            self._source.bind('keydown.'+NAMESPACE, function (e) {
                 if (e.keyCode === 27) {
                     colorPicker_hide(self);
                 }
@@ -1442,6 +1448,7 @@
         destroy: function () {
             return each(this, function () {
                 var self = $(this).data(NAMESPACE);
+                var prefix = self.settings.eventPrefix;
                 if (self.haveTarget){
                     if (self._container.siblings().length) {
                         self._container.remove();
@@ -1451,9 +1458,13 @@
                 } else {
                     self._target.remove();
                 }
+                self._source.add(self._icon).unbind('.' + NAMESPACE);
+                for (var i in self) {
+                    delete self[i];
+                }
                 $(this)
                 .removeData(NAMESPACE)
-                .trigger(self.settings.eventPrefix + 'destroy')
+                .trigger(prefix + 'destroy')
                 .unbind('.' + NAMESPACE);
             });
         }
