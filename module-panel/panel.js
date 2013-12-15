@@ -272,7 +272,7 @@ var Panel = (function () {
             }
 
             drawPanel();
-            $target.trigger(NAMESPACE);
+            $target.trigger(NAMESPACE+'.'+NAMESPACE);
         });
 
         // API

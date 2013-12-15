@@ -10,6 +10,7 @@
      *
      * v 2.1.1
      *   Show is triggered multiple times
+     *   Unbind events from [window, document]
      *
      * v 2.2.0
      *   Update fiddles to point to new js file
@@ -1102,15 +1103,15 @@
                 self.settings.shadowColor
             );
             self.panelApi.setColor(self.Color.getRgba());
-            self._panel.bind(NAMESPACE, function () {
+            self._panel.bind(NAMESPACE+'.'+NAMESPACE, function () {
                 self.setColorRenderer(self, self.panelApi.getColor().getHsla());
             });
-            self._source.bind(self.settings.eventPrefix + 'update', function () {
+            self._source.bind(self.settings.eventPrefix + 'update.'+NAMESPACE, function () {
                 self.panelApi.setColor(self.Color.getHsla());
             });
-            self._panel.find('select').blur(function () {
+            self._panel.find('select').bind('blur.'+NAMESPACE, function () {
                 colorPicker_hide(self);
-            }).change(function () {
+            }).bind('change.'+NAMESPACE,function () {
                 self._root.width(
                     self.panelApi.getWidth() + self._container.width()
                 );
@@ -1253,14 +1254,14 @@
         /**
         * Register events
         */
-        self._source.keyup(function () {
+        self._source.bind('keyup.'+NAMESPACE, function () {
             self._source.trigger(self.settings.eventPrefix + 'update');
             colorPicker_load(self);
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
         });
         if (self.settings.resizable) {
-            self._resizer.bind('mousedown touchstart', function (e) {
+            self._resizer.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {
                 preventDefault(e);
                 var inputPoint = getEventPosition(self, e, self._picker);
                 self._source.trigger(self.settings.eventPrefix + 'resizeStart');
@@ -1271,7 +1272,7 @@
                 ];
             });
         }
-        self._container.bind('mousedown touchstart', function (e) {
+        self._container.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {
             preventDefault(e);
             var inputPoint = getEventPosition(self, e, self._picker);
             if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
@@ -1288,7 +1289,7 @@
                     self.draggingSatLumRenderer(self, e);
                 }
             }
-        }).bind('mousemove touchmove', function (e) {
+        }).bind('mousemove.'+NAMESPACE+' touchmove.'+NAMESPACE, function (e) {
             var inputPoint = getEventPosition(self, e, self._picker);
             if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth/2)
                 &&
@@ -1458,7 +1459,11 @@
                 } else {
                     self._target.remove();
                 }
-                self._source.add(self._icon).unbind('.' + NAMESPACE);
+                self._source
+                    .add(self._icon)
+                    .add(self._resizer)
+                    .add(self._container)
+                    .unbind('.' + NAMESPACE);
                 for (var i in self) {
                     delete self[i];
                 }
