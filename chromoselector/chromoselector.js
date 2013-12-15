@@ -18,6 +18,7 @@
      * v 3.0.0
      *   Implement RequestAnimationFrame
      *   Fix slide animation
+     *   Preview as module
      *   More unit tests
      *   refactor hue2rgb
      *   Improved mobile support
