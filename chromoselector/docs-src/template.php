@@ -82,7 +82,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
         $html .= '<div data-role="page" class="type-home">';
         $html .= '<div data-role="content">';
         if (! empty($_GET['RELEASE'])) {
-            $html .= '<a style="position:absolute; width:80px; height:80px; background:url(libs/images/rss.png); top:0; right: 0" href="http://chromoselector.com/feed.rss"></a>';
+            $html .= '<a style="position:absolute; width:80px; height:80px; background:url(libs/images/rss.png); top:0; right: 0" href="http://chromoselector.com/feed.xml"></a>';
         }
     }
 
