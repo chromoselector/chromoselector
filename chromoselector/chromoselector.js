@@ -8,11 +8,11 @@
      *
      * TODO
      *
-     * v 2.1.1
+     * v 2.1.3
      *   Show is triggered multiple times
      *   Unbind events from [window, document]
-     *
-     * v 2.2.0
+     *   Jquery mobile popup demo
+     *   New features page (codecanyon landing page)
      *   Update fiddles to point to new js file
      *
      * v 3.0.0
