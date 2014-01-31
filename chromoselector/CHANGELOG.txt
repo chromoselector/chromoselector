@@ -1,3 +1,6 @@
+v 2.1.2 - 30 Jan 2014
+  * Fixed crash in Chrome 32+
+
 v 2.1.1 - 28 Dec 2013
   * Fixed missing shadow around the color preview for WebKit
   * Fixed memory leak

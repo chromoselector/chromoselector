@@ -918,13 +918,16 @@
             // touchscreen
             x = touch[0].pageX - offset.left;
             y = touch[0].pageY - offset.top - previewHeight;
-        } else if (e.pageX) {
+        } else if (oe.clientX) {
             // mouse
-            var pageX = oe.clientX + document.body.scrollLeft;
-            var pageY = oe.clientY + document.body.scrollTop;
-            if (document.documentElement) {
+            var pageX = oe.clientX;
+            var pageY = oe.clientY;
+            if (document.documentElement && document.documentElement.scrollTop) {
                 pageX += document.documentElement.scrollLeft;
                 pageY += document.documentElement.scrollTop;
+            } else {
+                pageX += document.body.scrollLeft;
+                pageY += document.body.scrollTop;
             }
             x = pageX - offset.left;
             y = pageY - offset.top - previewHeight;
