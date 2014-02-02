@@ -32,6 +32,7 @@ haveTarget
 hueSelectorLineWidth
 hueSelectorCircleRadius
 hiding
+showing
 ColorWheelBg
 Effect
 Width

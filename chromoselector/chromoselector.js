@@ -9,7 +9,6 @@
      * TODO
      *
      * v 2.1.3
-     *   Show is triggered multiple times
      *   Unbind events from [window, document]
      *   Jquery mobile popup demo
      *   New features page (codecanyon landing page)
@@ -515,6 +514,10 @@
         }
     }
     function colorPicker_show(self, speed) {
+        if (self.showing || self._root.is(':visible')) {
+            return;
+        }
+        self.showing = 1;
         if (self.hiding) {
             clearTimeout(self.hiding);
             self.hiding = 0;
@@ -549,6 +552,7 @@
                         drawResizer(self, self._resizer[0]);
                     }
                     self._source.trigger(self.settings.eventPrefix + 'show');
+                    self.showing = 0;
                 }
             );
             if (self.panelApi) {
@@ -1039,6 +1043,7 @@
         }
 
         self.hiding = 0;
+        self.showing = 0;
 
         self._source = $this;
         colorPicker_load(self); // sets self.Color
