@@ -1,5 +1,6 @@
 v 2.1.3 - Not yet released
   * Fixed multiple triggering of show and beforeShow events
+  * Added jQuery mobile popup integration demo
 
 v 2.1.2 - 30 Jan 2014
   * Fixed crash in Chrome 32+

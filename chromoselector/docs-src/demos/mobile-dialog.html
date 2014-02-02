@@ -8,22 +8,60 @@ $html .= '<div class="content-primary">';
 $html .= '<form action="#" method="get">';
 $html .= '<h2>jQuery Mobile dialog integration</h2>';
 
+
+// dialog
 $html .= '<div data-role="collapsible" data-collapsed="false"';
 $html .= ' data-theme="b" data-content-theme="d"';
 $html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
 $html .= '<h3>jQuery Mobile dialog</h3>';
 $html .= '<div data-role="fieldcontain" class="jqm-wrapper">';
 $html .= '<label for="jqm-dialog-demo">Pick a color</label>
-	<input type="text" id="jqm-dialog-demo" value="#3caadf"/>
-    <a class="jqm-open" href="#"
+    <input type="text" id="jqm-dialog-demo" value="#3caadf"/>
+    <a class="jqm-open-dialog" href="#"
        data-theme="e" data-role="button"
        data-inline="true" data-iconpos="notext"
        data-icon="edit">
            Open Color Picker
     </a>';
 $html .= '</div>';
-$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uZCdX/">jsFiddle: Resizable color picker in mobile dialog</a>';
+$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/uZCdX/">jsFiddle: Resizable color picker in jqm dialog</a>';
 $html .= '</div>';
+
+// popup
+$html .= '<div data-role="collapsible" data-collapsed="false"';
+$html .= ' data-theme="b" data-content-theme="d"';
+$html .= ' data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d">';
+$html .= '<h3>jQuery Mobile popup</h3>';
+$html .= '<div data-role="fieldcontain" class="jqm-wrapper">';
+
+$html .= '<label for="jqm-popup-demo">Pick a color</label>
+    <input type="text" id="jqm-popup-demo" value="#ecbd8a"/>
+    <a class="jqm-open-popup" href="#jqm-popup" data-rel="popup"
+        data-position-to="window"
+        data-theme="e" data-role="button"
+        data-inline="true" data-iconpos="notext"
+        data-icon="edit">
+           Open Color Picker
+    </a>';
+// popup target
+$html .= '<div data-role="popup" id="jqm-popup"
+    data-overlay-theme="a" data-dismissible="false">
+    <a href="#" data-rel="back" data-role="button" data-theme="a"
+        data-icon="delete" data-iconpos="notext" class="ui-btn-right">
+        Close
+    </a>
+    <div style="padding: 15px">
+        <div id="jqm-popup-picker"></div>
+        <a id="jqm-popup-save" href="#" data-role="button" data-theme="b">
+            OK
+        </a>
+    </div>
+</div>';
+
+$html .= '</div>';
+$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/yVNTL/">jsFiddle: Color picker in jqm popup</a>';
+$html .= '</div>';
+
 $html .= '</form>';
 $html .= '</div>';
 $html .= '<div class="content-secondary">';

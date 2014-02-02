@@ -248,7 +248,7 @@ $(document).ready(function () {
     });
 });
 
-// jQuery mobile integration
+// jQuery mobile dialog integration
 $(document).ready(function() {
     $("#jqm-dialog-demo").chromoselector({
         autoshow: false,
@@ -264,7 +264,7 @@ $(document).ready(function() {
         }
     });
     var api = $("#jqm-dialog-demo").chromoselector("api").show();
-    $(".jqm-open").click(function () {
+    $(".jqm-open-dialog").click(function () {
         api.load();
         $("#jqm-dialog").show();
         $.mobile.changePage("#jqm-dialog",{transition:"none"});
@@ -276,5 +276,26 @@ $(document).ready(function() {
     });
     $("#jqm-close").click(function () {
         $("#jqm-dialog").dialog("close").hide();
+    });
+});
+
+// jQuery mobile dialog integration
+$(document).ready(function() {
+    $("#jqm-popup-demo").chromoselector({
+        autoshow: false,
+        width: 200,
+        target: $("#jqm-popup-picker"),
+        autosave: false,
+        resizable: false,
+        create: function () {
+            $(this).chromoselector("show");
+        }
+    });
+    $(".jqm-open-popup").click(function () {
+        $("#jqm-popup-demo").chromoselector("load");
+    });
+    $("#jqm-popup-save").click(function () {
+        $("#jqm-popup-demo").chromoselector("save");
+        $("#jqm-popup").popup("close");
     });
 });

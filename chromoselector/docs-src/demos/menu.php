@@ -9,7 +9,7 @@ function getDemosMenu($path = '.', $selected = '') {
         'previews' => 'Color Previews',
         'animations' => 'Animations',
         'icon' => 'Icon Opener',
-        'mobile-dialog' => 'jQuery Mobile dialog integration',
+        'mobile-dialog' => 'jQuery Mobile integration',
         'ui-dialog' => 'jQuery UI dialog integration'
     );
     foreach ($elms as $key => $value) {
