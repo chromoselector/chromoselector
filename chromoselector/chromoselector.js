@@ -926,7 +926,7 @@
             // mouse
             var pageX = oe.clientX;
             var pageY = oe.clientY;
-            if (document.documentElement && document.documentElement.scrollTop) {
+            if (document.documentElement && typeof document.documentElement.scrollTop !== 'undefined') {
                 pageX += document.documentElement.scrollLeft;
                 pageY += document.documentElement.scrollTop;
             } else {
