@@ -154,46 +154,7 @@ $(window).load(function () {
     }
     $html .= '<script src="' . $path . '/demos/demos.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/highlight.pack.js" type="text/javascript"></script>';
-
-
-    $html .= '<script type="text/javascript">';
-    $html .= '$(document).bind("pageinit", function(){';
-
-    $html .= '$("h3.ui-collapsible-heading").bind("click", function () {';
-    $html .= '$(this).parent().find("pre code").not(".done").addClass("done").each(function(i, e) {hljs.highlightBlock(e)});';
-    $html .= '});';
-
-    $html .= '$("pre.instant code").each(function(i, e) {hljs.highlightBlock(e)});';
-
-    $html .= '$(".collapse").bind("click", function(){';
-    $html .= '$(".ui-collapsible-heading:not(.ui-collapsible-heading-collapsed)").click();';
-    $html .= '});';
-    $html .= '$(".expand").bind("click", function(){';
-    $html .= '$(".ui-collapsible-heading.ui-collapsible-heading-collapsed").click();';
-    $html .= '});';
-
-    $html .= '});';
-    $html .= '</script>';
-
-    $html .= '<script type="text/javascript">
-    if (navigator.userAgent.match(/MSIE 10/)) {
-        $(document).bind("pageinit", function () {
-            var classes = "abcde".split("");
-            for (var i in classes) {
-                $(".ui-btn-up-"+classes[i])
-                    .removeClass("ui-btn-up-"+classes[i])
-                    .addClass("backup-ui-btn-up-"+classes[i]);
-            }
-            setTimeout(function () {
-                for (var i in classes) {
-                    $(".backup-ui-btn-up-"+classes[i])
-                        .addClass("ui-btn-up-"+classes[i]);
-                }
-
-            }, 40)
-        });
-    }';
-    $html .= '</script>';
+    $html .= '<script src="' . $path . '/libs/scripts.js" type="text/javascript"></script>';
 
     $html .= '</body></html>';
     return $html;
