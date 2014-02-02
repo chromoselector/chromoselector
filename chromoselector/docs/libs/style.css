@@ -263,7 +263,7 @@ p.intro strong {
 .jqm-wrapper {
     position: relative;
 }
-.jqm-open {
+.jqm-open-dialog, .jqm-open-popup {
     position: absolute;
     top: -2px;
     right: 0;
