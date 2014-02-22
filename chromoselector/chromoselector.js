@@ -460,7 +460,7 @@
             h: hsla.h,
             s: s,
             l: l,
-            a: hsla.a,
+            a: hsla.a
         });
         colorPicker_drawIndicators(
             self
