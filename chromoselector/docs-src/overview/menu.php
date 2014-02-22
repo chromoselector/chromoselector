@@ -5,7 +5,7 @@ function getOverviewMenu($path = '.', $selected = '') {
 
     if (empty($_GET['RELEASE'])) {
         $elms = array(
-            'purchase' => 'Purchase',
+            'purchase' => 'Buy Now',
             'features' => 'Features',
             'screenshots' => 'Screenshots',
             'requirements' => 'Requirements',
