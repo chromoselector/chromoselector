@@ -924,17 +924,8 @@
             y = touch[0].pageY - offset.top - previewHeight;
         } else if (oe.clientX) {
             // mouse
-            var pageX = oe.clientX;
-            var pageY = oe.clientY;
-            if (document.documentElement && typeof document.documentElement.scrollTop !== 'undefined') {
-                pageX += document.documentElement.scrollLeft;
-                pageY += document.documentElement.scrollTop;
-            } else {
-                pageX += document.body.scrollLeft;
-                pageY += document.body.scrollTop;
-            }
-            x = pageX - offset.left;
-            y = pageY - offset.top - previewHeight;
+            x = oe.clientX + window.pageXOffset - offset.left;
+            y = oe.clientY + window.pageYOffset - offset.top - previewHeight;
         }
         return [x, y];
     }
