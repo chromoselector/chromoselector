@@ -125,25 +125,6 @@ function getFooter($path = '.', $needDialog = false) {
     $html .= '$(document).on("mobileinit", function(){';
     $html .= '$.mobile.ajaxEnabled = false;';
     $html .= '});';
-    $html .= '
-$(window).load(function () {
-    var url = location.href;
-    var target = "";
-    var index = url.lastIndexOf("?target=");
-    if (index !== -1) {
-        target = url.substr(index + 8);
-    }
-    if (target) {
-        var $target = $("#" + target);
-        if ($target.length) {
-            $target.find("h3").click();
-            $("html, body").animate({
-                scrollTop: $("#" + target).find("h3").offset().top
-            }, 400);
-        }
-    }
-});
-    ';
     $html .= '</script>';
 
     $html .= '<script src="' . $path . '/libs/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>';
