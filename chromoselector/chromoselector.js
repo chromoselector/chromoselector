@@ -8,11 +8,17 @@
      *
      * TODO
      *
-     * v 2.1.3
+     * v 2.1.5
      *   Unbind events from [window, document]
      *   Jquery mobile popup demo
      *   New features page (codecanyon landing page)
      *   Update fiddles to point to new js file
+     *   iOS and Android rendering bugs
+     *   Rendered twice in static mode?
+     *
+     * v 2.2.0
+     *   Retina support
+     *   Improved mobile support
      *
      * v 3.0.0
      *   Implement RequestAnimationFrame
@@ -20,7 +26,6 @@
      *   Preview as module
      *   More unit tests
      *   refactor hue2rgb
-     *   Improved mobile support
      *   Better generation of new elements
      *   Camel-case all properties
      *   Improve shadow ratio calculation / shadow rendering
