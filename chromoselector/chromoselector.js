@@ -513,6 +513,9 @@
         if (self.settings.preview && self._preview) {
             self._previewColor.css('background', self.Color.getRgbaString());
         }
+        if (self.panelApi) {
+            self.panelApi.setColor(self.Color);
+        }
         if (redraw) {
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
