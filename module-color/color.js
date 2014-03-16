@@ -321,7 +321,7 @@ var Color = (function () {
             }
         } else if (value instanceof Color) {
             var color = value.getRgba();
-            if (haveFields(value, 'rgba')) {
+            if (haveFields(color, 'rgba')) {
                 currentColor = color;
                 isHsl = false;
             }

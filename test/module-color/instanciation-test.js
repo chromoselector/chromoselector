@@ -13,4 +13,10 @@ test("Instanciation test", function() {
     equal(color.getCmykString(), 'device-cmyk(0,0,0,1)', 'CMYK string is black');
     equal(color.getHexString(), '#000000', 'HEX string is black');
     equal(color.getHexaString(), '#000000ff', 'HEXA string is black');
+    var rgba = 'rgba(125,125,125,0.8)';
+    equal(
+        new Color(new Color(rgba)).getRgbaString(),
+        rgba,
+        'Color object value not lost in costruct'
+    );
 });
