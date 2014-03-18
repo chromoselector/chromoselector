@@ -101,7 +101,7 @@ function getFooter($path = '.', $needDialog = false) {
     }
     $html  = '</div>';
     $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
-    $html .= '<p>v2.1.4</p>';
+    $html .= '<p>v2.1.5</p>';
     $html .= '<p style="float: right">&copy; 2013 <a href="http://chromoselector.com/">chromoselector.com</a></p>';
     $html .= '<div style="clear:both"></div>';
     $html .= '</div>';
