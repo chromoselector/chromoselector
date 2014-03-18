@@ -1266,10 +1266,10 @@
         * Register events
         */
         self._source.bind('keyup.'+NAMESPACE, function () {
-            self._source.trigger(self.settings.eventPrefix + 'update');
             colorPicker_load(self);
             colorPicker_drawSaturationLimunositySelector(self);
             colorPicker_drawIndicators(self);
+            self._source.trigger(self.settings.eventPrefix + 'update');
         });
         if (self.settings.resizable) {
             self._resizer.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {

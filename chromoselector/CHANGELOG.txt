@@ -1,4 +1,5 @@
 v 2.1.5 - Not yet released
+  * Fixed the update event being called too early
   * Fixed a bug in the "load" API call
   * Fixed a bug in the setColor method of the Color object
 
