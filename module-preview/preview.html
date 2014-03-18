@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Chromoselector hello world demo page</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../chromoselector/chromoselector.css" />
+    <script src="../chromoselector/jquery-1.10.2.min.js" type="text/javascript"></script>
+    <script src="../module-color/color.js" type="text/javascript"></script>
+    <script src="preview.js" type="text/javascript"></script>
+    <style type="text/css">
+    body {
+        margin: 2em;
+    }
+    .ui-cs-preview-container {
+        padding: 10px 10px 0 10px;
+        height: 25px;
+    }
+    .ui-cs-preview-widget {
+        display: block;
+    }
+    </style>
+</head>
+<body>
+    <div id="preview1"></div>
+    <br />
+    <button id="resize1">animate resize</button>
+    <button id="color1">animate color</button>
+    <br />
+    <br />
+    <br />
+    <div id="preview2"></div>
+    <br />
+    <button id="resize2">animate resize</button>
+    <button id="color2">animate color</button>
+    <script type="text/javascript">
+    $(function () {
+        var p = new Preview(
+            $('#preview1'),
+            new Color('rgba(127,0,0,0.7)'),
+            300,
+            new Color(),
+            10
+        );
+        $('#resize1').click(function () {
+            var number = 0;
+            var timeout;
+            timeout = function () {
+                p.setWidth(45 + number);
+                
+                number++;
+                if (number <= 255) {
+                    setTimeout(timeout, 5);
+                }
+            };
+            timeout();
+        });
+        $('#color1').click(function () {
+            var number = 0;
+            var timeout;
+            timeout = function () {
+                var color = new Color({
+                    r: 0.5,
+                    g: number / 255,
+                    b: 0.5,
+                    a: 0.7
+                });
+                p.setColor(color);
+                number++;
+                if (number <= 255) {
+                    setTimeout(timeout, 5);
+                }
+            };
+            timeout();
+        });
+    });
+    $(function () {
+        var p2 = new Preview(
+            $('#preview2'),
+            new Color('rgba(127,0,0,0.7)'),
+            300,
+            new Color(),
+            10
+        );
+        $('#resize2').click(function () {
+            var number = 0;
+            var timeout;
+            timeout = function () {
+                p2.setWidth(45 + number);
+                
+                number++;
+                if (number <= 255) {
+                    setTimeout(timeout, 5);
+                }
+            };
+            timeout();
+        });
+        $('#color2').click(function () {
+            var number = 0;
+            var timeout;
+            timeout = function () {
+                var color = new Color({
+                    r: 0.5,
+                    g: number / 255,
+                    b: 0.5,
+                    a: 0.7
+                });
+                p2.setColor(color);
+                number++;
+                if (number <= 255) {
+                    setTimeout(timeout, 5);
+                }
+            };
+            timeout();
+        });
+    });
+    </script>
+</body>
+</html>
