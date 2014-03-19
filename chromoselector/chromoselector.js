@@ -1113,12 +1113,12 @@
                 self.settings.shadow,
                 self.settings.shadowColor
             );
-            self.panelApi.setColor(self.Color.getRgba());
+            self.panelApi.setColor(self.Color);
             self._panel.bind(NAMESPACE+'.'+NAMESPACE, function () {
                 self.setColorRenderer(self, self.panelApi.getColor().getHsla());
             });
             self._source.bind(self.settings.eventPrefix + 'update.'+NAMESPACE, function () {
-                self.panelApi.setColor(self.Color.getHsla());
+                self.panelApi.setColor(self.Color);
             });
             self._panel.find('select').bind('blur.'+NAMESPACE, function () {
                 colorPicker_hide(self);
