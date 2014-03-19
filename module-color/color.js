@@ -12,16 +12,16 @@ var Color = (function () {
 
         // Object getters
         self.getRgba = function () {
-            return currentColor;
+            return clone(currentColor);
         };
         self.getRgb = function () {
             return getRgb(currentColor);
         };
         self.getHsla = function () {
             if (isHsl) {
-                return currentHslColor;
+                return clone(currentHslColor);
             } else {
-                return getHslaFromRgb(currentColor);
+                return clone(getHslaFromRgb(currentColor));
             }
         };
         self.getHsl = function () {
@@ -322,39 +322,40 @@ var Color = (function () {
         } else if (value instanceof Color) {
             var color = value.getRgba();
             if (haveFields(color, 'rgba')) {
-                currentColor = color;
+                currentColor = clone(color);
                 isHsl = false;
             }
         } else if (typeof value === 'object') {
+            var clonedValue = {};
             for (i in value) {
                 if (value.hasOwnProperty(i)) {
-                    value[i] = parseFloat(value[i]);
+                    clonedValue[i] = parseFloat(value[i]);
                 }
             }
-            if (haveFields(value, 'sl')
-                && ! isNaN(value.h)
+            if (haveFields(clonedValue, 'sl')
+                && ! isNaN(clonedValue.h)
             ) {
                 isHsl = true;
-                value.h = value.h - Math.floor(value.h);
-                if (value.h < 0) {
-                    value.h = 1 + value.h;
+                clonedValue.h = clonedValue.h - Math.floor(clonedValue.h);
+                if (clonedValue.h < 0) {
+                    clonedValue.h = 1 + clonedValue.h;
                 }
-                currentHslColor = value;
+                currentHslColor = clonedValue;
                 alpha = 1;
-                if (haveFields(value, 'a')) {
-                    alpha = value.a;
+                if (haveFields(clonedValue, 'a')) {
+                    alpha = clonedValue.a;
                 }
                 currentHslColor.a = alpha;
-            } else if (haveFields(value, 'rgb')) {
-                currentColor = value;
+            } else if (haveFields(clonedValue, 'rgb')) {
+                currentColor = clonedValue;
                 alpha = 1;
-                if (haveFields(value, 'a')) {
-                    alpha = value.a;
+                if (haveFields(clonedValue, 'a')) {
+                    alpha = clonedValue.a;
                 }
                 currentColor.a = alpha;
                 isHsl = false;
-            } else if (haveFields(value, 'cmyk')) {
-                currentColor = cmyk2rgb(value);
+            } else if (haveFields(clonedValue, 'cmyk')) {
+                currentColor = cmyk2rgb(clonedValue);
                 currentColor.a = 1;
                 isHsl = false;
             }
@@ -372,6 +373,16 @@ var Color = (function () {
                 isHsl: isHsl
             };
         }
+    }
+
+    function clone(obj) {
+        var i, clone = {};
+        for (i in obj) {
+            if (obj.hasOwnProperty(i)) {
+                clone[i] = obj[i];
+            }
+        }
+        return clone;
     }
 
     // Used to expand shorthand hex strings

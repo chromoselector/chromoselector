@@ -2,6 +2,7 @@ v 2.1.5 - Not yet released
   * Fixed the update event being called too early
   * Fixed a bug in the "load" API call
   * Fixed a bug in the setColor method of the Color object
+  * Fixed a bug in object getters of the Color object
 
 v 2.1.4 - 22 Feb 2014
   * Fixed rendering issue when page is scrolled in Safari
