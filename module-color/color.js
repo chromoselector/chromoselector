@@ -376,13 +376,13 @@ var Color = (function () {
     }
 
     function clone(obj) {
-        var i, clone = {};
+        var i, cloned = {};
         for (i in obj) {
             if (obj.hasOwnProperty(i)) {
                 clone[i] = obj[i];
             }
         }
-        return clone;
+        return cloned;
     }
 
     // Used to expand shorthand hex strings
