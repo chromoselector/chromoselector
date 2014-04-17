@@ -1,5 +1,7 @@
 <?php
 
+error_reporting(0);
+
 header('Content-Type: application/rss+xml; charset=UTF-8');
 
 $items = array();
