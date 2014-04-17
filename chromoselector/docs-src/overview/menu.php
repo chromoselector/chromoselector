@@ -28,7 +28,11 @@ function getOverviewMenu($path = '.', $selected = '') {
         } else {
             $html .= '<li>';
         }
-        $html .= '<a href="' . $path . '/overview/' . $key . '.html">' . $value . '</a>';
+        if ($key == 'purchase') {
+            $html .= '<a rel="nofollow" href="' . $path . '/overview/' . $key . '.html">' . $value . '</a>';
+        } else {
+            $html .= '<a href="' . $path . '/overview/' . $key . '.html">' . $value . '</a>';
+        }
         $html .= '</li>';
     }
     return $html;

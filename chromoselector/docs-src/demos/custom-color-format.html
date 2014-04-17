@@ -161,7 +161,7 @@ $demos = array(
 
 foreach ($demos as $value) {
     if (! empty($value['fiddle'])) {
-        $value['fiddle'] = '<a data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
+        $value['fiddle'] = '<a rel="nofollow" data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
     } else {
         $value['fiddle'] = '';
     }

@@ -47,7 +47,7 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
         $libPath = $path . '/libs';
     }
 
-    $html  = '<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin : ' . $title . '</title>';
+    $html  = '<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin - ' . $title . '</title>';
     $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
     $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
 
@@ -70,10 +70,10 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
         $html .= '<body>';
         $html .= '<div data-role="page" class="type-interior" id="' . $type . '">';
         $html .= '<div data-role="header" data-theme="a">';
-        $html .= '<h1>' . $title . '</h1>';
+        $html .= '<h1><span style="display: none">ChromoSelector - jQuery Color Picker plugin - </span>' . $title . '</h1>';
         $html .= '<a href="../index.html" data-icon="home" data-iconpos="notext" data-direction="reverse">Home</a>';
         if (empty($_GET['RELEASE'])) {
-            $html .= '<a data-theme="b" href="../overview/purchase.html">Buy now</a>';
+            $html .= '<a rel="nofollow" data-theme="b" href="../overview/purchase.html">Buy now</a>';
         }
         $html .= '</div>';
         $html .= '<div data-role="content">';

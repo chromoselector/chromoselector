@@ -189,7 +189,7 @@ $(document).ready(function () {
 
 foreach ($demos as $value) {
     if (! empty($value['fiddle'])) {
-        $value['fiddle'] = '<a data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
+        $value['fiddle'] = '<a rel="nofollow" data-role="button" data-theme="c" href="' . $value['fiddle'] . '">jsFiddle</a>';
     } else {
         $value['fiddle'] = '';
     }
@@ -239,7 +239,7 @@ $html .= '<pre><code class="javascript">$(document).ready(function() {
     }).chromoselector("show", 0);
 });</code></pre>';
 $html .= '</div>';
-$html .= '<a data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/ECryt/">jsFiddle</a>';
+$html .= '<a rel="nofollow" data-role="button" data-theme="c" href="http://sandbox.chromoselector.com/ECryt/">jsFiddle</a>';
 $html .= '</div>';
 
 $html .= '</form>';
