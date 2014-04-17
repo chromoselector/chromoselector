@@ -8,6 +8,9 @@
     border: 1px solid #521;
     border-color: rgba(82, 37, 18, 0.5);
     position: absolute;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
 }
 .ui-cs-chromoselector .ui-cs-supercontainer {
     position: relative;
@@ -54,6 +57,9 @@
     float: left;
     color: #521;
     padding-bottom: 10px;
+    -webkit-box-sizing: content-box;
+    -moz-box-sizing: content-box;
+    box-sizing: content-box;
 }
 .ui-cs-chromoselector.ui-cs-static {
     position: relative;
