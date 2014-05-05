@@ -379,7 +379,7 @@ var Color = (function () {
         var i, cloned = {};
         for (i in obj) {
             if (obj.hasOwnProperty(i)) {
-                clone[i] = obj[i];
+                cloned[i] = obj[i];
             }
         }
         return cloned;
