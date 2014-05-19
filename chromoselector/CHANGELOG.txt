@@ -1,5 +1,6 @@
 v 2.1.6 - Not yet released
   * Fixed panel display with bootstrap
+  * Documentation fixes
 
 v 2.1.5 - 20 Mar 2014
   * Fixed the update event being called too early
