@@ -8,7 +8,7 @@
      *
      * TODO
      *
-     * v 2.1.6
+     * v 2.1.7
      *   Panel bug on iOS, sliders work only once
      *
      * v 2.2.0
@@ -1121,7 +1121,9 @@
                 self.panelApi.setColor(self.Color);
             });
             self._panel.find('select').bind('blur.'+NAMESPACE, function () {
-                colorPicker_hide(self);
+                if (! self.haveTarget) {
+                    colorPicker_hide(self);
+                }
             }).bind('change.'+NAMESPACE,function () {
                 self._root.width(
                     self.panelApi.getWidth() + self._container.width()
