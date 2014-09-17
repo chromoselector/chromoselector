@@ -1,7 +1,7 @@
 /**
- * ChromoSelector 2.1.5 for jQuery 1.3+
+ * ChromoSelector 2.1.6 for jQuery 1.3+
  *
- * All code (c) 2013 - Copyright www.chromoselector.com - All Rights Reserved.
+ * All code (c) 2013-2014 - Copyright www.chromoselector.com - All Rights Reserved.
  * Written by Rouslan Placella <info@chromoselector.com>
  * Unauthorized copying of this file, via any medium, is strictly prohibited.
  */
