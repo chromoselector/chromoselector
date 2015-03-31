@@ -523,6 +523,9 @@ $properties = array(
                 ."        width: 320\n"
                 ."    });\n"
                 ."});\n"
+        ),
+        'links' => array(
+            array('url' => 'theming.html', 'text' => 'Theming')
         )
     )
 );
@@ -538,11 +541,11 @@ foreach ($properties as $key => $value) {
 
     $links = '';
     if (! empty($value['links'])) {
-        $links = '<strong>See also:</strong><ul>';
+        $links = '<strong>See also:</strong><p>';
         foreach ($value['links'] as $link) {
-            $links .= '<li>';
+            $links .= '';
             $links .= '<a href="'. $link['url'] . '">' . $link['text'] . '</a>';
-            $links .= '</li>';
+            $links .= '</p>';
         }
         $links .= '</ul>';
     }
@@ -660,9 +663,9 @@ foreach ($properties as $key => $value) {
         $template,
         str_replace(array("(", ")"), "", $key),
         $key,
-        $value['default'],
         $value['description'],
         $value['values'],
+        $value['default'],
         $css,
         $samples,
         $links
