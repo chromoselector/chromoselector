@@ -1,3 +1,6 @@
+v 2.1.7 - 31 Mar 2015
+  * Documentation fixes
+
 v 2.1.6 - 17 Sep 2014
   * Fixed panel bug in static mode
   * Fixed panel display with bootstrap
