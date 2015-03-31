@@ -6,7 +6,10 @@ ErrorDocument 500 /500.shtml
 
 RewriteEngine on
 RewriteCond %{HTTP_HOST} ^www\.chromoselector\.com
-RewriteRule ^(.*)$ http://chromoselector.com/$1 [R=permanent,L]
+RewriteRule ^(.*)$ https://chromoselector.com/$1 [R=permanent,L]
+
+RewriteCond %{HTTP:CF-Visitor} '"scheme":"http"'
+RewriteRule ^(.*)$ https://chromoselector.com/$1 [L]
 
 <IfModule mod_expires.c>
 	ExpiresActive On
