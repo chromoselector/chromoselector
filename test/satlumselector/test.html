@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<body>
+<button id="plus">+</button>
+<button id="minus">-</button>
+<br>
+<canvas style="display:none" id="a1"></canvas>
+<canvas id="a2"></canvas>
+<script src="../../module-color/color.js"></script>
+<script type="text/javascript" src="../../chromoselector/jquery-1.10.2.min.js"></script>
+<script type="text/javascript">
+    var addColorStop = 'addColorStop';
+    var fillRect = 'fillRect';
+    var fillStyle = 'fillStyle';
+    var globalCompositeOperation = 'globalCompositeOperation';
+    var strokeStyle = 'strokeStyle';
+    /**
+     * Sets a pixel on a canvas
+     */
+    function setPixel(imageData, x, y, pixel) {
+        var i, index = (x + y * imageData.width) * 4;
+        for (i=0; i<4; i++) {
+            imageData.data[index+i] = pixel[i];
+        }
+    }
+    function getPointOnCircle(radius, degrees, offset) {
+        return [
+            offset + (radius * Math.cos(degrees)),
+            offset + (radius * Math.sin(degrees))
+        ];
+    }
+    function colorPicker_getPoints(self, hue) {
+        var i, points = [];
+        for (i = 0; i < 3; i++) {
+            points[i] = getPointOnCircle(
+                self.triangleRadius,
+                hue,
+                self.Width / 2
+            );
+            hue -= Math.PI * 2 / 3;
+        }
+        return points;
+    }
+    function intersectLineLine(a1, a2, b1, b2) {
+        var u_b = (b2[1] - b1[1]) * (a2[0] - a1[0]) - (b2[0] - b1[0]) * (a2[1] - a1[1]);
+        var ua_t = (b2[0] - b1[0]) * (a1[1] - b1[1]) - (b2[1] - b1[1]) * (a1[0] - b1[0]);
+        var ua = ua_t / u_b;
+        return [
+            a1[0] + ua * (a2[0] - a1[0]),
+            a1[1] + ua * (a2[1] - a1[1])
+        ];
+    }
+    /**
+     * the following function is simplified
+     * to account for the mask always being
+     * straight relative to the x-axis
+     */
+    function getLuminosityPixel(point1, point2, point3, inputPoint) {
+        var lumIntersectionPoint1 = intersectLineLine(
+            inputPoint,
+            [inputPoint[0] + 20, inputPoint[1]],
+            point1,
+            point2
+        );
+        var lumIntersectionPoint2 = intersectLineLine(
+            inputPoint,
+            [inputPoint[0] + 20, inputPoint[1]],
+            point1,
+            point3
+        );
+        var l;
+        if (inputPoint[0] < lumIntersectionPoint1[0]) {
+            l = 255;
+        } else if (inputPoint[0] > lumIntersectionPoint2[0]) {
+            l = 0;
+        } else {
+            l = (
+                (lumIntersectionPoint2[0] - inputPoint[0])
+                /
+                (lumIntersectionPoint2[0] - lumIntersectionPoint1[0])
+            ) * 255;
+        }
+        return [ l, l, l, 255];
+    }
+    /**
+     * Draws the triangular selector
+     */
+    function colorPicker_drawSaturationLimunositySelector(self) {
+        var hue = self.Color.getHsl().h;
+        var canvas = self.canvases[2];
+        var ctx = canvas.getContext("2d");
+        ctx.clearRect(0,0,self.Width, self.Width);
+        var degrees = -Math.PI / 2;
+        var points = colorPicker_getPoints(self, degrees);
+        var tempCtx;
+        if (! self.ready) {
+            var maskImageData = ctx.createImageData(self.Width, self.Width);
+            // triangle limits
+            var limits = function (points, axis) {
+                return {
+                    start: Math.round(Math.min(points[0][axis] - 3, points[1][axis] - 3, points[2][axis] - 3)),
+                    end: Math.round(Math.max(points[0][axis] + 3, points[1][axis] + 3, points[2][axis] + 3))
+                };
+            };
+            var limitX = limits(points, 0);
+            var limitY = limits(points, 1);
+            var i, j;
+            // draw
+            for (i = limitX.start; i <= limitX.end; i++) {
+                for (j = limitY.start; j <= limitY.end; j++) {
+                    setPixel(
+                        maskImageData,
+                        i,
+                        j,
+                        getLuminosityPixel(points[0], points[1], points[2], [i, j])
+                    );
+                }
+            }
+
+            tempCtx = self.tempCanvas.getContext('2d');
+            tempCtx.putImageData(maskImageData, 0, 0);
+
+           /* var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
+            lingrad[addColorStop](1, 'rgba(0,0,0,0)');
+            lingrad[addColorStop](0, 'rgba(0,0,0,1)');
+            tempCtx[fillStyle] = lingrad;
+            tempCtx[globalCompositeOperation] = "destination-out";
+            tempCtx[fillRect](limitX.start,limitY.start,limitX.end,limitY.end);
+            tempCtx[globalCompositeOperation] = "source-over";*/
+        }
+
+       /* degrees = (1 - hue) * Math.PI * 2;
+        points = colorPicker_getPoints(self, degrees);
+        // Fill background
+        ctx[fillStyle] = new Color({
+            h:hue, s:1, l:0.5
+        }).getHexString();
+        ctx[fillRect](0,0,self.Width,self.Width);
+        // Copy rotated mask
+        ctx.save();
+        ctx.translate(self.Width/2, self.Width/2);
+        ctx.rotate(degrees + Math.PI / 2);
+        ctx.translate(-self.Width/2, -self.Width/2);
+        ctx.drawImage(self.tempCanvas, 0, 0);
+        ctx.restore();
+        // cut out triangle
+        ctx.beginPath();
+        ctx.moveTo(0, 0);
+        ctx.lineTo(points[1][0], points[1][1]);
+        ctx.lineTo(points[0][0], points[0][1]);
+        ctx.lineTo(points[2][0], points[2][1]);
+        ctx.lineTo(points[1][0], points[1][1]);
+        ctx.lineTo(0, 0);
+        ctx.lineTo(0, self.Width);
+        ctx.lineTo(self.Width, self.Width);
+        ctx.lineTo(self.Width, 0);
+        ctx.lineTo(0, 0);
+        ctx.closePath();
+        ctx[globalCompositeOperation] = "destination-out";
+        ctx[fillStyle] = 'rgba(0,0,0,1)';
+        ctx.fill();
+        // shadow
+        /*var shadowPoint = function (index, axis) {
+            var pixel = (1 / (self.Width / 2)) * 2;
+            return self.Width / 2 * pixel + points[index][axis] * (1-pixel);
+        };
+        ctx[globalCompositeOperation] = "destination-over";
+        ctx.beginPath();
+        ctx.moveTo(shadowPoint(0, 0), shadowPoint(0, 1));
+        ctx.lineTo(shadowPoint(1, 0), shadowPoint(1, 1));
+        ctx.lineTo(shadowPoint(2, 0), shadowPoint(2, 1));
+        ctx.closePath();
+        ctx[fillStyle] = 'rgba(0,0,0,1)';
+        ctx.shadowColor = self.settings.shadowColor;
+        ctx.shadowBlur = self.settings.shadow;
+        ctx.fill();
+
+        ctx.shadowColor = 'rgba(0,0,0,0)';
+        ctx.shadowBlur = 0;
+        ctx[globalCompositeOperation] = "source-over";*/
+    }
+    function makePicker(size) {
+        $('#a1')[0].width = size;
+        $('#a1')[0].height = size;
+        $('#a2')[0].width = size;
+        $('#a2')[0].height = size;
+        $('#a1').css('width', size);
+        $('#a1').css('height', size);
+        $('#a2').css('width', size);
+        $('#a2').css('height', size);
+        var picker = {
+            Width: size,
+            Color: new Color('#ffff00'),
+            tempCanvas: $('#a2')[0],
+            canvases: [],
+            triangleRadius: size / 2
+        };
+        picker.canvases[2] = $('#a1')[0];
+        colorPicker_drawSaturationLimunositySelector(picker);
+    }
+    var size = 400;
+    makePicker(size);
+    $('#plus').click(function () {
+        size += 50;
+        makePicker(size);
+    });
+    $('#minus').click(function () {
+        size -= 10;
+        makePicker(size);
+    });
+</script>
+</body>
+</html>
