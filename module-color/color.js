@@ -1,547 +1,468 @@
-/**
- * COLOR MANAGEMENT
- */
-var Color = (function () {
-    var round = Math.round;
-    function Color(value) {
-        var self = this;
-        // default to black
-        var currentColor = { r:0, g:0, b:0, a:1 };
-        var currentHslColor = { h:0, s:0, l:0, a:1 };
-        var isHsl = false;
+;var Color = (function(Math){
+'use strict';// Shorthand
+var round = Math.round;
 
-        // Object getters
-        self.getRgba = function () {
-            return clone(currentColor);
-        };
-        self.getRgb = function () {
-            return getRgb(currentColor);
-        };
-        self.getHsla = function () {
-            if (isHsl) {
-                return clone(currentHslColor);
+// One level deep copy
+function clone(obj, callback) {
+    var i, cloned = {};
+    for (i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            if (callback) {
+                cloned[i] = callback(obj[i]);
             } else {
-                return clone(getHslaFromRgb(currentColor));
-            }
-        };
-        self.getHsl = function () {
-            if (isHsl) {
-                return getHsl(currentHslColor);
-            } else {
-                return getHslFromRgb(currentColor);
-            }
-        };
-        self.getCmyk = function () {
-            return getCmyk(currentColor);
-        };
-        // String getters
-        self.getRgbaString = function () {
-            return getRgbaString(currentColor);
-        };
-        self.getRgbString = function () {
-            return getRgbString(currentColor);
-        };
-        self.getHexaString = function () {
-            return getHexaString(currentColor);
-        };
-        self.getHexString = function () {
-            return getHexString(currentColor);
-        };
-        self.getHslaString = function () {
-            return getHslaString(currentColor);
-        };
-        self.getHslString = function () {
-            return getHslString(currentColor);
-        };
-        self.getCmykString = function () {
-            return getCmykString(currentColor);
-        };
-        // Contrasting color getter
-        self.getTextColor = function () {
-            return getTextColor(currentColor);
-        };
-        // Color setter
-        self.setColor = function (color) {
-            var retval      = setColor(color, currentColor, currentHslColor, isHsl);
-            currentColor    = retval.rgba;
-            currentHslColor = retval.hsla;
-            isHsl           = retval.isHsl;
-            return self;
-        };
-        self.setAlpha = function (value) {
-            value = parseFloat(value);
-            if (! isNaN(value) && value >= 0 && value <= 1) {
-                currentColor.a = value;
-                currentHslColor.a = value;
-            }
-            return self;
-        };
-        self.getAlpha = function () {
-            return currentColor.a;
-        };
-        // Set to input color
-        self.setColor(value);
-    }
-
-    // Object getters
-    function getRgb(color) {
-        var retval = {};
-        retval.r = color.r;
-        retval.g = color.g;
-        retval.b = color.b;
-        return retval;
-    }
-    function getHslFromRgb(color) {
-        var retval = {};
-        var hsl = rgb2hsl(color);
-        retval.h = hsl.h;
-        retval.s = hsl.s;
-        retval.l = hsl.l;
-        return retval;
-    }
-    function getHsl(color) {
-        var retval = {};
-        retval.h = color.h;
-        retval.s = color.s;
-        retval.l = color.l;
-        return retval;
-    }
-    function getHslaFromRgb(color) {
-        return rgb2hsl(color);
-    }
-    function getCmyk(color) {
-        return rgb2cmyk(color);
-    }
-
-    // String getters
-    function getRgbString(color) {
-        return 'rgb('
-            + round(color.r * 255) + ','
-            + round(color.g * 255) + ','
-            + round(color.b * 255) + ')';
-    }
-    function getRgbaString(color) {
-        return 'rgba('
-            + round(color.r * 255) + ','
-            + round(color.g * 255) + ','
-            + round(color.b * 255) + ','
-            + round(color.a * 100) / 100  + ')';
-    }
-    function getHexString(color) {
-        return rgb2hex(color);
-    }
-    function getHexaString(color) {
-        var byte = round(color.a * 255);
-        var value = byte.toString(16);
-        if (byte < 16) {
-            value = "0" + value;
-        }
-        return rgb2hex(color) + value;
-    }
-    function getHslString(color) {
-        var hsla = rgb2hsl(color);
-        return 'hsl('
-            + round(hsla.h * 360) + ','
-            + round(hsla.s * 100) + '%,'
-            + round(hsla.l * 100) + '%)';
-    }
-    function getHslaString(color) {
-        var hsla = rgb2hsl(color);
-        return 'hsla('
-            + round(hsla.h * 360) + ','
-            + round(hsla.s * 100) + '%,'
-            + round(hsla.l * 100) + '%,'
-            + round(hsla.a * 100) / 100  + ')';
-    }
-    // http://www.w3.org/TR/css3-gcpm/#cmyk-colors
-    function getCmykString(color) {
-        var cmyk = rgb2cmyk(color);
-        return 'device-cmyk('
-            + round(cmyk.c * 100) / 100 + ','
-            + round(cmyk.m * 100) / 100 + ','
-            + round(cmyk.y * 100) / 100 + ','
-            + round(cmyk.k * 100) / 100 + ')';
-    }
-
-    // Contrasting color getter
-    function getTextColor(color) {
-        // See BT 709 color spec
-        var luma = color.r*0.2126 + color.g*0.7152 + color.b*0.0722;
-        return new Color(luma < 0.35 ? '#fff' : '#000');
-    }
-
-    // Color setter
-    function setColor(value, currentColor, currentHslColor, isHsl) {
-        var parts, i, alpha, hue;
-        if (typeof value === 'string') {
-            value = value.replace(/\s+/g, '');
-            if (/^#/.test(value)) { // hex
-                if (/^#([0-9a-f]{3}){1,2}$/i.test(value)) {
-                    if (value.length === 4) {
-                        value = value.replace(/[0-9a-f]/gi, replaceCallback);
-                    }
-                    currentColor = hex2rgb(value);
-                    currentColor.a = 1;
-                    isHsl = false;
-                } else if (/^#([0-9a-f]{4}){1,2}$/i.test(value)) {
-                    if (value.length === 5) {
-                        value = value.replace(/[0-9a-f]/gi, replaceCallback);
-                    }
-                    currentColor = hexa2rgb(value);
-                    isHsl = false;
-                }
-            } else if (/^rgba/.test(value)) {
-                parts = value.match(/^rgba\((\d+%?),(\d+%?),(\d+%?),(\.\d+|\d+\.?\d*)\)$/);
-                if (parts && parts.length === 5) {
-                    parts.shift();
-                    alpha = parts.pop() / 1; // Divide by 1 to convert string to number
-                    if (alpha > 1) {
-                        alpha = 1;
-                    } else if (alpha < 0) {
-                        alpha = 0;
-                    }
-                    for (i=0; i<parts.length; i++) {
-                        if (parts[i].indexOf('%') !== -1) {
-                            parts[i] = parts[i].substr(0, parts[i].length - 1) / 100;
-                        } else {
-                            parts[i] = parts[i] / 255;
-                        }
-                        if (parts[i] > 1) {
-                            parts[i] = 1;
-                        } else if (parts[i] < 0) {
-                            parts[i] = 0;
-                        }
-                    }
-                    currentColor.r = parts[0];
-                    currentColor.g = parts[1];
-                    currentColor.b = parts[2];
-                    currentColor.a = alpha;
-                    isHsl = false;
-                }
-            } else if (/^rgb/.test(value)) {
-                parts = value.match(/^rgb\((\d+%?),(\d+%?),(\d+%?)\)$/);
-                if (parts && parts.length === 4) {
-                    parts.shift();
-                    for (i=0; i<parts.length; i++) {
-                        if (parts[i].indexOf('%') !== -1) {
-                            parts[i] = parts[i].substr(0, parts[i].length - 1) / 100;
-                        } else {
-                            parts[i] = parts[i] / 255;
-                        }
-                        if (parts[i] > 1) {
-                            parts[i] = 1;
-                        } else if (parts[i] < 0) {
-                            parts[i] = 0;
-                        }
-                    }
-                    currentColor.r = parts[0];
-                    currentColor.g = parts[1];
-                    currentColor.b = parts[2];
-                    currentColor.a = 1;
-                    isHsl = false;
-                }
-            } else if (/^hsla/.test(value)) {
-                parts = value.match(/^hsla\((\d+),(\d+%),(\d+%),(\.\d+|\d+\.?\d*)\)$/);
-                if (parts && parts.length === 5) {
-                    parts.shift();
-                    hue = parts.shift() / 360;
-                    hue = hue - Math.floor(hue);
-                    if (hue < 0) {
-                        hue = 1 + hue;
-                    }
-                    alpha = parts.pop() / 1; // Divide by 1 to convert string to number
-                    if (alpha > 1) {
-                        alpha = 1;
-                    } else if (alpha < 0) {
-                        alpha = 0;
-                    }
-                    if (parts.length === 2) {
-                        for (i=0; i<parts.length; i++) {
-                            parts[i] = parts[i].substr(0, parts[i].length - 1) / 100;
-                            if (parts[i] > 1) {
-                                parts[i] = 1;
-                            } else if (parts[i] < 0) {
-                                parts[i] = 0;
-                            }
-                        }
-                        isHsl = true;
-                        currentHslColor = {
-                            h: hue,
-                            s: parts[0],
-                            l: parts[1],
-                            a: alpha
-                        };
-                    }
-                }
-            } else if (/^hsl/.test(value)) {
-                parts = value.match(/^hsl\((\d+),(\d+%),(\d+%)\)$/);
-                if (parts && parts.length === 4) {
-                    parts.shift();
-                    hue = parts.shift() / 360;
-                    hue = hue - Math.floor(hue);
-                    if (hue < 0) {
-                        hue = 1 + hue;
-                    }
-                    for (i=0; i<parts.length; i++) {
-                        parts[i] = parts[i].substr(0, parts[i].length - 1) / 100;
-                        if (parts[i] > 1) {
-                            parts[i] = 1;
-                        } else if (parts[i] < 0) {
-                            parts[i] = 0;
-                        }
-                    }
-                    isHsl = true;
-                    currentHslColor = {
-                        h: hue,
-                        s: parts[0],
-                        l: parts[1],
-                        a: 1
-                    };
-                }
-            } else if (/^device-cmyk/.test(value)) {
-                parts = value.match(/^device-cmyk\((\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*)\)$/);
-                if (parts && parts.length === 5) {
-                    parts.shift();
-                    for (i=0; i<parts.length; i++) {
-                        parts[i] = parts[i] / 1; // Divide by 1 to convert string to number
-                        if (parts[i] > 1) {
-                            parts[i] = 1;
-                        } else if (parts[i] < 0) {
-                            parts[i] = 0;
-                        }
-                    }
-                    currentColor = cmyk2rgb({
-                        c: parts[0],
-                        m: parts[1],
-                        y: parts[2],
-                        k: parts[3]
-                    });
-                    isHsl = false;
-                }
-            }
-        } else if (value instanceof Color) {
-            var color = value.getRgba();
-            if (haveFields(color, 'rgba')) {
-                currentColor = clone(color);
-                isHsl = false;
-            }
-        } else if (typeof value === 'object') {
-            var clonedValue = {};
-            for (i in value) {
-                if (value.hasOwnProperty(i)) {
-                    clonedValue[i] = parseFloat(value[i]);
-                }
-            }
-            if (haveFields(clonedValue, 'sl')
-                && ! isNaN(clonedValue.h)
-            ) {
-                isHsl = true;
-                clonedValue.h = clonedValue.h - Math.floor(clonedValue.h);
-                if (clonedValue.h < 0) {
-                    clonedValue.h = 1 + clonedValue.h;
-                }
-                currentHslColor = clonedValue;
-                alpha = 1;
-                if (haveFields(clonedValue, 'a')) {
-                    alpha = clonedValue.a;
-                }
-                currentHslColor.a = alpha;
-            } else if (haveFields(clonedValue, 'rgb')) {
-                currentColor = clonedValue;
-                alpha = 1;
-                if (haveFields(clonedValue, 'a')) {
-                    alpha = clonedValue.a;
-                }
-                currentColor.a = alpha;
-                isHsl = false;
-            } else if (haveFields(clonedValue, 'cmyk')) {
-                currentColor = cmyk2rgb(clonedValue);
-                currentColor.a = 1;
-                isHsl = false;
-            }
-        }
-        if (isHsl) {
-            return {
-                rgba: hsl2rgb(currentHslColor),
-                hsla: currentHslColor,
-                isHsl: isHsl
-            };
-        } else {
-            return {
-                rgba: currentColor,
-                hsla: rgb2hsl(currentColor),
-                isHsl: isHsl
-            };
-        }
-    }
-
-    function clone(obj) {
-        var i, cloned = {};
-        for (i in obj) {
-            if (obj.hasOwnProperty(i)) {
                 cloned[i] = obj[i];
             }
         }
-        return cloned;
     }
+    return cloned;
+}
 
-    // Used to expand shorthand hex strings
-    function replaceCallback(match) {
-        return match + match;
-    }
+// Used to expand shorthand hex strings
+function replaceCallback(match) {
+    return match + match;
+}
 
-    // Channel validity checker
-    function haveFields(value, fields) {
-        var i, temp, arr = fields.split('');
-        for (i in arr) {
-            if (arr.hasOwnProperty(i)) {
-                temp = parseFloat(value[fields[i]]);
-                if (isNaN(temp)
-                    || temp < 0
-                    || temp > 1
-                ) {
-                    return 0;
-                }
+// Channel validity checker
+function haveFields(value, fields) {
+    var i, temp, arr = fields.split('');
+    for (i in arr) {
+        if (arr.hasOwnProperty(i)) {
+            temp = parseFloat(value[fields[i]]);
+            if (isNaN(temp) || temp < 0 || temp > 1) {
+                return 0;
             }
         }
-        return 1;
     }
-
-    // converters
-    function rgb2hex(input) {
-        var value, byte, retval = '', i=0;
-        for (;i<3;i++) {
-            byte = round(input[['r','g','b'][i]] * 255);
-            value = byte.toString(16);
-            if (byte < 16) {
-                value = "0" + value;
+    return 1;
+}
+// converters
+function rgb2hexa(input) {
+    var value, byte, retval = '', i=0;
+    for (;i<4;i++) {
+        byte = round(input[['r','g','b','a'][i]] * 255);
+        value = byte.toString(16);
+        if (byte < 16) {
+            value = "0" + value;
+        }
+        retval += value;
+    }
+    return '#' + retval;
+}
+function hexa2rgb(value) {
+    var i=0, retval = {};
+    for (;i<4;i++) {
+        retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
+    }
+    return {
+        r: retval[0],
+        g: retval[1],
+        b: retval[2],
+        a: retval[3]
+    };
+}
+function rgb2hsl(value) {
+    var r = value.r,
+    g = value.g,
+    b = value.b,
+    max = Math.max(r, g, b),
+    min = Math.min(r, g, b),
+    h,
+    s,
+    l = (max + min) / 2;
+    if (max === min) {
+        h = s = 0; // achromatic
+    } else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch(max) {
+            case r: h = (g - b) / d + (g < b ? 6 : 0); break;
+            case g: h = (b - r) / d + 2; break;
+            case b: h = (r - g) / d + 4; break;
+        }
+        h /= 6;
+    }
+    return {
+        h: h,
+        s: s,
+        l: l,
+        a: value.a
+    };
+}
+function hsl2rgb(value) {
+    var r, g, b;
+    if (value.s === 0) {
+        r = g = b = value.l; // achromatic
+    } else {
+        var hue2rgb = function (p, q, t) {
+            if (t < 0) {
+                t += 1;
+            } else if (t > 1) {
+                t -= 1;
             }
-            retval += value;
-        }
-        return '#' + retval;
+            if (t < 1/6) {
+                return p + (q - p) * 6 * t;
+            }
+            if (t < 1/2) {
+                return q;
+            }
+            if (t < 2/3) {
+                return p + (q - p) * (2/3 - t) * 6;
+            }
+            return p;
+        };
 
-    }
-    function hex2rgb(value) {
-        var i=0, retval = {};
-        for (;i<3;i++) {
-            retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
-        }
-        return {
-            r: retval[0],
-            g: retval[1],
-            b: retval[2]
-        };
-    }
-    function hexa2rgb(value) {
-        var i=0, retval = {};
-        for (;i<4;i++) {
-            retval[i] = parseInt('0x' + value.substring(i*2+1,i*2+3), 16) / 255;
-        }
-        return {
-            r: retval[0],
-            g: retval[1],
-            b: retval[2],
-            a: retval[3]
-        };
-    }
-    function rgb2hsl(value) {
-        var r = value.r,
-        g = value.g,
-        b = value.b,
-        max = Math.max(r, g, b),
-        min = Math.min(r, g, b),
-        h,
-        s,
-        l = (max + min) / 2;
-        if (max === min) {
-            h = s = 0; // achromatic
+        var q;
+        if (value.l < 0.5) {
+            q = value.l * (1 + value.s);
         } else {
-            var d = max - min;
-            s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-            switch(max) {
-                case r: h = (g - b) / d + (g < b ? 6 : 0); break;
-                case g: h = (b - r) / d + 2; break;
-                case b: h = (r - g) / d + 4; break;
-            }
-            h /= 6;
+            q = value.l + value.s - value.l * value.s;
         }
+        var p = 2 * value.l - q;
+        r = hue2rgb(p, q, value.h + 1/3);
+        g = hue2rgb(p, q, value.h);
+        b = hue2rgb(p, q, value.h - 1/3);
+    }
+    return {
+        r: r,
+        g: g,
+        b: b,
+        a: value.a
+    };
+}
+function rgb2cmyk(value) {
+    // achromatic
+    if (value.r === value.g && value.g === value.b) {
         return {
-            h: h,
-            s: s,
-            l: l,
-            a: value.a
+            c:0,
+            m:0,
+            y:0,
+            k:1 - value.r
         };
     }
-    function hsl2rgb(value) {
-        var r, g, b;
-        if (value.s === 0) {
-            r = g = b = value.l; // achromatic
+    var k = Math.min(
+        1 - value.r,
+        1 - value.g,
+        1 - value.b
+    );
+    return {
+        c:(1 - value.r - k) / (1 - k),
+        m:(1 - value.g - k) / (1 - k),
+        y:(1 - value.b - k) / (1 - k),
+        k:k
+    };
+}
+function cmyk2rgb(value) {
+    return {
+        r: 1 - Math.min(1, value.c * (1 - value.k) + value.k),
+        g: 1 - Math.min(1, value.m * (1 - value.k) + value.k),
+        b: 1 - Math.min(1, value.y * (1 - value.k) + value.k),
+        a: 1
+    };
+}
+// Color parser
+function parseChannelValues(channels) {
+    for (var i=0; i<channels.length; i++) {
+        if (channels[i].indexOf('%') !== -1) {
+            channels[i] = channels[i].substr(0, channels[i].length - 1) / 100;
         } else {
-            var hue2rgb = function (p, q, t) {
-                if (t < 0) {
-                    t += 1;
-                } else if (t > 1) {
-                    t -= 1;
-                }
-                if (t < 1/6) {
-                    return p + (q - p) * 6 * t;
-                }
-                if (t < 1/2) {
-                    return q;
-                }
-                if (t < 2/3) {
-                    return p + (q - p) * (2/3 - t) * 6;
-                }
-                return p;
-            };
+            channels[i] = channels[i] / 255;
+        }
+        if (channels[i] > 1) {
+            channels[i] = 1;
+        }
+    }
+    return channels;
+}
+function parseHexString(value) {
+    var retval;
+    if (/^#([0-9a-f]{3}){1,2}$/i.test(value)) {
+        if (value.length === 4) {
+            value = value.replace(/[0-9a-f]/gi, replaceCallback);
+        }
+        retval = { rgba: hexa2rgb(value) };
+        retval.rgba.a = 1;
+    } else if (/^#([0-9a-f]{4}){1,2}$/i.test(value)) {
+        if (value.length === 5) {
+            value = value.replace(/[0-9a-f]/gi, replaceCallback);
+        }
+        retval = { rgba: hexa2rgb(value) };
+    }
+    return retval;
+}
+function parseRgbaString(value) {
+    var parts, alpha;
+    parts = value.match(/^rgba\((\d+%?),(\d+%?),(\d+%?),(\.\d+|\d+\.?\d*)\)$/);
+    if (parts && parts.length === 5) {
+        parts.shift();
+        alpha = parts.pop() / 1; // Divide by 1 to convert string to number
+        if (alpha > 1) {
+            alpha = 1;
+        }
+        parts = parseChannelValues(parts);
+        return {
+            rgba: {
+                r: parts[0],
+                g: parts[1],
+                b: parts[2],
+                a: alpha
+            }
+        };
+    }
+}
+function parseRgbString(value) {
+    var parts;
+    parts = value.match(/^rgb\((\d+%?),(\d+%?),(\d+%?)\)$/);
+    if (parts && parts.length === 4) {
+        parts.shift();
+        parts = parseChannelValues(parts);
+        return {
+            rgba: {
+                r: parts[0],
+                g: parts[1],
+                b: parts[2],
+                a: 1
+            }
+        };
+    }
+}
+function parseHslaString(value) {
+    var parts, alpha, hue;
+    parts = value.match(/^hsla\((-?\d+),(\d+%),(\d+%),(\.\d+|\d+\.?\d*)\)$/);
+    if (parts && parts.length === 5) {
+        parts.shift();
+        hue = parts.shift() / 360;
+        hue = hue - Math.floor(hue);
+        alpha = parts.pop() / 1; // Divide by 1 to convert string to number
+        if (alpha > 1) {
+            alpha = 1;
+        }
+        parts = parseChannelValues(parts);
+        return {
+            hsla: {
+                h: hue,
+                s: parts[0],
+                l: parts[1],
+                a: alpha
+            }
+        };
+    }
+}
+function parseHslString(value) {
+    var parts, hue;
+    parts = value.match(/^hsl\((-?\d+),(\d+%),(\d+%)\)$/);
+    if (parts && parts.length === 4) {
+        parts.shift();
+        hue = parts.shift() / 360;
+        hue = hue - Math.floor(hue);
+        parts = parseChannelValues(parts);
+        return {
+            hsla: {
+                h: hue,
+                s: parts[0],
+                l: parts[1],
+                a: 1
+            }
+        };
+    }
+}
+function parseCmykString(value) {
+    var parts, i;
+    parts = value.match(/^device-cmyk\((\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*),(\.\d+|\d+\.?\d*)\)$/);
+    if (parts && parts.length === 5) {
+        parts.shift();
+        for (i=0; i<parts.length; i++) {
+            parts[i] = parts[i] / 1; // Divide by 1 to convert string to number
+            if (parts[i] > 1) {
+                parts[i] = 1;
+            }
+        }
+        return {
+            rgba: cmyk2rgb({
+                c: parts[0],
+                m: parts[1],
+                y: parts[2],
+                k: parts[3]
+            })
+        };
+    }
+}
+function parseString(value) {
+    var retval;
+    value = value.replace(/\s+/g, '');
+    if (/^#/.test(value)) { // hex
+        retval = parseHexString(value);
+    } else if (/^rgba/.test(value)) {
+        retval = parseRgbaString(value);
+    } else if (/^rgb/.test(value)) {
+        retval = parseRgbString(value);
+    } else if (/^hsla/.test(value)) {
+        retval = parseHslaString(value);
+    } else if (/^hsl/.test(value)) {
+        retval = parseHslString(value);
+    } else if (/^device-cmyk/.test(value)) {
+        retval = parseCmykString(value);
+    }
+    return retval;
+}
+function parseObject(value) {
+    var alpha, retval;
+    value = clone(value, parseFloat);
+    if (haveFields(value, 'sl') && ! isNaN(value.h)) {
+        value.h = value.h - Math.floor(value.h);
+        retval = { hsla: value };
+        alpha = 1;
+        if (haveFields(value, 'a')) {
+            alpha = value.a;
+        }
+        retval.hsla.a = alpha;
+    } else if (haveFields(value, 'rgb')) {
+        retval = { rgba: value };
+        alpha = 1;
+        if (haveFields(value, 'a')) {
+            alpha = value.a;
+        }
+        retval.rgba.a = alpha;
+    } else if (haveFields(value, 'cmyk')) {
+        retval = { rgba: cmyk2rgb(value) };
+    }
+    return retval;
+}
+function parse(value) {
+    var retval;
+    if (typeof value === 'string') {
+        retval = parseString(value);
+    } else if (value instanceof Color) {
+        retval = {
+            rgba: value.getRgba(),
+            hsla: value.getHsla()
+        };
+    } else if (typeof value === 'object') {
+        retval = parseObject(value);
+    }
+    return retval;
+}
+// Prepare values for display in strings
+function round1decimal(i) {
+    return round(i * 100) / 100;
+}
+function getRgbaStringValues(color) {
+    return [
+        round(color.r * 255),
+        round(color.g * 255),
+        round(color.b * 255),
+        round1decimal(color.a)
+    ];
+}
+function getHslaStringValues(color) {
+    return [
+        round(color.h * 360),
+        round(color.s * 100) + '%',
+        round(color.l * 100) + '%',
+        round1decimal(color.a)
+    ];
+}
+function getCmykStringValues(color) {
+    return [
+        round1decimal(color.c),
+        round1decimal(color.m),
+        round1decimal(color.y),
+        round1decimal(color.k)
+    ];
+}
+/**
+ * COLOR MANAGEMENT
+ */
 
-            var q;
-            if (value.l < 0.5) {
-                q = value.l * (1 + value.s);
+// Constructor
+function Color(value) {
+    var self = this;
+    // default to black
+    var currentColor = { r:0, g:0, b:0, a:1 };
+    var currentHslColor = { h:0, s:0, l:0, a:1 };
+
+    // Object getters
+    self.getRgba = function () {
+        return clone(currentColor);
+    };
+    self.getRgb = function () {
+        var retval = clone(currentColor);
+        delete retval.a;
+        return retval;
+    };
+    self.getHsla = function () {
+        return clone(currentHslColor);
+    };
+    self.getHsl = function () {
+        var retval = clone(currentHslColor);
+        delete retval.a;
+        return retval;
+    };
+    self.getCmyk = function () {
+        return rgb2cmyk(currentColor);
+    };
+    // String getters
+    self.getRgbaString = function () {
+        return 'rgba(' + getRgbaStringValues(currentColor).join()  + ')';
+    };
+    self.getRgbString = function () {
+        var values = getRgbaStringValues(currentColor);
+        values.pop();
+        return 'rgb(' + values.join() + ')';
+    };
+    self.getHexaString = function () {
+        return rgb2hexa(currentColor);
+    };
+    self.getHexString = function () {
+        return rgb2hexa(currentColor).substring(0, 7);
+    };
+    self.getHslaString = function () {
+        return 'hsla(' + getHslaStringValues(currentHslColor).join()  + ')';
+    };
+    self.getHslString = function () {
+        var values = getHslaStringValues(currentHslColor);
+        values.pop();
+        return 'hsl(' + values.join() + ')';
+    };
+    self.getCmykString = function () {
+        // http://www.w3.org/TR/css3-gcpm/#cmyk-colors
+        var values = getCmykStringValues(rgb2cmyk(currentColor));
+        return 'device-cmyk(' + values.join() + ')';
+    };
+    // Contrasting color getter
+    self.getTextColor = function () {
+        // See BT 709 color spec
+        var luma = currentColor.r*0.2126 + currentColor.g*0.7152 + currentColor.b*0.0722;
+        return new Color(luma < 0.35 ? '#fff' : '#000');
+    };
+    // Color setter
+    self.setColor = function (color) {
+        var retval = parse(color);
+        if (retval) {
+            if (retval.rgba && retval.hsla) {
+                currentColor    = retval.rgba;
+                currentHslColor = retval.hsla;
+            } else if (retval.rgba) {
+                currentColor    = retval.rgba;
+                currentHslColor = rgb2hsl(retval.rgba);
             } else {
-                q = value.l + value.s - value.l * value.s;
+                currentColor    = hsl2rgb(retval.hsla);
+                currentHslColor = retval.hsla;
             }
-            var p = 2 * value.l - q;
-            r = hue2rgb(p, q, value.h + 1/3);
-            g = hue2rgb(p, q, value.h);
-            b = hue2rgb(p, q, value.h - 1/3);
         }
-        return {
-            r: r,
-            g: g,
-            b: b,
-            a: value.a
-        };
-    }
-    function rgb2cmyk(value) {
-        // achromatic
-        if (value.r === value.g && value.g === value.b) {
-            return {
-                c:0,
-                m:0,
-                y:0,
-                k:1 - value.r
-            };
+        return self;
+    };
+    self.setAlpha = function (value) {
+        value = parseFloat(value);
+        if (! isNaN(value) && value >= 0 && value <= 1) {
+            currentColor.a = value;
+            currentHslColor.a = value;
         }
-        var k = Math.min(
-            1 - value.r,
-            1 - value.g,
-            1 - value.b
-        );
-        return {
-            c:(1 - value.r - k) / (1 - k),
-            m:(1 - value.g - k) / (1 - k),
-            y:(1 - value.b - k) / (1 - k),
-            k:k
-        };
-    }
-    function cmyk2rgb(value) {
-        return {
-            r: 1 - Math.min(1, value.c * (1 - value.k) + value.k),
-            g: 1 - Math.min(1, value.m * (1 - value.k) + value.k),
-            b: 1 - Math.min(1, value.y * (1 - value.k) + value.k),
-            a: 1
-        };
-    }
-    return Color;
-})();
+        return self;
+    };
+    self.getAlpha = function () {
+        return currentColor.a;
+    };
+    // Set to input color
+    self.setColor(value);
+}
+return Color;}(Math));
