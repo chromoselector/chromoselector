@@ -179,13 +179,13 @@ function parseHexString(value) {
         if (value.length === 4) {
             value = value.replace(/[0-9a-f]/gi, replaceCallback);
         }
-        retval = { rgba: hexa2rgb(value) };
-        retval.rgba.a = 1;
+        retval = { r: hexa2rgb(value) };
+        retval.r.a = 1;
     } else if (/^#([0-9a-f]{4}){1,2}$/i.test(value)) {
         if (value.length === 5) {
             value = value.replace(/[0-9a-f]/gi, replaceCallback);
         }
-        retval = { rgba: hexa2rgb(value) };
+        retval = { r: hexa2rgb(value) };
     }
     return retval;
 }
@@ -200,7 +200,7 @@ function parseRgbaString(value) {
         }
         parts = parseChannelValues(parts);
         return {
-            rgba: {
+            r: {
                 r: parts[0],
                 g: parts[1],
                 b: parts[2],
@@ -216,7 +216,7 @@ function parseRgbString(value) {
         parts.shift();
         parts = parseChannelValues(parts);
         return {
-            rgba: {
+            r: {
                 r: parts[0],
                 g: parts[1],
                 b: parts[2],
@@ -238,7 +238,7 @@ function parseHslaString(value) {
         }
         parts = parseChannelValues(parts);
         return {
-            hsla: {
+            h: {
                 h: hue,
                 s: parts[0],
                 l: parts[1],
@@ -256,7 +256,7 @@ function parseHslString(value) {
         hue = hue - Math.floor(hue);
         parts = parseChannelValues(parts);
         return {
-            hsla: {
+            h: {
                 h: hue,
                 s: parts[0],
                 l: parts[1],
@@ -277,7 +277,7 @@ function parseCmykString(value) {
             }
         }
         return {
-            rgba: cmyk2rgb({
+            r: cmyk2rgb({
                 c: parts[0],
                 m: parts[1],
                 y: parts[2],
@@ -309,21 +309,21 @@ function parseObject(value) {
     value = clone(value, parseFloat);
     if (haveFields(value, 'sl') && ! isNaN(value.h)) {
         value.h = value.h - Math.floor(value.h);
-        retval = { hsla: value };
+        retval = { h: value };
         alpha = 1;
         if (haveFields(value, 'a')) {
             alpha = value.a;
         }
-        retval.hsla.a = alpha;
+        retval.h.a = alpha;
     } else if (haveFields(value, 'rgb')) {
-        retval = { rgba: value };
+        retval = { r: value };
         alpha = 1;
         if (haveFields(value, 'a')) {
             alpha = value.a;
         }
-        retval.rgba.a = alpha;
+        retval.r.a = alpha;
     } else if (haveFields(value, 'cmyk')) {
-        retval = { rgba: cmyk2rgb(value) };
+        retval = { r: cmyk2rgb(value) };
     }
     return retval;
 }
@@ -333,8 +333,8 @@ function parse(value) {
         retval = parseString(value);
     } else if (value instanceof Color) {
         retval = {
-            rgba: value.getRgba(),
-            hsla: value.getHsla()
+            r: value.getRgba(),
+            h: value.getHsla()
         };
     } else if (typeof value === 'object') {
         retval = parseObject(value);
@@ -438,15 +438,15 @@ function Color(value) {
     self.setColor = function (color) {
         var retval = parse(color);
         if (retval) {
-            if (retval.rgba && retval.hsla) {
-                currentColor    = retval.rgba;
-                currentHslColor = retval.hsla;
-            } else if (retval.rgba) {
-                currentColor    = retval.rgba;
-                currentHslColor = rgb2hsl(retval.rgba);
+            if (retval.r && retval.h) {
+                currentColor    = retval.r;
+                currentHslColor = retval.h;
+            } else if (retval.r) {
+                currentColor    = retval.r;
+                currentHslColor = rgb2hsl(retval.r);
             } else {
-                currentColor    = hsl2rgb(retval.hsla);
-                currentHslColor = retval.hsla;
+                currentColor    = hsl2rgb(retval.h);
+                currentHslColor = retval.h;
             }
         }
         return self;
