@@ -8,7 +8,7 @@
      *
      * TODO
      *
-     * v 2.1.7
+     * v 2.1.9
      *   Panel bug on iOS, sliders work only once
      *
      * v 2.2.0

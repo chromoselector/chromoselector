@@ -1,3 +1,6 @@
+v 2.1.8 - 23 April 2015
+  * Color management module optimisations
+
 v 2.1.7 - 31 Mar 2015
   * Documentation fixes
 
