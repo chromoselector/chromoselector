@@ -1,6 +1,3 @@
-<?php
-    header('content-type: text/javascript');
-?>
 (function ($, window, Math, defaults) {
     "use strict";
     var document = window.document;
@@ -16,12 +13,6 @@
     var fillStyle = 'fillStyle';
     var globalCompositeOperation = 'globalCompositeOperation';
     var strokeStyle = 'strokeStyle';
-
-<?php
-    readfile('../throttle.js');
-    readfile('../color.js');
-    readfile('../panel.js');
-?>
 
     /**
      * 2D MATHS
