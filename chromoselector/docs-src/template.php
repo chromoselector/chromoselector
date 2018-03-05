@@ -37,27 +37,11 @@ function tidy_up($html){
 }
 
 function getHeader($path = '.', $type = 'interior', $title = '') {
-    if (empty($_GET['SITE'])) {
-        if ($path === '.') {
-            $libPath = '..';
-        } else {
-            $libPath = $path . '/..';
-        }
-    } else {
-        $libPath = $path . '/libs';
-    }
+    $libPath = $path . '/libs';
 
     $html  = '<!DOCTYPE html><html><head><title>ChromoSelector - jQuery Color Picker plugin - ' . $title . '</title>';
     $html .= '<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />';
     $html .= '<meta name="viewport" content="width=device-width, initial-scale=1.0" />';
-
-    if (! empty($_GET['SITE'])) {
-        $html .= '<script type="text/javascript">';
-        $html .= 'if (top.location != location) {';
-        $html .= 'top.location.href = document.location.href;';
-        $html .= '}';
-        $html .= '</script>';
-    }
 
     $html .= '<link rel="stylesheet" type="text/css" href="' . $path . '/libs/jquery.mobile-1.3.1.min.css" />';
     $html .= '<link rel="stylesheet" type="text/css" href="' . $libPath . '/chromoselector.css" />';
@@ -90,15 +74,8 @@ function getHeader($path = '.', $type = 'interior', $title = '') {
 }
 
 function getFooter($path = '.', $needDialog = false) {
-    if (empty($_GET['SITE'])) {
-        if ($path === '.') {
-            $libPath = '..';
-        } else {
-            $libPath = $path . '/..';
-        }
-    } else {
-        $libPath = $path . '/libs';
-    }
+    $libPath = $path . '/libs';
+
     $html  = '</div>';
     $html .= '<div data-role="footer" class="footer-docs" data-theme="c">';
     $html .= '<p>v2.1.8</p>';
@@ -128,11 +105,7 @@ function getFooter($path = '.', $needDialog = false) {
     $html .= '</script>';
 
     $html .= '<script src="' . $path . '/libs/jquery.mobile-1.3.1.min.js" type="text/javascript"></script>';
-    if (empty($_GET['SITE'])) {
-        $html .= '<script src="' . $libPath . '/chromoselector.min.js" type="text/javascript"></script>';
-    } else {
-        $html .= '<script src="' . $libPath . '/chromoselector.demo.min.js" type="text/javascript"></script>';
-    }
+    $html .= '<script src="' . $libPath . '/chromoselector.min.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/demos/demos.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/highlight.pack.js" type="text/javascript"></script>';
     $html .= '<script src="' . $path . '/libs/scripts.js" type="text/javascript"></script>';

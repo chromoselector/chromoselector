@@ -1,14 +1,12 @@
 all:
 	make js
-	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
 js:
 	wget -q -O chromoselector.built.js http://localhost/chromoselector/chromoselector/chromoselector.js
 full:
-	make demo
-	make site
 	make release
 	make
 clean:
@@ -18,19 +16,13 @@ clean:
 	rm docs/index.html
 b:
 	make js
-	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 0 TESTSUITE 0 | uglifyjs -b -nc > chromoselector.temp.js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl TESTSUITE 0 | uglifyjs -b -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
-	make common
-	./makedocs.sh
-demo:
-	make js
-	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 1 TESTSUITE 0 | uglifyjs -nc > chromoselector.temp.js
-	cat ./license.txt ./chromoselector.temp.js > chromoselector.demo.min.js
 	make common
 	./makedocs.sh
 test:
 	make js
-	./replacevars.pl chromoselector.built.js | ./replacecode.pl DEMO 0 TESTSUITE 1 | uglifyjs -nc > chromoselector.temp.js
+	./replacevars.pl chromoselector.built.js | ./replacecode.pl TESTSUITE 1 | uglifyjs -nc > chromoselector.temp.js
 	cat ./license.txt ./chromoselector.temp.js > chromoselector.min.js
 	make common
 	./makedocs.sh
@@ -53,22 +45,7 @@ release:
 	cp README.txt release/README.txt
 	cp CHANGELOG.txt release/CHANGELOG.txt
 	rm release/chromoselector.js
-	rm release/chromoselector.demo.min.js
 	rm release/docs/overview/purchase.html
 	rm release/chromoselector.min.css
-site:
-	rm -rf site
-	make all
-	./makedocs.sh SITE #FIXME: this is being run twice, no biggie though
-	mkdir site
-	mkdir site/libs
-	cp -R docs/* site
-	cp -R jquery-ui site/libs
-	cp *.css site/libs
-	cp chromoselector.demo.min.js site/libs
-	cp copyright-notice.js site/libs
-	cp jquery-1.10.2.min.js site/libs
-	cp .htaccess site
-	wget -q -O site/feed.xml http://localhost/chromoselector/chromoselector/feed.php
 
-.PHONY: test release site
+.PHONY: test release
