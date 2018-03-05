@@ -3,39 +3,6 @@
 ?>
 (function ($, window, Math, defaults) {
     "use strict";
-    /**
-     * IF-TESTSUITE
-     *
-     * TODO
-     *
-     * v 2.1.9
-     *   Panel bug on iOS, sliders work only once
-     *
-     * v 2.2.0
-     *   Upgrade to jQuery 2.1.0
-     *   Integrate updating of preview color in input element
-     *   Preview as a module
-     *   New features page (codecanyon landing page)
-     *
-     * v 3.0.0
-     *   Bubble type preview
-     *   Add enableLabels setting to Panel
-     *   Update fiddles to point to new js file
-     *   iOS and Android rendering bugs
-     *   Retina support
-     *   Improved mobile support
-     *   More unit tests
-     *   Better generation of new elements
-     *   Fix slide animation
-     *   Implement RequestAnimationFrame
-     *   Unbind events from [window, document]
-     *   Rendered twice in static mode?
-     *   refactor hue2rgb
-     *   Improve shadow ratio calculation / shadow rendering
-     *   Faster shadow - rotate instead of blurring
-     *
-     * FI-TESTSUITE
-     */
     var document = window.document;
     /**
      * NAMESPACE for events and data
@@ -51,9 +18,9 @@
     var strokeStyle = 'strokeStyle';
 
 <?php
-    readfile('../module-throttle/throttle.js');
-    readfile('../module-color/color.js');
-    readfile('../module-panel/panel.js');
+    readfile('../throttle.js');
+    readfile('../color.js');
+    readfile('../panel.js');
 ?>
 
     /**
