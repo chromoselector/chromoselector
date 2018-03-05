@@ -69,7 +69,6 @@ site:
 	cp copyright-notice.js site/libs
 	cp jquery-1.10.2.min.js site/libs
 	cp .htaccess site
-	./sitemap.sh > site/sitemap.xml
 	wget -q -O site/feed.xml http://localhost/chromoselector/chromoselector/feed.php
 
 .PHONY: test release site
