@@ -10,13 +10,6 @@ var jQuery = require('jquery');
     var NAMESPACE = 'chromoselector';
     var EVENTS = 'create|ready|update|destroy|show|beforeShow|hide|beforeHide|resize|resizeStart|resizeStop';
 
-    // Shortens code below
-    var addColorStop = 'addColorStop';
-    var fillRect = 'fillRect';
-    var fillStyle = 'fillStyle';
-    var globalCompositeOperation = 'globalCompositeOperation';
-    var strokeStyle = 'strokeStyle';
-
     var Throttle = require('./throttle.js');
     var Color = require('./color.js');
     var Panel = require('./panel.js');
@@ -175,8 +168,8 @@ var jQuery = require('jquery');
         var origin = [width / 2, width / 2];
         // cut out doughnut
         /** webkit bug prevents usage of "destination-in" */
-        ctx[globalCompositeOperation] = "destination-out";
-        ctx[strokeStyle] = 'rgba(0,0,0,1)';
+        ctx['globalCompositeOperation'] = "destination-out";
+        ctx['strokeStyle'] = 'rgba(0,0,0,1)';
         ctx.lineWidth = self.hueSelectorLineWidth;
         ctx.beginPath();
         ctx.arc(origin[0], origin[1], self.hueSelectorCircleRadius - (self.hueSelectorLineWidth / 2), 0, Math.PI*2, true);
@@ -185,8 +178,8 @@ var jQuery = require('jquery');
 
         var tempCanvas = $('<canvas/>').attr('width', width).attr('height', width)[0];
         var tempCtx = tempCanvas.getContext('2d');
-        tempCtx[fillRect](0,0,width,width);
-        tempCtx[globalCompositeOperation] = "destination-out";
+        tempCtx['fillRect'](0,0,width,width);
+        tempCtx['globalCompositeOperation'] = "destination-out";
         tempCtx.beginPath();
         tempCtx.arc(origin[0], origin[1], self.hueSelectorCircleRadius + (self.hueSelectorLineWidth / 2), 0, Math.PI*2, true);
         tempCtx.closePath();
@@ -253,21 +246,21 @@ var jQuery = require('jquery');
             tempCtx.putImageData(maskImageData, 0, 0);
 
             var lingrad = tempCtx.createLinearGradient(0,limitY.start,0,limitY.end);
-            lingrad[addColorStop](1, 'rgba(0,0,0,0)');
-            lingrad[addColorStop](0, 'rgba(0,0,0,1)');
-            tempCtx[fillStyle] = lingrad;
-            tempCtx[globalCompositeOperation] = "destination-out";
-            tempCtx[fillRect](limitX.start,limitY.start,limitX.end,limitY.end);
-            tempCtx[globalCompositeOperation] = "source-over";
+            lingrad['addColorStop'](1, 'rgba(0,0,0,0)');
+            lingrad['addColorStop'](0, 'rgba(0,0,0,1)');
+            tempCtx['fillStyle'] = lingrad;
+            tempCtx['globalCompositeOperation'] = "destination-out";
+            tempCtx['fillRect'](limitX.start,limitY.start,limitX.end,limitY.end);
+            tempCtx['globalCompositeOperation'] = "source-over";
         }
 
         degrees = (1 - hue) * Math.PI * 2;
         points = colorPicker_getPoints(self, degrees);
         // Fill background
-        ctx[fillStyle] = new Color({
+        ctx['fillStyle'] = new Color({
             h:hue, s:1, l:0.5
         }).getHexString();
-        ctx[fillRect](0,0,self.Width,self.Width);
+        ctx['fillRect'](0,0,self.Width,self.Width);
         // Copy rotated mask
         ctx.save();
         ctx.translate(self.Width/2, self.Width/2);
@@ -288,28 +281,28 @@ var jQuery = require('jquery');
         ctx.lineTo(self.Width, 0);
         ctx.lineTo(0, 0);
         ctx.closePath();
-        ctx[globalCompositeOperation] = "destination-out";
-        ctx[fillStyle] = 'rgba(0,0,0,1)';
+        ctx['globalCompositeOperation'] = "destination-out";
+        ctx['fillStyle'] = 'rgba(0,0,0,1)';
         ctx.fill();
         // shadow
         var shadowPoint = function (index, axis) {
             var pixel = (1 / (self.Width / 2)) * 2;
             return self.Width / 2 * pixel + points[index][axis] * (1-pixel);
         };
-        ctx[globalCompositeOperation] = "destination-over";
+        ctx['globalCompositeOperation'] = "destination-over";
         ctx.beginPath();
         ctx.moveTo(shadowPoint(0, 0), shadowPoint(0, 1));
         ctx.lineTo(shadowPoint(1, 0), shadowPoint(1, 1));
         ctx.lineTo(shadowPoint(2, 0), shadowPoint(2, 1));
         ctx.closePath();
-        ctx[fillStyle] = 'rgba(0,0,0,1)';
+        ctx['fillStyle'] = 'rgba(0,0,0,1)';
         ctx.shadowColor = self.settings.shadowColor;
         ctx.shadowBlur = self.settings.shadow;
         ctx.fill();
 
         ctx.shadowColor = 'rgba(0,0,0,0)';
         ctx.shadowBlur = 0;
-        ctx[globalCompositeOperation] = "source-over";
+        ctx['globalCompositeOperation'] = "source-over";
     }
 
     function colorPicker_drawIndicators(self) {
@@ -356,14 +349,14 @@ var jQuery = require('jquery');
             indicator,
             colorPoint
         ], function (i, indicator) {
-            ctx[strokeStyle] = "#fff";
+            ctx['strokeStyle'] = "#fff";
             ctx.lineWidth = 1.5;
             ctx.beginPath();
             ctx.arc(indicator[0], indicator[1], 6, 0, Math.PI*2, true);
             ctx.closePath();
             ctx.stroke();
             ctx.lineWidth = 2;
-            ctx[strokeStyle] = 'rgba(0,0,0,1)';
+            ctx['strokeStyle'] = 'rgba(0,0,0,1)';
             ctx.beginPath();
             ctx.arc(indicator[0], indicator[1], 4.5, 0, Math.PI*2, true);
             ctx.closePath();
@@ -376,9 +369,9 @@ var jQuery = require('jquery');
         /** draw resizer */
         ctx.clearRect(0,0,canvas.width,canvas.height);
         if (self._root.css('border-bottom-color')) {
-            ctx[strokeStyle] = self._root.css('border-bottom-color');
+            ctx['strokeStyle'] = self._root.css('border-bottom-color');
         } else {
-            ctx[strokeStyle] = '#444';
+            ctx['strokeStyle'] = '#444';
         }
         ctx.lineWidth = 1;
         ctx.lineCap="round";
@@ -927,14 +920,14 @@ var jQuery = require('jquery');
         tempCanvas.height = 10;
         tempCanvas.width = 10;
         var tempCtx = tempCanvas.getContext('2d');
-        tempCtx[fillStyle] = '#ccc';
-        tempCtx[fillRect](0, 0, 10, 10);
-        tempCtx[fillStyle] = '#888';
-        tempCtx[fillRect](0, 0, 5, 5);
-        tempCtx[fillRect](5, 5, 5, 5);
+        tempCtx['fillStyle'] = '#ccc';
+        tempCtx['fillRect'](0, 0, 10, 10);
+        tempCtx['fillStyle'] = '#888';
+        tempCtx['fillRect'](0, 0, 5, 5);
+        tempCtx['fillRect'](5, 5, 5, 5);
         var pattern = ctx.createPattern(tempCanvas, 'repeat');
-        ctx[fillStyle] = pattern;
-        ctx[fillRect](
+        ctx['fillStyle'] = pattern;
+        ctx['fillRect'](
             0,
             0,
             self.Width,

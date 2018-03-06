@@ -1,6 +1,8 @@
 'use strict';
 
 var Panel = (function () {
+    var NAMESPACE = 'chromoselector';
+
     var Color = require('./color.js');
     var Throttle = require('./throttle.js');
 
@@ -46,33 +48,33 @@ var Panel = (function () {
         };
         var setSimpleGradient = function(color1, color2) {
             lingrad = createGradient();
-            lingrad[addColorStop](0, color1.getHexString());
-            lingrad[addColorStop](1, color2.getHexString());
-            ctx[strokeStyle] = lingrad;
+            lingrad['addColorStop'](0, color1.getHexString());
+            lingrad['addColorStop'](1, color2.getHexString());
+            ctx['strokeStyle'] = lingrad;
         };
         var setHueGradient = function() {
             lingrad = createGradient();
-            lingrad[addColorStop](0/6, '#f00');
-            lingrad[addColorStop](1/6, '#ff0');
-            lingrad[addColorStop](2/6, '#0f0');
-            lingrad[addColorStop](3/6, '#0ff');
-            lingrad[addColorStop](4/6, '#00f');
-            lingrad[addColorStop](5/6, '#f0f');
-            lingrad[addColorStop](6/6, '#f00');
-            ctx[strokeStyle] = lingrad;
+            lingrad['addColorStop'](0/6, '#f00');
+            lingrad['addColorStop'](1/6, '#ff0');
+            lingrad['addColorStop'](2/6, '#0f0');
+            lingrad['addColorStop'](3/6, '#0ff');
+            lingrad['addColorStop'](4/6, '#00f');
+            lingrad['addColorStop'](5/6, '#f0f');
+            lingrad['addColorStop'](6/6, '#f00');
+            ctx['strokeStyle'] = lingrad;
         };
         var setLightnessGradient = function(color) {
             lingrad = createGradient();
-            lingrad[addColorStop](0,   '#000');
-            lingrad[addColorStop](0.5, color.getHexString());
-            lingrad[addColorStop](1,   '#fff');
-            ctx[strokeStyle] = lingrad;
+            lingrad['addColorStop'](0,   '#000');
+            lingrad['addColorStop'](0.5, color.getHexString());
+            lingrad['addColorStop'](1,   '#fff');
+            ctx['strokeStyle'] = lingrad;
         };
         var setKeyGradient = function(color) {
             lingrad = createGradient();
-            lingrad[addColorStop](0, color.getHexString());
-            lingrad[addColorStop](1, '#000');
-            ctx[strokeStyle] = lingrad;
+            lingrad['addColorStop'](0, color.getHexString());
+            lingrad['addColorStop'](1, '#000');
+            ctx['strokeStyle'] = lingrad;
         };
 
         var drawPanel = function() {
@@ -99,18 +101,18 @@ var Panel = (function () {
                 tempCanvas.height = 10;
                 tempCanvas.width = 10;
                 var tempCtx = tempCanvas.getContext('2d');
-                tempCtx[fillStyle] = '#ccc';
-                tempCtx[fillRect](0, 0, 10, 10);
-                tempCtx[fillStyle] = '#888';
-                tempCtx[fillRect](0, 0, 5, 5);
-                tempCtx[fillRect](5, 5, 5, 5);
+                tempCtx['fillStyle'] = '#ccc';
+                tempCtx['fillRect'](0, 0, 10, 10);
+                tempCtx['fillStyle'] = '#888';
+                tempCtx['fillRect'](0, 0, 5, 5);
+                tempCtx['fillRect'](5, 5, 5, 5);
                 var pattern = ctx.createPattern(tempCanvas, 'repeat');
-                ctx[strokeStyle] = pattern;
+                ctx['strokeStyle'] = pattern;
                 drawChannel();
                 lingrad = createGradient();
-                lingrad[addColorStop](0, new Color(currentColor).setAlpha(0).getRgbaString());
-                lingrad[addColorStop](1, currentColor.getHexString());
-                ctx[strokeStyle] = lingrad;
+                lingrad['addColorStop'](0, new Color(currentColor).setAlpha(0).getRgbaString());
+                lingrad['addColorStop'](1, currentColor.getHexString());
+                ctx['strokeStyle'] = lingrad;
                 drawChannel();
                 offset += channelWidth + channelMargin;
                 channel = 1;
@@ -175,7 +177,7 @@ var Panel = (function () {
         var drawIndicators = function(color) {
             var offset = 10, channel, x, y, verticalSpace;
             var indicator = function (color, lineWidth, diameter){
-                ctx[strokeStyle] = color;
+                ctx['strokeStyle'] = color;
                 ctx.lineWidth = lineWidth;
                 ctx.beginPath();
                 ctx.arc(x, y, diameter, 0, Math.PI*2, true);
@@ -208,7 +210,7 @@ var Panel = (function () {
             ctx.moveTo(x, channelWidth/2+10);
             ctx.lineTo(x, canvasHeight-channelWidth/2-10);
             ctx.lineWidth = channelWidth - 2;
-            ctx[strokeStyle] = 'rgba(0,0,0,1)';
+            ctx['strokeStyle'] = 'rgba(0,0,0,1)';
             ctx.lineCap = 'round';
             ctx.stroke();
             ctx.shadowBlur = 0;
