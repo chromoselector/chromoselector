@@ -1,6 +1,6 @@
 'use strict';
 
-var jQuery = require('jQuery');
+var jQuery = require('jquery');
 
 (function ($, window, Math, defaults) {
     "use strict";

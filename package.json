@@ -1,0 +1,47 @@
+{
+  "name": "chromoselector",
+  "version": "2.1.9",
+  "description": "A jQuery color picker plugin",
+  "main": "src/chromoselector.js",
+  "scripts": {
+    "dist": "mkdir -p dist && npm run license && npm run browserify && npm run cssmin",
+    "license": "cat LICENSE.txt > dist/chromoselector.min.js && cat LICENSE.txt > dist/chromoselector.min.css",
+    "browserify": "node node_modules/browserify/bin/cmd.js . | node node_modules/uglify-js/bin/uglifyjs >> dist/chromoselector.min.js",
+    "cssmin": "node node_modules/csso-cli/bin/csso src/chromoselector.css >> dist/chromoselector.min.css",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chromoselector/chromoselector.git"
+  },
+  "keywords": [
+    "color",
+    "picker"
+  ],
+  "author": "Rouslan Placella <rouslan@placella.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chromoselector/chromoselector/issues"
+  },
+  "homepage": "https://github.com/chromoselector/chromoselector#readme",
+  "devDependencies": {
+    "browserify": "^16.1.0",
+    "browserify-shim": "^3.8.14",
+    "csso-cli": "^1.1.0",
+    "uglify-js": "^3.3.13"
+  },
+  "dependencies": {
+    "jquery": "1.11.0"
+  },
+  "browser": {
+    "jquery": "./node_modules/jquery/dist/jquery.min.js"
+  },
+  "browserify-shim": {
+    "jquery": "jQuery"
+  },
+  "browserify": {
+    "transform": [
+      "browserify-shim"
+    ]
+  }
+}
