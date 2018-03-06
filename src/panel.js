@@ -383,11 +383,11 @@ var Panel = (function () {
         }
         $target.add($labels.find('div')).bind('mousedown touchstart', function (event) {
             if ($(this).is(event.target)) {
-                preventDefault(event);
+                event.preventDefault();
             }
         });
         $canvas.bind('mousedown touchstart', function (event) {
-            preventDefault(event);
+            event.preventDefault();
             draggingChannel = 0;
             var offset = 10;
             var inputPoint = Util.getEventPosition(false, event, $(this));
@@ -425,12 +425,12 @@ var Panel = (function () {
         });
         $([window, document]).bind('mousemove touchmove', function (event) {
             if (dragging) {
-                preventDefault(event);
+                event.preventDefault();
                 draggingRenderer(event);
             }
         }).bind('mouseup touchend', function (event) {
             if (dragging) {
-                preventDefault(event);
+                event.preventDefault();
                 dragging = 0;
                 draggingRenderer(event);
             }

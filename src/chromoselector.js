@@ -706,9 +706,6 @@ var jQuery = require('jquery');
             colorPicker_drawAll(self);
         }
     }
-    function preventDefault(e) {
-        e.preventDefault();
-    }
     function colorPicker_fixCorners(self, width) {
         if (self.settings.roundcorners) {
             width = width || self.Width;
@@ -1152,7 +1149,7 @@ var jQuery = require('jquery');
                 $initElement = self._icon;
             }
             $initElement.bind('focus.'+NAMESPACE+' click.'+NAMESPACE, function (e) {
-                preventDefault(e);
+                e.preventDefault();
                 if (! self.ready) {
                     colorPicker_drawAll(self);
                 }
@@ -1177,7 +1174,7 @@ var jQuery = require('jquery');
         });
         if (self.settings.resizable) {
             self._resizer.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {
-                preventDefault(e);
+                e.preventDefault();
                 var inputPoint = Util.getEventPosition(self, e, self._picker);
                 self._source.trigger(self.settings.eventPrefix + 'resizeStart');
                 self.resizing = 1;
@@ -1188,7 +1185,7 @@ var jQuery = require('jquery');
             });
         }
         self._container.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {
-            preventDefault(e);
+            e.preventDefault();
             var inputPoint = Util.getEventPosition(self, e, self._picker);
             if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
                 &&
@@ -1223,26 +1220,26 @@ var jQuery = require('jquery');
         });
         $([window, document]).bind('mousemove touchmove', function (e) {
             if (self.draggingHue) {
-                preventDefault(e);
+                e.preventDefault();
                 self.draggingHueRenderer(self, e);
             } else if (self.draggingSatLum) {
-                preventDefault(e);
+                e.preventDefault();
                 self.draggingSatLumRenderer(self, e);
             } else if (self.resizing) {
-                preventDefault(e);
+                e.preventDefault();
                 self.resizingRenderer(self, e);
             }
         }).bind('mouseup touchend', function (e) {
             if (self.draggingHue) {
-                preventDefault(e);
+                e.preventDefault();
                 self.draggingHue = 0;
                 colorPicker_reDrawHue(self, e);
             } else if (self.draggingSatLum) {
-                preventDefault(e);
+                e.preventDefault();
                 self.draggingSatLum = 0;
                 colorPicker_handleSatLumDrag(self, e);
             } else if (self.resizing) {
-                preventDefault(e);
+                e.preventDefault();
                 self.resizing = 0;
                 colorPicker_resize(self, self._picker.width());
                 colorPicker_fixPosition(self);
