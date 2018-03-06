@@ -5,17 +5,17 @@
   - [Requirements](../README.md#requirements)
   - [Install](../README.md#install)
   - [Build](../README.md#build)
-- [Screenshots](screenshots.md)
-- [Gettings started](gettings-started.md)
+- [Screenshots](screenshots.md#screenshots)
+- [Gettings started](getting-started.md#getting-started)
 - API
-  - [Properties](properties.md)
-  - [Events](events.md)
-  - [Methods](methods.md)
-  - [Api Object](api-object.md)
-  - [Overriding defaults](defaults.md)
-  - [Color manipulation](color.md)
-- [Dimensions](dimensions.md)
-- [Theming](theming.md)
+  - [Properties](properties.md#properties)
+  - [Events](events.md#events)
+  - [Methods](methods.md#methods)
+  - [Api Object](api-object.md#api-object)
+  - [Overriding defaults](defaults.md#overriding-defaults)
+  - [Color manipulation](color.md#color-manipulation)
+- [Dimensions](dimensions.md#dimensions)
+- [Theming](theming.md#theming)
 
 # Methods
 - [api()](#api)
@@ -115,7 +115,7 @@ $(document).ready(function () {
 ```
 
 ## hide()
-Initiates a hide operation. Note that that the operation may be aborted if a [beforeHide](events.md#beforeHide) event returns a value that evaluates to ```false```.
+Initiates a hide operation. Note that that the operation may be aborted if a [beforeHide](events.md#beforehide) event returns a value that evaluates to ```false```.
 #### Parameters
 - int **speed**: Optional. Duration of the transition animation in milliseconds
 #### Return Value
@@ -132,7 +132,7 @@ $(document).ready(function () {
 });
 ```
 #### See also
-- [beforeHide event](events.md#beforeHide)
+- [beforeHide event](events.md#beforehide)
 
 ## load()
 Loads the color value from the source text input into the color picker. (Triggers a redraw operation)

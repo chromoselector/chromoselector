@@ -5,29 +5,29 @@
   - [Requirements](../README.md#requirements)
   - [Install](../README.md#install)
   - [Build](../README.md#build)
-- [Screenshots](screenshots.md)
-- [Gettings started](gettings-started.md)
+- [Screenshots](screenshots.md#screenshots)
+- [Gettings started](getting-started.md#getting-started)
 - API
-  - [Properties](properties.md)
-  - [Events](events.md)
-  - [Methods](methods.md)
-  - [Api Object](api-object.md)
-  - [Overriding defaults](defaults.md)
-  - [Color manipulation](color.md)
-- [Dimensions](dimensions.md)
-- [Theming](theming.md)
+  - [Properties](properties.md#properties)
+  - [Events](events.md#events)
+  - [Methods](methods.md#methods)
+  - [Api Object](api-object.md#api-object)
+  - [Overriding defaults](defaults.md#overriding-defaults)
+  - [Color manipulation](color.md#color-manipulation)
+- [Dimensions](dimensions.md#dimensions)
+- [Theming](theming.md#theming)
 
 # Color Manipulation
-The color management module is Open Source and is available at [color-module](https://github.com/roccivic/color-module).
+The color management module is Open Source and is available at [https://github.com/roccivic/color-module](https://github.com/roccivic/color-module).
 
 #### Getting a color
-Assuming that the plugin has already been instanciated, getting it's current color is an API call to [getColor()](#getColor):
+Assuming that the plugin has already been instanciated, getting it's current color is an API call to [getColor()](methods.md#getcolor):
 ```js
 var color = $("#myColorInput").chromoselector("getColor");
 ```
 
 #### Setting a color
-See the [setColor()](#setColor) method in the API below for valid formats. The method may delay execution under load, so consider this a request to change the color, the actual color change may happen a little later.
+See the [setColor()](methods.md#setcolor) method in the API below for valid formats. The method may delay execution under load, so consider this a request to change the color, the actual color change may happen a little later.
 ```js
 $("#myColorInput").chromoselector("setColor", aNewColor);
 ```

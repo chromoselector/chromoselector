@@ -5,17 +5,17 @@
   - [Requirements](README.md#requirements)
   - [Install](README.md#install)
   - [Build](README.md#build)
-- [Screenshots](docs/screenshots.md)
-- [Gettings started](docs/gettings-started.md)
+- [Screenshots](docs/screenshots.md#screenshots)
+- [Gettings started](docs/getting-started.md#getting-started)
 - API
-  - [Properties](docs/properties.md)
-  - [Events](docs/events.md)
-  - [Methods](docs/methods.md)
-  - [Api Object](docs/api-object.md)
-  - [Overriding defaults](docs/defaults.md)
-  - [Color manipulation](docs/color.md)
-- [Dimensions](docs/dimensions.md)
-- [Theming](docs/theming.md)
+  - [Properties](docs/properties.md#properties)
+  - [Events](docs/events.md#events)
+  - [Methods](docs/methods.md#methods)
+  - [Api Object](docs/api-object.md#api-object)
+  - [Overriding defaults](docs/defaults.md#overriding-defaults)
+  - [Color manipulation](docs/color.md#color-manipulation)
+- [Dimensions](docs/dimensions.md#dimensions)
+- [Theming](docs/theming.md#theming)
 
 ## Demos
 Live demos available at [https://chromoselector.netlify.com](https://chromoselector.netlify.com).

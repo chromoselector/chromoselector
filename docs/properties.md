@@ -5,17 +5,17 @@
   - [Requirements](../README.md#requirements)
   - [Install](../README.md#install)
   - [Build](../README.md#build)
-- [Screenshots](screenshots.md)
-- [Gettings started](gettings-started.md)
+- [Screenshots](screenshots.md#screenshots)
+- [Gettings started](getting-started.md#getting-started)
 - API
-  - [Properties](properties.md)
-  - [Events](events.md)
-  - [Methods](methods.md)
-  - [Api Object](api-object.md)
-  - [Overriding defaults](defaults.md)
-  - [Color manipulation](color.md)
-- [Dimensions](dimensions.md)
-- [Theming](theming.md)
+  - [Properties](properties.md#properties)
+  - [Events](events.md#events)
+  - [Methods](methods.md#methods)
+  - [Api Object](api-object.md#api-object)
+  - [Overriding defaults](defaults.md#overriding-defaults)
+  - [Color manipulation](color.md#color-manipulation)
+- [Dimensions](dimensions.md#dimensions)
+- [Theming](theming.md#theming)
 
 # Properties
 - [General Properties](#general-properties)
@@ -250,7 +250,7 @@ $(document).ready(function () {
 ```
 
 ## maxWidth
-Maximum width of the color picker widget, not including the side panel. This setting is ignored if the value is less than [minWidth](#minWidth).
+Maximum width of the color picker widget, not including the side panel. This setting is ignored if the value is less than [minWidth](#minwidth).
 #### Values
 An integer greater than or equal to ```100```.
 #### Default
@@ -362,7 +362,7 @@ $(document).ready(function () {
 ```
 
 ## panelModes
-The available modes for the panel. If an empty array is passed, the mode selector will be hidden and the panel will stay in the mode defined by the [panelMode](#panelMode) property.
+The available modes for the panel. If an empty array is passed, the mode selector will be hidden and the panel will stay in the mode defined by the [panelMode](#panelmode) property.
 #### Values
 ```Array```
 #### Default
@@ -622,7 +622,7 @@ $(document).ready(function () {
 ## width
 The total width of the color picker widget in pixels. This includes a fixed padding on both sides.
 #### Values
-An integer between [minWidth](#minWidth) and [maxWidth](#maxWidth). Any values outside of this range will be clipped to the nearest legal value.
+An integer between [minWidth](#minwidth) and [maxWidth](#maxwidth). Any values outside of this range will be clipped to the nearest legal value.
 #### Default
 ```180```
 #### Examples

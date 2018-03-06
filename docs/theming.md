@@ -5,17 +5,17 @@
   - [Requirements](../README.md#requirements)
   - [Install](../README.md#install)
   - [Build](../README.md#build)
-- [Screenshots](screenshots.md)
-- [Gettings started](gettings-started.md)
+- [Screenshots](screenshots.md#screenshots)
+- [Gettings started](getting-started.md#getting-started)
 - API
-  - [Properties](properties.md)
-  - [Events](events.md)
-  - [Methods](methods.md)
-  - [Api Object](api-object.md)
-  - [Overriding defaults](defaults.md)
-  - [Color manipulation](color.md)
-- [Dimensions](dimensions.md)
-- [Theming](theming.md)
+  - [Properties](properties.md#properties)
+  - [Events](events.md#events)
+  - [Methods](methods.md#methods)
+  - [Api Object](api-object.md#api-object)
+  - [Overriding defaults](defaults.md#overriding-defaults)
+  - [Color manipulation](color.md#color-manipulation)
+- [Dimensions](dimensions.md#dimensions)
+- [Theming](theming.md#theming)
 
 # Theming
 The color picker can be themed in the chromoselector.css file.
