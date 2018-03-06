@@ -3,7 +3,6 @@
 var jQuery = require('jquery');
 
 (function ($, window, Math, defaults) {
-    "use strict";
     var document = window.document;
     /**
      * NAMESPACE for events and data

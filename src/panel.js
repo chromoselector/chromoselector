@@ -1,6 +1,9 @@
 'use strict';
 
 var Panel = (function () {
+    var Color = require('./color.js');
+    var Throttle = require('./throttle.js');
+
     // return constructor
     return function(
         $target,

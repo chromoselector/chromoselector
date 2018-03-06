@@ -1,6 +1,8 @@
 'use strict';
 
 var Preview = (function() {
+    var Color = require('./color.js');
+
     var makePattern = function (ctx) {
         var tempCanvas = document.createElement('canvas');
         tempCanvas.height = 10;
