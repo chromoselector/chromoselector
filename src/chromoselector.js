@@ -13,6 +13,7 @@ var jQuery = require('jquery');
     var Throttle = require('./throttle.js');
     var Color = require('./color.js');
     var Panel = require('./panel.js');
+    var Util = require('./util.js');
 
     /**
      * 2D MATHS
@@ -400,7 +401,7 @@ var jQuery = require('jquery');
         return points;
     }
     function colorPicker_reDrawHue(self, e) {
-        var coords = getEventPosition(self, e, self._picker);
+        var coords = Util.getEventPosition(self, e, self._picker);
         var angle = Math.atan2(
             coords[0] - self.Width / 2,
             coords[1] - self.Width / 2
@@ -567,7 +568,7 @@ var jQuery = require('jquery');
     function colorPicker_handleSatLumDrag(self, e) {
         var degrees = (1 - self.Color.getHsl().h) * Math.PI * 2;
         var points = colorPicker_getPoints(self, degrees);
-        var inputPoint = getEventPosition(self, e, self._picker);
+        var inputPoint = Util.getEventPosition(self, e, self._picker);
         var sanitisedInputPoint = inputPoint;
         if (! pointInTriangle(inputPoint, points[0], points[1], points[2])) {
             var i, distances = [];
@@ -656,7 +657,7 @@ var jQuery = require('jquery');
         self._source.trigger(self.settings.eventPrefix + 'ready');
     }
     function colorPicker_handleResizeDrag(self, e) {
-        var inputPoint = getEventPosition(self, e, self._picker);
+        var inputPoint = Util.getEventPosition(self, e, self._picker);
         if (self.settings.panel || self.settings.panelAlpha) {
             inputPoint[0] -= self.panelApi.getWidth();
         }
@@ -873,30 +874,6 @@ var jQuery = require('jquery');
             }
         }
         return retval;
-    }
-    function getEventPosition(self, e, $obj) {
-        var x = 0, y = 0;
-        var oe = e.originalEvent;
-        var touch = oe.touches || oe.changedTouches;
-        var offset;
-        var previewHeight;
-        if (self) {
-            offset = $obj.parent().offset();
-            previewHeight = self._preview.outerHeight();
-        } else {
-            offset = $obj.offset();
-            previewHeight = 0;
-        }
-        if (touch) {
-            // touchscreen
-            x = touch[0].pageX - offset.left;
-            y = touch[0].pageY - offset.top - previewHeight;
-        } else if (oe.clientX) {
-            // mouse
-            x = oe.clientX + window.pageXOffset - offset.left;
-            y = oe.clientY + window.pageYOffset - offset.top - previewHeight;
-        }
-        return [x, y];
     }
     function colorPicker_getWidth(self) {
         return self._root.width();
@@ -1201,7 +1178,7 @@ var jQuery = require('jquery');
         if (self.settings.resizable) {
             self._resizer.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {
                 preventDefault(e);
-                var inputPoint = getEventPosition(self, e, self._picker);
+                var inputPoint = Util.getEventPosition(self, e, self._picker);
                 self._source.trigger(self.settings.eventPrefix + 'resizeStart');
                 self.resizing = 1;
                 self.resizeOffset = [
@@ -1212,7 +1189,7 @@ var jQuery = require('jquery');
         }
         self._container.bind('mousedown.'+NAMESPACE+' touchstart.'+NAMESPACE, function (e) {
             preventDefault(e);
-            var inputPoint = getEventPosition(self, e, self._picker);
+            var inputPoint = Util.getEventPosition(self, e, self._picker);
             if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth)
                 &&
                 ! pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth)
@@ -1228,7 +1205,7 @@ var jQuery = require('jquery');
                 }
             }
         }).bind('mousemove.'+NAMESPACE+' touchmove.'+NAMESPACE, function (e) {
-            var inputPoint = getEventPosition(self, e, self._picker);
+            var inputPoint = Util.getEventPosition(self, e, self._picker);
             if (pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius+self.hueSelectorLineWidth/2)
                 &&
                 ! pointInCircle(inputPoint, self.Width/2, self.hueSelectorCircleRadius-self.hueSelectorLineWidth/2)

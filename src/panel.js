@@ -5,6 +5,7 @@ var Panel = (function () {
 
     var Color = require('./color.js');
     var Throttle = require('./throttle.js');
+    var Util = require('./util.js');
 
     // return constructor
     return function(
@@ -253,7 +254,7 @@ var Panel = (function () {
             }
         };
         var draggingRenderer = Throttle(function(event) {
-            var inputPoint = getEventPosition(false, event, $canvas);
+            var inputPoint = Util.getEventPosition(false, event, $canvas);
             var fullScaleValue = canvasHeight - channelWidth - canvasPadding;
             var position = fullScaleValue - Math.round(inputPoint[1] - channelWidth/2 - canvasPadding/2);
             if (position < 0) {
@@ -389,7 +390,7 @@ var Panel = (function () {
             preventDefault(event);
             draggingChannel = 0;
             var offset = 10;
-            var inputPoint = getEventPosition(false, event, $(this));
+            var inputPoint = Util.getEventPosition(false, event, $(this));
             while (draggingChannel < 5 && ! dragging) {
                 if (inputPoint[0] > offset && inputPoint[0] < offset+channelWidth) {
                     dragging = 1;
@@ -400,7 +401,7 @@ var Panel = (function () {
                 }
             }
         }).bind('mousemove touchmove', function (event) {
-            var inputPoint = getEventPosition(false, event, $canvas);
+            var inputPoint = Util.getEventPosition(false, event, $canvas);
             var width = $canvas.width();
             var padding = canvasPadding / 2;
             if (   inputPoint[0] > padding
