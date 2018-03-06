@@ -1,3 +1,5 @@
+'use strict';
+
 var Preview = (function() {
     var makePattern = function (ctx) {
         var tempCanvas = document.createElement('canvas');
@@ -77,3 +79,5 @@ var Preview = (function() {
         };
     };
 })();
+
+module.exports = Preview;

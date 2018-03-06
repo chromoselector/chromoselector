@@ -1,3 +1,5 @@
+'use strict';
+
 var Panel = (function () {
     // return constructor
     return function(
@@ -429,3 +431,5 @@ var Panel = (function () {
         });
     };
 })();
+
+module.exports = Panel;

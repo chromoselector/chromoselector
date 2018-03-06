@@ -1,3 +1,7 @@
+'use strict';
+
+var jQuery = require('jQuery');
+
 (function ($, window, Math, defaults) {
     "use strict";
     var document = window.document;
@@ -13,6 +17,10 @@
     var fillStyle = 'fillStyle';
     var globalCompositeOperation = 'globalCompositeOperation';
     var strokeStyle = 'strokeStyle';
+
+    var Throttle = require('./throttle.js');
+    var Color = require('./color.js');
+    var Panel = require('./panel.js');
 
     /**
      * 2D MATHS

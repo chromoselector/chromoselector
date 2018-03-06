@@ -1,3 +1,5 @@
+'use strict';
+
 var Throttle = (function() {
     return function(functionToCall, timeoutInMs) {
         timeoutInMs = timeoutInMs || 4;
@@ -19,3 +21,5 @@ var Throttle = (function() {
         };
     };
 })();
+
+module.exports = Throttle;
