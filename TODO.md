@@ -1,4 +1,3 @@
-  * Upgrade to jQuery 3.0.0+
   * Unit tests
   * Panel bug on iOS, sliders work only once
   * Integrate updating of preview color in input element

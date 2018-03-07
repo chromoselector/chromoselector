@@ -2,7 +2,6 @@
 - [Index](../README.md)
   - [Demos](../README.md#demos)
   - [Features](../README.md#features)
-  - [Requirements](../README.md#requirements)
   - [Install](../README.md#install)
   - [Build](../README.md#build)
 - [Screenshots](screenshots.md#screenshots)
@@ -35,7 +34,7 @@ Next, you need to include these files in the ```head``` element of your page, as
     <!-- include the CSS file -->
     <link rel="stylesheet" href="chromoselector.min.css" />
     <!-- include the JavaScript files -->
-    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
     <!-- N.B.: jQuery MUST be included BEFORE the chromoselector script -->
     <script src="chromoselector.min.js" type="text/javascript"></script>
 </head>
@@ -73,7 +72,7 @@ At this point the color picker is fully integrated and the code for the entire p
     <title>Chromoselector inline demo page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="chromoselector.min.css" />
-    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
     <script src="chromoselector.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(document).ready(function () {
@@ -105,7 +104,7 @@ Next, you need to include these files in the ```head``` element of your page, as
     <!-- include the CSS file -->
     <link rel="stylesheet" href="chromoselector.min.css" />
     <!-- include the JavaScript files -->
-    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
     <!-- N.B.: jQuery MUST be included BEFORE the chromoselector script -->
     <script src="chromoselector.min.js" type="text/javascript"></script>
 </head>
@@ -165,7 +164,7 @@ At this point the color picker is fully integrated and the code for the entire p
     <title>Chromoselector static mode demo page</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="stylesheet" href="chromoselector.min.css" />
-    <script src="https://code.jquery.com/jquery-1.11.0.min.js" type="text/javascript"></script>
+    <script src="https://code.jquery.com/jquery-3.0.0.min.js" type="text/javascript"></script>
     <script src="chromoselector.min.js" type="text/javascript"></script>
     <script type="text/javascript">
     $(document).ready(function () {

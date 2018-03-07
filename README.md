@@ -2,7 +2,6 @@
 - [Index](README.md)
   - [Demos](README.md#demos)
   - [Features](README.md#features)
-  - [Requirements](README.md#requirements)
   - [Install](README.md#install)
   - [Build](README.md#build)
 - [Screenshots](docs/screenshots.md#screenshots)
@@ -35,18 +34,6 @@ Live demos available at [https://chromoselector.netlify.com](https://chromoselec
 - Touch screen support
 - Themable
 - Resizable
-
-## Requirements
-#### jQuery
-- jQuery 1.3+
-
-#### Browser
-- Firefox 3.5+
-- Chrome 4+
-- Safari 4+
-- Opera 12+
-- Internet Explorer 9+
-- Android Browser 2.2+
 
 ## Install
 ```sh

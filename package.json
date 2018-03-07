@@ -1,6 +1,6 @@
 {
   "name": "chromoselector",
-  "version": "2.1.9",
+  "version": "2.2.0",
   "description": "A jQuery color picker plugin",
   "main": "src/chromoselector.js",
   "scripts": {
@@ -31,7 +31,7 @@
     "uglify-js": "^3.3.13"
   },
   "dependencies": {
-    "jquery": "1.11.0"
+    "jquery": "^3.0.0"
   },
   "browser": {
     "jquery": "./node_modules/jquery/dist/jquery.min.js"

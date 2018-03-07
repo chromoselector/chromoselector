@@ -2,7 +2,6 @@
 - [Index](../README.md)
   - [Demos](../README.md#demos)
   - [Features](../README.md#features)
-  - [Requirements](../README.md#requirements)
   - [Install](../README.md#install)
   - [Build](../README.md#build)
 - [Screenshots](screenshots.md#screenshots)

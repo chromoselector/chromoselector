@@ -1,3 +1,8 @@
+## 2.2.0 - FIXME
+  * Updated to jQuery 3.0.0
+  * Replaced build system
+  * Replaced documentation
+
 ## 2.1.8 - 23 April 2015
   * Color management module optimisations
 
