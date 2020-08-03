@@ -1,3 +1,7 @@
+# Deprecation notice
+
+THIS LIBRARY IS DEPRECATED, NO LONGER SUPPORTED, CONTAINS SECURITY VULNERABILITIES AND SHOULD NOT BE USED.
+
 # Documentation
 - [Index](README.md)
   - [Demos](README.md#demos)
